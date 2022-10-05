@@ -4475,13 +4475,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item class_id="11" tracking_level="0" version="0">
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second class_id="12" tracking_level="0" version="0">
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4490,7 +4490,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -4548,13 +4548,13 @@
               <name>tmp_s</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4563,7 +4563,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -4590,13 +4590,13 @@
               <name>exitcond</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4605,7 +4605,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -4633,13 +4633,13 @@
               <name>n</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4648,7 +4648,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -4676,13 +4676,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4691,7 +4691,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -4720,13 +4720,13 @@
               <name>pos_assign_cast_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5222</lineNumber>
+              <lineNumber>5225</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4735,7 +4735,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5222</second>
+                      <second>5225</second>
                     </item>
                   </second>
                 </item>
@@ -4762,13 +4762,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5222</lineNumber>
+              <lineNumber>5225</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4777,7 +4777,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5222</second>
+                      <second>5225</second>
                     </item>
                   </second>
                 </item>
@@ -4888,13 +4888,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5223</lineNumber>
+              <lineNumber>5226</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4903,7 +4903,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5223</second>
+                      <second>5226</second>
                     </item>
                   </second>
                 </item>
@@ -5035,13 +5035,13 @@
               <name>bpest0_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4930</lineNumber>
+              <lineNumber>4933</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5050,14 +5050,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4930</second>
+                      <second>4933</second>
                     </item>
                   </second>
                 </item>
@@ -5085,13 +5085,13 @@
               <name>prHat_buf_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4930</lineNumber>
+              <lineNumber>4933</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5100,14 +5100,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4930</second>
+                      <second>4933</second>
                     </item>
                   </second>
                 </item>
@@ -5136,13 +5136,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4930</lineNumber>
+              <lineNumber>4933</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5151,14 +5151,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4930</second>
+                      <second>4933</second>
                     </item>
                   </second>
                 </item>
@@ -5186,13 +5186,13 @@
               <name>prHat_bufA_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4931</lineNumber>
+              <lineNumber>4934</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5201,14 +5201,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4931</second>
+                      <second>4934</second>
                     </item>
                   </second>
                 </item>
@@ -5237,13 +5237,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4931</lineNumber>
+              <lineNumber>4934</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5252,14 +5252,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4931</second>
+                      <second>4934</second>
                     </item>
                   </second>
                 </item>
@@ -5287,13 +5287,13 @@
               <name>prHat_bufAa_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4932</lineNumber>
+              <lineNumber>4935</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5302,14 +5302,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4932</second>
+                      <second>4935</second>
                     </item>
                   </second>
                 </item>
@@ -5338,13 +5338,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4932</lineNumber>
+              <lineNumber>4935</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5353,14 +5353,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4932</second>
+                      <second>4935</second>
                     </item>
                   </second>
                 </item>
@@ -5388,13 +5388,13 @@
               <name>prHat_bufAb_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4933</lineNumber>
+              <lineNumber>4936</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5403,14 +5403,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4933</second>
+                      <second>4936</second>
                     </item>
                   </second>
                 </item>
@@ -5439,13 +5439,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4933</lineNumber>
+              <lineNumber>4936</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5454,14 +5454,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4933</second>
+                      <second>4936</second>
                     </item>
                   </second>
                 </item>
@@ -5489,13 +5489,13 @@
               <name>prHat_bufAc_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4934</lineNumber>
+              <lineNumber>4937</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5504,14 +5504,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4934</second>
+                      <second>4937</second>
                     </item>
                   </second>
                 </item>
@@ -5540,13 +5540,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4934</lineNumber>
+              <lineNumber>4937</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5555,14 +5555,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4934</second>
+                      <second>4937</second>
                     </item>
                   </second>
                 </item>
@@ -5590,13 +5590,13 @@
               <name>prHat_bufB_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4936</lineNumber>
+              <lineNumber>4939</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5605,14 +5605,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4936</second>
+                      <second>4939</second>
                     </item>
                   </second>
                 </item>
@@ -5641,13 +5641,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4936</lineNumber>
+              <lineNumber>4939</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5656,14 +5656,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4936</second>
+                      <second>4939</second>
                     </item>
                   </second>
                 </item>
@@ -5691,13 +5691,13 @@
               <name>bpest1_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4938</lineNumber>
+              <lineNumber>4941</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5706,14 +5706,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4938</second>
+                      <second>4941</second>
                     </item>
                   </second>
                 </item>
@@ -5741,13 +5741,13 @@
               <name>prHat_buf1_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4938</lineNumber>
+              <lineNumber>4941</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5756,14 +5756,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4938</second>
+                      <second>4941</second>
                     </item>
                   </second>
                 </item>
@@ -5792,13 +5792,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4938</lineNumber>
+              <lineNumber>4941</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5807,14 +5807,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4938</second>
+                      <second>4941</second>
                     </item>
                   </second>
                 </item>
@@ -5842,13 +5842,13 @@
               <name>prHat_bufA1_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4939</lineNumber>
+              <lineNumber>4942</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5857,14 +5857,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4939</second>
+                      <second>4942</second>
                     </item>
                   </second>
                 </item>
@@ -5893,13 +5893,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4939</lineNumber>
+              <lineNumber>4942</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5908,14 +5908,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4939</second>
+                      <second>4942</second>
                     </item>
                   </second>
                 </item>
@@ -5943,13 +5943,13 @@
               <name>prHat_bufB1_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4940</lineNumber>
+              <lineNumber>4943</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -5958,14 +5958,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4940</second>
+                      <second>4943</second>
                     </item>
                   </second>
                 </item>
@@ -5994,13 +5994,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4940</lineNumber>
+              <lineNumber>4943</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6009,14 +6009,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4940</second>
+                      <second>4943</second>
                     </item>
                   </second>
                 </item>
@@ -6044,13 +6044,13 @@
               <name>prHat_bufB1a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4941</lineNumber>
+              <lineNumber>4944</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6059,14 +6059,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4941</second>
+                      <second>4944</second>
                     </item>
                   </second>
                 </item>
@@ -6095,13 +6095,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4941</lineNumber>
+              <lineNumber>4944</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6110,14 +6110,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4941</second>
+                      <second>4944</second>
                     </item>
                   </second>
                 </item>
@@ -6145,13 +6145,13 @@
               <name>prHat_bufB1b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4942</lineNumber>
+              <lineNumber>4945</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6160,14 +6160,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4942</second>
+                      <second>4945</second>
                     </item>
                   </second>
                 </item>
@@ -6196,13 +6196,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4942</lineNumber>
+              <lineNumber>4945</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6211,14 +6211,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4942</second>
+                      <second>4945</second>
                     </item>
                   </second>
                 </item>
@@ -6246,13 +6246,13 @@
               <name>prHat_bufB1c_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4943</lineNumber>
+              <lineNumber>4946</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6261,14 +6261,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4943</second>
+                      <second>4946</second>
                     </item>
                   </second>
                 </item>
@@ -6297,13 +6297,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4943</lineNumber>
+              <lineNumber>4946</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6312,14 +6312,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4943</second>
+                      <second>4946</second>
                     </item>
                   </second>
                 </item>
@@ -6347,13 +6347,13 @@
               <name>bpest2_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4945</lineNumber>
+              <lineNumber>4948</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6362,14 +6362,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4945</second>
+                      <second>4948</second>
                     </item>
                   </second>
                 </item>
@@ -6397,13 +6397,13 @@
               <name>prHat_buf2_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4945</lineNumber>
+              <lineNumber>4948</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6412,14 +6412,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4945</second>
+                      <second>4948</second>
                     </item>
                   </second>
                 </item>
@@ -6448,13 +6448,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4945</lineNumber>
+              <lineNumber>4948</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6463,14 +6463,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4945</second>
+                      <second>4948</second>
                     </item>
                   </second>
                 </item>
@@ -6498,13 +6498,13 @@
               <name>prHat_bufA2_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4946</lineNumber>
+              <lineNumber>4949</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6513,14 +6513,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4946</second>
+                      <second>4949</second>
                     </item>
                   </second>
                 </item>
@@ -6549,13 +6549,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4946</lineNumber>
+              <lineNumber>4949</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6564,14 +6564,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4946</second>
+                      <second>4949</second>
                     </item>
                   </second>
                 </item>
@@ -6599,13 +6599,13 @@
               <name>prHat_bufA2a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4947</lineNumber>
+              <lineNumber>4950</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6614,14 +6614,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4947</second>
+                      <second>4950</second>
                     </item>
                   </second>
                 </item>
@@ -6650,13 +6650,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4947</lineNumber>
+              <lineNumber>4950</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6665,14 +6665,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4947</second>
+                      <second>4950</second>
                     </item>
                   </second>
                 </item>
@@ -6700,13 +6700,13 @@
               <name>prHat_bufA2b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4948</lineNumber>
+              <lineNumber>4951</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6715,14 +6715,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4948</second>
+                      <second>4951</second>
                     </item>
                   </second>
                 </item>
@@ -6751,13 +6751,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4948</lineNumber>
+              <lineNumber>4951</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6766,14 +6766,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4948</second>
+                      <second>4951</second>
                     </item>
                   </second>
                 </item>
@@ -6801,13 +6801,13 @@
               <name>prHat_bufA2c_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4949</lineNumber>
+              <lineNumber>4952</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6816,14 +6816,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4949</second>
+                      <second>4952</second>
                     </item>
                   </second>
                 </item>
@@ -6852,13 +6852,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4949</lineNumber>
+              <lineNumber>4952</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6867,14 +6867,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4949</second>
+                      <second>4952</second>
                     </item>
                   </second>
                 </item>
@@ -6902,13 +6902,13 @@
               <name>prHat_bufB2_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4950</lineNumber>
+              <lineNumber>4953</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6917,14 +6917,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4950</second>
+                      <second>4953</second>
                     </item>
                   </second>
                 </item>
@@ -6953,13 +6953,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4950</lineNumber>
+              <lineNumber>4953</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -6968,14 +6968,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4950</second>
+                      <second>4953</second>
                     </item>
                   </second>
                 </item>
@@ -7003,13 +7003,13 @@
               <name>bpest3_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4952</lineNumber>
+              <lineNumber>4955</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7018,14 +7018,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4952</second>
+                      <second>4955</second>
                     </item>
                   </second>
                 </item>
@@ -7053,13 +7053,13 @@
               <name>prHat_buf3_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4952</lineNumber>
+              <lineNumber>4955</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7068,14 +7068,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4952</second>
+                      <second>4955</second>
                     </item>
                   </second>
                 </item>
@@ -7104,13 +7104,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4952</lineNumber>
+              <lineNumber>4955</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7119,14 +7119,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4952</second>
+                      <second>4955</second>
                     </item>
                   </second>
                 </item>
@@ -7154,13 +7154,13 @@
               <name>prHat_bufA3_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4953</lineNumber>
+              <lineNumber>4956</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7169,14 +7169,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4953</second>
+                      <second>4956</second>
                     </item>
                   </second>
                 </item>
@@ -7205,13 +7205,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4953</lineNumber>
+              <lineNumber>4956</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7220,14 +7220,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4953</second>
+                      <second>4956</second>
                     </item>
                   </second>
                 </item>
@@ -7255,13 +7255,13 @@
               <name>prHat_bufB3_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4954</lineNumber>
+              <lineNumber>4957</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7270,14 +7270,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4954</second>
+                      <second>4957</second>
                     </item>
                   </second>
                 </item>
@@ -7306,13 +7306,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4954</lineNumber>
+              <lineNumber>4957</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7321,14 +7321,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4954</second>
+                      <second>4957</second>
                     </item>
                   </second>
                 </item>
@@ -7356,13 +7356,13 @@
               <name>prHat_bufB3a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4955</lineNumber>
+              <lineNumber>4958</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7371,14 +7371,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4955</second>
+                      <second>4958</second>
                     </item>
                   </second>
                 </item>
@@ -7407,13 +7407,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4955</lineNumber>
+              <lineNumber>4958</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7422,14 +7422,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4955</second>
+                      <second>4958</second>
                     </item>
                   </second>
                 </item>
@@ -7457,13 +7457,13 @@
               <name>prHat_bufB3b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4956</lineNumber>
+              <lineNumber>4959</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7472,14 +7472,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4956</second>
+                      <second>4959</second>
                     </item>
                   </second>
                 </item>
@@ -7508,13 +7508,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4956</lineNumber>
+              <lineNumber>4959</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7523,14 +7523,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4956</second>
+                      <second>4959</second>
                     </item>
                   </second>
                 </item>
@@ -7558,13 +7558,13 @@
               <name>prHat_bufB3c_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4957</lineNumber>
+              <lineNumber>4960</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7573,14 +7573,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4957</second>
+                      <second>4960</second>
                     </item>
                   </second>
                 </item>
@@ -7609,13 +7609,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4957</lineNumber>
+              <lineNumber>4960</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7624,14 +7624,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4957</second>
+                      <second>4960</second>
                     </item>
                   </second>
                 </item>
@@ -7659,13 +7659,13 @@
               <name>bpest4_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4959</lineNumber>
+              <lineNumber>4962</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7674,14 +7674,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4959</second>
+                      <second>4962</second>
                     </item>
                   </second>
                 </item>
@@ -7709,13 +7709,13 @@
               <name>prHat_buf4_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4959</lineNumber>
+              <lineNumber>4962</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7724,14 +7724,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4959</second>
+                      <second>4962</second>
                     </item>
                   </second>
                 </item>
@@ -7760,13 +7760,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4959</lineNumber>
+              <lineNumber>4962</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7775,14 +7775,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4959</second>
+                      <second>4962</second>
                     </item>
                   </second>
                 </item>
@@ -7810,13 +7810,13 @@
               <name>prHat_buf4a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4960</lineNumber>
+              <lineNumber>4963</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7825,14 +7825,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4960</second>
+                      <second>4963</second>
                     </item>
                   </second>
                 </item>
@@ -7861,13 +7861,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4960</lineNumber>
+              <lineNumber>4963</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7876,14 +7876,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4960</second>
+                      <second>4963</second>
                     </item>
                   </second>
                 </item>
@@ -7911,13 +7911,13 @@
               <name>prHat_bufA4_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4961</lineNumber>
+              <lineNumber>4964</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7926,14 +7926,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4961</second>
+                      <second>4964</second>
                     </item>
                   </second>
                 </item>
@@ -7962,13 +7962,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4961</lineNumber>
+              <lineNumber>4964</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -7977,14 +7977,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4961</second>
+                      <second>4964</second>
                     </item>
                   </second>
                 </item>
@@ -8012,13 +8012,13 @@
               <name>prHat_bufA4a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4962</lineNumber>
+              <lineNumber>4965</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8027,14 +8027,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4962</second>
+                      <second>4965</second>
                     </item>
                   </second>
                 </item>
@@ -8063,13 +8063,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4962</lineNumber>
+              <lineNumber>4965</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8078,14 +8078,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4962</second>
+                      <second>4965</second>
                     </item>
                   </second>
                 </item>
@@ -8113,13 +8113,13 @@
               <name>prHat_bufA4b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4963</lineNumber>
+              <lineNumber>4966</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8128,14 +8128,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4963</second>
+                      <second>4966</second>
                     </item>
                   </second>
                 </item>
@@ -8164,13 +8164,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4963</lineNumber>
+              <lineNumber>4966</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8179,14 +8179,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4963</second>
+                      <second>4966</second>
                     </item>
                   </second>
                 </item>
@@ -8214,13 +8214,13 @@
               <name>prHat_bufB4_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4964</lineNumber>
+              <lineNumber>4967</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8229,14 +8229,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4964</second>
+                      <second>4967</second>
                     </item>
                   </second>
                 </item>
@@ -8265,13 +8265,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4964</lineNumber>
+              <lineNumber>4967</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8280,14 +8280,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4964</second>
+                      <second>4967</second>
                     </item>
                   </second>
                 </item>
@@ -8315,13 +8315,13 @@
               <name>bpest5_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4967</lineNumber>
+              <lineNumber>4970</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8330,14 +8330,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4967</second>
+                      <second>4970</second>
                     </item>
                   </second>
                 </item>
@@ -8365,13 +8365,13 @@
               <name>prHat_bufA5_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4967</lineNumber>
+              <lineNumber>4970</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8380,14 +8380,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4967</second>
+                      <second>4970</second>
                     </item>
                   </second>
                 </item>
@@ -8416,13 +8416,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4967</lineNumber>
+              <lineNumber>4970</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8431,14 +8431,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4967</second>
+                      <second>4970</second>
                     </item>
                   </second>
                 </item>
@@ -8466,13 +8466,13 @@
               <name>prHat_bufB5_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4968</lineNumber>
+              <lineNumber>4971</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8481,14 +8481,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4968</second>
+                      <second>4971</second>
                     </item>
                   </second>
                 </item>
@@ -8517,13 +8517,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4968</lineNumber>
+              <lineNumber>4971</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8532,14 +8532,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4968</second>
+                      <second>4971</second>
                     </item>
                   </second>
                 </item>
@@ -8567,13 +8567,13 @@
               <name>prHat_bufB5a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4969</lineNumber>
+              <lineNumber>4972</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8582,14 +8582,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4969</second>
+                      <second>4972</second>
                     </item>
                   </second>
                 </item>
@@ -8618,13 +8618,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4969</lineNumber>
+              <lineNumber>4972</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8633,14 +8633,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4969</second>
+                      <second>4972</second>
                     </item>
                   </second>
                 </item>
@@ -8668,13 +8668,13 @@
               <name>prHat_bufB5b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4970</lineNumber>
+              <lineNumber>4973</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8683,14 +8683,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4970</second>
+                      <second>4973</second>
                     </item>
                   </second>
                 </item>
@@ -8719,13 +8719,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4970</lineNumber>
+              <lineNumber>4973</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8734,14 +8734,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4970</second>
+                      <second>4973</second>
                     </item>
                   </second>
                 </item>
@@ -8769,13 +8769,13 @@
               <name>prHat_bufB5c_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4971</lineNumber>
+              <lineNumber>4974</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8784,14 +8784,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4971</second>
+                      <second>4974</second>
                     </item>
                   </second>
                 </item>
@@ -8820,13 +8820,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4971</lineNumber>
+              <lineNumber>4974</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8835,14 +8835,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4971</second>
+                      <second>4974</second>
                     </item>
                   </second>
                 </item>
@@ -8870,13 +8870,13 @@
               <name>bpest6_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4973</lineNumber>
+              <lineNumber>4976</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8885,14 +8885,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4973</second>
+                      <second>4976</second>
                     </item>
                   </second>
                 </item>
@@ -8920,13 +8920,13 @@
               <name>prHat_buf6_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4973</lineNumber>
+              <lineNumber>4976</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8935,14 +8935,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4973</second>
+                      <second>4976</second>
                     </item>
                   </second>
                 </item>
@@ -8971,13 +8971,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4973</lineNumber>
+              <lineNumber>4976</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -8986,14 +8986,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4973</second>
+                      <second>4976</second>
                     </item>
                   </second>
                 </item>
@@ -9021,13 +9021,13 @@
               <name>prHat_buf6a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4974</lineNumber>
+              <lineNumber>4977</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9036,14 +9036,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4974</second>
+                      <second>4977</second>
                     </item>
                   </second>
                 </item>
@@ -9072,13 +9072,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4974</lineNumber>
+              <lineNumber>4977</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9087,14 +9087,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4974</second>
+                      <second>4977</second>
                     </item>
                   </second>
                 </item>
@@ -9122,13 +9122,13 @@
               <name>prHat_bufA6_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4975</lineNumber>
+              <lineNumber>4978</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9137,14 +9137,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4975</second>
+                      <second>4978</second>
                     </item>
                   </second>
                 </item>
@@ -9173,13 +9173,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4975</lineNumber>
+              <lineNumber>4978</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9188,14 +9188,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4975</second>
+                      <second>4978</second>
                     </item>
                   </second>
                 </item>
@@ -9223,13 +9223,13 @@
               <name>prHat_bufA6b_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4976</lineNumber>
+              <lineNumber>4979</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9238,14 +9238,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4976</second>
+                      <second>4979</second>
                     </item>
                   </second>
                 </item>
@@ -9274,13 +9274,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4976</lineNumber>
+              <lineNumber>4979</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9289,14 +9289,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4976</second>
+                      <second>4979</second>
                     </item>
                   </second>
                 </item>
@@ -9324,13 +9324,13 @@
               <name>prHat_bufA6c_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4977</lineNumber>
+              <lineNumber>4980</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9339,14 +9339,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4977</second>
+                      <second>4980</second>
                     </item>
                   </second>
                 </item>
@@ -9375,13 +9375,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4977</lineNumber>
+              <lineNumber>4980</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9390,14 +9390,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4977</second>
+                      <second>4980</second>
                     </item>
                   </second>
                 </item>
@@ -9425,13 +9425,13 @@
               <name>prHat_bufA6a_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4978</lineNumber>
+              <lineNumber>4981</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9440,14 +9440,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4978</second>
+                      <second>4981</second>
                     </item>
                   </second>
                 </item>
@@ -9476,13 +9476,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4978</lineNumber>
+              <lineNumber>4981</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9491,14 +9491,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4978</second>
+                      <second>4981</second>
                     </item>
                   </second>
                 </item>
@@ -9526,13 +9526,13 @@
               <name>prHat_bufB6_addr</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4979</lineNumber>
+              <lineNumber>4982</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9541,14 +9541,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4979</second>
+                      <second>4982</second>
                     </item>
                   </second>
                 </item>
@@ -9577,13 +9577,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4979</lineNumber>
+              <lineNumber>4982</lineNumber>
               <contextFuncName>update_hat_all_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>2</count>
                     <item_version>0</item_version>
@@ -9592,14 +9592,14 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5224</second>
+                      <second>5227</second>
                     </item>
                     <item>
                       <first>
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>update_hat_all_23</second>
                       </first>
-                      <second>4979</second>
+                      <second>4982</second>
                     </item>
                   </second>
                 </item>
@@ -9627,13 +9627,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5220</lineNumber>
+              <lineNumber>5223</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -9642,7 +9642,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5220</second>
+                      <second>5223</second>
                     </item>
                   </second>
                 </item>
@@ -9669,13 +9669,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>5227</lineNumber>
+              <lineNumber>5230</lineNumber>
               <contextFuncName>calc_n_23</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -9684,7 +9684,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>calc_n_23</second>
                       </first>
-                      <second>5227</second>
+                      <second>5230</second>
                     </item>
                   </second>
                 </item>

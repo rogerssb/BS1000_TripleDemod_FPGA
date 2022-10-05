@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'mcalcAA_23'
 ================================================================
-* Date:           Sat Oct 05 17:03:38 2019
+* Date:           Thu Aug 11 10:24:39 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -2554,8 +2554,8 @@ Target clock period: 10ns, clock uncertainty: 1.25ns.
  <State 1>: 2.39ns
 The critical path consists of the following:
 	wire read on port 'num_nt' [63]  (0 ns)
-	'getelementptr' operation ('varinx10B_1024_a_add', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:953) [124]  (0 ns)
-	'load' operation ('varinx10B_1024_a_loa', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:953) on array 'varinx10B_1024_a' [125]  (2.39 ns)
+	'getelementptr' operation ('varinx10B_4096_d_V_a', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1017) [225]  (0 ns)
+	'load' operation ('varinx10B_4096_d_V_l', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1017) on array 'varinx10B_4096_d_V' [226]  (2.39 ns)
 
  <State 2>: 5.56ns
 The critical path consists of the following:
@@ -2567,14 +2567,16 @@ The critical path consists of the following:
  <State 3>: 5.56ns
 The critical path consists of the following:
 	'load' operation ('varinx3_1024_23_load_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:926) on array 'varinx3_1024_23' [77]  (2.39 ns)
-	'select' operation ('d_0_in_in_in', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:920) [247]  (0.84 ns)
-	'getelementptr' operation ('Lam_buf4_addr_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1044) [346]  (0 ns)
-	'load' operation ('lTabE[0]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1044) on array 'Lam_buf4' [347]  (2.33 ns)
+	'select' operation ('f_0_in_in_in', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:920) [249]  (0.84 ns)
+	'getelementptr' operation ('Lam_buf6a_addr_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1046) [352]  (0 ns)
+	'load' operation ('lTabE[2]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1046) on array 'Lam_buf6a' [353]  (2.33 ns)
 
  <State 4>: 3.17ns
 The critical path consists of the following:
 	'load' operation ('SpEtaPrevC_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1052) on array 'SpEtaPrevC' [360]  (2.33 ns)
-	'select' operation ('pTabE[2]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1265) [598]  (0.84 ns)
+	'select' operation ('pTabE[0]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1265) [602]  (0.84 ns)
+	'insertvalue' operation ('newret150', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [719]  (0 ns)
+	'insertvalue' operation ('newret152', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [720]  (0 ns)
 	'insertvalue' operation ('newret154', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [721]  (0 ns)
 	'insertvalue' operation ('newret156', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [722]  (0 ns)
 	'insertvalue' operation ('newret158', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [723]  (0 ns)
@@ -2618,16 +2620,6 @@ The critical path consists of the following:
 	'insertvalue' operation ('newret196', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [761]  (0 ns)
 	'insertvalue' operation ('newret197', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [762]  (0 ns)
 	'insertvalue' operation ('newret198', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [763]  (0 ns)
-	'insertvalue' operation ('newret199', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [764]  (0 ns)
-	'insertvalue' operation ('newret200', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [765]  (0 ns)
-	'insertvalue' operation ('newret201', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [766]  (0 ns)
-	'insertvalue' operation ('newret202', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [767]  (0 ns)
-	'insertvalue' operation ('newret203', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [768]  (0 ns)
-	'insertvalue' operation ('newret204', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [769]  (0 ns)
-	'insertvalue' operation ('newret205', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [770]  (0 ns)
-	'insertvalue' operation ('newret206', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [771]  (0 ns)
-	'insertvalue' operation ('newret207', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [772]  (0 ns)
-	'insertvalue' operation ('newret208', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:922) [773]  (0 ns)
 
 
 ============================================================

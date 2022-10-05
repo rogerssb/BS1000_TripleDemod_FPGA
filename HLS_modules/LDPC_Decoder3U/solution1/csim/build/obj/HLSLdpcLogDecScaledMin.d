@@ -1,9 +1,9 @@
 obj/HLSLdpcLogDecScaledMin.o: ../../../HLSLdpcLogDecScaledMin.cpp \
- C:/Xilinx/Vivado_HLS/2016.3/include/ap_int.h \
- C:/Xilinx/Vivado_HLS/2016.3/include/etc/ap_int_sim.h \
- C:/Xilinx/Vivado_HLS/2016.3/include/etc/ap_private.h \
- C:/Xilinx/Vivado_HLS/2016.3/include/etc/ap_fixed_sim.h \
- C:/Xilinx/Vivado_HLS/2016.3/include/etc/ap_int_sim.h \
+ C:/Xilinx/Vivado_HLS/2016.4/include/ap_int.h \
+ C:/Xilinx/Vivado_HLS/2016.4/include/etc/ap_int_sim.h \
+ C:/Xilinx/Vivado_HLS/2016.4/include/etc/ap_private.h \
+ C:/Xilinx/Vivado_HLS/2016.4/include/etc/ap_fixed_sim.h \
+ C:/Xilinx/Vivado_HLS/2016.4/include/etc/ap_int_sim.h \
  ../../../ldpc1024_1_2_1_trichk.h ../../../ldpc1024_1_2_2_trichk.h \
  ../../../ldpc1024_1_2_trichk.h ../../../ldpc4096_1_2_1_trichk.h \
  ../../../ldpc4096_1_2_2_trichk.h ../../../ldpc4096_1_2_trichk.h \

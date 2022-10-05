@@ -2766,14 +2766,14 @@
 						<id>101</id>
 						<name>tmp</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4725</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4728</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item class_id="11" tracking_level="0" version="0">
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second class_id="12" tracking_level="0" version="0">
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2782,7 +2782,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4725</second>
+										<second>4728</second>
 									</item>
 								</second>
 							</item>
@@ -2811,14 +2811,14 @@
 						<id>102</id>
 						<name>icmp</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4725</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4728</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2827,7 +2827,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4725</second>
+										<second>4728</second>
 									</item>
 								</second>
 							</item>
@@ -2854,14 +2854,14 @@
 						<id>103</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4725</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4728</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2870,7 +2870,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4725</second>
+										<second>4728</second>
 									</item>
 								</second>
 							</item>
@@ -2898,14 +2898,14 @@
 						<id>105</id>
 						<name>pest0_load</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4728</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4731</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2914,7 +2914,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4728</second>
+										<second>4731</second>
 									</item>
 								</second>
 							</item>
@@ -2940,14 +2940,14 @@
 						<id>106</id>
 						<name>tmp_s</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4728</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4731</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2956,7 +2956,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4728</second>
+										<second>4731</second>
 									</item>
 								</second>
 							</item>
@@ -2982,14 +2982,14 @@
 						<id>107</id>
 						<name>Lam_bufAa_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4728</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4731</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -2998,7 +2998,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4728</second>
+										<second>4731</second>
 									</item>
 								</second>
 							</item>
@@ -3026,14 +3026,14 @@
 						<id>108</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4728</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4731</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3042,7 +3042,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4728</second>
+										<second>4731</second>
 									</item>
 								</second>
 							</item>
@@ -3069,14 +3069,14 @@
 						<id>109</id>
 						<name>Lam_bufB_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4729</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4732</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3085,7 +3085,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4729</second>
+										<second>4732</second>
 									</item>
 								</second>
 							</item>
@@ -3113,14 +3113,14 @@
 						<id>110</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4729</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4732</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3129,7 +3129,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4729</second>
+										<second>4732</second>
 									</item>
 								</second>
 							</item>
@@ -3156,14 +3156,14 @@
 						<id>111</id>
 						<name>pest1_load</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4731</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4734</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3172,7 +3172,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4731</second>
+										<second>4734</second>
 									</item>
 								</second>
 							</item>
@@ -3198,14 +3198,14 @@
 						<id>112</id>
 						<name>Lam_bufA1_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4731</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4734</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3214,7 +3214,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4731</second>
+										<second>4734</second>
 									</item>
 								</second>
 							</item>
@@ -3242,14 +3242,14 @@
 						<id>113</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4731</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4734</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3258,7 +3258,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4731</second>
+										<second>4734</second>
 									</item>
 								</second>
 							</item>
@@ -3285,14 +3285,14 @@
 						<id>114</id>
 						<name>Lam_bufB1a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4732</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4735</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3301,7 +3301,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4732</second>
+										<second>4735</second>
 									</item>
 								</second>
 							</item>
@@ -3329,14 +3329,14 @@
 						<id>115</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4732</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4735</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3345,7 +3345,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4732</second>
+										<second>4735</second>
 									</item>
 								</second>
 							</item>
@@ -3372,14 +3372,14 @@
 						<id>116</id>
 						<name>Lam_bufB1b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4733</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4736</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3388,7 +3388,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4733</second>
+										<second>4736</second>
 									</item>
 								</second>
 							</item>
@@ -3416,14 +3416,14 @@
 						<id>117</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4733</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4736</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3432,7 +3432,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4733</second>
+										<second>4736</second>
 									</item>
 								</second>
 							</item>
@@ -3459,14 +3459,14 @@
 						<id>118</id>
 						<name>pest2_load</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4735</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4738</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3475,7 +3475,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4735</second>
+										<second>4738</second>
 									</item>
 								</second>
 							</item>
@@ -3501,14 +3501,14 @@
 						<id>119</id>
 						<name>Lam_buf2_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4735</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4738</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3517,7 +3517,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4735</second>
+										<second>4738</second>
 									</item>
 								</second>
 							</item>
@@ -3545,14 +3545,14 @@
 						<id>120</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4735</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4738</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3561,7 +3561,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4735</second>
+										<second>4738</second>
 									</item>
 								</second>
 							</item>
@@ -3588,14 +3588,14 @@
 						<id>121</id>
 						<name>pest3_load</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4737</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4740</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3604,7 +3604,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4737</second>
+										<second>4740</second>
 									</item>
 								</second>
 							</item>
@@ -3630,14 +3630,14 @@
 						<id>122</id>
 						<name>Lam_bufA3_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4737</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4740</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3646,7 +3646,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4737</second>
+										<second>4740</second>
 									</item>
 								</second>
 							</item>
@@ -3674,14 +3674,14 @@
 						<id>123</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4737</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4740</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3690,7 +3690,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4737</second>
+										<second>4740</second>
 									</item>
 								</second>
 							</item>
@@ -3717,14 +3717,14 @@
 						<id>124</id>
 						<name>Lam_bufB3a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4738</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4741</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3733,7 +3733,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4738</second>
+										<second>4741</second>
 									</item>
 								</second>
 							</item>
@@ -3761,14 +3761,14 @@
 						<id>125</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4738</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4741</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3777,7 +3777,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4738</second>
+										<second>4741</second>
 									</item>
 								</second>
 							</item>
@@ -3804,14 +3804,14 @@
 						<id>126</id>
 						<name>Lam_bufB3b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4739</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4742</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3820,7 +3820,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4739</second>
+										<second>4742</second>
 									</item>
 								</second>
 							</item>
@@ -3848,14 +3848,14 @@
 						<id>127</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4739</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4742</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3864,7 +3864,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4739</second>
+										<second>4742</second>
 									</item>
 								</second>
 							</item>
@@ -3891,14 +3891,14 @@
 						<id>128</id>
 						<name>pest4_load</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4741</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4744</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3907,7 +3907,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4741</second>
+										<second>4744</second>
 									</item>
 								</second>
 							</item>
@@ -3933,14 +3933,14 @@
 						<id>129</id>
 						<name>Lam_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4741</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4744</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3949,7 +3949,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4741</second>
+										<second>4744</second>
 									</item>
 								</second>
 							</item>
@@ -3977,14 +3977,14 @@
 						<id>130</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4741</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4744</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -3993,7 +3993,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4741</second>
+										<second>4744</second>
 									</item>
 								</second>
 							</item>
@@ -4020,14 +4020,14 @@
 						<id>131</id>
 						<name>Lam_buf4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4742</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4745</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4036,7 +4036,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4742</second>
+										<second>4745</second>
 									</item>
 								</second>
 							</item>
@@ -4064,14 +4064,14 @@
 						<id>132</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4742</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4745</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4080,7 +4080,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4742</second>
+										<second>4745</second>
 									</item>
 								</second>
 							</item>
@@ -4107,14 +4107,14 @@
 						<id>133</id>
 						<name>Lam_bufA4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4743</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4746</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4123,7 +4123,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4743</second>
+										<second>4746</second>
 									</item>
 								</second>
 							</item>
@@ -4151,14 +4151,14 @@
 						<id>134</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4743</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4746</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4167,7 +4167,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4743</second>
+										<second>4746</second>
 									</item>
 								</second>
 							</item>
@@ -4194,14 +4194,14 @@
 						<id>135</id>
 						<name>Lam_bufA4b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4744</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4747</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4210,7 +4210,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4744</second>
+										<second>4747</second>
 									</item>
 								</second>
 							</item>
@@ -4238,14 +4238,14 @@
 						<id>136</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4744</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4747</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4254,7 +4254,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4744</second>
+										<second>4747</second>
 									</item>
 								</second>
 							</item>
@@ -4281,14 +4281,14 @@
 						<id>137</id>
 						<name>Lam_bufA4c_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4745</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4748</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4297,7 +4297,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4745</second>
+										<second>4748</second>
 									</item>
 								</second>
 							</item>
@@ -4325,14 +4325,14 @@
 						<id>138</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4745</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4748</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4341,7 +4341,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4745</second>
+										<second>4748</second>
 									</item>
 								</second>
 							</item>
@@ -4368,14 +4368,14 @@
 						<id>139</id>
 						<name>Lam_bufB4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4746</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4749</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4384,7 +4384,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4746</second>
+										<second>4749</second>
 									</item>
 								</second>
 							</item>
@@ -4412,14 +4412,14 @@
 						<id>140</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4746</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4749</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4428,7 +4428,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4746</second>
+										<second>4749</second>
 									</item>
 								</second>
 							</item>
@@ -4455,14 +4455,14 @@
 						<id>141</id>
 						<name>prLam_buf2_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4748</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4751</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4471,7 +4471,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4748</second>
+										<second>4751</second>
 									</item>
 								</second>
 							</item>
@@ -4499,14 +4499,14 @@
 						<id>142</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4748</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4751</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4515,7 +4515,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4748</second>
+										<second>4751</second>
 									</item>
 								</second>
 							</item>
@@ -4542,14 +4542,14 @@
 						<id>143</id>
 						<name>prLam_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4749</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4752</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4558,7 +4558,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4749</second>
+										<second>4752</second>
 									</item>
 								</second>
 							</item>
@@ -4586,14 +4586,14 @@
 						<id>144</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4749</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4752</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4602,7 +4602,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4749</second>
+										<second>4752</second>
 									</item>
 								</second>
 							</item>
@@ -4629,14 +4629,14 @@
 						<id>145</id>
 						<name>prLam_buf4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4750</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4753</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4645,7 +4645,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4750</second>
+										<second>4753</second>
 									</item>
 								</second>
 							</item>
@@ -4673,14 +4673,14 @@
 						<id>146</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4750</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4753</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4689,7 +4689,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4750</second>
+										<second>4753</second>
 									</item>
 								</second>
 							</item>
@@ -4716,14 +4716,14 @@
 						<id>147</id>
 						<name>prLam2_buf2_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4752</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4755</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4732,7 +4732,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4752</second>
+										<second>4755</second>
 									</item>
 								</second>
 							</item>
@@ -4760,14 +4760,14 @@
 						<id>148</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4752</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4755</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4776,7 +4776,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4752</second>
+										<second>4755</second>
 									</item>
 								</second>
 							</item>
@@ -4803,14 +4803,14 @@
 						<id>149</id>
 						<name>prLam2_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4753</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4756</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4819,7 +4819,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4753</second>
+										<second>4756</second>
 									</item>
 								</second>
 							</item>
@@ -4847,14 +4847,14 @@
 						<id>150</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4753</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4756</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4863,7 +4863,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4753</second>
+										<second>4756</second>
 									</item>
 								</second>
 							</item>
@@ -4890,14 +4890,14 @@
 						<id>151</id>
 						<name>prLam2_buf4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4754</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4757</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4906,7 +4906,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4754</second>
+										<second>4757</second>
 									</item>
 								</second>
 							</item>
@@ -4934,14 +4934,14 @@
 						<id>152</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4754</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4757</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4950,7 +4950,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4754</second>
+										<second>4757</second>
 									</item>
 								</second>
 							</item>
@@ -4977,14 +4977,14 @@
 						<id>153</id>
 						<name>prLamB_buf_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4756</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4759</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -4993,7 +4993,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4756</second>
+										<second>4759</second>
 									</item>
 								</second>
 							</item>
@@ -5021,14 +5021,14 @@
 						<id>154</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4756</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4759</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5037,7 +5037,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4756</second>
+										<second>4759</second>
 									</item>
 								</second>
 							</item>
@@ -5064,14 +5064,14 @@
 						<id>155</id>
 						<name>prLamB_buf1_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4757</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4760</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5080,7 +5080,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4757</second>
+										<second>4760</second>
 									</item>
 								</second>
 							</item>
@@ -5108,14 +5108,14 @@
 						<id>156</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4757</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4760</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5124,7 +5124,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4757</second>
+										<second>4760</second>
 									</item>
 								</second>
 							</item>
@@ -5151,14 +5151,14 @@
 						<id>157</id>
 						<name>prLamB_buf1a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4758</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4761</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5167,7 +5167,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4758</second>
+										<second>4761</second>
 									</item>
 								</second>
 							</item>
@@ -5195,14 +5195,14 @@
 						<id>158</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4758</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4761</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5211,7 +5211,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4758</second>
+										<second>4761</second>
 									</item>
 								</second>
 							</item>
@@ -5238,14 +5238,14 @@
 						<id>159</id>
 						<name>prLamB_buf3_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4759</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4762</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5254,7 +5254,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4759</second>
+										<second>4762</second>
 									</item>
 								</second>
 							</item>
@@ -5282,14 +5282,14 @@
 						<id>160</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4759</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4762</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5298,7 +5298,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4759</second>
+										<second>4762</second>
 									</item>
 								</second>
 							</item>
@@ -5325,14 +5325,14 @@
 						<id>161</id>
 						<name>prLamB_buf3a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4760</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4763</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5341,7 +5341,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4760</second>
+										<second>4763</second>
 									</item>
 								</second>
 							</item>
@@ -5369,14 +5369,14 @@
 						<id>162</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4760</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4763</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5385,7 +5385,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4760</second>
+										<second>4763</second>
 									</item>
 								</second>
 							</item>
@@ -5412,14 +5412,14 @@
 						<id>163</id>
 						<name>prLamB_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4761</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4764</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5428,7 +5428,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4761</second>
+										<second>4764</second>
 									</item>
 								</second>
 							</item>
@@ -5456,14 +5456,14 @@
 						<id>164</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4761</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4764</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5472,7 +5472,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4761</second>
+										<second>4764</second>
 									</item>
 								</second>
 							</item>
@@ -5499,14 +5499,14 @@
 						<id>165</id>
 						<name>prLam2B_buf_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4763</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4766</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5515,7 +5515,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4763</second>
+										<second>4766</second>
 									</item>
 								</second>
 							</item>
@@ -5543,14 +5543,14 @@
 						<id>166</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4763</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4766</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5559,7 +5559,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4763</second>
+										<second>4766</second>
 									</item>
 								</second>
 							</item>
@@ -5586,14 +5586,14 @@
 						<id>167</id>
 						<name>prLam2B_buf1_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4764</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4767</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5602,7 +5602,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4764</second>
+										<second>4767</second>
 									</item>
 								</second>
 							</item>
@@ -5630,14 +5630,14 @@
 						<id>168</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4764</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4767</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5646,7 +5646,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4764</second>
+										<second>4767</second>
 									</item>
 								</second>
 							</item>
@@ -5673,14 +5673,14 @@
 						<id>169</id>
 						<name>prLam2B_buf1a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4765</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4768</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5689,7 +5689,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4765</second>
+										<second>4768</second>
 									</item>
 								</second>
 							</item>
@@ -5717,14 +5717,14 @@
 						<id>170</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4765</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4768</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5733,7 +5733,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4765</second>
+										<second>4768</second>
 									</item>
 								</second>
 							</item>
@@ -5760,14 +5760,14 @@
 						<id>171</id>
 						<name>prLam2B_buf3_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4766</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4769</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5776,7 +5776,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4766</second>
+										<second>4769</second>
 									</item>
 								</second>
 							</item>
@@ -5804,14 +5804,14 @@
 						<id>172</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4766</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4769</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5820,7 +5820,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4766</second>
+										<second>4769</second>
 									</item>
 								</second>
 							</item>
@@ -5847,14 +5847,14 @@
 						<id>173</id>
 						<name>prLam2B_buf3a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4767</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4770</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5863,7 +5863,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4767</second>
+										<second>4770</second>
 									</item>
 								</second>
 							</item>
@@ -5891,14 +5891,14 @@
 						<id>174</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4767</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4770</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5907,7 +5907,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4767</second>
+										<second>4770</second>
 									</item>
 								</second>
 							</item>
@@ -5934,14 +5934,14 @@
 						<id>175</id>
 						<name>prLam2B_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4768</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4771</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5950,7 +5950,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4768</second>
+										<second>4771</second>
 									</item>
 								</second>
 							</item>
@@ -5978,14 +5978,14 @@
 						<id>176</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4768</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4771</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -5994,7 +5994,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4768</second>
+										<second>4771</second>
 									</item>
 								</second>
 							</item>
@@ -6021,14 +6021,14 @@
 						<id>177</id>
 						<name>prLamC_buf_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4770</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4773</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6037,7 +6037,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4770</second>
+										<second>4773</second>
 									</item>
 								</second>
 							</item>
@@ -6065,14 +6065,14 @@
 						<id>178</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4770</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4773</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6081,7 +6081,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4770</second>
+										<second>4773</second>
 									</item>
 								</second>
 							</item>
@@ -6108,14 +6108,14 @@
 						<id>179</id>
 						<name>prLamC_buf1_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4771</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4774</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6124,7 +6124,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4771</second>
+										<second>4774</second>
 									</item>
 								</second>
 							</item>
@@ -6152,14 +6152,14 @@
 						<id>180</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4771</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4774</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6168,7 +6168,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4771</second>
+										<second>4774</second>
 									</item>
 								</second>
 							</item>
@@ -6195,14 +6195,14 @@
 						<id>181</id>
 						<name>prLamC_buf3_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4772</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4775</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6211,7 +6211,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4772</second>
+										<second>4775</second>
 									</item>
 								</second>
 							</item>
@@ -6239,14 +6239,14 @@
 						<id>182</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4772</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4775</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6255,7 +6255,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4772</second>
+										<second>4775</second>
 									</item>
 								</second>
 							</item>
@@ -6282,14 +6282,14 @@
 						<id>183</id>
 						<name>prLamC_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4773</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4776</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6298,7 +6298,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4773</second>
+										<second>4776</second>
 									</item>
 								</second>
 							</item>
@@ -6326,14 +6326,14 @@
 						<id>184</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4773</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4776</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6342,7 +6342,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4773</second>
+										<second>4776</second>
 									</item>
 								</second>
 							</item>
@@ -6369,14 +6369,14 @@
 						<id>185</id>
 						<name>prLamC_buf4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4774</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4777</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6385,7 +6385,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4774</second>
+										<second>4777</second>
 									</item>
 								</second>
 							</item>
@@ -6413,14 +6413,14 @@
 						<id>186</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4774</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4777</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6429,7 +6429,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4774</second>
+										<second>4777</second>
 									</item>
 								</second>
 							</item>
@@ -6456,14 +6456,14 @@
 						<id>187</id>
 						<name>prLamC_buf4b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4775</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4778</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6472,7 +6472,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4775</second>
+										<second>4778</second>
 									</item>
 								</second>
 							</item>
@@ -6500,14 +6500,14 @@
 						<id>188</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4775</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4778</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6516,7 +6516,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4775</second>
+										<second>4778</second>
 									</item>
 								</second>
 							</item>
@@ -6543,14 +6543,14 @@
 						<id>189</id>
 						<name>prLam2C_buf_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4777</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4780</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6559,7 +6559,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4777</second>
+										<second>4780</second>
 									</item>
 								</second>
 							</item>
@@ -6587,14 +6587,14 @@
 						<id>190</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4777</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4780</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6603,7 +6603,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4777</second>
+										<second>4780</second>
 									</item>
 								</second>
 							</item>
@@ -6630,14 +6630,14 @@
 						<id>191</id>
 						<name>prLam2C_buf1_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4778</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4781</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6646,7 +6646,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4778</second>
+										<second>4781</second>
 									</item>
 								</second>
 							</item>
@@ -6674,14 +6674,14 @@
 						<id>192</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4778</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4781</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6690,7 +6690,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4778</second>
+										<second>4781</second>
 									</item>
 								</second>
 							</item>
@@ -6717,14 +6717,14 @@
 						<id>193</id>
 						<name>prLam2C_buf3_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4779</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4782</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6733,7 +6733,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4779</second>
+										<second>4782</second>
 									</item>
 								</second>
 							</item>
@@ -6761,14 +6761,14 @@
 						<id>194</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4779</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4782</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6777,7 +6777,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4779</second>
+										<second>4782</second>
 									</item>
 								</second>
 							</item>
@@ -6804,14 +6804,14 @@
 						<id>195</id>
 						<name>prLam2C_buf4_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4780</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4783</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6820,7 +6820,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4780</second>
+										<second>4783</second>
 									</item>
 								</second>
 							</item>
@@ -6848,14 +6848,14 @@
 						<id>196</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4780</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4783</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6864,7 +6864,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4780</second>
+										<second>4783</second>
 									</item>
 								</second>
 							</item>
@@ -6891,14 +6891,14 @@
 						<id>197</id>
 						<name>prLam2C_buf4a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4781</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4784</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6907,7 +6907,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4781</second>
+										<second>4784</second>
 									</item>
 								</second>
 							</item>
@@ -6935,14 +6935,14 @@
 						<id>198</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4781</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4784</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6951,7 +6951,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4781</second>
+										<second>4784</second>
 									</item>
 								</second>
 							</item>
@@ -6978,14 +6978,14 @@
 						<id>199</id>
 						<name>prLam2C_buf4b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4782</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4785</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -6994,7 +6994,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4782</second>
+										<second>4785</second>
 									</item>
 								</second>
 							</item>
@@ -7022,14 +7022,14 @@
 						<id>200</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4782</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4785</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7038,7 +7038,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4782</second>
+										<second>4785</second>
 									</item>
 								</second>
 							</item>
@@ -7065,14 +7065,14 @@
 						<id>201</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4784</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4787</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7081,7 +7081,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4784</second>
+										<second>4787</second>
 									</item>
 								</second>
 							</item>
@@ -7107,14 +7107,14 @@
 						<id>203</id>
 						<name>tmp_513</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4787</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4790</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7123,7 +7123,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4787</second>
+										<second>4790</second>
 									</item>
 								</second>
 							</item>
@@ -7149,14 +7149,14 @@
 						<id>204</id>
 						<name>pos_assign</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4787</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4790</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7165,7 +7165,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4787</second>
+										<second>4790</second>
 									</item>
 								</second>
 							</item>
@@ -7192,14 +7192,14 @@
 						<id>205</id>
 						<name>pest0_load_1</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4789</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4792</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7208,7 +7208,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4789</second>
+										<second>4792</second>
 									</item>
 								</second>
 							</item>
@@ -7234,14 +7234,14 @@
 						<id>206</id>
 						<name>tmp_443</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4789</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4792</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7250,7 +7250,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4789</second>
+										<second>4792</second>
 									</item>
 								</second>
 							</item>
@@ -7276,14 +7276,14 @@
 						<id>207</id>
 						<name>Lam_bufB6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4789</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4792</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7292,7 +7292,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4789</second>
+										<second>4792</second>
 									</item>
 								</second>
 							</item>
@@ -7320,14 +7320,14 @@
 						<id>208</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4789</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4792</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7336,7 +7336,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4789</second>
+										<second>4792</second>
 									</item>
 								</second>
 							</item>
@@ -7363,14 +7363,14 @@
 						<id>209</id>
 						<name>Lam_bufAb_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4790</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4793</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7379,7 +7379,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4790</second>
+										<second>4793</second>
 									</item>
 								</second>
 							</item>
@@ -7407,14 +7407,14 @@
 						<id>210</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4790</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4793</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7423,7 +7423,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4790</second>
+										<second>4793</second>
 									</item>
 								</second>
 							</item>
@@ -7450,14 +7450,14 @@
 						<id>211</id>
 						<name>pest1_load_1</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4792</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4795</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7466,7 +7466,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4792</second>
+										<second>4795</second>
 									</item>
 								</second>
 							</item>
@@ -7492,14 +7492,14 @@
 						<id>212</id>
 						<name>Lam_bufAc_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4792</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4795</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7508,7 +7508,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4792</second>
+										<second>4795</second>
 									</item>
 								</second>
 							</item>
@@ -7536,14 +7536,14 @@
 						<id>213</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4792</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4795</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7552,7 +7552,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4792</second>
+										<second>4795</second>
 									</item>
 								</second>
 							</item>
@@ -7579,14 +7579,14 @@
 						<id>214</id>
 						<name>Lam_bufB7a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4793</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4796</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7595,7 +7595,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4793</second>
+										<second>4796</second>
 									</item>
 								</second>
 							</item>
@@ -7623,14 +7623,14 @@
 						<id>215</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4793</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4796</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7639,7 +7639,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4793</second>
+										<second>4796</second>
 									</item>
 								</second>
 							</item>
@@ -7666,14 +7666,14 @@
 						<id>216</id>
 						<name>Lam_bufB7b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4794</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4797</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7682,7 +7682,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4794</second>
+										<second>4797</second>
 									</item>
 								</second>
 							</item>
@@ -7710,14 +7710,14 @@
 						<id>217</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4794</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4797</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7726,7 +7726,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4794</second>
+										<second>4797</second>
 									</item>
 								</second>
 							</item>
@@ -7753,14 +7753,14 @@
 						<id>218</id>
 						<name>pest2_load_1</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4796</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4799</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7769,7 +7769,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4796</second>
+										<second>4799</second>
 									</item>
 								</second>
 							</item>
@@ -7795,14 +7795,14 @@
 						<id>219</id>
 						<name>Lam_buf8_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4796</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4799</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7811,7 +7811,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4796</second>
+										<second>4799</second>
 									</item>
 								</second>
 							</item>
@@ -7839,14 +7839,14 @@
 						<id>220</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4796</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4799</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7855,7 +7855,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4796</second>
+										<second>4799</second>
 									</item>
 								</second>
 							</item>
@@ -7882,14 +7882,14 @@
 						<id>221</id>
 						<name>pest3_load_1</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4798</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4801</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7898,7 +7898,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4798</second>
+										<second>4801</second>
 									</item>
 								</second>
 							</item>
@@ -7924,14 +7924,14 @@
 						<id>222</id>
 						<name>Lam_bufA2a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4798</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4801</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7940,7 +7940,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4798</second>
+										<second>4801</second>
 									</item>
 								</second>
 							</item>
@@ -7968,14 +7968,14 @@
 						<id>223</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4798</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4801</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -7984,7 +7984,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4798</second>
+										<second>4801</second>
 									</item>
 								</second>
 							</item>
@@ -8011,14 +8011,14 @@
 						<id>224</id>
 						<name>Lam_bufB9a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4799</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4802</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8027,7 +8027,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4799</second>
+										<second>4802</second>
 									</item>
 								</second>
 							</item>
@@ -8055,14 +8055,14 @@
 						<id>225</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4799</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4802</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8071,7 +8071,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4799</second>
+										<second>4802</second>
 									</item>
 								</second>
 							</item>
@@ -8098,14 +8098,14 @@
 						<id>226</id>
 						<name>Lam_bufB9b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4800</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4803</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8114,7 +8114,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4800</second>
+										<second>4803</second>
 									</item>
 								</second>
 							</item>
@@ -8142,14 +8142,14 @@
 						<id>227</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4800</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4803</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8158,7 +8158,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4800</second>
+										<second>4803</second>
 									</item>
 								</second>
 							</item>
@@ -8185,14 +8185,14 @@
 						<id>228</id>
 						<name>pest4_load_1</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4802</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4805</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8201,7 +8201,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4802</second>
+										<second>4805</second>
 									</item>
 								</second>
 							</item>
@@ -8227,14 +8227,14 @@
 						<id>229</id>
 						<name>Lam_buf6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4802</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4805</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8243,7 +8243,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4802</second>
+										<second>4805</second>
 									</item>
 								</second>
 							</item>
@@ -8271,14 +8271,14 @@
 						<id>230</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4802</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4805</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8287,7 +8287,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4802</second>
+										<second>4805</second>
 									</item>
 								</second>
 							</item>
@@ -8314,14 +8314,14 @@
 						<id>231</id>
 						<name>Lam_buf6a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4803</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4806</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8330,7 +8330,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4803</second>
+										<second>4806</second>
 									</item>
 								</second>
 							</item>
@@ -8358,14 +8358,14 @@
 						<id>232</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4803</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4806</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8374,7 +8374,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4803</second>
+										<second>4806</second>
 									</item>
 								</second>
 							</item>
@@ -8401,14 +8401,14 @@
 						<id>233</id>
 						<name>Lam_bufA6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4804</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4807</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8417,7 +8417,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4804</second>
+										<second>4807</second>
 									</item>
 								</second>
 							</item>
@@ -8445,14 +8445,14 @@
 						<id>234</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4804</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4807</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8461,7 +8461,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4804</second>
+										<second>4807</second>
 									</item>
 								</second>
 							</item>
@@ -8488,14 +8488,14 @@
 						<id>235</id>
 						<name>Lam_bufA6b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4805</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4808</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8504,7 +8504,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4805</second>
+										<second>4808</second>
 									</item>
 								</second>
 							</item>
@@ -8532,14 +8532,14 @@
 						<id>236</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4805</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4808</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8548,7 +8548,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4805</second>
+										<second>4808</second>
 									</item>
 								</second>
 							</item>
@@ -8575,14 +8575,14 @@
 						<id>237</id>
 						<name>Lam_bufA6c_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4806</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4809</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8591,7 +8591,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4806</second>
+										<second>4809</second>
 									</item>
 								</second>
 							</item>
@@ -8619,14 +8619,14 @@
 						<id>238</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4806</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4809</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8635,7 +8635,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4806</second>
+										<second>4809</second>
 									</item>
 								</second>
 							</item>
@@ -8662,14 +8662,14 @@
 						<id>239</id>
 						<name>Lam_bufB10_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4807</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4810</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8678,7 +8678,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4807</second>
+										<second>4810</second>
 									</item>
 								</second>
 							</item>
@@ -8706,14 +8706,14 @@
 						<id>240</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4807</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4810</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8722,7 +8722,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4807</second>
+										<second>4810</second>
 									</item>
 								</second>
 							</item>
@@ -8749,14 +8749,14 @@
 						<id>241</id>
 						<name>prLamB_buf3b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4809</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4812</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8765,7 +8765,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4809</second>
+										<second>4812</second>
 									</item>
 								</second>
 							</item>
@@ -8793,14 +8793,14 @@
 						<id>242</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4809</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4812</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8809,7 +8809,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4809</second>
+										<second>4812</second>
 									</item>
 								</second>
 							</item>
@@ -8836,14 +8836,14 @@
 						<id>243</id>
 						<name>prLamB_buf5_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4810</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4813</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8852,7 +8852,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4810</second>
+										<second>4813</second>
 									</item>
 								</second>
 							</item>
@@ -8880,14 +8880,14 @@
 						<id>244</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4810</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4813</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8896,7 +8896,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4810</second>
+										<second>4813</second>
 									</item>
 								</second>
 							</item>
@@ -8923,14 +8923,14 @@
 						<id>245</id>
 						<name>prLamB_buf5a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4811</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4814</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8939,7 +8939,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4811</second>
+										<second>4814</second>
 									</item>
 								</second>
 							</item>
@@ -8967,14 +8967,14 @@
 						<id>246</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4811</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4814</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -8983,7 +8983,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4811</second>
+										<second>4814</second>
 									</item>
 								</second>
 							</item>
@@ -9010,14 +9010,14 @@
 						<id>247</id>
 						<name>prLamB_buf6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4812</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4815</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9026,7 +9026,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4812</second>
+										<second>4815</second>
 									</item>
 								</second>
 							</item>
@@ -9054,14 +9054,14 @@
 						<id>248</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4812</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4815</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9070,7 +9070,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4812</second>
+										<second>4815</second>
 									</item>
 								</second>
 							</item>
@@ -9097,14 +9097,14 @@
 						<id>249</id>
 						<name>prLamB_buf7_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4813</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4816</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9113,7 +9113,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4813</second>
+										<second>4816</second>
 									</item>
 								</second>
 							</item>
@@ -9141,14 +9141,14 @@
 						<id>250</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4813</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4816</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9157,7 +9157,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4813</second>
+										<second>4816</second>
 									</item>
 								</second>
 							</item>
@@ -9184,14 +9184,14 @@
 						<id>251</id>
 						<name>prLamB_buf7a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4814</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4817</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9200,7 +9200,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4814</second>
+										<second>4817</second>
 									</item>
 								</second>
 							</item>
@@ -9228,14 +9228,14 @@
 						<id>252</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4814</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4817</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9244,7 +9244,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4814</second>
+										<second>4817</second>
 									</item>
 								</second>
 							</item>
@@ -9271,14 +9271,14 @@
 						<id>253</id>
 						<name>prLamB_buf9_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4815</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4818</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9287,7 +9287,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4815</second>
+										<second>4818</second>
 									</item>
 								</second>
 							</item>
@@ -9315,14 +9315,14 @@
 						<id>254</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4815</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4818</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9331,7 +9331,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4815</second>
+										<second>4818</second>
 									</item>
 								</second>
 							</item>
@@ -9358,14 +9358,14 @@
 						<id>255</id>
 						<name>prLamB_buf9a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4816</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4819</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9374,7 +9374,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4816</second>
+										<second>4819</second>
 									</item>
 								</second>
 							</item>
@@ -9402,14 +9402,14 @@
 						<id>256</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4816</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4819</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9418,7 +9418,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4816</second>
+										<second>4819</second>
 									</item>
 								</second>
 							</item>
@@ -9445,14 +9445,14 @@
 						<id>257</id>
 						<name>prLamB_buf10_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4817</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4820</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9461,7 +9461,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4817</second>
+										<second>4820</second>
 									</item>
 								</second>
 							</item>
@@ -9489,14 +9489,14 @@
 						<id>258</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4817</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4820</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9505,7 +9505,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4817</second>
+										<second>4820</second>
 									</item>
 								</second>
 							</item>
@@ -9532,14 +9532,14 @@
 						<id>259</id>
 						<name>prLam2B_buf3b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4819</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4822</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9548,7 +9548,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4819</second>
+										<second>4822</second>
 									</item>
 								</second>
 							</item>
@@ -9576,14 +9576,14 @@
 						<id>260</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4819</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4822</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9592,7 +9592,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4819</second>
+										<second>4822</second>
 									</item>
 								</second>
 							</item>
@@ -9619,14 +9619,14 @@
 						<id>261</id>
 						<name>prLam2B_buf5_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4820</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4823</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9635,7 +9635,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4820</second>
+										<second>4823</second>
 									</item>
 								</second>
 							</item>
@@ -9663,14 +9663,14 @@
 						<id>262</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4820</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4823</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9679,7 +9679,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4820</second>
+										<second>4823</second>
 									</item>
 								</second>
 							</item>
@@ -9706,14 +9706,14 @@
 						<id>263</id>
 						<name>prLam2B_buf5a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4821</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4824</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9722,7 +9722,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4821</second>
+										<second>4824</second>
 									</item>
 								</second>
 							</item>
@@ -9750,14 +9750,14 @@
 						<id>264</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4821</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4824</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9766,7 +9766,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4821</second>
+										<second>4824</second>
 									</item>
 								</second>
 							</item>
@@ -9793,14 +9793,14 @@
 						<id>265</id>
 						<name>prLam2B_buf6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4822</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4825</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9809,7 +9809,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4822</second>
+										<second>4825</second>
 									</item>
 								</second>
 							</item>
@@ -9837,14 +9837,14 @@
 						<id>266</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4822</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4825</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9853,7 +9853,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4822</second>
+										<second>4825</second>
 									</item>
 								</second>
 							</item>
@@ -9880,14 +9880,14 @@
 						<id>267</id>
 						<name>prLam2B_buf7_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4823</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4826</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9896,7 +9896,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4823</second>
+										<second>4826</second>
 									</item>
 								</second>
 							</item>
@@ -9924,14 +9924,14 @@
 						<id>268</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4823</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4826</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9940,7 +9940,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4823</second>
+										<second>4826</second>
 									</item>
 								</second>
 							</item>
@@ -9967,14 +9967,14 @@
 						<id>269</id>
 						<name>prLam2B_buf7a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4824</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4827</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -9983,7 +9983,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4824</second>
+										<second>4827</second>
 									</item>
 								</second>
 							</item>
@@ -10011,14 +10011,14 @@
 						<id>270</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4824</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4827</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10027,7 +10027,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4824</second>
+										<second>4827</second>
 									</item>
 								</second>
 							</item>
@@ -10054,14 +10054,14 @@
 						<id>271</id>
 						<name>prLam2B_buf9_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4825</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4828</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10070,7 +10070,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4825</second>
+										<second>4828</second>
 									</item>
 								</second>
 							</item>
@@ -10098,14 +10098,14 @@
 						<id>272</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4825</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4828</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10114,7 +10114,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4825</second>
+										<second>4828</second>
 									</item>
 								</second>
 							</item>
@@ -10141,14 +10141,14 @@
 						<id>273</id>
 						<name>prLam2B_buf9a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4826</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4829</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10157,7 +10157,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4826</second>
+										<second>4829</second>
 									</item>
 								</second>
 							</item>
@@ -10185,14 +10185,14 @@
 						<id>274</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4826</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4829</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10201,7 +10201,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4826</second>
+										<second>4829</second>
 									</item>
 								</second>
 							</item>
@@ -10228,14 +10228,14 @@
 						<id>275</id>
 						<name>prLam2B_buf10_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4827</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4830</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10244,7 +10244,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4827</second>
+										<second>4830</second>
 									</item>
 								</second>
 							</item>
@@ -10272,14 +10272,14 @@
 						<id>276</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4827</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4830</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10288,7 +10288,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4827</second>
+										<second>4830</second>
 									</item>
 								</second>
 							</item>
@@ -10315,14 +10315,14 @@
 						<id>277</id>
 						<name>prLamC_buf5_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4830</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4833</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10331,7 +10331,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4830</second>
+										<second>4833</second>
 									</item>
 								</second>
 							</item>
@@ -10359,14 +10359,14 @@
 						<id>278</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4830</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4833</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10375,7 +10375,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4830</second>
+										<second>4833</second>
 									</item>
 								</second>
 							</item>
@@ -10402,14 +10402,14 @@
 						<id>279</id>
 						<name>prLamC_buf6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4831</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4834</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10418,7 +10418,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4831</second>
+										<second>4834</second>
 									</item>
 								</second>
 							</item>
@@ -10446,14 +10446,14 @@
 						<id>280</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4831</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4834</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10462,7 +10462,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4831</second>
+										<second>4834</second>
 									</item>
 								</second>
 							</item>
@@ -10489,14 +10489,14 @@
 						<id>281</id>
 						<name>prLamC_buf7_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4832</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4835</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10505,7 +10505,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4832</second>
+										<second>4835</second>
 									</item>
 								</second>
 							</item>
@@ -10533,14 +10533,14 @@
 						<id>282</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4832</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4835</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10549,7 +10549,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4832</second>
+										<second>4835</second>
 									</item>
 								</second>
 							</item>
@@ -10576,14 +10576,14 @@
 						<id>283</id>
 						<name>prLamC_buf10_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4833</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4836</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10592,7 +10592,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4833</second>
+										<second>4836</second>
 									</item>
 								</second>
 							</item>
@@ -10620,14 +10620,14 @@
 						<id>284</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4833</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4836</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10636,7 +10636,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4833</second>
+										<second>4836</second>
 									</item>
 								</second>
 							</item>
@@ -10663,14 +10663,14 @@
 						<id>285</id>
 						<name>prLamC_buf10a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4834</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4837</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10679,7 +10679,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4834</second>
+										<second>4837</second>
 									</item>
 								</second>
 							</item>
@@ -10707,14 +10707,14 @@
 						<id>286</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4834</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4837</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10723,7 +10723,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4834</second>
+										<second>4837</second>
 									</item>
 								</second>
 							</item>
@@ -10750,14 +10750,14 @@
 						<id>287</id>
 						<name>prLamC_buf10b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4835</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4838</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10766,7 +10766,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4835</second>
+										<second>4838</second>
 									</item>
 								</second>
 							</item>
@@ -10794,14 +10794,14 @@
 						<id>288</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4835</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4838</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10810,7 +10810,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4835</second>
+										<second>4838</second>
 									</item>
 								</second>
 							</item>
@@ -10837,14 +10837,14 @@
 						<id>289</id>
 						<name>prLam2C_buf5_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4837</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4840</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10853,7 +10853,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4837</second>
+										<second>4840</second>
 									</item>
 								</second>
 							</item>
@@ -10881,14 +10881,14 @@
 						<id>290</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4837</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4840</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10897,7 +10897,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4837</second>
+										<second>4840</second>
 									</item>
 								</second>
 							</item>
@@ -10924,14 +10924,14 @@
 						<id>291</id>
 						<name>prLam2C_buf6_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4838</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4841</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10940,7 +10940,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4838</second>
+										<second>4841</second>
 									</item>
 								</second>
 							</item>
@@ -10968,14 +10968,14 @@
 						<id>292</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4838</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4841</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -10984,7 +10984,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4838</second>
+										<second>4841</second>
 									</item>
 								</second>
 							</item>
@@ -11011,14 +11011,14 @@
 						<id>293</id>
 						<name>prLam2C_buf7_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4839</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4842</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11027,7 +11027,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4839</second>
+										<second>4842</second>
 									</item>
 								</second>
 							</item>
@@ -11055,14 +11055,14 @@
 						<id>294</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4839</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4842</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11071,7 +11071,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4839</second>
+										<second>4842</second>
 									</item>
 								</second>
 							</item>
@@ -11098,14 +11098,14 @@
 						<id>295</id>
 						<name>prLam2C_buf10_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4840</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4843</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11114,7 +11114,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4840</second>
+										<second>4843</second>
 									</item>
 								</second>
 							</item>
@@ -11142,14 +11142,14 @@
 						<id>296</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4840</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4843</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11158,7 +11158,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4840</second>
+										<second>4843</second>
 									</item>
 								</second>
 							</item>
@@ -11185,14 +11185,14 @@
 						<id>297</id>
 						<name>prLam2C_buf10a_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4841</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4844</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11201,7 +11201,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4841</second>
+										<second>4844</second>
 									</item>
 								</second>
 							</item>
@@ -11229,14 +11229,14 @@
 						<id>298</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4841</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4844</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11245,7 +11245,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4841</second>
+										<second>4844</second>
 									</item>
 								</second>
 							</item>
@@ -11272,14 +11272,14 @@
 						<id>299</id>
 						<name>prLam2C_buf10b_addr</name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4842</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4845</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11288,7 +11288,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4842</second>
+										<second>4845</second>
 									</item>
 								</second>
 							</item>
@@ -11316,14 +11316,14 @@
 						<id>300</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4842</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4845</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11332,7 +11332,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4842</second>
+										<second>4845</second>
 									</item>
 								</second>
 							</item>
@@ -11387,14 +11387,14 @@
 						<id>303</id>
 						<name></name>
 						<fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
-						<fileDirectory>C:\Users\dougo</fileDirectory>
-						<lineNumber>4846</lineNumber>
+						<fileDirectory>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</fileDirectory>
+						<lineNumber>4849</lineNumber>
 						<contextFuncName>update_lam_all_12</contextFuncName>
 						<inlineStackInfo>
 							<count>1</count>
 							<item_version>0</item_version>
 							<item>
-								<first>C:\Users\dougo</first>
+								<first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
 								<second>
 									<count>1</count>
 									<item_version>0</item_version>
@@ -11403,7 +11403,7 @@
 											<first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
 											<second>update_lam_all_12</second>
 										</first>
-										<second>4846</second>
+										<second>4849</second>
 									</item>
 								</second>
 							</item>

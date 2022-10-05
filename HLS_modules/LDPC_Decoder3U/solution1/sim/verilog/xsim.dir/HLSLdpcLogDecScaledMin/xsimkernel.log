@@ -1,7 +1,7 @@
-Running: xsim.dir/HLSLdpcLogDecScaledMin/xsimk.exe -simmode gui -wdb HLSLdpcLogDecScaledMin.wdb -simrunnum 0 -socket 57682
+Running: xsim.dir/HLSLdpcLogDecScaledMin/xsimk.exe -simmode gui -wdb HLSLdpcLogDecScaledMin.wdb -simrunnum 0 -socket 51614
 Design successfully loaded
-Design Loading Memory Usage: 22748 KB (Peak: 22748 KB)
-Design Loading CPU Usage: 62 ms
+Design Loading Memory Usage: 25404 KB (Peak: 25404 KB)
+Design Loading CPU Usage: 31 ms
 Simulation completed
-Simulation Memory Usage: 34988 KB (Peak: 34988 KB)
-Simulation CPU Usage: 923999 ms
+Simulation Memory Usage: 37584 KB (Peak: 37584 KB)
+Simulation CPU Usage: 527999 ms

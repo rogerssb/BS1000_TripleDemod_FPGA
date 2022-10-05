@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'HLSLdpcLogDecScaledMin'
 ================================================================
-* Date:           Sat Oct 05 17:10:56 2019
+* Date:           Thu Aug 11 10:27:07 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -1890,10 +1890,10 @@ ST_9: tmp_1081 (1190)  [1/1] 0.84ns
 ST_9: StgValue_607 (1191)  [1/1] 0.00ns
 :3  br i1 %tmp_1081, label %._crit_edge54, label %._crit_edge52
 
-ST_9: StgValue_608 (1193)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_9: StgValue_608 (1193)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 ._crit_edge54:0  br label %12
 
-ST_9: StgValue_609 (1211)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_9: StgValue_609 (1211)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 ._crit_edge51:0  br label %9
 
 ST_9: StgValue_610 (1229)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
@@ -1904,19 +1904,19 @@ ST_9: StgValue_610 (1229)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaled
 ST_10: m_i2 (1195)  [1/1] 0.00ns
 :0  %m_i2 = phi i16 [ 0, %._crit_edge54 ], [ %m_2, %13 ]
 
-ST_10: rows_load_2 (1196)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_10: rows_load_2 (1196)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :1  %rows_load_2 = load i16* @rows, align 2
 
-ST_10: tmp_i2 (1197)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_10: tmp_i2 (1197)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :2  %tmp_i2 = icmp slt i16 %m_i2, %rows_load_2
 
-ST_10: StgValue_614 (1198)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_10: StgValue_614 (1198)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :3  br i1 %tmp_i2, label %13, label %._crit_edge52.loopexit
 
-ST_10: StgValue_615 (1201)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3544->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_10: StgValue_615 (1201)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3547->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :1  call fastcc void @setup_calc_12(i16 %m_i2, i16 %m_i2, i16 %m_i2) nounwind
 
-ST_10: m_2 (1204)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_10: m_2 (1204)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :4  %m_2 = add i16 %m_i2, 2
 
 ST_10: StgValue_617 (1207)  [1/1] 0.00ns
@@ -1928,19 +1928,19 @@ ST_10: StgValue_618 (1209)  [1/1] 0.00ns
 ST_10: m_i1 (1213)  [1/1] 0.00ns
 :0  %m_i1 = phi i16 [ 0, %._crit_edge51 ], [ %m_1, %10 ]
 
-ST_10: rows_load_1 (1214)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_10: rows_load_1 (1214)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :1  %rows_load_1 = load i16* @rows, align 2
 
-ST_10: tmp_i1 (1215)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_10: tmp_i1 (1215)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :2  %tmp_i1 = icmp slt i16 %m_i1, %rows_load_1
 
-ST_10: StgValue_622 (1216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_10: StgValue_622 (1216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :3  br i1 %tmp_i1, label %10, label %calc_m_23.exit.loopexit
 
-ST_10: StgValue_623 (1219)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_10: StgValue_623 (1219)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3500->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :1  call fastcc void @setup_calc_23(i16 %m_i1, i16 %m_i1, i16 %m_i1) nounwind
 
-ST_10: m_1 (1222)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_10: m_1 (1222)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :4  %m_1 = add i16 %m_i1, 2
 
 ST_10: StgValue_625 (1225)  [1/1] 0.00ns
@@ -1961,7 +1961,7 @@ ST_10: tmp_i (1233)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cp
 ST_10: StgValue_630 (1234)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :3  br i1 %tmp_i, label %7, label %calc_m.exit.loopexit
 
-ST_10: StgValue_631 (1237)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3452->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_10: StgValue_631 (1237)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3453->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :1  call fastcc void @setup_calc(i16 %m_i, i16 %m_i, i16 %m_i) nounwind
 
 ST_10: m (1240)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
@@ -2041,122 +2041,122 @@ ST_10: StgValue_656 (1398)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScale
 
 
  <State 11>: 0.00ns
-ST_11: StgValue_657 (1201)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3544->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_11: StgValue_657 (1201)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3547->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :1  call fastcc void @setup_calc_12(i16 %m_i2, i16 %m_i2, i16 %m_i2) nounwind
 
 
  <State 12>: 2.08ns
-ST_12: StgValue_658 (1202)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_12: StgValue_658 (1202)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 13>: 8.75ns
-ST_13: StgValue_659 (1202)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_13: StgValue_659 (1202)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 14>: 0.00ns
-ST_14: StgValue_660 (1202)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_14: StgValue_660 (1202)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 15>: 1.09ns
-ST_15: StgValue_661 (1203)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_15: StgValue_661 (1203)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :3  call fastcc void @write_result_12() nounwind
 
 
  <State 16>: 7.21ns
-ST_16: StgValue_662 (1203)  [2/3] 7.21ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_16: StgValue_662 (1203)  [2/3] 7.21ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :3  call fastcc void @write_result_12() nounwind
 
 
  <State 17>: 0.00ns
-ST_17: StgValue_663 (1200)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3542->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_17: StgValue_663 (1200)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3545->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str83) nounwind
 
-ST_17: StgValue_664 (1203)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_17: StgValue_664 (1203)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :3  call fastcc void @write_result_12() nounwind
 
-ST_17: StgValue_665 (1205)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
+ST_17: StgValue_665 (1205)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:771
 :5  br label %12
 
 
  <State 18>: 0.00ns
-ST_18: StgValue_666 (1219)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_18: StgValue_666 (1219)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3500->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :1  call fastcc void @setup_calc_23(i16 %m_i1, i16 %m_i1, i16 %m_i1) nounwind
 
 
  <State 19>: 2.08ns
-ST_19: StgValue_667 (1220)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_19: StgValue_667 (1220)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 20>: 8.75ns
-ST_20: StgValue_668 (1220)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_20: StgValue_668 (1220)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 21>: 0.00ns
-ST_21: StgValue_669 (1220)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_21: StgValue_669 (1220)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 22>: 1.09ns
-ST_22: StgValue_670 (1221)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_22: StgValue_670 (1221)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :3  call fastcc void @write_result_23() nounwind
 
 
  <State 23>: 7.67ns
-ST_23: StgValue_671 (1221)  [2/3] 7.67ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_23: StgValue_671 (1221)  [2/3] 7.67ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :3  call fastcc void @write_result_23() nounwind
 
 
  <State 24>: 0.00ns
-ST_24: StgValue_672 (1218)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_24: StgValue_672 (1218)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str83) nounwind
 
-ST_24: StgValue_673 (1221)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_24: StgValue_673 (1221)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :3  call fastcc void @write_result_23() nounwind
 
-ST_24: StgValue_674 (1223)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
+ST_24: StgValue_674 (1223)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:769
 :5  br label %9
 
 
  <State 25>: 0.00ns
-ST_25: StgValue_675 (1237)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3452->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_25: StgValue_675 (1237)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3453->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :1  call fastcc void @setup_calc(i16 %m_i, i16 %m_i, i16 %m_i) nounwind
 
 
  <State 26>: 2.08ns
-ST_26: StgValue_676 (1238)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_26: StgValue_676 (1238)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 27>: 8.75ns
-ST_27: StgValue_677 (1238)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_27: StgValue_677 (1238)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 28>: 0.00ns
-ST_28: StgValue_678 (1238)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_28: StgValue_678 (1238)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 29>: 1.09ns
-ST_29: StgValue_679 (1239)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_29: StgValue_679 (1239)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :3  call fastcc void @write_result() nounwind
 
 
  <State 30>: 8.52ns
-ST_30: StgValue_680 (1239)  [2/3] 8.52ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_30: StgValue_680 (1239)  [2/3] 8.52ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :3  call fastcc void @write_result() nounwind
 
 
  <State 31>: 0.00ns
-ST_31: StgValue_681 (1236)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3450->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_31: StgValue_681 (1236)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3451->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str82) nounwind
 
-ST_31: StgValue_682 (1239)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
+ST_31: StgValue_682 (1239)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
 :3  call fastcc void @write_result() nounwind
 
 ST_31: StgValue_683 (1241)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:767
@@ -2251,10 +2251,10 @@ ST_32: tmp_1100 (1301)  [1/1] 0.84ns
 ST_32: StgValue_712 (1302)  [1/1] 0.00ns
 :3  br i1 %tmp_1100, label %._crit_edge68, label %._crit_edge66
 
-ST_32: StgValue_713 (1304)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_32: StgValue_713 (1304)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 ._crit_edge68:0  br label %27
 
-ST_32: StgValue_714 (1322)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_32: StgValue_714 (1322)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 ._crit_edge65:0  br label %24
 
 ST_32: StgValue_715 (1340)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
@@ -2265,19 +2265,19 @@ ST_32: StgValue_715 (1340)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScale
 ST_33: m_i5 (1306)  [1/1] 0.00ns
 :0  %m_i5 = phi i16 [ 0, %._crit_edge68 ], [ %m_5, %28 ]
 
-ST_33: rows_load_5 (1307)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_33: rows_load_5 (1307)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :1  %rows_load_5 = load i16* @rows, align 2
 
-ST_33: tmp_i5 (1308)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_33: tmp_i5 (1308)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :2  %tmp_i5 = icmp slt i16 %m_i5, %rows_load_5
 
-ST_33: StgValue_719 (1309)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_33: StgValue_719 (1309)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :3  br i1 %tmp_i5, label %28, label %._crit_edge66.loopexit
 
-ST_33: StgValue_720 (1312)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3544->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_33: StgValue_720 (1312)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3547->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :1  call fastcc void @setup_calc_12(i16 %m_i5, i16 %m_i5, i16 %m_i5) nounwind
 
-ST_33: m_5 (1315)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_33: m_5 (1315)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :4  %m_5 = add i16 %m_i5, 2
 
 ST_33: StgValue_722 (1318)  [1/1] 0.00ns
@@ -2289,19 +2289,19 @@ ST_33: StgValue_723 (1320)  [1/1] 0.00ns
 ST_33: m_i4 (1324)  [1/1] 0.00ns
 :0  %m_i4 = phi i16 [ 0, %._crit_edge65 ], [ %m_4, %25 ]
 
-ST_33: rows_load_4 (1325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_33: rows_load_4 (1325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :1  %rows_load_4 = load i16* @rows, align 2
 
-ST_33: tmp_i4 (1326)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_33: tmp_i4 (1326)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :2  %tmp_i4 = icmp slt i16 %m_i4, %rows_load_4
 
-ST_33: StgValue_727 (1327)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_33: StgValue_727 (1327)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :3  br i1 %tmp_i4, label %25, label %calc_m_23.exit297.loopexit
 
-ST_33: StgValue_728 (1330)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_33: StgValue_728 (1330)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3500->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :1  call fastcc void @setup_calc_23(i16 %m_i4, i16 %m_i4, i16 %m_i4) nounwind
 
-ST_33: m_4 (1333)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_33: m_4 (1333)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :4  %m_4 = add i16 %m_i4, 2
 
 ST_33: StgValue_730 (1336)  [1/1] 0.00ns
@@ -2322,7 +2322,7 @@ ST_33: tmp_i3 (1344)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.c
 ST_33: StgValue_735 (1345)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :3  br i1 %tmp_i3, label %22, label %calc_m.exit292.loopexit
 
-ST_33: StgValue_736 (1348)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3452->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_33: StgValue_736 (1348)  [2/2] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3453->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :1  call fastcc void @setup_calc(i16 %m_i3, i16 %m_i3, i16 %m_i3) nounwind
 
 ST_33: m_3 (1351)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
@@ -2396,122 +2396,122 @@ ST_33: StgValue_759 (1394)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScale
 
 
  <State 34>: 0.00ns
-ST_34: StgValue_760 (1312)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3544->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_34: StgValue_760 (1312)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3547->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :1  call fastcc void @setup_calc_12(i16 %m_i5, i16 %m_i5, i16 %m_i5) nounwind
 
 
  <State 35>: 2.08ns
-ST_35: StgValue_761 (1313)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_35: StgValue_761 (1313)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 36>: 8.75ns
-ST_36: StgValue_762 (1313)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_36: StgValue_762 (1313)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 37>: 0.00ns
-ST_37: StgValue_763 (1313)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3552->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_37: StgValue_763 (1313)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3555->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 38>: 1.09ns
-ST_38: StgValue_764 (1314)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_38: StgValue_764 (1314)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :3  call fastcc void @write_result_12() nounwind
 
 
  <State 39>: 7.21ns
-ST_39: StgValue_765 (1314)  [2/3] 7.21ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_39: StgValue_765 (1314)  [2/3] 7.21ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :3  call fastcc void @write_result_12() nounwind
 
 
  <State 40>: 0.00ns
-ST_40: StgValue_766 (1311)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3542->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_40: StgValue_766 (1311)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3545->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str83) nounwind
 
-ST_40: StgValue_767 (1314)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3554->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_40: StgValue_767 (1314)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3557->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :3  call fastcc void @write_result_12() nounwind
 
-ST_40: StgValue_768 (1316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3541->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
+ST_40: StgValue_768 (1316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3543->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:828
 :5  br label %27
 
 
  <State 41>: 0.00ns
-ST_41: StgValue_769 (1330)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_41: StgValue_769 (1330)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3500->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :1  call fastcc void @setup_calc_23(i16 %m_i4, i16 %m_i4, i16 %m_i4) nounwind
 
 
  <State 42>: 2.08ns
-ST_42: StgValue_770 (1331)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_42: StgValue_770 (1331)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 43>: 8.75ns
-ST_43: StgValue_771 (1331)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_43: StgValue_771 (1331)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 44>: 0.00ns
-ST_44: StgValue_772 (1331)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3506->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_44: StgValue_772 (1331)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 45>: 1.09ns
-ST_45: StgValue_773 (1332)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_45: StgValue_773 (1332)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :3  call fastcc void @write_result_23() nounwind
 
 
  <State 46>: 7.67ns
-ST_46: StgValue_774 (1332)  [2/3] 7.67ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_46: StgValue_774 (1332)  [2/3] 7.67ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :3  call fastcc void @write_result_23() nounwind
 
 
  <State 47>: 0.00ns
-ST_47: StgValue_775 (1329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_47: StgValue_775 (1329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3498->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str83) nounwind
 
-ST_47: StgValue_776 (1332)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3508->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_47: StgValue_776 (1332)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3510->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :3  call fastcc void @write_result_23() nounwind
 
-ST_47: StgValue_777 (1334)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3495->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
+ST_47: StgValue_777 (1334)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3496->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:826
 :5  br label %24
 
 
  <State 48>: 0.00ns
-ST_48: StgValue_778 (1348)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3452->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_48: StgValue_778 (1348)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3453->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :1  call fastcc void @setup_calc(i16 %m_i3, i16 %m_i3, i16 %m_i3) nounwind
 
 
  <State 49>: 2.08ns
-ST_49: StgValue_779 (1349)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_49: StgValue_779 (1349)  [3/3] 2.08ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 50>: 8.75ns
-ST_50: StgValue_780 (1349)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_50: StgValue_780 (1349)  [2/3] 8.75ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 51>: 0.00ns
-ST_51: StgValue_781 (1349)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3460->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_51: StgValue_781 (1349)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3461->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :2  call fastcc void @calc_ma() nounwind
 
 
  <State 52>: 1.09ns
-ST_52: StgValue_782 (1350)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_52: StgValue_782 (1350)  [3/3] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :3  call fastcc void @write_result() nounwind
 
 
  <State 53>: 8.52ns
-ST_53: StgValue_783 (1350)  [2/3] 8.52ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_53: StgValue_783 (1350)  [2/3] 8.52ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :3  call fastcc void @write_result() nounwind
 
 
  <State 54>: 0.00ns
-ST_54: StgValue_784 (1347)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3450->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_54: StgValue_784 (1347)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3451->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :0  call void (...)* @_ssdm_op_SpecLoopName([14 x i8]* @p_str82) nounwind
 
-ST_54: StgValue_785 (1350)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3462->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
+ST_54: StgValue_785 (1350)  [1/3] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3463->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
 :3  call fastcc void @write_result() nounwind
 
 ST_54: StgValue_786 (1352)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3449->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:824
@@ -2585,7 +2585,7 @@ ST_58: test_in_1 (1410)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMi
 ST_58: StgValue_806 (1411)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:875
 :1  br label %35
 
-ST_58: StgValue_807 (1413)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_58: StgValue_807 (1413)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304.preheader:0  br label %.preheader304
 
 
@@ -2593,40 +2593,40 @@ ST_58: StgValue_807 (1413)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScale
 ST_59: i_i (1415)  [1/1] 0.00ns
 .preheader304:0  %i_i = phi i12 [ %i, %._crit_edge.i ], [ 0, %.preheader304.preheader ]
 
-ST_59: i_i_cast1 (1416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: i_i_cast1 (1416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:1  %i_i_cast1 = zext i12 %i_i to i32
 
-ST_59: i_i_cast (1417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: i_i_cast (1417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:2  %i_i_cast = zext i12 %i_i to i16
 
-ST_59: cols_load_1 (1418)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: cols_load_1 (1418)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:3  %cols_load_1 = load i16* @cols, align 2
 
-ST_59: tmp_i_113 (1419)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: tmp_i_113 (1419)  [1/1] 1.55ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:4  %tmp_i_113 = icmp slt i16 %i_i_cast, %cols_load_1
 
-ST_59: i (1420)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: i (1420)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:5  %i = add i12 %i_i, 1
 
-ST_59: StgValue_814 (1421)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: StgValue_814 (1421)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 .preheader304:6  br i1 %tmp_i_113, label %37, label %write_pcHat.exit
 
-ST_59: prHat_buf_addr (1423)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5256->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: prHat_buf_addr (1423)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5259->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :0  %prHat_buf_addr = getelementptr inbounds [2048 x i1]* @prHat_buf, i32 0, i32 %i_i_cast1
 
-ST_59: prHat_buf_load (1424)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5256->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: prHat_buf_load (1424)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5259->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :1  %prHat_buf_load = load i1* %prHat_buf_addr, align 1
 
-ST_59: prHat_bufA1_addr (1427)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: prHat_bufA1_addr (1427)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :4  %prHat_bufA1_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA1, i32 0, i32 %i_i_cast1
 
-ST_59: prHat_bufA1_load (1428)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: prHat_bufA1_load (1428)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :5  %prHat_bufA1_load = load i1* %prHat_bufA1_addr, align 1
 
-ST_59: tmp_1110 (1431)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5258->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: tmp_1110 (1431)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :8  %tmp_1110 = call i2 @_ssdm_op_PartSelect.i2.i12.i32.i32(i12 %i_i, i32 10, i32 11)
 
-ST_59: icmp7 (1432)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5258->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_59: icmp7 (1432)  [1/1] 0.85ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :9  %icmp7 = icmp eq i2 %tmp_1110, 0
 
 ST_59: tmp_962 (1463)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:878
@@ -2640,123 +2640,123 @@ write_pcHat.exit:2  ret void
 
 
  <State 60>: 4.72ns
-ST_60: prHat_buf_load (1424)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5256->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_buf_load (1424)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5259->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :1  %prHat_buf_load = load i1* %prHat_buf_addr, align 1
 
-ST_60: pbhat0_addr (1425)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5256->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: pbhat0_addr (1425)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5259->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :2  %pbhat0_addr = getelementptr [2048 x i1]* %pbhat0, i32 0, i32 %i_i_cast1
 
-ST_60: StgValue_826 (1426)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5256->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: StgValue_826 (1426)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5259->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :3  store i1 %prHat_buf_load, i1* %pbhat0_addr, align 1
 
-ST_60: prHat_bufA1_load (1428)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufA1_load (1428)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :5  %prHat_bufA1_load = load i1* %prHat_bufA1_addr, align 1
 
-ST_60: pbhat1_addr (1429)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: pbhat1_addr (1429)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :6  %pbhat1_addr = getelementptr [2048 x i1]* %pbhat1, i32 0, i32 %i_i_cast1
 
-ST_60: StgValue_829 (1430)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: StgValue_829 (1430)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :7  store i1 %prHat_bufA1_load, i1* %pbhat1_addr, align 1
 
-ST_60: StgValue_830 (1433)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5258->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: StgValue_830 (1433)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :10  br i1 %icmp7, label %38, label %._crit_edge.i
 
-ST_60: prHat_bufB2_addr (1435)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufB2_addr (1435)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :0  %prHat_bufB2_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB2, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_bufB2_load (1436)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufB2_load (1436)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :1  %prHat_bufB2_load = load i1* %prHat_bufB2_addr, align 1
 
-ST_60: prHat_buf3_addr (1439)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_buf3_addr (1439)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :4  %prHat_buf3_addr = getelementptr inbounds [2048 x i1]* @prHat_buf3, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_buf3_load (1440)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_buf3_load (1440)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :5  %prHat_buf3_load = load i1* %prHat_buf3_addr, align 1
 
-ST_60: prHat_bufA4_addr (1443)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5262->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufA4_addr (1443)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :8  %prHat_bufA4_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA4, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_bufA4_load (1444)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5262->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufA4_load (1444)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :9  %prHat_bufA4_load = load i1* %prHat_bufA4_addr, align 1
 
-ST_60: prHat_bufB5_addr (1447)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufB5_addr (1447)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :12  %prHat_bufB5_addr = getelementptr inbounds [2048 x i1]* @prHat_bufB5, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_bufB5_load (1448)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufB5_load (1448)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :13  %prHat_bufB5_load = load i1* %prHat_bufB5_addr, align 1
 
-ST_60: prHat_buf6_addr (1451)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_buf6_addr (1451)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5267->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :16  %prHat_buf6_addr = getelementptr inbounds [2048 x i1]* @prHat_buf6, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_buf6_load (1452)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_buf6_load (1452)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5267->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :17  %prHat_buf6_load = load i1* %prHat_buf6_addr, align 1
 
-ST_60: prHat_bufA7_addr (1455)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufA7_addr (1455)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5268->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :20  %prHat_bufA7_addr = getelementptr inbounds [2048 x i1]* @prHat_bufA7, i32 0, i32 %i_i_cast1
 
-ST_60: prHat_bufA7_load (1456)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_60: prHat_bufA7_load (1456)  [2/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5268->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :21  %prHat_bufA7_load = load i1* %prHat_bufA7_addr, align 1
 
 
  <State 61>: 4.72ns
-ST_61: prHat_bufB2_load (1436)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_bufB2_load (1436)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :1  %prHat_bufB2_load = load i1* %prHat_bufB2_addr, align 1
 
-ST_61: pbhat2_addr (1437)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat2_addr (1437)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :2  %pbhat2_addr = getelementptr [1024 x i1]* %pbhat2, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_845 (1438)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5260->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_845 (1438)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :3  store i1 %prHat_bufB2_load, i1* %pbhat2_addr, align 1
 
-ST_61: prHat_buf3_load (1440)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_buf3_load (1440)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :5  %prHat_buf3_load = load i1* %prHat_buf3_addr, align 1
 
-ST_61: pbhat3_addr (1441)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat3_addr (1441)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :6  %pbhat3_addr = getelementptr [1024 x i1]* %pbhat3, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_848 (1442)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5261->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_848 (1442)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :7  store i1 %prHat_buf3_load, i1* %pbhat3_addr, align 1
 
-ST_61: prHat_bufA4_load (1444)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5262->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_bufA4_load (1444)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :9  %prHat_bufA4_load = load i1* %prHat_bufA4_addr, align 1
 
-ST_61: pbhat4_addr (1445)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5262->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat4_addr (1445)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :10  %pbhat4_addr = getelementptr [1024 x i1]* %pbhat4, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_851 (1446)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5262->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_851 (1446)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :11  store i1 %prHat_bufA4_load, i1* %pbhat4_addr, align 1
 
-ST_61: prHat_bufB5_load (1448)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_bufB5_load (1448)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :13  %prHat_bufB5_load = load i1* %prHat_bufB5_addr, align 1
 
-ST_61: pbhat5_addr (1449)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat5_addr (1449)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :14  %pbhat5_addr = getelementptr [1024 x i1]* %pbhat5, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_854 (1450)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5263->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_854 (1450)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :15  store i1 %prHat_bufB5_load, i1* %pbhat5_addr, align 1
 
-ST_61: prHat_buf6_load (1452)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_buf6_load (1452)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5267->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :17  %prHat_buf6_load = load i1* %prHat_buf6_addr, align 1
 
-ST_61: pbhat6_addr (1453)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat6_addr (1453)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5267->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :18  %pbhat6_addr = getelementptr [1024 x i1]* %pbhat6, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_857 (1454)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5264->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_857 (1454)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5267->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :19  store i1 %prHat_buf6_load, i1* %pbhat6_addr, align 1
 
-ST_61: prHat_bufA7_load (1456)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: prHat_bufA7_load (1456)  [1/2] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5268->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :21  %prHat_bufA7_load = load i1* %prHat_bufA7_addr, align 1
 
-ST_61: pbhat7_addr (1457)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: pbhat7_addr (1457)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5268->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :22  %pbhat7_addr = getelementptr [1024 x i1]* %pbhat7, i32 0, i32 %i_i_cast1
 
-ST_61: StgValue_860 (1458)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5265->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_860 (1458)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5268->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :23  store i1 %prHat_bufA7_load, i1* %pbhat7_addr, align 1
 
-ST_61: StgValue_861 (1459)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5266->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_861 (1459)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5269->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 :24  br label %._crit_edge.i
 
-ST_61: StgValue_862 (1461)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5254->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
+ST_61: StgValue_862 (1461)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5257->LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:877
 ._crit_edge.i:0  br label %.preheader304
 
 

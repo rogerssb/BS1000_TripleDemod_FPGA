@@ -274,13 +274,13 @@
               <name>Lam_tabe_0_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item class_id="10" tracking_level="0" version="0">
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second class_id="11" tracking_level="0" version="0">
                     <count>1</count>
                     <item_version>0</item_version>
@@ -289,7 +289,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -316,13 +316,13 @@
               <name>tmp_622</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -331,7 +331,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -358,13 +358,13 @@
               <name>Peta_tabe_0_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -373,7 +373,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -400,13 +400,13 @@
               <name>tmp_623</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -415,7 +415,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -442,13 +442,13 @@
               <name>vArg_V</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -457,7 +457,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -485,13 +485,13 @@
               <name>tmp_624</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -500,7 +500,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -529,13 +529,13 @@
               <name>vArg_V_3</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4010</lineNumber>
+              <lineNumber>4013</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -544,7 +544,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4010</second>
+                      <second>4013</second>
                     </item>
                   </second>
                 </item>
@@ -572,13 +572,13 @@
               <name>p_s</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -587,7 +587,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -616,13 +616,13 @@
               <name>tmp_556</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -631,7 +631,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -659,13 +659,13 @@
               <name>tmp_557</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -674,7 +674,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -702,13 +702,13 @@
               <name>tmp_558</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -717,7 +717,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -745,13 +745,13 @@
               <name>tmp_559</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -760,7 +760,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -788,13 +788,13 @@
               <name>tmp_560</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -803,7 +803,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -831,13 +831,13 @@
               <name>tmp_561</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4023</lineNumber>
+              <lineNumber>4026</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -846,7 +846,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4023</second>
+                      <second>4026</second>
                     </item>
                   </second>
                 </item>
@@ -874,13 +874,13 @@
               <name>storemerge_cast_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -889,7 +889,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -918,13 +918,13 @@
               <name>sel_tmp</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -933,7 +933,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -962,13 +962,13 @@
               <name>sel_tmp_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -977,7 +977,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1004,13 +1004,13 @@
               <name>sel_tmp1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1019,7 +1019,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -1047,13 +1047,13 @@
               <name>sel_tmp2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1062,7 +1062,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -1090,13 +1090,13 @@
               <name>sel_tmp6</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1105,7 +1105,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -1133,13 +1133,13 @@
               <name>sel_tmp7</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1148,7 +1148,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -1176,13 +1176,13 @@
               <name>sel_tmp3_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1191,7 +1191,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1220,13 +1220,13 @@
               <name>tmp</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1235,7 +1235,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1263,13 +1263,13 @@
               <name>sel_tmp8</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1278,7 +1278,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1307,13 +1307,13 @@
               <name>sel_tmp13</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1322,7 +1322,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -1350,13 +1350,13 @@
               <name>sel_tmp14</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1365,7 +1365,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -1393,13 +1393,13 @@
               <name>sel_tmp22</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1408,7 +1408,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -1436,13 +1436,13 @@
               <name>sel_tmp23</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1451,7 +1451,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -1479,13 +1479,13 @@
               <name>sel_tmp15_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1494,7 +1494,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1523,13 +1523,13 @@
               <name>tmp_562</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1538,7 +1538,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1566,13 +1566,13 @@
               <name>lhs_V_34</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1581,7 +1581,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -1610,13 +1610,13 @@
               <name>Lam_tabe_1_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1625,7 +1625,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -1652,13 +1652,13 @@
               <name>tmp_625</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1667,7 +1667,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -1694,13 +1694,13 @@
               <name>Peta_tabe_1_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1709,7 +1709,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -1736,13 +1736,13 @@
               <name>tmp_626</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1751,7 +1751,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -1778,13 +1778,13 @@
               <name>vArg_V_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1793,7 +1793,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -1821,13 +1821,13 @@
               <name>tmp_627</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1836,7 +1836,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -1865,13 +1865,13 @@
               <name>vArg_V_3_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4010</lineNumber>
+              <lineNumber>4013</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1880,7 +1880,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4010</second>
+                      <second>4013</second>
                     </item>
                   </second>
                 </item>
@@ -1908,13 +1908,13 @@
               <name>p_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1923,7 +1923,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -1952,13 +1952,13 @@
               <name>tmp_1064_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -1967,7 +1967,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -1995,13 +1995,13 @@
               <name>tmp_1065_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2010,7 +2010,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -2038,13 +2038,13 @@
               <name>tmp_1066_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2053,7 +2053,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -2081,13 +2081,13 @@
               <name>tmp_1067_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2096,7 +2096,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -2124,13 +2124,13 @@
               <name>tmp_1068_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2139,7 +2139,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -2167,13 +2167,13 @@
               <name>tmp_1069_1</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4023</lineNumber>
+              <lineNumber>4026</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2182,7 +2182,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4023</second>
+                      <second>4026</second>
                     </item>
                   </second>
                 </item>
@@ -2210,13 +2210,13 @@
               <name>storemerge_1_cast_ca</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2225,7 +2225,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2254,13 +2254,13 @@
               <name>sel_tmp25</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2269,7 +2269,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2298,13 +2298,13 @@
               <name>sel_tmp25_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2313,7 +2313,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2340,13 +2340,13 @@
               <name>sel_tmp26</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2355,7 +2355,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -2383,13 +2383,13 @@
               <name>sel_tmp27</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2398,7 +2398,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -2426,13 +2426,13 @@
               <name>sel_tmp31</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2441,7 +2441,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -2469,13 +2469,13 @@
               <name>sel_tmp32</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2484,7 +2484,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -2512,13 +2512,13 @@
               <name>sel_tmp28_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2527,7 +2527,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2556,13 +2556,13 @@
               <name>tmp_563</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2571,7 +2571,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2599,13 +2599,13 @@
               <name>sel_tmp33</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2614,7 +2614,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2643,13 +2643,13 @@
               <name>sel_tmp38</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2658,7 +2658,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -2686,13 +2686,13 @@
               <name>sel_tmp39</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2701,7 +2701,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -2729,13 +2729,13 @@
               <name>sel_tmp47</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2744,7 +2744,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -2772,13 +2772,13 @@
               <name>sel_tmp48</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2787,7 +2787,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -2815,13 +2815,13 @@
               <name>sel_tmp40_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2830,7 +2830,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2859,13 +2859,13 @@
               <name>tmp_564</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2874,7 +2874,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2902,13 +2902,13 @@
               <name>lhs_V</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2917,7 +2917,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -2946,13 +2946,13 @@
               <name>Lam_tabe_2_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -2961,7 +2961,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -2988,13 +2988,13 @@
               <name>tmp_628</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3003,7 +3003,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -3030,13 +3030,13 @@
               <name>Peta_tabe_2_load</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3045,7 +3045,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -3072,13 +3072,13 @@
               <name>tmp_629</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3087,7 +3087,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -3114,13 +3114,13 @@
               <name>vArg_V_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4002</lineNumber>
+              <lineNumber>4005</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3129,7 +3129,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4002</second>
+                      <second>4005</second>
                     </item>
                   </second>
                 </item>
@@ -3157,13 +3157,13 @@
               <name>tmp_630</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3172,7 +3172,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -3201,13 +3201,13 @@
               <name>vArg_V_3_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4010</lineNumber>
+              <lineNumber>4013</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3216,7 +3216,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4010</second>
+                      <second>4013</second>
                     </item>
                   </second>
                 </item>
@@ -3244,13 +3244,13 @@
               <name>p_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4005</lineNumber>
+              <lineNumber>4008</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3259,7 +3259,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4005</second>
+                      <second>4008</second>
                     </item>
                   </second>
                 </item>
@@ -3288,13 +3288,13 @@
               <name>tmp_1064_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3303,7 +3303,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -3331,13 +3331,13 @@
               <name>tmp_1065_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3346,7 +3346,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -3374,13 +3374,13 @@
               <name>tmp_1066_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3389,7 +3389,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -3417,13 +3417,13 @@
               <name>tmp_1067_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3432,7 +3432,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -3460,13 +3460,13 @@
               <name>tmp_1068_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3475,7 +3475,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -3503,13 +3503,13 @@
               <name>tmp_1069_2</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4023</lineNumber>
+              <lineNumber>4026</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3518,7 +3518,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4023</second>
+                      <second>4026</second>
                     </item>
                   </second>
                 </item>
@@ -3546,13 +3546,13 @@
               <name>storemerge_2_cast_ca</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3561,7 +3561,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3590,13 +3590,13 @@
               <name>sel_tmp50</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3605,7 +3605,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3634,13 +3634,13 @@
               <name>sel_tmp50_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3649,7 +3649,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3676,13 +3676,13 @@
               <name>sel_tmp51</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4013</lineNumber>
+              <lineNumber>4016</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3691,7 +3691,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4013</second>
+                      <second>4016</second>
                     </item>
                   </second>
                 </item>
@@ -3719,13 +3719,13 @@
               <name>sel_tmp52</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3734,7 +3734,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -3762,13 +3762,13 @@
               <name>sel_tmp56</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4015</lineNumber>
+              <lineNumber>4018</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3777,7 +3777,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4015</second>
+                      <second>4018</second>
                     </item>
                   </second>
                 </item>
@@ -3805,13 +3805,13 @@
               <name>sel_tmp57</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3820,7 +3820,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -3848,13 +3848,13 @@
               <name>sel_tmp53_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3863,7 +3863,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3892,13 +3892,13 @@
               <name>tmp_565</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3907,7 +3907,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3935,13 +3935,13 @@
               <name>sel_tmp58</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3950,7 +3950,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -3979,13 +3979,13 @@
               <name>sel_tmp63</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4017</lineNumber>
+              <lineNumber>4020</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -3994,7 +3994,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4017</second>
+                      <second>4020</second>
                     </item>
                   </second>
                 </item>
@@ -4022,13 +4022,13 @@
               <name>sel_tmp64</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4037,7 +4037,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -4065,13 +4065,13 @@
               <name>sel_tmp72</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4019</lineNumber>
+              <lineNumber>4022</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4080,7 +4080,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4019</second>
+                      <second>4022</second>
                     </item>
                   </second>
                 </item>
@@ -4108,13 +4108,13 @@
               <name>sel_tmp73</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4021</lineNumber>
+              <lineNumber>4024</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4123,7 +4123,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4021</second>
+                      <second>4024</second>
                     </item>
                   </second>
                 </item>
@@ -4151,13 +4151,13 @@
               <name>sel_tmp65_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4166,7 +4166,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4195,13 +4195,13 @@
               <name>tmp_566</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4210,7 +4210,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4238,13 +4238,13 @@
               <name>rhs_V</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4253,7 +4253,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4282,13 +4282,13 @@
               <name>tmp_s</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4030</lineNumber>
+              <lineNumber>4033</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4297,7 +4297,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4030</second>
+                      <second>4033</second>
                     </item>
                   </second>
                 </item>
@@ -4325,13 +4325,13 @@
               <name>tmp_567</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4033</lineNumber>
+              <lineNumber>4036</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4340,7 +4340,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4033</second>
+                      <second>4036</second>
                     </item>
                   </second>
                 </item>
@@ -4368,13 +4368,13 @@
               <name>tmp_568</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4036</lineNumber>
+              <lineNumber>4039</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4383,7 +4383,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4036</second>
+                      <second>4039</second>
                     </item>
                   </second>
                 </item>
@@ -4411,13 +4411,13 @@
               <name>r_V</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4426,7 +4426,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4454,13 +4454,13 @@
               <name>tmp_995_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4469,7 +4469,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4496,13 +4496,13 @@
               <name>mf7</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4511,7 +4511,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4539,13 +4539,13 @@
               <name>tmp_569</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4030</lineNumber>
+              <lineNumber>4033</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4554,7 +4554,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4030</second>
+                      <second>4033</second>
                     </item>
                   </second>
                 </item>
@@ -4583,13 +4583,13 @@
               <name>tmp_996_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4030</lineNumber>
+              <lineNumber>4033</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4598,7 +4598,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4030</second>
+                      <second>4033</second>
                     </item>
                   </second>
                 </item>
@@ -4625,13 +4625,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4039</lineNumber>
+              <lineNumber>4042</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4640,7 +4640,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4039</second>
+                      <second>4042</second>
                     </item>
                   </second>
                 </item>
@@ -4668,13 +4668,13 @@
               <name>r_V_95</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4683,7 +4683,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -4711,13 +4711,13 @@
               <name>tmp_997_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4726,7 +4726,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -4753,13 +4753,13 @@
               <name>mf5</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4768,7 +4768,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -4796,13 +4796,13 @@
               <name>tmp_570</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4033</lineNumber>
+              <lineNumber>4036</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4811,7 +4811,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4033</second>
+                      <second>4036</second>
                     </item>
                   </second>
                 </item>
@@ -4840,13 +4840,13 @@
               <name>tmp_998_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4033</lineNumber>
+              <lineNumber>4036</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4855,7 +4855,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4033</second>
+                      <second>4036</second>
                     </item>
                   </second>
                 </item>
@@ -4882,13 +4882,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4041</lineNumber>
+              <lineNumber>4044</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4897,7 +4897,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4041</second>
+                      <second>4044</second>
                     </item>
                   </second>
                 </item>
@@ -4925,13 +4925,13 @@
               <name>r_V_96</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4940,7 +4940,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -4968,13 +4968,13 @@
               <name>tmp_999_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -4983,7 +4983,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -5010,13 +5010,13 @@
               <name>mf</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -5025,7 +5025,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -5053,13 +5053,13 @@
               <name>tmp_571</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4036</lineNumber>
+              <lineNumber>4039</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -5068,7 +5068,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4036</second>
+                      <second>4039</second>
                     </item>
                   </second>
                 </item>
@@ -5097,13 +5097,13 @@
               <name>tmp_1000_cast</name>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4036</lineNumber>
+              <lineNumber>4039</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -5112,7 +5112,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4036</second>
+                      <second>4039</second>
                     </item>
                   </second>
                 </item>
@@ -5139,13 +5139,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4043</lineNumber>
+              <lineNumber>4046</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -5154,7 +5154,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4043</second>
+                      <second>4046</second>
                     </item>
                   </second>
                 </item>
@@ -5182,13 +5182,13 @@
               <name/>
               <fileName>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</fileName>
               <fileDirectory>..</fileDirectory>
-              <lineNumber>4056</lineNumber>
+              <lineNumber>4059</lineNumber>
               <contextFuncName>mcalcE</contextFuncName>
               <inlineStackInfo>
                 <count>1</count>
                 <item_version>0</item_version>
                 <item>
-                  <first>C:\Users\dougo</first>
+                  <first>C:\Engineering\Triple_Demod\BS1000-FPGA\branches\LDPC_Decoder\HLS_modules</first>
                   <second>
                     <count>1</count>
                     <item_version>0</item_version>
@@ -5197,7 +5197,7 @@
                         <first>LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp</first>
                         <second>mcalcE</second>
                       </first>
-                      <second>4056</second>
+                      <second>4059</second>
                     </item>
                   </second>
                 </item>

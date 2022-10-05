@@ -43,7 +43,7 @@ set SCTraceOption "all"
 set TargetInfo "xc7k160t:fbg676:-1"
 set SourceFiles {sc {} c ../HLSLdpcLogDecScaledMin.cpp}
 set SourceFlags {sc {} c {{}}}
-set DirectiveFile {C:/Users/dougo/LDPC_Decoder3U/solution1/solution1.directive}
+set DirectiveFile {C:/Engineering/Triple_Demod/BS1000-FPGA/branches/LDPC_Decoder/HLS_modules/LDPC_Decoder3U/solution1/solution1.directive}
 set TBFiles {verilog {../txword.h ../ldpc4096_45_info.h ../ldpc4096_45_data.h ../ldpc4096_45_code.h ../ldpc1024_23.h ../Txcode_1024_23.h ../LDPC_Decoder_parms.h ../LDPC_Decoder_check.cpp} bc {../txword.h ../ldpc4096_45_info.h ../ldpc4096_45_data.h ../ldpc4096_45_code.h ../ldpc1024_23.h ../Txcode_1024_23.h ../LDPC_Decoder_parms.h ../LDPC_Decoder_check.cpp} sc {../txword.h ../ldpc4096_45_info.h ../ldpc4096_45_data.h ../ldpc4096_45_code.h ../ldpc1024_23.h ../Txcode_1024_23.h ../LDPC_Decoder_parms.h ../LDPC_Decoder_check.cpp} vhdl {../txword.h ../ldpc4096_45_info.h ../ldpc4096_45_data.h ../ldpc4096_45_code.h ../ldpc1024_23.h ../Txcode_1024_23.h ../LDPC_Decoder_parms.h ../LDPC_Decoder_check.cpp} c {} cas {../txword.h ../ldpc4096_45_info.h ../ldpc4096_45_data.h ../ldpc4096_45_code.h ../ldpc1024_23.h ../Txcode_1024_23.h ../LDPC_Decoder_parms.h ../LDPC_Decoder_check.cpp}}
 set SpecLanguage "C"
 set TVInFiles {bc {} c {} sc {} cas {} vhdl {} verilog {}}

@@ -1,17 +1,17 @@
 #-----------------------------------------------------------
-# xsim v2016.3 (64-bit)
-# SW Build 1682563 on Mon Oct 10 19:07:27 MDT 2016
-# IP Build 1681267 on Mon Oct 10 21:28:31 MDT 2016
-# Start of session at: Sun Oct 06 12:00:58 2019
-# Process ID: 13100
-# Current directory: C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog
+# xsim v2016.4 (64-bit)
+# SW Build 1756540 on Mon Jan 23 19:11:23 MST 2017
+# IP Build 1755317 on Mon Jan 23 20:30:07 MST 2017
+# Start of session at: Thu Aug 11 10:32:42 2022
+# Process ID: 29852
+# Current directory: C:/Engineering/Triple_Demod/BS1000-FPGA/branches/LDPC_Decoder/HLS_modules/LDPC_Decoder3U/solution1/sim/verilog
 # Command line: xsim.exe -mode tcl -source {xsim.dir/HLSLdpcLogDecScaledMin/xsim_script.tcl}
-# Log file: C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/xsim.log
-# Journal file: C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog\xsim.jou
+# Log file: C:/Engineering/Triple_Demod/BS1000-FPGA/branches/LDPC_Decoder/HLS_modules/LDPC_Decoder3U/solution1/sim/verilog/xsim.log
+# Journal file: C:/Engineering/Triple_Demod/BS1000-FPGA/branches/LDPC_Decoder/HLS_modules/LDPC_Decoder3U/solution1/sim/verilog\xsim.jou
 #-----------------------------------------------------------
 source xsim.dir/HLSLdpcLogDecScaledMin/xsim_script.tcl
 # xsim {HLSLdpcLogDecScaledMin} -autoloadwcfg -tclbatch {HLSLdpcLogDecScaledMin.tcl}
-Vivado Simulator 2016.3
+Vivado Simulator 2016.4
 Time resolution is 1 ps
 source HLSLdpcLogDecScaledMin.tcl
 ## run all
@@ -24,7 +24,7 @@ source HLSLdpcLogDecScaledMin.tcl
 // RTL Simulation : 0 / 1 [n/a] @ "125000"
 // RTL Simulation : 1 / 1 [n/a] @ "9381795000"
 ////////////////////////////////////////////////////////////////////////////////////
-$finish called at time : 9381835 ns : File "C:/Users/dougo/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaledMin.autotb.v" Line 1465
-run: Time (s): cpu = 00:00:00 ; elapsed = 00:15:25 . Memory (MB): peak = 207.219 ; gain = 0.000
+$finish called at time : 9381835 ns : File "C:/Engineering/Triple_Demod/BS1000-FPGA/branches/LDPC_Decoder/HLS_modules/LDPC_Decoder3U/solution1/sim/verilog/HLSLdpcLogDecScaledMin.autotb.v" Line 1465
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:08:48 . Memory (MB): peak = 210.340 ; gain = 0.000
 ## quit
-INFO: [Common 17-206] Exiting xsim at Sun Oct 06 12:16:31 2019...
+INFO: [Common 17-206] Exiting xsim at Thu Aug 11 10:41:34 2022...

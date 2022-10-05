@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'setup_calc'
 ================================================================
-* Date:           Sat Oct 05 17:06:42 2019
+* Date:           Thu Aug 11 10:25:39 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -1535,7 +1535,7 @@ The critical path consists of the following:
  <State 3>: 3.17ns
 The critical path consists of the following:
 	'call' operation ('call_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3206) to 'mcalcAA' [336]  (3.17 ns)
-	'store' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3206) of variable 'Lam_tabf_4_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3206 on global variable 'Lam_tabf_4' [634]  (0 ns)
+	'store' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3206) of variable 'Eta_tabx_1_ret', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3206 on global variable 'Eta_tabx_1' [340]  (0 ns)
 
 
 ============================================================

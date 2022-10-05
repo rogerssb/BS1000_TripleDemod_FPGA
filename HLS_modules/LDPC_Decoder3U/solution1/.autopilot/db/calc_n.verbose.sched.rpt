@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'calc_n'
 ================================================================
-* Date:           Sat Oct 05 17:10:19 2019
+* Date:           Thu Aug 11 10:26:53 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -91,10 +91,10 @@ IsGatedGlobalClock: 0
 ST_1: nCodeN11_read (215)  [1/1] 0.00ns
 :0  %nCodeN11_read = call i12 @_ssdm_op_Read.ap_auto.i12(i12 %nCodeN11)
 
-ST_1: StgValue_7 (216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5195
+ST_1: StgValue_7 (216)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5198
 :1  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str) nounwind
 
-ST_1: StgValue_8 (217)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+ST_1: StgValue_8 (217)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
 :2  br label %1
 
 
@@ -102,40 +102,40 @@ ST_1: StgValue_8 (217)  [1/1] 1.09ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin
 ST_2: n (219)  [1/1] 0.00ns
 :0  %n = phi i12 [ 0, %0 ], [ %n_1, %2 ]
 
-ST_2: exitcond (220)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+ST_2: exitcond (220)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
 :1  %exitcond = icmp eq i12 %n, %nCodeN11_read
 
-ST_2: n_1 (221)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+ST_2: n_1 (221)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
 :2  %n_1 = add i12 %n, 1
 
-ST_2: StgValue_12 (222)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+ST_2: StgValue_12 (222)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
 :3  br i1 %exitcond, label %3, label %2
 
-ST_2: StgValue_13 (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5209
+ST_2: StgValue_13 (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5212
 :0  ret void
 
 
  <State 3>: 0.00ns
-ST_3: n_cast_cast2 (224)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+ST_3: n_cast_cast2 (224)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5207
 :0  %n_cast_cast2 = zext i12 %n to i13
 
-ST_3: StgValue_15 (225)  [2/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+ST_3: StgValue_15 (225)  [2/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5207
 :1  call fastcc void @load_pest_all(i13 signext %n_cast_cast2)
 
 
  <State 4>: 0.00ns
-ST_4: StgValue_16 (225)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5204
+ST_4: StgValue_16 (225)  [1/2] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5207
 :1  call fastcc void @load_pest_all(i13 signext %n_cast_cast2)
 
 
  <State 5>: 2.39ns
-ST_5: StgValue_17 (226)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
+ST_5: StgValue_17 (226)  [1/1] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5208
 :2  call fastcc void @update_lam_all(i13 signext %n_cast_cast2)
 
-ST_5: StgValue_18 (227)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5206
+ST_5: StgValue_18 (227)  [1/1] 2.39ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5209
 :3  call fastcc void @update_hat_all(i13 signext %n_cast_cast2)
 
-ST_5: StgValue_19 (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202
+ST_5: StgValue_19 (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205
 :4  br label %1
 
 
@@ -147,12 +147,12 @@ Target clock period: 10ns, clock uncertainty: 1.25ns.
 
  <State 1>: 1.09ns
 The critical path consists of the following:
-	multiplexor before 'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [219]  (1.09 ns)
+	multiplexor before 'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205) [219]  (1.09 ns)
 
  <State 2>: 1.47ns
 The critical path consists of the following:
-	'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [219]  (0 ns)
-	'icmp' operation ('exitcond', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5202) [220]  (1.47 ns)
+	'phi' operation ('n') with incoming values : ('n', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205) [219]  (0 ns)
+	'icmp' operation ('exitcond', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5205) [220]  (1.47 ns)
 
  <State 3>: 0ns
 The critical path consists of the following:
@@ -162,7 +162,7 @@ The critical path consists of the following:
 
  <State 5>: 2.39ns
 The critical path consists of the following:
-	'call' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5206) to 'update_hat_all' [227]  (2.39 ns)
+	'call' operation (LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5209) to 'update_hat_all' [227]  (2.39 ns)
 
 
 ============================================================

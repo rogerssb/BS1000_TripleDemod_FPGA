@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'load_pest_all'
 ================================================================
-* Date:           Sat Oct 05 17:09:41 2019
+* Date:           Thu Aug 11 10:26:40 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -86,535 +86,535 @@ ST_1: pos_read (113)  [1/1] 0.00ns
 ST_1: pos_cast (114)  [1/1] 0.00ns
 :1  %pos_cast = sext i13 %pos_read to i16
 
-ST_1: tmp (117)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: tmp (117)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :4  %tmp = zext i16 %pos_cast to i32
 
-ST_1: pLambda0_addr (118)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: pLambda0_addr (118)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :5  %pLambda0_addr = getelementptr inbounds [2048 x i16]* @pLambda0, i32 0, i32 %tmp
 
-ST_1: pLambda0_load (119)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: pLambda0_load (119)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :6  %pLambda0_load = load i16* %pLambda0_addr, align 2
 
-ST_1: prLamB_buf_addr (120)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamB_buf_addr (120)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :7  %prLamB_buf_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf, i32 0, i32 %tmp
 
-ST_1: prLamB_buf_load (121)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamB_buf_load (121)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :8  %prLamB_buf_load = load i16* %prLamB_buf_addr, align 2
 
-ST_1: prLamC_buf_addr (122)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_buf_addr (122)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :9  %prLamC_buf_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf, i32 0, i32 %tmp
 
-ST_1: prLamC_buf_load (123)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_buf_load (123)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :10  %prLamC_buf_load = load i16* %prLamC_buf_addr, align 2
 
-ST_1: prLamC_bufa_addr (124)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_bufa_addr (124)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :11  %prLamC_bufa_addr = getelementptr inbounds [1024 x i16]* @prLamC_bufa, i32 0, i32 %tmp
 
-ST_1: prLamC_bufa_load (125)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_bufa_load (125)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :12  %prLamC_bufa_load = load i16* %prLamC_bufa_addr, align 2
 
-ST_1: prLamC_bufb_addr (126)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_bufb_addr (126)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :13  %prLamC_bufb_addr = getelementptr inbounds [1024 x i16]* @prLamC_bufb, i32 0, i32 %tmp
 
-ST_1: prLamC_bufb_load (127)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLamC_bufb_load (127)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :14  %prLamC_bufb_load = load i16* %prLamC_bufb_addr, align 2
 
-ST_1: prLam2B_buf_addr (128)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2B_buf_addr (128)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :15  %prLam2B_buf_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf_load (129)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2B_buf_load (129)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :16  %prLam2B_buf_load = load i16* %prLam2B_buf_addr, align 2
 
-ST_1: prLam2C_buf_addr (130)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_buf_addr (130)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :17  %prLam2C_buf_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf_load (131)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_buf_load (131)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :18  %prLam2C_buf_load = load i16* %prLam2C_buf_addr, align 2
 
-ST_1: prLam2C_bufa_addr (132)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_bufa_addr (132)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :19  %prLam2C_bufa_addr = getelementptr inbounds [1024 x i16]* @prLam2C_bufa, i32 0, i32 %tmp
 
-ST_1: prLam2C_bufa_load (133)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_bufa_load (133)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :20  %prLam2C_bufa_load = load i16* %prLam2C_bufa_addr, align 2
 
-ST_1: prLam2C_bufb_addr (134)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_bufb_addr (134)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :21  %prLam2C_bufb_addr = getelementptr inbounds [1024 x i16]* @prLam2C_bufb, i32 0, i32 %tmp
 
-ST_1: prLam2C_bufb_load (135)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_1: prLam2C_bufb_load (135)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :22  %prLam2C_bufb_load = load i16* %prLam2C_bufb_addr, align 2
 
-ST_1: pLambda1_addr (145)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: pLambda1_addr (145)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :32  %pLambda1_addr = getelementptr inbounds [2048 x i16]* @pLambda1, i32 0, i32 %tmp
 
-ST_1: pLambda1_load (146)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: pLambda1_load (146)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :33  %pLambda1_load = load i16* %pLambda1_addr, align 2
 
-ST_1: prLamB_buf1_addr (147)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1_addr (147)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :34  %prLamB_buf1_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf1, i32 0, i32 %tmp
 
-ST_1: prLamB_buf1_load (148)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1_load (148)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :35  %prLamB_buf1_load = load i16* %prLamB_buf1_addr, align 2
 
-ST_1: prLamB_buf1a_addr (149)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1a_addr (149)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :36  %prLamB_buf1a_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf1a, i32 0, i32 %tmp
 
-ST_1: prLamB_buf1a_load (150)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1a_load (150)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :37  %prLamB_buf1a_load = load i16* %prLamB_buf1a_addr, align 2
 
-ST_1: prLamB_buf1b_addr (151)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1b_addr (151)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :38  %prLamB_buf1b_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf1b, i32 0, i32 %tmp
 
-ST_1: prLamB_buf1b_load (152)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamB_buf1b_load (152)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :39  %prLamB_buf1b_load = load i16* %prLamB_buf1b_addr, align 2
 
-ST_1: prLamC_buf1_addr (153)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamC_buf1_addr (153)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :40  %prLamC_buf1_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf1, i32 0, i32 %tmp
 
-ST_1: prLamC_buf1_load (154)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLamC_buf1_load (154)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :41  %prLamC_buf1_load = load i16* %prLamC_buf1_addr, align 2
 
-ST_1: prLam2B_buf1_addr (155)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1_addr (155)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :42  %prLam2B_buf1_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf1, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf1_load (156)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1_load (156)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :43  %prLam2B_buf1_load = load i16* %prLam2B_buf1_addr, align 2
 
-ST_1: prLam2B_buf1a_addr (157)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1a_addr (157)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :44  %prLam2B_buf1a_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf1a, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf1a_load (158)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1a_load (158)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :45  %prLam2B_buf1a_load = load i16* %prLam2B_buf1a_addr, align 2
 
-ST_1: prLam2B_buf1b_addr (159)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1b_addr (159)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :46  %prLam2B_buf1b_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf1b, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf1b_load (160)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2B_buf1b_load (160)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :47  %prLam2B_buf1b_load = load i16* %prLam2B_buf1b_addr, align 2
 
-ST_1: prLam2C_buf1_addr (161)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2C_buf1_addr (161)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :48  %prLam2C_buf1_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf1, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf1_load (162)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_1: prLam2C_buf1_load (162)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :49  %prLam2C_buf1_load = load i16* %prLam2C_buf1_addr, align 2
 
-ST_1: pLambda2_addr (172)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: pLambda2_addr (172)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :59  %pLambda2_addr = getelementptr inbounds [2048 x i16]* @pLambda2, i32 0, i32 %tmp
 
-ST_1: pLambda2_load (173)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: pLambda2_load (173)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :60  %pLambda2_load = load i16* %pLambda2_addr, align 2
 
-ST_1: prLamB_buf2_addr (174)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamB_buf2_addr (174)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :61  %prLamB_buf2_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf2, i32 0, i32 %tmp
 
-ST_1: prLamB_buf2_load (175)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamB_buf2_load (175)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :62  %prLamB_buf2_load = load i16* %prLamB_buf2_addr, align 2
 
-ST_1: prLamC_buf2_addr (176)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2_addr (176)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :63  %prLamC_buf2_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf2, i32 0, i32 %tmp
 
-ST_1: prLamC_buf2_load (177)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2_load (177)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :64  %prLamC_buf2_load = load i16* %prLamC_buf2_addr, align 2
 
-ST_1: prLamC_buf2a_addr (178)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2a_addr (178)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :65  %prLamC_buf2a_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf2a, i32 0, i32 %tmp
 
-ST_1: prLamC_buf2a_load (179)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2a_load (179)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :66  %prLamC_buf2a_load = load i16* %prLamC_buf2a_addr, align 2
 
-ST_1: prLamC_buf2b_addr (180)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2b_addr (180)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :67  %prLamC_buf2b_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf2b, i32 0, i32 %tmp
 
-ST_1: prLamC_buf2b_load (181)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLamC_buf2b_load (181)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :68  %prLamC_buf2b_load = load i16* %prLamC_buf2b_addr, align 2
 
-ST_1: prLam2B_buf2_addr (182)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2B_buf2_addr (182)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :69  %prLam2B_buf2_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf2, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf2_load (183)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2B_buf2_load (183)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :70  %prLam2B_buf2_load = load i16* %prLam2B_buf2_addr, align 2
 
-ST_1: prLam2C_buf2_addr (184)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2_addr (184)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :71  %prLam2C_buf2_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf2, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf2_load (185)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2_load (185)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :72  %prLam2C_buf2_load = load i16* %prLam2C_buf2_addr, align 2
 
-ST_1: prLam2C_buf2a_addr (186)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2a_addr (186)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :73  %prLam2C_buf2a_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf2a, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf2a_load (187)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2a_load (187)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :74  %prLam2C_buf2a_load = load i16* %prLam2C_buf2a_addr, align 2
 
-ST_1: prLam2C_buf2b_addr (188)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2b_addr (188)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :75  %prLam2C_buf2b_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf2b, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf2b_load (189)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_1: prLam2C_buf2b_load (189)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :76  %prLam2C_buf2b_load = load i16* %prLam2C_buf2b_addr, align 2
 
-ST_1: pLambda3_addr (199)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: pLambda3_addr (199)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :86  %pLambda3_addr = getelementptr inbounds [2048 x i16]* @pLambda3, i32 0, i32 %tmp
 
-ST_1: pLambda3_load (200)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: pLambda3_load (200)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :87  %pLambda3_load = load i16* %pLambda3_addr, align 2
 
-ST_1: prLamB_buf3_addr (201)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3_addr (201)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :88  %prLamB_buf3_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf3, i32 0, i32 %tmp
 
-ST_1: prLamB_buf3_load (202)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3_load (202)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :89  %prLamB_buf3_load = load i16* %prLamB_buf3_addr, align 2
 
-ST_1: prLamB_buf3a_addr (203)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3a_addr (203)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :90  %prLamB_buf3a_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf3a, i32 0, i32 %tmp
 
-ST_1: prLamB_buf3a_load (204)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3a_load (204)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :91  %prLamB_buf3a_load = load i16* %prLamB_buf3a_addr, align 2
 
-ST_1: prLamB_buf3b_addr (205)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3b_addr (205)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :92  %prLamB_buf3b_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf3b, i32 0, i32 %tmp
 
-ST_1: prLamB_buf3b_load (206)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamB_buf3b_load (206)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :93  %prLamB_buf3b_load = load i16* %prLamB_buf3b_addr, align 2
 
-ST_1: prLamC_buf3_addr (207)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamC_buf3_addr (207)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :94  %prLamC_buf3_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf3, i32 0, i32 %tmp
 
-ST_1: prLamC_buf3_load (208)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLamC_buf3_load (208)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :95  %prLamC_buf3_load = load i16* %prLamC_buf3_addr, align 2
 
-ST_1: prLam2B_buf3_addr (209)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3_addr (209)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :96  %prLam2B_buf3_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf3, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf3_load (210)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3_load (210)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :97  %prLam2B_buf3_load = load i16* %prLam2B_buf3_addr, align 2
 
-ST_1: prLam2B_buf3a_addr (211)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3a_addr (211)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :98  %prLam2B_buf3a_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf3a, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf3a_load (212)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3a_load (212)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :99  %prLam2B_buf3a_load = load i16* %prLam2B_buf3a_addr, align 2
 
-ST_1: prLam2B_buf3b_addr (213)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3b_addr (213)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :100  %prLam2B_buf3b_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf3b, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf3b_load (214)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2B_buf3b_load (214)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :101  %prLam2B_buf3b_load = load i16* %prLam2B_buf3b_addr, align 2
 
-ST_1: prLam2C_buf3_addr (215)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2C_buf3_addr (215)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :102  %prLam2C_buf3_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf3, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf3_load (216)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_1: prLam2C_buf3_load (216)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :103  %prLam2C_buf3_load = load i16* %prLam2C_buf3_addr, align 2
 
-ST_1: pLambda4_addr (226)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: pLambda4_addr (226)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :113  %pLambda4_addr = getelementptr inbounds [2048 x i16]* @pLambda4, i32 0, i32 %tmp
 
-ST_1: pLambda4_load (227)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: pLambda4_load (227)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :114  %pLambda4_load = load i16* %pLambda4_addr, align 2
 
-ST_1: prLamB_buf4_addr (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamB_buf4_addr (228)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :115  %prLamB_buf4_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf4, i32 0, i32 %tmp
 
-ST_1: prLamB_buf4_load (229)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamB_buf4_load (229)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :116  %prLamB_buf4_load = load i16* %prLamB_buf4_addr, align 2
 
-ST_1: prLamC_buf4_addr (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4_addr (230)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :117  %prLamC_buf4_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf4, i32 0, i32 %tmp
 
-ST_1: prLamC_buf4_load (231)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4_load (231)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :118  %prLamC_buf4_load = load i16* %prLamC_buf4_addr, align 2
 
-ST_1: prLamC_buf4a_addr (232)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4a_addr (232)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :119  %prLamC_buf4a_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf4a, i32 0, i32 %tmp
 
-ST_1: prLamC_buf4a_load (233)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4a_load (233)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :120  %prLamC_buf4a_load = load i16* %prLamC_buf4a_addr, align 2
 
-ST_1: prLamC_buf4b_addr (234)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4b_addr (234)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :121  %prLamC_buf4b_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf4b, i32 0, i32 %tmp
 
-ST_1: prLamC_buf4b_load (235)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLamC_buf4b_load (235)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :122  %prLamC_buf4b_load = load i16* %prLamC_buf4b_addr, align 2
 
-ST_1: prLam2B_buf4_addr (236)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2B_buf4_addr (236)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :123  %prLam2B_buf4_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf4, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf4_load (237)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2B_buf4_load (237)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :124  %prLam2B_buf4_load = load i16* %prLam2B_buf4_addr, align 2
 
-ST_1: prLam2C_buf4_addr (238)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4_addr (238)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :125  %prLam2C_buf4_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf4, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf4_load (239)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4_load (239)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :126  %prLam2C_buf4_load = load i16* %prLam2C_buf4_addr, align 2
 
-ST_1: prLam2C_buf4a_addr (240)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4a_addr (240)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :127  %prLam2C_buf4a_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf4a, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf4a_load (241)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4a_load (241)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :128  %prLam2C_buf4a_load = load i16* %prLam2C_buf4a_addr, align 2
 
-ST_1: prLam2C_buf4b_addr (242)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4b_addr (242)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :129  %prLam2C_buf4b_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf4b, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf4b_load (243)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_1: prLam2C_buf4b_load (243)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :130  %prLam2C_buf4b_load = load i16* %prLam2C_buf4b_addr, align 2
 
-ST_1: pLambda5_addr (253)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: pLambda5_addr (253)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :140  %pLambda5_addr = getelementptr inbounds [1024 x i16]* @pLambda5, i32 0, i32 %tmp
 
-ST_1: pLambda5_load (254)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: pLambda5_load (254)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :141  %pLambda5_load = load i16* %pLambda5_addr, align 2
 
-ST_1: prLamB_buf5_addr (255)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5_addr (255)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :142  %prLamB_buf5_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf5, i32 0, i32 %tmp
 
-ST_1: prLamB_buf5_load (256)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5_load (256)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :143  %prLamB_buf5_load = load i16* %prLamB_buf5_addr, align 2
 
-ST_1: prLamB_buf5a_addr (257)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5a_addr (257)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :144  %prLamB_buf5a_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf5a, i32 0, i32 %tmp
 
-ST_1: prLamB_buf5a_load (258)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5a_load (258)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :145  %prLamB_buf5a_load = load i16* %prLamB_buf5a_addr, align 2
 
-ST_1: prLamB_buf5b_addr (259)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5b_addr (259)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :146  %prLamB_buf5b_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf5b, i32 0, i32 %tmp
 
-ST_1: prLamB_buf5b_load (260)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamB_buf5b_load (260)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :147  %prLamB_buf5b_load = load i16* %prLamB_buf5b_addr, align 2
 
-ST_1: prLamC_buf5_addr (261)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamC_buf5_addr (261)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :148  %prLamC_buf5_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf5, i32 0, i32 %tmp
 
-ST_1: prLamC_buf5_load (262)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLamC_buf5_load (262)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :149  %prLamC_buf5_load = load i16* %prLamC_buf5_addr, align 2
 
-ST_1: prLam2B_buf5_addr (263)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5_addr (263)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :150  %prLam2B_buf5_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf5, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf5_load (264)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5_load (264)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :151  %prLam2B_buf5_load = load i16* %prLam2B_buf5_addr, align 2
 
-ST_1: prLam2B_buf5a_addr (265)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5a_addr (265)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :152  %prLam2B_buf5a_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf5a, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf5a_load (266)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5a_load (266)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :153  %prLam2B_buf5a_load = load i16* %prLam2B_buf5a_addr, align 2
 
-ST_1: prLam2B_buf5b_addr (267)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5b_addr (267)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :154  %prLam2B_buf5b_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf5b, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf5b_load (268)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2B_buf5b_load (268)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :155  %prLam2B_buf5b_load = load i16* %prLam2B_buf5b_addr, align 2
 
-ST_1: prLam2C_buf5_addr (269)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2C_buf5_addr (269)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :156  %prLam2C_buf5_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf5, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf5_load (270)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_1: prLam2C_buf5_load (270)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :157  %prLam2C_buf5_load = load i16* %prLam2C_buf5_addr, align 2
 
-ST_1: pLambda6_addr (280)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: pLambda6_addr (280)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :167  %pLambda6_addr = getelementptr inbounds [1024 x i16]* @pLambda6, i32 0, i32 %tmp
 
-ST_1: pLambda6_load (281)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: pLambda6_load (281)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :168  %pLambda6_load = load i16* %pLambda6_addr, align 2
 
-ST_1: prLamB_buf6_addr (282)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLamB_buf6_addr (282)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :169  %prLamB_buf6_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf6, i32 0, i32 %tmp
 
-ST_1: prLamB_buf6_load (283)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLamB_buf6_load (283)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :170  %prLamB_buf6_load = load i16* %prLamB_buf6_addr, align 2
 
-ST_1: prLamC_buf6_addr (284)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLamC_buf6_addr (284)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :171  %prLamC_buf6_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf6, i32 0, i32 %tmp
 
-ST_1: prLamC_buf6_load (285)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLamC_buf6_load (285)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :172  %prLamC_buf6_load = load i16* %prLamC_buf6_addr, align 2
 
-ST_1: prLam2B_buf6_addr (286)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLam2B_buf6_addr (286)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :173  %prLam2B_buf6_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf6, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf6_load (287)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLam2B_buf6_load (287)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :174  %prLam2B_buf6_load = load i16* %prLam2B_buf6_addr, align 2
 
-ST_1: prLam2C_buf6_addr (288)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLam2C_buf6_addr (288)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :175  %prLam2C_buf6_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf6, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf6_load (289)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_1: prLam2C_buf6_load (289)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :176  %prLam2C_buf6_load = load i16* %prLam2C_buf6_addr, align 2
 
-ST_1: pLambda7_addr (295)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: pLambda7_addr (295)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :182  %pLambda7_addr = getelementptr inbounds [1024 x i16]* @pLambda7, i32 0, i32 %tmp
 
-ST_1: pLambda7_load (296)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: pLambda7_load (296)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :183  %pLambda7_load = load i16* %pLambda7_addr, align 2
 
-ST_1: prLamB_buf7_addr (297)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamB_buf7_addr (297)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :184  %prLamB_buf7_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf7, i32 0, i32 %tmp
 
-ST_1: prLamB_buf7_load (298)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamB_buf7_load (298)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :185  %prLamB_buf7_load = load i16* %prLamB_buf7_addr, align 2
 
-ST_1: prLamB_buf7a_addr (299)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamB_buf7a_addr (299)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :186  %prLamB_buf7a_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf7a, i32 0, i32 %tmp
 
-ST_1: prLamB_buf7a_load (300)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamB_buf7a_load (300)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :187  %prLamB_buf7a_load = load i16* %prLamB_buf7a_addr, align 2
 
-ST_1: prLamC_buf7_addr (301)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamC_buf7_addr (301)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :188  %prLamC_buf7_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf7, i32 0, i32 %tmp
 
-ST_1: prLamC_buf7_load (302)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLamC_buf7_load (302)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :189  %prLamC_buf7_load = load i16* %prLamC_buf7_addr, align 2
 
-ST_1: prLam2B_buf7_addr (303)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2B_buf7_addr (303)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :190  %prLam2B_buf7_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf7, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf7_load (304)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2B_buf7_load (304)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :191  %prLam2B_buf7_load = load i16* %prLam2B_buf7_addr, align 2
 
-ST_1: prLam2B_buf7a_addr (305)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2B_buf7a_addr (305)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :192  %prLam2B_buf7a_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf7a, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf7a_load (306)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2B_buf7a_load (306)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :193  %prLam2B_buf7a_load = load i16* %prLam2B_buf7a_addr, align 2
 
-ST_1: prLam2C_buf7_addr (307)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2C_buf7_addr (307)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :194  %prLam2C_buf7_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf7, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf7_load (308)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_1: prLam2C_buf7_load (308)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :195  %prLam2C_buf7_load = load i16* %prLam2C_buf7_addr, align 2
 
-ST_1: pLambda8_addr (316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: pLambda8_addr (316)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :203  %pLambda8_addr = getelementptr inbounds [1024 x i16]* @pLambda8, i32 0, i32 %tmp
 
-ST_1: pLambda8_load (317)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: pLambda8_load (317)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :204  %pLambda8_load = load i16* %pLambda8_addr, align 2
 
-ST_1: prLam_buf2_addr (318)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: prLam_buf2_addr (318)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :205  %prLam_buf2_addr = getelementptr inbounds [1024 x i16]* @prLam_buf2, i32 0, i32 %tmp
 
-ST_1: prLam_buf2_load (319)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: prLam_buf2_load (319)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :206  %prLam_buf2_load = load i16* %prLam_buf2_addr, align 2
 
-ST_1: prLam2_buf2_addr (320)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: prLam2_buf2_addr (320)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :207  %prLam2_buf2_addr = getelementptr inbounds [1024 x i16]* @prLam2_buf2, i32 0, i32 %tmp
 
-ST_1: prLam2_buf2_load (321)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_1: prLam2_buf2_load (321)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :208  %prLam2_buf2_load = load i16* %prLam2_buf2_addr, align 2
 
-ST_1: pLambda9_addr (325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: pLambda9_addr (325)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :212  %pLambda9_addr = getelementptr inbounds [1024 x i16]* @pLambda9, i32 0, i32 %tmp
 
-ST_1: pLambda9_load (326)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: pLambda9_load (326)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :213  %pLambda9_load = load i16* %pLambda9_addr, align 2
 
-ST_1: prLamB_buf9_addr (327)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamB_buf9_addr (327)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :214  %prLamB_buf9_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf9, i32 0, i32 %tmp
 
-ST_1: prLamB_buf9_load (328)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamB_buf9_load (328)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :215  %prLamB_buf9_load = load i16* %prLamB_buf9_addr, align 2
 
-ST_1: prLamB_buf9a_addr (329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamB_buf9a_addr (329)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :216  %prLamB_buf9a_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf9a, i32 0, i32 %tmp
 
-ST_1: prLamB_buf9a_load (330)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamB_buf9a_load (330)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :217  %prLamB_buf9a_load = load i16* %prLamB_buf9a_addr, align 2
 
-ST_1: prLamC_buf9_addr (331)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamC_buf9_addr (331)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :218  %prLamC_buf9_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf9, i32 0, i32 %tmp
 
-ST_1: prLamC_buf9_load (332)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLamC_buf9_load (332)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :219  %prLamC_buf9_load = load i16* %prLamC_buf9_addr, align 2
 
-ST_1: prLam2B_buf9_addr (333)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2B_buf9_addr (333)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :220  %prLam2B_buf9_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf9, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf9_load (334)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2B_buf9_load (334)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :221  %prLam2B_buf9_load = load i16* %prLam2B_buf9_addr, align 2
 
-ST_1: prLam2B_buf9a_addr (335)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2B_buf9a_addr (335)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :222  %prLam2B_buf9a_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf9a, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf9a_load (336)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2B_buf9a_load (336)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :223  %prLam2B_buf9a_load = load i16* %prLam2B_buf9a_addr, align 2
 
-ST_1: prLam2C_buf9_addr (337)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2C_buf9_addr (337)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :224  %prLam2C_buf9_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf9, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf9_load (338)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_1: prLam2C_buf9_load (338)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :225  %prLam2C_buf9_load = load i16* %prLam2C_buf9_addr, align 2
 
-ST_1: prLam_buf4_addr (347)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam_buf4_addr (347)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :234  %prLam_buf4_addr = getelementptr inbounds [1024 x i16]* @prLam_buf4, i32 0, i32 %tmp
 
-ST_1: prLam_buf4_load (348)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam_buf4_load (348)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :235  %prLam_buf4_load = load i16* %prLam_buf4_addr, align 2
 
-ST_1: prLam_buf4a_addr (349)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam_buf4a_addr (349)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :236  %prLam_buf4a_addr = getelementptr inbounds [1024 x i16]* @prLam_buf4a, i32 0, i32 %tmp
 
-ST_1: prLam_buf4a_load (350)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam_buf4a_load (350)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :237  %prLam_buf4a_load = load i16* %prLam_buf4a_addr, align 2
 
-ST_1: prLamB_buf10_addr (351)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamB_buf10_addr (351)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :238  %prLamB_buf10_addr = getelementptr inbounds [1024 x i16]* @prLamB_buf10, i32 0, i32 %tmp
 
-ST_1: prLamB_buf10_load (352)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamB_buf10_load (352)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :239  %prLamB_buf10_load = load i16* %prLamB_buf10_addr, align 2
 
-ST_1: prLamC_buf10_addr (353)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10_addr (353)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :240  %prLamC_buf10_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf10, i32 0, i32 %tmp
 
-ST_1: prLamC_buf10_load (354)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10_load (354)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :241  %prLamC_buf10_load = load i16* %prLamC_buf10_addr, align 2
 
-ST_1: prLamC_buf10a_addr (355)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10a_addr (355)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :242  %prLamC_buf10a_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf10a, i32 0, i32 %tmp
 
-ST_1: prLamC_buf10a_load (356)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10a_load (356)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :243  %prLamC_buf10a_load = load i16* %prLamC_buf10a_addr, align 2
 
-ST_1: prLamC_buf10b_addr (357)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10b_addr (357)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :244  %prLamC_buf10b_addr = getelementptr inbounds [1024 x i16]* @prLamC_buf10b, i32 0, i32 %tmp
 
-ST_1: prLamC_buf10b_load (358)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLamC_buf10b_load (358)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :245  %prLamC_buf10b_load = load i16* %prLamC_buf10b_addr, align 2
 
-ST_1: prLam2_buf4_addr (359)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2_buf4_addr (359)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :246  %prLam2_buf4_addr = getelementptr inbounds [1024 x i16]* @prLam2_buf4, i32 0, i32 %tmp
 
-ST_1: prLam2_buf4_load (360)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2_buf4_load (360)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :247  %prLam2_buf4_load = load i16* %prLam2_buf4_addr, align 2
 
-ST_1: prLam2_buf4a_addr (361)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2_buf4a_addr (361)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :248  %prLam2_buf4a_addr = getelementptr inbounds [1024 x i16]* @prLam2_buf4a, i32 0, i32 %tmp
 
-ST_1: prLam2_buf4a_load (362)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2_buf4a_load (362)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :249  %prLam2_buf4a_load = load i16* %prLam2_buf4a_addr, align 2
 
-ST_1: prLam2B_buf10_addr (363)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2B_buf10_addr (363)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :250  %prLam2B_buf10_addr = getelementptr inbounds [1024 x i16]* @prLam2B_buf10, i32 0, i32 %tmp
 
-ST_1: prLam2B_buf10_load (364)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2B_buf10_load (364)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :251  %prLam2B_buf10_load = load i16* %prLam2B_buf10_addr, align 2
 
-ST_1: prLam2C_buf10_addr (365)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10_addr (365)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :252  %prLam2C_buf10_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf10, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf10_load (366)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10_load (366)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :253  %prLam2C_buf10_load = load i16* %prLam2C_buf10_addr, align 2
 
-ST_1: prLam2C_buf10a_addr (367)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10a_addr (367)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :254  %prLam2C_buf10a_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf10a, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf10a_load (368)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10a_load (368)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :255  %prLam2C_buf10a_load = load i16* %prLam2C_buf10a_addr, align 2
 
-ST_1: prLam2C_buf10b_addr (369)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10b_addr (369)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :256  %prLam2C_buf10b_addr = getelementptr inbounds [1024 x i16]* @prLam2C_buf10b, i32 0, i32 %tmp
 
-ST_1: prLam2C_buf10b_load (370)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_1: prLam2C_buf10b_load (370)  [2/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :257  %prLam2C_buf10b_load = load i16* %prLam2C_buf10b_addr, align 2
 
 
@@ -625,640 +625,640 @@ ST_2: StgValue_182 (115)  [1/1] 0.00ns
 ST_2: StgValue_183 (116)  [1/1] 0.00ns
 :3  call void (...)* @_ssdm_op_SpecMemCore([1024 x i16]* @prLam_buf4, [1 x i8]* @p_str, [13 x i8]* @p_str79, [1 x i8]* @p_str, i32 -1, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str, [1 x i8]* @p_str) nounwind
 
-ST_2: pLambda0_load (119)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: pLambda0_load (119)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :6  %pLambda0_load = load i16* %pLambda0_addr, align 2
 
-ST_2: prLamB_buf_load (121)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLamB_buf_load (121)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :8  %prLamB_buf_load = load i16* %prLamB_buf_addr, align 2
 
-ST_2: prLamC_buf_load (123)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLamC_buf_load (123)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :10  %prLamC_buf_load = load i16* %prLamC_buf_addr, align 2
 
-ST_2: prLamC_bufa_load (125)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLamC_bufa_load (125)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :12  %prLamC_bufa_load = load i16* %prLamC_bufa_addr, align 2
 
-ST_2: prLamC_bufb_load (127)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLamC_bufb_load (127)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :14  %prLamC_bufb_load = load i16* %prLamC_bufb_addr, align 2
 
-ST_2: prLam2B_buf_load (129)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLam2B_buf_load (129)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :16  %prLam2B_buf_load = load i16* %prLam2B_buf_addr, align 2
 
-ST_2: prLam2C_buf_load (131)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLam2C_buf_load (131)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :18  %prLam2C_buf_load = load i16* %prLam2C_buf_addr, align 2
 
-ST_2: prLam2C_bufa_load (133)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLam2C_bufa_load (133)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :20  %prLam2C_bufa_load = load i16* %prLam2C_bufa_addr, align 2
 
-ST_2: prLam2C_bufb_load (135)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: prLam2C_bufb_load (135)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :22  %prLam2C_bufb_load = load i16* %prLam2C_bufb_addr, align 2
 
-ST_2: tmp8 (136)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp8 (136)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :23  %tmp8 = add i16 %prLam2C_bufa_load, %prLam2C_buf_load
 
-ST_2: tmp9 (137)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp9 (137)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :24  %tmp9 = add i16 %prLamC_bufb_load, %prLam2B_buf_load
 
-ST_2: tmp7 (138)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp7 (138)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :25  %tmp7 = add i16 %tmp8, %tmp9
 
-ST_2: tmp11 (139)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp11 (139)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :26  %tmp11 = add i16 %prLamB_buf_load, %pLambda0_load
 
-ST_2: tmp13 (140)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp13 (140)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :27  %tmp13 = add i16 %prLam2C_bufb_load, %prLamC_buf_load
 
-ST_2: tmp12 (141)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp12 (141)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :28  %tmp12 = add i16 %prLamC_bufa_load, %tmp13
 
-ST_2: tmp10 (142)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp10 (142)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :29  %tmp10 = add i16 %tmp11, %tmp12
 
-ST_2: tmp_s (143)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: tmp_s (143)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :30  %tmp_s = add i16 %tmp7, %tmp10
 
-ST_2: StgValue_201 (144)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5025
+ST_2: StgValue_201 (144)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5028
 :31  store i16 %tmp_s, i16* @pest0, align 2
 
-ST_2: pLambda1_load (146)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: pLambda1_load (146)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :33  %pLambda1_load = load i16* %pLambda1_addr, align 2
 
-ST_2: prLamB_buf1_load (148)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLamB_buf1_load (148)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :35  %prLamB_buf1_load = load i16* %prLamB_buf1_addr, align 2
 
-ST_2: prLamB_buf1a_load (150)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLamB_buf1a_load (150)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :37  %prLamB_buf1a_load = load i16* %prLamB_buf1a_addr, align 2
 
-ST_2: prLamB_buf1b_load (152)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLamB_buf1b_load (152)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :39  %prLamB_buf1b_load = load i16* %prLamB_buf1b_addr, align 2
 
-ST_2: prLamC_buf1_load (154)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLamC_buf1_load (154)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :41  %prLamC_buf1_load = load i16* %prLamC_buf1_addr, align 2
 
-ST_2: prLam2B_buf1_load (156)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLam2B_buf1_load (156)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :43  %prLam2B_buf1_load = load i16* %prLam2B_buf1_addr, align 2
 
-ST_2: prLam2B_buf1a_load (158)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLam2B_buf1a_load (158)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :45  %prLam2B_buf1a_load = load i16* %prLam2B_buf1a_addr, align 2
 
-ST_2: prLam2B_buf1b_load (160)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLam2B_buf1b_load (160)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :47  %prLam2B_buf1b_load = load i16* %prLam2B_buf1b_addr, align 2
 
-ST_2: prLam2C_buf1_load (162)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: prLam2C_buf1_load (162)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :49  %prLam2C_buf1_load = load i16* %prLam2C_buf1_addr, align 2
 
-ST_2: tmp21 (163)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp21 (163)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :50  %tmp21 = add i16 %prLam2B_buf1b_load, %prLam2B_buf1a_load
 
-ST_2: tmp22 (164)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp22 (164)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :51  %tmp22 = add i16 %prLamC_buf1_load, %prLam2B_buf1_load
 
-ST_2: tmp20 (165)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp20 (165)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :52  %tmp20 = add i16 %tmp21, %tmp22
 
-ST_2: tmp24 (166)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp24 (166)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :53  %tmp24 = add i16 %prLamB_buf1_load, %pLambda1_load
 
-ST_2: tmp26 (167)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp26 (167)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :54  %tmp26 = add i16 %prLam2C_buf1_load, %prLamB_buf1a_load
 
-ST_2: tmp25 (168)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp25 (168)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :55  %tmp25 = add i16 %prLamB_buf1b_load, %tmp26
 
-ST_2: tmp23 (169)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp23 (169)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :56  %tmp23 = add i16 %tmp24, %tmp25
 
-ST_2: tmp_925 (170)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: tmp_925 (170)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :57  %tmp_925 = add i16 %tmp20, %tmp23
 
-ST_2: StgValue_219 (171)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5027
+ST_2: StgValue_219 (171)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5030
 :58  store i16 %tmp_925, i16* @pest1, align 2
 
-ST_2: pLambda2_load (173)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: pLambda2_load (173)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :60  %pLambda2_load = load i16* %pLambda2_addr, align 2
 
-ST_2: prLamB_buf2_load (175)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLamB_buf2_load (175)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :62  %prLamB_buf2_load = load i16* %prLamB_buf2_addr, align 2
 
-ST_2: prLamC_buf2_load (177)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLamC_buf2_load (177)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :64  %prLamC_buf2_load = load i16* %prLamC_buf2_addr, align 2
 
-ST_2: prLamC_buf2a_load (179)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLamC_buf2a_load (179)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :66  %prLamC_buf2a_load = load i16* %prLamC_buf2a_addr, align 2
 
-ST_2: prLamC_buf2b_load (181)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLamC_buf2b_load (181)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :68  %prLamC_buf2b_load = load i16* %prLamC_buf2b_addr, align 2
 
-ST_2: prLam2B_buf2_load (183)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLam2B_buf2_load (183)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :70  %prLam2B_buf2_load = load i16* %prLam2B_buf2_addr, align 2
 
-ST_2: prLam2C_buf2_load (185)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLam2C_buf2_load (185)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :72  %prLam2C_buf2_load = load i16* %prLam2C_buf2_addr, align 2
 
-ST_2: prLam2C_buf2a_load (187)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLam2C_buf2a_load (187)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :74  %prLam2C_buf2a_load = load i16* %prLam2C_buf2a_addr, align 2
 
-ST_2: prLam2C_buf2b_load (189)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: prLam2C_buf2b_load (189)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :76  %prLam2C_buf2b_load = load i16* %prLam2C_buf2b_addr, align 2
 
-ST_2: tmp34 (190)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp34 (190)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :77  %tmp34 = add i16 %prLam2C_buf2a_load, %prLam2C_buf2_load
 
-ST_2: tmp35 (191)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp35 (191)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :78  %tmp35 = add i16 %prLamC_buf2b_load, %prLam2B_buf2_load
 
-ST_2: tmp33 (192)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp33 (192)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :79  %tmp33 = add i16 %tmp34, %tmp35
 
-ST_2: tmp37 (193)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp37 (193)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :80  %tmp37 = add i16 %prLamB_buf2_load, %pLambda2_load
 
-ST_2: tmp39 (194)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp39 (194)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :81  %tmp39 = add i16 %prLam2C_buf2b_load, %prLamC_buf2_load
 
-ST_2: tmp38 (195)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp38 (195)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :82  %tmp38 = add i16 %prLamC_buf2a_load, %tmp39
 
-ST_2: tmp36 (196)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp36 (196)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :83  %tmp36 = add i16 %tmp37, %tmp38
 
-ST_2: tmp_926 (197)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: tmp_926 (197)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :84  %tmp_926 = add i16 %tmp33, %tmp36
 
-ST_2: StgValue_237 (198)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5029
+ST_2: StgValue_237 (198)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5032
 :85  store i16 %tmp_926, i16* @pest2, align 2
 
-ST_2: pLambda3_load (200)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: pLambda3_load (200)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :87  %pLambda3_load = load i16* %pLambda3_addr, align 2
 
-ST_2: prLamB_buf3_load (202)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLamB_buf3_load (202)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :89  %prLamB_buf3_load = load i16* %prLamB_buf3_addr, align 2
 
-ST_2: prLamB_buf3a_load (204)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLamB_buf3a_load (204)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :91  %prLamB_buf3a_load = load i16* %prLamB_buf3a_addr, align 2
 
-ST_2: prLamB_buf3b_load (206)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLamB_buf3b_load (206)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :93  %prLamB_buf3b_load = load i16* %prLamB_buf3b_addr, align 2
 
-ST_2: prLamC_buf3_load (208)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLamC_buf3_load (208)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :95  %prLamC_buf3_load = load i16* %prLamC_buf3_addr, align 2
 
-ST_2: prLam2B_buf3_load (210)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLam2B_buf3_load (210)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :97  %prLam2B_buf3_load = load i16* %prLam2B_buf3_addr, align 2
 
-ST_2: prLam2B_buf3a_load (212)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLam2B_buf3a_load (212)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :99  %prLam2B_buf3a_load = load i16* %prLam2B_buf3a_addr, align 2
 
-ST_2: prLam2B_buf3b_load (214)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLam2B_buf3b_load (214)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :101  %prLam2B_buf3b_load = load i16* %prLam2B_buf3b_addr, align 2
 
-ST_2: prLam2C_buf3_load (216)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: prLam2C_buf3_load (216)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :103  %prLam2C_buf3_load = load i16* %prLam2C_buf3_addr, align 2
 
-ST_2: tmp47 (217)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp47 (217)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :104  %tmp47 = add i16 %prLam2B_buf3b_load, %prLam2B_buf3a_load
 
-ST_2: tmp48 (218)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp48 (218)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :105  %tmp48 = add i16 %prLamC_buf3_load, %prLam2B_buf3_load
 
-ST_2: tmp46 (219)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp46 (219)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :106  %tmp46 = add i16 %tmp47, %tmp48
 
-ST_2: tmp50 (220)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp50 (220)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :107  %tmp50 = add i16 %prLamB_buf3_load, %pLambda3_load
 
-ST_2: tmp52 (221)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp52 (221)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :108  %tmp52 = add i16 %prLam2C_buf3_load, %prLamB_buf3a_load
 
-ST_2: tmp51 (222)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp51 (222)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :109  %tmp51 = add i16 %prLamB_buf3b_load, %tmp52
 
-ST_2: tmp49 (223)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp49 (223)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :110  %tmp49 = add i16 %tmp50, %tmp51
 
-ST_2: tmp_927 (224)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: tmp_927 (224)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :111  %tmp_927 = add i16 %tmp46, %tmp49
 
-ST_2: StgValue_255 (225)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5031
+ST_2: StgValue_255 (225)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5034
 :112  store i16 %tmp_927, i16* @pest3, align 2
 
-ST_2: pLambda4_load (227)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: pLambda4_load (227)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :114  %pLambda4_load = load i16* %pLambda4_addr, align 2
 
-ST_2: prLamB_buf4_load (229)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLamB_buf4_load (229)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :116  %prLamB_buf4_load = load i16* %prLamB_buf4_addr, align 2
 
-ST_2: prLamC_buf4_load (231)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLamC_buf4_load (231)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :118  %prLamC_buf4_load = load i16* %prLamC_buf4_addr, align 2
 
-ST_2: prLamC_buf4a_load (233)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLamC_buf4a_load (233)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :120  %prLamC_buf4a_load = load i16* %prLamC_buf4a_addr, align 2
 
-ST_2: prLamC_buf4b_load (235)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLamC_buf4b_load (235)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :122  %prLamC_buf4b_load = load i16* %prLamC_buf4b_addr, align 2
 
-ST_2: prLam2B_buf4_load (237)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLam2B_buf4_load (237)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :124  %prLam2B_buf4_load = load i16* %prLam2B_buf4_addr, align 2
 
-ST_2: prLam2C_buf4_load (239)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLam2C_buf4_load (239)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :126  %prLam2C_buf4_load = load i16* %prLam2C_buf4_addr, align 2
 
-ST_2: prLam2C_buf4a_load (241)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLam2C_buf4a_load (241)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :128  %prLam2C_buf4a_load = load i16* %prLam2C_buf4a_addr, align 2
 
-ST_2: prLam2C_buf4b_load (243)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: prLam2C_buf4b_load (243)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :130  %prLam2C_buf4b_load = load i16* %prLam2C_buf4b_addr, align 2
 
-ST_2: tmp60 (244)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp60 (244)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :131  %tmp60 = add i16 %prLam2C_buf4a_load, %prLam2C_buf4_load
 
-ST_2: tmp61 (245)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp61 (245)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :132  %tmp61 = add i16 %prLamC_buf4b_load, %prLam2B_buf4_load
 
-ST_2: tmp59 (246)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp59 (246)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :133  %tmp59 = add i16 %tmp60, %tmp61
 
-ST_2: tmp63 (247)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp63 (247)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :134  %tmp63 = add i16 %prLamB_buf4_load, %pLambda4_load
 
-ST_2: tmp65 (248)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp65 (248)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :135  %tmp65 = add i16 %prLam2C_buf4b_load, %prLamC_buf4_load
 
-ST_2: tmp64 (249)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp64 (249)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :136  %tmp64 = add i16 %prLamC_buf4a_load, %tmp65
 
-ST_2: tmp62 (250)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp62 (250)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :137  %tmp62 = add i16 %tmp63, %tmp64
 
-ST_2: tmp_928 (251)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: tmp_928 (251)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :138  %tmp_928 = add i16 %tmp59, %tmp62
 
-ST_2: StgValue_273 (252)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5033
+ST_2: StgValue_273 (252)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5036
 :139  store i16 %tmp_928, i16* @pest4, align 2
 
-ST_2: pLambda5_load (254)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: pLambda5_load (254)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :141  %pLambda5_load = load i16* %pLambda5_addr, align 2
 
-ST_2: prLamB_buf5_load (256)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLamB_buf5_load (256)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :143  %prLamB_buf5_load = load i16* %prLamB_buf5_addr, align 2
 
-ST_2: prLamB_buf5a_load (258)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLamB_buf5a_load (258)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :145  %prLamB_buf5a_load = load i16* %prLamB_buf5a_addr, align 2
 
-ST_2: prLamB_buf5b_load (260)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLamB_buf5b_load (260)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :147  %prLamB_buf5b_load = load i16* %prLamB_buf5b_addr, align 2
 
-ST_2: prLamC_buf5_load (262)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLamC_buf5_load (262)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :149  %prLamC_buf5_load = load i16* %prLamC_buf5_addr, align 2
 
-ST_2: prLam2B_buf5_load (264)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLam2B_buf5_load (264)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :151  %prLam2B_buf5_load = load i16* %prLam2B_buf5_addr, align 2
 
-ST_2: prLam2B_buf5a_load (266)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLam2B_buf5a_load (266)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :153  %prLam2B_buf5a_load = load i16* %prLam2B_buf5a_addr, align 2
 
-ST_2: prLam2B_buf5b_load (268)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLam2B_buf5b_load (268)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :155  %prLam2B_buf5b_load = load i16* %prLam2B_buf5b_addr, align 2
 
-ST_2: prLam2C_buf5_load (270)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: prLam2C_buf5_load (270)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :157  %prLam2C_buf5_load = load i16* %prLam2C_buf5_addr, align 2
 
-ST_2: tmp73 (271)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp73 (271)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :158  %tmp73 = add i16 %prLam2B_buf5b_load, %prLam2B_buf5a_load
 
-ST_2: tmp74 (272)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp74 (272)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :159  %tmp74 = add i16 %prLamC_buf5_load, %prLam2B_buf5_load
 
-ST_2: tmp72 (273)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp72 (273)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :160  %tmp72 = add i16 %tmp73, %tmp74
 
-ST_2: tmp76 (274)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp76 (274)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :161  %tmp76 = add i16 %prLamB_buf5_load, %pLambda5_load
 
-ST_2: tmp78 (275)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp78 (275)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :162  %tmp78 = add i16 %prLam2C_buf5_load, %prLamB_buf5a_load
 
-ST_2: tmp77 (276)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp77 (276)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :163  %tmp77 = add i16 %prLamB_buf5b_load, %tmp78
 
-ST_2: tmp75 (277)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp75 (277)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :164  %tmp75 = add i16 %tmp76, %tmp77
 
-ST_2: tmp_929 (278)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: tmp_929 (278)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :165  %tmp_929 = add i16 %tmp72, %tmp75
 
-ST_2: StgValue_291 (279)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5035
+ST_2: StgValue_291 (279)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5038
 :166  store i16 %tmp_929, i16* @pest5, align 2
 
-ST_2: pLambda6_load (281)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: pLambda6_load (281)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :168  %pLambda6_load = load i16* %pLambda6_addr, align 2
 
-ST_2: prLamB_buf6_load (283)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: prLamB_buf6_load (283)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :170  %prLamB_buf6_load = load i16* %prLamB_buf6_addr, align 2
 
-ST_2: prLamC_buf6_load (285)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: prLamC_buf6_load (285)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :172  %prLamC_buf6_load = load i16* %prLamC_buf6_addr, align 2
 
-ST_2: prLam2B_buf6_load (287)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: prLam2B_buf6_load (287)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :174  %prLam2B_buf6_load = load i16* %prLam2B_buf6_addr, align 2
 
-ST_2: prLam2C_buf6_load (289)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: prLam2C_buf6_load (289)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :176  %prLam2C_buf6_load = load i16* %prLam2C_buf6_addr, align 2
 
-ST_2: tmp81 (290)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: tmp81 (290)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :177  %tmp81 = add i16 %prLam2B_buf6_load, %prLamC_buf6_load
 
-ST_2: tmp83 (291)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: tmp83 (291)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :178  %tmp83 = add i16 %prLam2C_buf6_load, %prLamB_buf6_load
 
-ST_2: tmp82 (292)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: tmp82 (292)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :179  %tmp82 = add i16 %pLambda6_load, %tmp83
 
-ST_2: tmp_930 (293)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: tmp_930 (293)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :180  %tmp_930 = add i16 %tmp81, %tmp82
 
-ST_2: StgValue_301 (294)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5037
+ST_2: StgValue_301 (294)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5040
 :181  store i16 %tmp_930, i16* @pest6, align 2
 
-ST_2: pLambda7_load (296)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: pLambda7_load (296)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :183  %pLambda7_load = load i16* %pLambda7_addr, align 2
 
-ST_2: prLamB_buf7_load (298)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLamB_buf7_load (298)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :185  %prLamB_buf7_load = load i16* %prLamB_buf7_addr, align 2
 
-ST_2: prLamB_buf7a_load (300)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLamB_buf7a_load (300)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :187  %prLamB_buf7a_load = load i16* %prLamB_buf7a_addr, align 2
 
-ST_2: prLamC_buf7_load (302)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLamC_buf7_load (302)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :189  %prLamC_buf7_load = load i16* %prLamC_buf7_addr, align 2
 
-ST_2: prLam2B_buf7_load (304)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLam2B_buf7_load (304)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :191  %prLam2B_buf7_load = load i16* %prLam2B_buf7_addr, align 2
 
-ST_2: prLam2B_buf7a_load (306)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLam2B_buf7a_load (306)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :193  %prLam2B_buf7a_load = load i16* %prLam2B_buf7a_addr, align 2
 
-ST_2: prLam2C_buf7_load (308)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: prLam2C_buf7_load (308)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :195  %prLam2C_buf7_load = load i16* %prLam2C_buf7_addr, align 2
 
-ST_2: tmp89 (309)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp89 (309)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :196  %tmp89 = add i16 %prLamC_buf7_load, %prLam2B_buf7a_load
 
-ST_2: tmp88 (310)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp88 (310)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :197  %tmp88 = add i16 %prLam2B_buf7_load, %tmp89
 
-ST_2: tmp91 (311)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp91 (311)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :198  %tmp91 = add i16 %prLamB_buf7a_load, %prLamB_buf7_load
 
-ST_2: tmp92 (312)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp92 (312)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :199  %tmp92 = add i16 %prLam2C_buf7_load, %pLambda7_load
 
-ST_2: tmp90 (313)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp90 (313)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :200  %tmp90 = add i16 %tmp91, %tmp92
 
-ST_2: tmp_931 (314)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: tmp_931 (314)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :201  %tmp_931 = add i16 %tmp88, %tmp90
 
-ST_2: StgValue_315 (315)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5039
+ST_2: StgValue_315 (315)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
 :202  store i16 %tmp_931, i16* @pest7, align 2
 
-ST_2: pLambda8_load (317)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: pLambda8_load (317)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :204  %pLambda8_load = load i16* %pLambda8_addr, align 2
 
-ST_2: prLam_buf2_load (319)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: prLam_buf2_load (319)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :206  %prLam_buf2_load = load i16* %prLam_buf2_addr, align 2
 
-ST_2: prLam2_buf2_load (321)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: prLam2_buf2_load (321)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :208  %prLam2_buf2_load = load i16* %prLam2_buf2_addr, align 2
 
-ST_2: tmp93 (322)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: tmp93 (322)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :209  %tmp93 = add i16 %prLam2_buf2_load, %pLambda8_load
 
-ST_2: tmp_932 (323)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: tmp_932 (323)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :210  %tmp_932 = add i16 %prLam_buf2_load, %tmp93
 
-ST_2: StgValue_321 (324)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5041
+ST_2: StgValue_321 (324)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
 :211  store i16 %tmp_932, i16* @pest8, align 2
 
-ST_2: pLambda9_load (326)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: pLambda9_load (326)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :213  %pLambda9_load = load i16* %pLambda9_addr, align 2
 
-ST_2: prLamB_buf9_load (328)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLamB_buf9_load (328)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :215  %prLamB_buf9_load = load i16* %prLamB_buf9_addr, align 2
 
-ST_2: prLamB_buf9a_load (330)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLamB_buf9a_load (330)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :217  %prLamB_buf9a_load = load i16* %prLamB_buf9a_addr, align 2
 
-ST_2: prLamC_buf9_load (332)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLamC_buf9_load (332)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :219  %prLamC_buf9_load = load i16* %prLamC_buf9_addr, align 2
 
-ST_2: prLam2B_buf9_load (334)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLam2B_buf9_load (334)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :221  %prLam2B_buf9_load = load i16* %prLam2B_buf9_addr, align 2
 
-ST_2: prLam2B_buf9a_load (336)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLam2B_buf9a_load (336)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :223  %prLam2B_buf9a_load = load i16* %prLam2B_buf9a_addr, align 2
 
-ST_2: prLam2C_buf9_load (338)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: prLam2C_buf9_load (338)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :225  %prLam2C_buf9_load = load i16* %prLam2C_buf9_addr, align 2
 
-ST_2: tmp99 (339)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp99 (339)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :226  %tmp99 = add i16 %prLamC_buf9_load, %prLam2B_buf9a_load
 
-ST_2: tmp98 (340)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp98 (340)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :227  %tmp98 = add i16 %prLam2B_buf9_load, %tmp99
 
-ST_2: tmp101 (341)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp101 (341)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :228  %tmp101 = add i16 %prLamB_buf9a_load, %prLamB_buf9_load
 
-ST_2: tmp102 (342)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp102 (342)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :229  %tmp102 = add i16 %prLam2C_buf9_load, %pLambda9_load
 
-ST_2: tmp100 (343)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp100 (343)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :230  %tmp100 = add i16 %tmp101, %tmp102
 
-ST_2: tmp_933 (344)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: tmp_933 (344)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :231  %tmp_933 = add i16 %tmp98, %tmp100
 
-ST_2: StgValue_335 (345)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5042
+ST_2: StgValue_335 (345)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5045
 :232  store i16 %tmp_933, i16* @pest9, align 2
 
-ST_2: blk_val_load (346)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: blk_val_load (346)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :233  %blk_val_load = load i16* @blk_val, align 2
 
-ST_2: prLam_buf4_load (348)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam_buf4_load (348)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :235  %prLam_buf4_load = load i16* %prLam_buf4_addr, align 2
 
-ST_2: prLam_buf4a_load (350)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam_buf4a_load (350)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :237  %prLam_buf4a_load = load i16* %prLam_buf4a_addr, align 2
 
-ST_2: prLamB_buf10_load (352)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLamB_buf10_load (352)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :239  %prLamB_buf10_load = load i16* %prLamB_buf10_addr, align 2
 
-ST_2: prLamC_buf10_load (354)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLamC_buf10_load (354)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :241  %prLamC_buf10_load = load i16* %prLamC_buf10_addr, align 2
 
-ST_2: prLamC_buf10a_load (356)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLamC_buf10a_load (356)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :243  %prLamC_buf10a_load = load i16* %prLamC_buf10a_addr, align 2
 
-ST_2: prLamC_buf10b_load (358)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLamC_buf10b_load (358)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :245  %prLamC_buf10b_load = load i16* %prLamC_buf10b_addr, align 2
 
-ST_2: prLam2_buf4_load (360)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2_buf4_load (360)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :247  %prLam2_buf4_load = load i16* %prLam2_buf4_addr, align 2
 
-ST_2: prLam2_buf4a_load (362)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2_buf4a_load (362)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :249  %prLam2_buf4a_load = load i16* %prLam2_buf4a_addr, align 2
 
-ST_2: prLam2B_buf10_load (364)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2B_buf10_load (364)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :251  %prLam2B_buf10_load = load i16* %prLam2B_buf10_addr, align 2
 
-ST_2: prLam2C_buf10_load (366)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2C_buf10_load (366)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :253  %prLam2C_buf10_load = load i16* %prLam2C_buf10_addr, align 2
 
-ST_2: prLam2C_buf10a_load (368)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2C_buf10a_load (368)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :255  %prLam2C_buf10a_load = load i16* %prLam2C_buf10a_addr, align 2
 
-ST_2: prLam2C_buf10b_load (370)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: prLam2C_buf10b_load (370)  [1/2] 2.33ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :257  %prLam2C_buf10b_load = load i16* %prLam2C_buf10b_addr, align 2
 
-ST_2: tmp115 (371)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp115 (371)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :258  %tmp115 = add i16 %prLam2B_buf10_load, %prLam2C_buf10a_load
 
-ST_2: tmp114 (372)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp114 (372)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :259  %tmp114 = add i16 %prLam2C_buf10_load, %tmp115
 
-ST_2: tmp117 (373)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp117 (373)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :260  %tmp117 = add i16 %prLam2_buf4_load, %prLam2_buf4a_load
 
-ST_2: tmp116 (374)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp116 (374)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :261  %tmp116 = add i16 %prLamC_buf10b_load, %tmp117
 
-ST_2: tmp113 (375)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp113 (375)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :262  %tmp113 = add i16 %tmp114, %tmp116
 
-ST_2: tmp120 (376)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp120 (376)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :263  %tmp120 = add i16 %blk_val_load, %prLam_buf4a_load
 
-ST_2: tmp119 (377)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp119 (377)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :264  %tmp119 = add i16 %prLam_buf4_load, %tmp120
 
-ST_2: tmp122 (378)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp122 (378)  [1/1] 1.46ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :265  %tmp122 = add i16 %prLamC_buf10a_load, %prLamB_buf10_load
 
-ST_2: tmp123 (379)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp123 (379)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :266  %tmp123 = add i16 %prLam2C_buf10b_load, %prLamC_buf10_load
 
-ST_2: tmp121 (380)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp121 (380)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :267  %tmp121 = add i16 %tmp122, %tmp123
 
-ST_2: tmp118 (381)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp118 (381)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :268  %tmp118 = add i16 %tmp119, %tmp121
 
-ST_2: tmp_934 (382)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: tmp_934 (382)  [1/1] 1.32ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :269  %tmp_934 = add i16 %tmp113, %tmp118
 
-ST_2: StgValue_361 (383)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5044
+ST_2: StgValue_361 (383)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5047
 :270  store i16 %tmp_934, i16* @pest10, align 2
 
-ST_2: tmp_1039 (384)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5048
+ST_2: tmp_1039 (384)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
 :271  %tmp_1039 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_s, i32 15)
 
-ST_2: rev (385)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5048
+ST_2: rev (385)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
 :272  %rev = xor i1 %tmp_1039, true
 
-ST_2: StgValue_364 (386)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5048
+ST_2: StgValue_364 (386)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
 :273  store i1 %rev, i1* @bpest0, align 1
 
-ST_2: tmp_1040 (387)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5049
+ST_2: tmp_1040 (387)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
 :274  %tmp_1040 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_925, i32 15)
 
-ST_2: rev5 (388)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5049
+ST_2: rev5 (388)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
 :275  %rev5 = xor i1 %tmp_1040, true
 
-ST_2: StgValue_367 (389)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5049
+ST_2: StgValue_367 (389)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
 :276  store i1 %rev5, i1* @bpest1, align 1
 
-ST_2: tmp_1041 (390)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5050
+ST_2: tmp_1041 (390)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
 :277  %tmp_1041 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_926, i32 15)
 
-ST_2: rev8 (391)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5050
+ST_2: rev8 (391)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
 :278  %rev8 = xor i1 %tmp_1041, true
 
-ST_2: StgValue_370 (392)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5050
+ST_2: StgValue_370 (392)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
 :279  store i1 %rev8, i1* @bpest2, align 1
 
-ST_2: tmp_1042 (393)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
+ST_2: tmp_1042 (393)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
 :280  %tmp_1042 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_927, i32 15)
 
-ST_2: rev6 (394)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
+ST_2: rev6 (394)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
 :281  %rev6 = xor i1 %tmp_1042, true
 
-ST_2: StgValue_373 (395)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5051
+ST_2: StgValue_373 (395)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
 :282  store i1 %rev6, i1* @bpest3, align 1
 
-ST_2: tmp_1043 (396)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
+ST_2: tmp_1043 (396)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
 :283  %tmp_1043 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_928, i32 15)
 
-ST_2: rev7 (397)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
+ST_2: rev7 (397)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
 :284  %rev7 = xor i1 %tmp_1043, true
 
-ST_2: StgValue_376 (398)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5052
+ST_2: StgValue_376 (398)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
 :285  store i1 %rev7, i1* @bpest4, align 1
 
-ST_2: tmp_1044 (399)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
+ST_2: tmp_1044 (399)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
 :286  %tmp_1044 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_929, i32 15)
 
-ST_2: rev9 (400)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
+ST_2: rev9 (400)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
 :287  %rev9 = xor i1 %tmp_1044, true
 
-ST_2: StgValue_379 (401)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5053
+ST_2: StgValue_379 (401)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
 :288  store i1 %rev9, i1* @bpest5, align 1
 
-ST_2: tmp_1045 (402)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
+ST_2: tmp_1045 (402)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
 :289  %tmp_1045 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_930, i32 15)
 
-ST_2: rev10 (403)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
+ST_2: rev10 (403)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
 :290  %rev10 = xor i1 %tmp_1045, true
 
-ST_2: StgValue_382 (404)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5054
+ST_2: StgValue_382 (404)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
 :291  store i1 %rev10, i1* @bpest6, align 1
 
-ST_2: tmp_1046 (405)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
+ST_2: tmp_1046 (405)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
 :292  %tmp_1046 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_931, i32 15)
 
-ST_2: rev11 (406)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
+ST_2: rev11 (406)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
 :293  %rev11 = xor i1 %tmp_1046, true
 
-ST_2: StgValue_385 (407)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5055
+ST_2: StgValue_385 (407)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
 :294  store i1 %rev11, i1* @bpest7, align 1
 
-ST_2: tmp_1047 (408)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
+ST_2: tmp_1047 (408)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5059
 :295  %tmp_1047 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_932, i32 15)
 
-ST_2: rev12 (409)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
+ST_2: rev12 (409)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5059
 :296  %rev12 = xor i1 %tmp_1047, true
 
-ST_2: StgValue_388 (410)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5056
+ST_2: StgValue_388 (410)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5059
 :297  store i1 %rev12, i1* @bpest8, align 1
 
-ST_2: tmp_1048 (411)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
+ST_2: tmp_1048 (411)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5060
 :298  %tmp_1048 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_933, i32 15)
 
-ST_2: rev13 (412)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
+ST_2: rev13 (412)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5060
 :299  %rev13 = xor i1 %tmp_1048, true
 
-ST_2: StgValue_391 (413)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5057
+ST_2: StgValue_391 (413)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5060
 :300  store i1 %rev13, i1* @bpest9, align 1
 
-ST_2: tmp_1049 (414)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
+ST_2: tmp_1049 (414)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5061
 :301  %tmp_1049 = call i1 @_ssdm_op_BitSelect.i1.i16.i32(i16 %tmp_934, i32 15)
 
-ST_2: rev14 (415)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
+ST_2: rev14 (415)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5061
 :302  %rev14 = xor i1 %tmp_1049, true
 
-ST_2: StgValue_394 (416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5058
+ST_2: StgValue_394 (416)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5061
 :303  store i1 %rev14, i1* @bpest10, align 1
 
-ST_2: StgValue_395 (417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5060
+ST_2: StgValue_395 (417)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:5063
 :304  ret void
 
 

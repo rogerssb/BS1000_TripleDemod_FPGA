@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'mcalcB'
 ================================================================
-* Date:           Sat Oct 05 16:59:03 2019
+* Date:           Thu Aug 11 10:23:04 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -80,354 +80,354 @@ IsGatedGlobalClock: 0
 * FSM state operations: 
 
  <State 1>: 5.11ns
-ST_1: Lam_tabx_0_load (11)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Lam_tabx_0_load (11)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:1  %Lam_tabx_0_load = load i16* @Lam_tabx_0, align 2
 
-ST_1: tmp_784 (12)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_784 (12)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:2  %tmp_784 = trunc i16 %Lam_tabx_0_load to i12
 
-ST_1: Peta_tabx_0_load (13)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Peta_tabx_0_load (13)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:3  %Peta_tabx_0_load = load i16* @Peta_tabx_0, align 2
 
-ST_1: tmp_785 (14)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_785 (14)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:4  %tmp_785 = trunc i16 %Peta_tabx_0_load to i12
 
-ST_1: vArg_V (15)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: vArg_V (15)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:5  %vArg_V = sub i12 %tmp_785, %tmp_784
 
-ST_1: tmp_786 (16)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: tmp_786 (16)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:6  %tmp_786 = call i1 @_ssdm_op_BitSelect.i1.i12.i32(i12 %vArg_V, i32 11)
 
-ST_1: vArg_V_6 (17)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3602
+ST_1: vArg_V_6 (17)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3605
 _ifconv:7  %vArg_V_6 = sub i12 0, %vArg_V
 
-ST_1: p_s (18)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: p_s (18)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:8  %p_s = select i1 %tmp_786, i12 %vArg_V_6, i12 %vArg_V
 
-ST_1: tmp_697 (19)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606
+ST_1: tmp_697 (19)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609
 _ifconv:9  %tmp_697 = icmp sgt i12 %p_s, 126
 
-ST_1: tmp_698 (20)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608
+ST_1: tmp_698 (20)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611
 _ifconv:10  %tmp_698 = icmp sgt i12 %p_s, 62
 
-ST_1: tmp_699 (21)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610
+ST_1: tmp_699 (21)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613
 _ifconv:11  %tmp_699 = icmp sgt i12 %p_s, 30
 
-ST_1: tmp_700 (22)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612
+ST_1: tmp_700 (22)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615
 _ifconv:12  %tmp_700 = icmp sgt i12 %p_s, 14
 
-ST_1: tmp_701 (23)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614
+ST_1: tmp_701 (23)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617
 _ifconv:13  %tmp_701 = icmp sgt i12 %p_s, 6
 
-ST_1: tmp_702 (24)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3616
+ST_1: tmp_702 (24)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3619
 _ifconv:14  %tmp_702 = icmp sgt i12 %p_s, 2
 
-ST_1: Lam_tabx_1_load (42)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Lam_tabx_1_load (42)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:32  %Lam_tabx_1_load = load i16* @Lam_tabx_1, align 2
 
-ST_1: tmp_787 (43)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_787 (43)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:33  %tmp_787 = trunc i16 %Lam_tabx_1_load to i12
 
-ST_1: Peta_tabx_1_load (44)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Peta_tabx_1_load (44)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:34  %Peta_tabx_1_load = load i16* @Peta_tabx_1, align 2
 
-ST_1: tmp_788 (45)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_788 (45)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:35  %tmp_788 = trunc i16 %Peta_tabx_1_load to i12
 
-ST_1: vArg_V_1 (46)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: vArg_V_1 (46)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:36  %vArg_V_1 = sub i12 %tmp_788, %tmp_787
 
-ST_1: tmp_789 (47)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: tmp_789 (47)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:37  %tmp_789 = call i1 @_ssdm_op_BitSelect.i1.i12.i32(i12 %vArg_V_1, i32 11)
 
-ST_1: vArg_V_6_1 (48)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3602
+ST_1: vArg_V_6_1 (48)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3605
 _ifconv:38  %vArg_V_6_1 = sub i12 0, %vArg_V_1
 
-ST_1: p_1 (49)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: p_1 (49)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:39  %p_1 = select i1 %tmp_789, i12 %vArg_V_6_1, i12 %vArg_V_1
 
-ST_1: tmp_1547_1 (50)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606
+ST_1: tmp_1547_1 (50)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609
 _ifconv:40  %tmp_1547_1 = icmp sgt i12 %p_1, 126
 
-ST_1: tmp_1548_1 (51)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608
+ST_1: tmp_1548_1 (51)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611
 _ifconv:41  %tmp_1548_1 = icmp sgt i12 %p_1, 62
 
-ST_1: tmp_1549_1 (52)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610
+ST_1: tmp_1549_1 (52)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613
 _ifconv:42  %tmp_1549_1 = icmp sgt i12 %p_1, 30
 
-ST_1: tmp_1550_1 (53)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612
+ST_1: tmp_1550_1 (53)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615
 _ifconv:43  %tmp_1550_1 = icmp sgt i12 %p_1, 14
 
-ST_1: tmp_1551_1 (54)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614
+ST_1: tmp_1551_1 (54)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617
 _ifconv:44  %tmp_1551_1 = icmp sgt i12 %p_1, 6
 
-ST_1: tmp_1552_1 (55)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3616
+ST_1: tmp_1552_1 (55)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3619
 _ifconv:45  %tmp_1552_1 = icmp sgt i12 %p_1, 2
 
-ST_1: Lam_tabx_2_load (73)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Lam_tabx_2_load (73)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:63  %Lam_tabx_2_load = load i16* @Lam_tabx_2, align 2
 
-ST_1: tmp_790 (74)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_790 (74)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:64  %tmp_790 = trunc i16 %Lam_tabx_2_load to i12
 
-ST_1: Peta_tabx_2_load (75)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: Peta_tabx_2_load (75)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:65  %Peta_tabx_2_load = load i16* @Peta_tabx_2, align 2
 
-ST_1: tmp_791 (76)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: tmp_791 (76)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:66  %tmp_791 = trunc i16 %Peta_tabx_2_load to i12
 
-ST_1: vArg_V_2 (77)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591
+ST_1: vArg_V_2 (77)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594
 _ifconv:67  %vArg_V_2 = sub i12 %tmp_791, %tmp_790
 
-ST_1: tmp_792 (78)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: tmp_792 (78)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:68  %tmp_792 = call i1 @_ssdm_op_BitSelect.i1.i12.i32(i12 %vArg_V_2, i32 11)
 
-ST_1: vArg_V_6_2 (79)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3602
+ST_1: vArg_V_6_2 (79)  [1/1] 1.40ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3605
 _ifconv:69  %vArg_V_6_2 = sub i12 0, %vArg_V_2
 
-ST_1: p_2 (80)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597
+ST_1: p_2 (80)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600
 _ifconv:70  %p_2 = select i1 %tmp_792, i12 %vArg_V_6_2, i12 %vArg_V_2
 
-ST_1: tmp_1547_2 (81)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606
+ST_1: tmp_1547_2 (81)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609
 _ifconv:71  %tmp_1547_2 = icmp sgt i12 %p_2, 126
 
-ST_1: tmp_1548_2 (82)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608
+ST_1: tmp_1548_2 (82)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611
 _ifconv:72  %tmp_1548_2 = icmp sgt i12 %p_2, 62
 
-ST_1: tmp_1549_2 (83)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610
+ST_1: tmp_1549_2 (83)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613
 _ifconv:73  %tmp_1549_2 = icmp sgt i12 %p_2, 30
 
-ST_1: tmp_1550_2 (84)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612
+ST_1: tmp_1550_2 (84)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615
 _ifconv:74  %tmp_1550_2 = icmp sgt i12 %p_2, 14
 
-ST_1: tmp_1551_2 (85)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614
+ST_1: tmp_1551_2 (85)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617
 _ifconv:75  %tmp_1551_2 = icmp sgt i12 %p_2, 6
 
-ST_1: tmp_1552_2 (86)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3616
+ST_1: tmp_1552_2 (86)  [1/1] 1.47ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3619
 _ifconv:76  %tmp_1552_2 = icmp sgt i12 %p_2, 2
 
 
  <State 2>: 5.54ns
-ST_2: StgValue_45 (10)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3572
+ST_2: StgValue_45 (10)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3575
 _ifconv:0  call void (...)* @_ssdm_op_SpecPipeline(i32 -1, i32 1, i32 1, i32 0, [1 x i8]* @p_str) nounwind
 
-ST_2: storemerge_cast_cast (25)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node sel_tmp8)
+ST_2: storemerge_cast_cast (25)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node sel_tmp8)
 _ifconv:15  %storemerge_cast_cast = select i1 %tmp_697, i3 -1, i3 3
 
-ST_2: sel_tmp (26)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node sel_tmp8)
+ST_2: sel_tmp (26)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node sel_tmp8)
 _ifconv:16  %sel_tmp = select i1 %tmp_702, i3 %storemerge_cast_cast, i3 1
 
-ST_2: sel_tmp_cast (27)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node sel_tmp8)
+ST_2: sel_tmp_cast (27)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node sel_tmp8)
 _ifconv:17  %sel_tmp_cast = sext i3 %sel_tmp to i7
 
-ST_2: sel_tmp1 (28)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606 (grouped into LUT with out node sel_tmp8)
+ST_2: sel_tmp1 (28)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609 (grouped into LUT with out node sel_tmp8)
 _ifconv:18  %sel_tmp1 = xor i1 %tmp_697, true
 
-ST_2: sel_tmp2 (29)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp8)
+ST_2: sel_tmp2 (29)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp8)
 _ifconv:19  %sel_tmp2 = and i1 %tmp_698, %sel_tmp1
 
-ST_2: sel_tmp6 (30)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp7)
+ST_2: sel_tmp6 (30)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp7)
 _ifconv:20  %sel_tmp6 = xor i1 %tmp_698, true
 
-ST_2: sel_tmp7 (31)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (out node of the LUT)
+ST_2: sel_tmp7 (31)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (out node of the LUT)
 _ifconv:21  %sel_tmp7 = and i1 %tmp_699, %sel_tmp6
 
-ST_2: sel_tmp3_cast (32)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node sel_tmp8)
+ST_2: sel_tmp3_cast (32)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node sel_tmp8)
 _ifconv:22  %sel_tmp3_cast = select i1 %sel_tmp7, i7 31, i7 63
 
-ST_2: tmp (33)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node sel_tmp8)
+ST_2: tmp (33)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node sel_tmp8)
 _ifconv:23  %tmp = or i1 %sel_tmp7, %sel_tmp2
 
-ST_2: sel_tmp8 (34)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (out node of the LUT)
+ST_2: sel_tmp8 (34)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (out node of the LUT)
 _ifconv:24  %sel_tmp8 = select i1 %tmp, i7 %sel_tmp3_cast, i7 %sel_tmp_cast
 
-ST_2: sel_tmp13 (35)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (grouped into LUT with out node lhs_V_69)
+ST_2: sel_tmp13 (35)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (grouped into LUT with out node lhs_V_69)
 _ifconv:25  %sel_tmp13 = xor i1 %tmp_699, true
 
-ST_2: sel_tmp14 (36)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node lhs_V_69)
+ST_2: sel_tmp14 (36)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node lhs_V_69)
 _ifconv:26  %sel_tmp14 = and i1 %tmp_700, %sel_tmp13
 
-ST_2: sel_tmp22 (37)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node sel_tmp23)
+ST_2: sel_tmp22 (37)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node sel_tmp23)
 _ifconv:27  %sel_tmp22 = xor i1 %tmp_700, true
 
-ST_2: sel_tmp23 (38)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614 (out node of the LUT)
+ST_2: sel_tmp23 (38)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617 (out node of the LUT)
 _ifconv:28  %sel_tmp23 = and i1 %tmp_701, %sel_tmp22
 
-ST_2: sel_tmp15_cast (39)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node lhs_V_69)
+ST_2: sel_tmp15_cast (39)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node lhs_V_69)
 _ifconv:29  %sel_tmp15_cast = select i1 %sel_tmp23, i7 7, i7 15
 
-ST_2: tmp_729 (40)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (grouped into LUT with out node lhs_V_69)
+ST_2: tmp_729 (40)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (grouped into LUT with out node lhs_V_69)
 _ifconv:30  %tmp_729 = or i1 %sel_tmp23, %sel_tmp14
 
-ST_2: lhs_V_69 (41)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637 (out node of the LUT)
+ST_2: lhs_V_69 (41)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640 (out node of the LUT)
 _ifconv:31  %lhs_V_69 = select i1 %tmp_729, i7 %sel_tmp15_cast, i7 %sel_tmp8
 
-ST_2: storemerge_1_cast_ca (56)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node sel_tmp33)
+ST_2: storemerge_1_cast_ca (56)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node sel_tmp33)
 _ifconv:46  %storemerge_1_cast_ca = select i1 %tmp_1547_1, i3 -1, i3 3
 
-ST_2: sel_tmp25 (57)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node sel_tmp33)
+ST_2: sel_tmp25 (57)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node sel_tmp33)
 _ifconv:47  %sel_tmp25 = select i1 %tmp_1552_1, i3 %storemerge_1_cast_ca, i3 1
 
-ST_2: sel_tmp25_cast (58)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node sel_tmp33)
+ST_2: sel_tmp25_cast (58)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node sel_tmp33)
 _ifconv:48  %sel_tmp25_cast = sext i3 %sel_tmp25 to i7
 
-ST_2: sel_tmp26 (59)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606 (grouped into LUT with out node sel_tmp33)
+ST_2: sel_tmp26 (59)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609 (grouped into LUT with out node sel_tmp33)
 _ifconv:49  %sel_tmp26 = xor i1 %tmp_1547_1, true
 
-ST_2: sel_tmp27 (60)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp33)
+ST_2: sel_tmp27 (60)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp33)
 _ifconv:50  %sel_tmp27 = and i1 %tmp_1548_1, %sel_tmp26
 
-ST_2: sel_tmp31 (61)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp32)
+ST_2: sel_tmp31 (61)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp32)
 _ifconv:51  %sel_tmp31 = xor i1 %tmp_1548_1, true
 
-ST_2: sel_tmp32 (62)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (out node of the LUT)
+ST_2: sel_tmp32 (62)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (out node of the LUT)
 _ifconv:52  %sel_tmp32 = and i1 %tmp_1549_1, %sel_tmp31
 
-ST_2: sel_tmp28_cast (63)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node sel_tmp33)
+ST_2: sel_tmp28_cast (63)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node sel_tmp33)
 _ifconv:53  %sel_tmp28_cast = select i1 %sel_tmp32, i7 31, i7 63
 
-ST_2: tmp_730 (64)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node sel_tmp33)
+ST_2: tmp_730 (64)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node sel_tmp33)
 _ifconv:54  %tmp_730 = or i1 %sel_tmp32, %sel_tmp27
 
-ST_2: sel_tmp33 (65)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (out node of the LUT)
+ST_2: sel_tmp33 (65)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (out node of the LUT)
 _ifconv:55  %sel_tmp33 = select i1 %tmp_730, i7 %sel_tmp28_cast, i7 %sel_tmp25_cast
 
-ST_2: sel_tmp38 (66)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (grouped into LUT with out node lhs_V)
+ST_2: sel_tmp38 (66)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (grouped into LUT with out node lhs_V)
 _ifconv:56  %sel_tmp38 = xor i1 %tmp_1549_1, true
 
-ST_2: sel_tmp39 (67)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node lhs_V)
+ST_2: sel_tmp39 (67)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node lhs_V)
 _ifconv:57  %sel_tmp39 = and i1 %tmp_1550_1, %sel_tmp38
 
-ST_2: sel_tmp47 (68)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node sel_tmp48)
+ST_2: sel_tmp47 (68)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node sel_tmp48)
 _ifconv:58  %sel_tmp47 = xor i1 %tmp_1550_1, true
 
-ST_2: sel_tmp48 (69)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614 (out node of the LUT)
+ST_2: sel_tmp48 (69)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617 (out node of the LUT)
 _ifconv:59  %sel_tmp48 = and i1 %tmp_1551_1, %sel_tmp47
 
-ST_2: sel_tmp40_cast (70)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node lhs_V)
+ST_2: sel_tmp40_cast (70)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node lhs_V)
 _ifconv:60  %sel_tmp40_cast = select i1 %sel_tmp48, i7 7, i7 15
 
-ST_2: tmp_731 (71)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (grouped into LUT with out node lhs_V)
+ST_2: tmp_731 (71)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (grouped into LUT with out node lhs_V)
 _ifconv:61  %tmp_731 = or i1 %sel_tmp48, %sel_tmp39
 
-ST_2: lhs_V (72)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639 (out node of the LUT)
+ST_2: lhs_V (72)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642 (out node of the LUT)
 _ifconv:62  %lhs_V = select i1 %tmp_731, i7 %sel_tmp40_cast, i7 %sel_tmp33
 
-ST_2: storemerge_2_cast_ca (87)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node sel_tmp58)
+ST_2: storemerge_2_cast_ca (87)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node sel_tmp58)
 _ifconv:77  %storemerge_2_cast_ca = select i1 %tmp_1547_2, i3 -1, i3 3
 
-ST_2: sel_tmp50 (88)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node sel_tmp58)
+ST_2: sel_tmp50 (88)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node sel_tmp58)
 _ifconv:78  %sel_tmp50 = select i1 %tmp_1552_2, i3 %storemerge_2_cast_ca, i3 1
 
-ST_2: sel_tmp50_cast (89)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node sel_tmp58)
+ST_2: sel_tmp50_cast (89)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node sel_tmp58)
 _ifconv:79  %sel_tmp50_cast = sext i3 %sel_tmp50 to i7
 
-ST_2: sel_tmp51 (90)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3606 (grouped into LUT with out node sel_tmp58)
+ST_2: sel_tmp51 (90)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609 (grouped into LUT with out node sel_tmp58)
 _ifconv:80  %sel_tmp51 = xor i1 %tmp_1547_2, true
 
-ST_2: sel_tmp52 (91)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp58)
+ST_2: sel_tmp52 (91)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp58)
 _ifconv:81  %sel_tmp52 = and i1 %tmp_1548_2, %sel_tmp51
 
-ST_2: sel_tmp56 (92)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608 (grouped into LUT with out node sel_tmp57)
+ST_2: sel_tmp56 (92)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611 (grouped into LUT with out node sel_tmp57)
 _ifconv:82  %sel_tmp56 = xor i1 %tmp_1548_2, true
 
-ST_2: sel_tmp57 (93)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (out node of the LUT)
+ST_2: sel_tmp57 (93)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (out node of the LUT)
 _ifconv:83  %sel_tmp57 = and i1 %tmp_1549_2, %sel_tmp56
 
-ST_2: sel_tmp53_cast (94)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node sel_tmp58)
+ST_2: sel_tmp53_cast (94)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node sel_tmp58)
 _ifconv:84  %sel_tmp53_cast = select i1 %sel_tmp57, i7 31, i7 63
 
-ST_2: tmp_732 (95)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node sel_tmp58)
+ST_2: tmp_732 (95)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node sel_tmp58)
 _ifconv:85  %tmp_732 = or i1 %sel_tmp57, %sel_tmp52
 
-ST_2: sel_tmp58 (96)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (out node of the LUT)
+ST_2: sel_tmp58 (96)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (out node of the LUT)
 _ifconv:86  %sel_tmp58 = select i1 %tmp_732, i7 %sel_tmp53_cast, i7 %sel_tmp50_cast
 
-ST_2: sel_tmp63 (97)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610 (grouped into LUT with out node rhs_V)
+ST_2: sel_tmp63 (97)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613 (grouped into LUT with out node rhs_V)
 _ifconv:87  %sel_tmp63 = xor i1 %tmp_1549_2, true
 
-ST_2: sel_tmp64 (98)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node rhs_V)
+ST_2: sel_tmp64 (98)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node rhs_V)
 _ifconv:88  %sel_tmp64 = and i1 %tmp_1550_2, %sel_tmp63
 
-ST_2: sel_tmp72 (99)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3612 (grouped into LUT with out node sel_tmp73)
+ST_2: sel_tmp72 (99)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3615 (grouped into LUT with out node sel_tmp73)
 _ifconv:89  %sel_tmp72 = xor i1 %tmp_1550_2, true
 
-ST_2: sel_tmp73 (100)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3614 (out node of the LUT)
+ST_2: sel_tmp73 (100)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3617 (out node of the LUT)
 _ifconv:90  %sel_tmp73 = and i1 %tmp_1551_2, %sel_tmp72
 
-ST_2: sel_tmp65_cast (101)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node rhs_V)
+ST_2: sel_tmp65_cast (101)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node rhs_V)
 _ifconv:91  %sel_tmp65_cast = select i1 %sel_tmp73, i7 7, i7 15
 
-ST_2: tmp_733 (102)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (grouped into LUT with out node rhs_V)
+ST_2: tmp_733 (102)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (grouped into LUT with out node rhs_V)
 _ifconv:92  %tmp_733 = or i1 %sel_tmp73, %sel_tmp64
 
-ST_2: rhs_V (103)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635 (out node of the LUT)
+ST_2: rhs_V (103)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638 (out node of the LUT)
 _ifconv:93  %rhs_V = select i1 %tmp_733, i7 %sel_tmp65_cast, i7 %sel_tmp58
 
-ST_2: tmp_s (104)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3624 (grouped into LUT with out node tmp_705)
+ST_2: tmp_s (104)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627 (grouped into LUT with out node tmp_705)
 _ifconv:94  %tmp_s = xor i1 %tmp_789, %tmp_792
 
-ST_2: tmp_703 (105)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627 (grouped into LUT with out node tmp_706)
+ST_2: tmp_703 (105)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630 (grouped into LUT with out node tmp_706)
 _ifconv:95  %tmp_703 = xor i1 %tmp_786, %tmp_792
 
-ST_2: tmp_704 (106)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630 (grouped into LUT with out node tmp_707)
+ST_2: tmp_704 (106)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3633 (grouped into LUT with out node tmp_707)
 _ifconv:96  %tmp_704 = xor i1 %tmp_786, %tmp_789
 
-ST_2: r_V (107)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635
+ST_2: r_V (107)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638
 _ifconv:97  %r_V = and i7 %rhs_V, %lhs_V
 
-ST_2: tmp_1409_cast (108)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635
+ST_2: tmp_1409_cast (108)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638
 _ifconv:98  %tmp_1409_cast = zext i7 %r_V to i8
 
-ST_2: mf10 (109)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635
+ST_2: mf10 (109)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638
 _ifconv:99  %mf10 = sub i8 0, %tmp_1409_cast
 
-ST_2: tmp_705 (110)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3624 (out node of the LUT)
+ST_2: tmp_705 (110)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627 (out node of the LUT)
 _ifconv:100  %tmp_705 = select i1 %tmp_s, i8 %tmp_1409_cast, i8 %mf10
 
-ST_2: tmp_1410_cast (111)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3624
+ST_2: tmp_1410_cast (111)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627
 _ifconv:101  %tmp_1410_cast = sext i8 %tmp_705 to i16
 
-ST_2: StgValue_105 (112)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3635
+ST_2: StgValue_105 (112)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3638
 _ifconv:102  store i16 %tmp_1410_cast, i16* @Eta_ans_0, align 2
 
-ST_2: r_V_191 (113)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637
+ST_2: r_V_191 (113)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640
 _ifconv:103  %r_V_191 = and i7 %lhs_V_69, %rhs_V
 
-ST_2: tmp_1411_cast (114)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637
+ST_2: tmp_1411_cast (114)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640
 _ifconv:104  %tmp_1411_cast = zext i7 %r_V_191 to i8
 
-ST_2: mf8 (115)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637
+ST_2: mf8 (115)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640
 _ifconv:105  %mf8 = sub i8 0, %tmp_1411_cast
 
-ST_2: tmp_706 (116)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627 (out node of the LUT)
+ST_2: tmp_706 (116)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630 (out node of the LUT)
 _ifconv:106  %tmp_706 = select i1 %tmp_703, i8 %tmp_1411_cast, i8 %mf8
 
-ST_2: tmp_1412_cast (117)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3627
+ST_2: tmp_1412_cast (117)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630
 _ifconv:107  %tmp_1412_cast = sext i8 %tmp_706 to i16
 
-ST_2: StgValue_111 (118)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637
+ST_2: StgValue_111 (118)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640
 _ifconv:108  store i16 %tmp_1412_cast, i16* @Eta_ans_1_32, align 2
 
-ST_2: r_V_192 (119)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639
+ST_2: r_V_192 (119)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642
 _ifconv:109  %r_V_192 = and i7 %lhs_V_69, %lhs_V
 
-ST_2: tmp_1413_cast (120)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639
+ST_2: tmp_1413_cast (120)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642
 _ifconv:110  %tmp_1413_cast = zext i7 %r_V_192 to i8
 
-ST_2: mf (121)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639
+ST_2: mf (121)  [1/1] 1.34ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642
 _ifconv:111  %mf = sub i8 0, %tmp_1413_cast
 
-ST_2: tmp_707 (122)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630 (out node of the LUT)
+ST_2: tmp_707 (122)  [1/1] 0.84ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3633 (out node of the LUT)
 _ifconv:112  %tmp_707 = select i1 %tmp_704, i8 %tmp_1413_cast, i8 %mf
 
-ST_2: tmp_1414_cast (123)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630
+ST_2: tmp_1414_cast (123)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3633
 _ifconv:113  %tmp_1414_cast = sext i8 %tmp_707 to i16
 
-ST_2: StgValue_117 (124)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639
+ST_2: StgValue_117 (124)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3642
 _ifconv:114  store i16 %tmp_1414_cast, i16* @Eta_ans_2_25, align 2
 
-ST_2: StgValue_118 (125)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3649
+ST_2: StgValue_118 (125)  [1/1] 0.00ns  loc: LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3652
 _ifconv:115  ret void
 
 
@@ -439,22 +439,22 @@ Target clock period: 10ns, clock uncertainty: 1.25ns.
 
  <State 1>: 5.11ns
 The critical path consists of the following:
-	'load' operation ('Lam_tabx_0_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591) on global variable 'Lam_tabx_0' [11]  (0 ns)
-	'sub' operation ('vArg_V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3591) [15]  (1.4 ns)
-	'sub' operation ('vArg_V_6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3602) [17]  (1.4 ns)
-	'select' operation ('p_s', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3597) [18]  (0.84 ns)
-	'icmp' operation ('tmp_702', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3616) [24]  (1.47 ns)
+	'load' operation ('Lam_tabx_0_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594) on global variable 'Lam_tabx_0' [11]  (0 ns)
+	'sub' operation ('vArg_V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3594) [15]  (1.4 ns)
+	'sub' operation ('vArg_V_6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3605) [17]  (1.4 ns)
+	'select' operation ('p_s', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3600) [18]  (0.84 ns)
+	'icmp' operation ('tmp_697', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3609) [19]  (1.47 ns)
 
  <State 2>: 5.54ns
 The critical path consists of the following:
-	'xor' operation ('sel_tmp6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3608) [30]  (0 ns)
-	'and' operation ('sel_tmp7', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3610) [31]  (0.84 ns)
-	'select' operation ('sel_tmp3_cast', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637) [32]  (0 ns)
-	'select' operation ('sel_tmp8', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637) [34]  (0.84 ns)
-	'select' operation ('lhs.V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3637) [41]  (0.84 ns)
-	'and' operation ('r.V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639) [119]  (0.84 ns)
-	'sub' operation ('mf', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3639) [121]  (1.34 ns)
-	'select' operation ('tmp_707', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630) [122]  (0.84 ns)
+	'xor' operation ('sel_tmp6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3611) [30]  (0 ns)
+	'and' operation ('sel_tmp7', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3613) [31]  (0.84 ns)
+	'select' operation ('sel_tmp3_cast', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640) [32]  (0 ns)
+	'select' operation ('sel_tmp8', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640) [34]  (0.84 ns)
+	'select' operation ('lhs.V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640) [41]  (0.84 ns)
+	'and' operation ('r.V', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640) [113]  (0.84 ns)
+	'sub' operation ('mf8', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3640) [115]  (1.34 ns)
+	'select' operation ('tmp_706', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:3630) [116]  (0.84 ns)
 
 
 ============================================================

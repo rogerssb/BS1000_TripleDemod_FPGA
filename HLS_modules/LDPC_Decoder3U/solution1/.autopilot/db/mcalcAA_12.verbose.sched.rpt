@@ -3,9 +3,9 @@
 ================================================================
 == Vivado HLS Report for 'mcalcAA_12'
 ================================================================
-* Date:           Sat Oct 05 16:58:04 2019
+* Date:           Thu Aug 11 10:22:45 2022
 
-* Version:        2016.3 (Build 1682563 on Mon Oct 10 19:41:59 MDT 2016)
+* Version:        2016.4 (Build 1756540 on Mon Jan 23 19:31:01 MST 2017)
 * Project:        LDPC_Decoder3U
 * Solution:       solution1
 * Product family: kintex7
@@ -2449,22 +2449,21 @@ Target clock period: 10ns, clock uncertainty: 1.25ns.
 The critical path consists of the following:
 	wire read on port 'num_nt' [58]  (0 ns)
 	'add' operation ('inx1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1392) [60]  (1.46 ns)
-	'getelementptr' operation ('varinx6B_4096_a_addr_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470) [185]  (0 ns)
-	'load' operation ('varinx6B_4096_a_load_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1470) on array 'varinx6B_4096_a' [186]  (2.39 ns)
+	'getelementptr' operation ('varinx6A_1024_a_addr_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415) [97]  (0 ns)
+	'load' operation ('varinx6A_1024_a_load_1', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1415) on array 'varinx6A_1024_a' [98]  (2.39 ns)
 
  <State 2>: 6.96ns
 The critical path consists of the following:
 	'load' operation ('varinx3_1024_12_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1398) on array 'varinx3_1024_12' [65]  (2.39 ns)
-	'select' operation ('b', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [197]  (0.84 ns)
-	'add' operation ('tmp_764', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) [270]  (1.4 ns)
-	'getelementptr' operation ('Lam_buf6_addr', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) [272]  (0 ns)
-	'load' operation ('Lam_buf6_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1496) on array 'Lam_buf6' [273]  (2.33 ns)
+	'select' operation ('a', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [195]  (0.84 ns)
+	'add' operation ('tmp_761', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491) [260]  (1.4 ns)
+	'getelementptr' operation ('Lam_buf8_addr', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491) [262]  (0 ns)
+	'load' operation ('Lam_buf8_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1491) on array 'Lam_buf8' [263]  (2.33 ns)
 
  <State 3>: 3.17ns
 The critical path consists of the following:
 	'load' operation ('Lam_buf2_load', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1489) on array 'Lam_buf2' [259]  (2.33 ns)
 	'select' operation ('lTab[0]', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [264]  (0.84 ns)
-	'insertvalue' operation ('newret6', LDPC_Decoder3U/HLSLdpcLogDecScaledMin.cpp:1358) [662]  (0 ns)
 
 
 ============================================================
