@@ -415,7 +415,7 @@ mpy18x18PL1 mpyFLD3(
 
 reg     [17:0]  nextFreqSample;
 reg     [17:0]  nextAbsSample;
-always @(demodMode or fm or fmInv or freqError) begin
+always @* begin
     casex (demodMode)
         `MODE_OQPSK,
         `MODE_SOQPSK: begin
@@ -431,12 +431,19 @@ always @(demodMode or fm or fmInv or freqError) begin
 
 wire    [17:0]  negAverageFreq = -averageFreq;
 wire    [17:0]  absAverageFreq = averageFreq[17] ? negAverageFreq : averageFreq;
+//wire            resetFreqAverages;
 always @(posedge clk) begin
     if (demodSync) begin
         freqSample <= nextFreqSample;
         absFreqSample <= nextAbsSample;
-        averageFreq <= alphaSum[34:17];
-        averageAbsFreq <= absAlphaSum[34:17];
+        //if (resetFreqAverages) begin
+        //    averageFreq <= 0;
+        //    averageAbsFreq <= 0;
+        //end
+        //else begin
+            averageFreq <= alphaSum[34:17];
+            averageAbsFreq <= absAlphaSum[34:17];
+        //end
         end
     end
 
@@ -445,7 +452,8 @@ always @(posedge clk) begin
         if (averageAbsFreq > 18'h10000) begin
             highFreqOffset <= 1;
             end
-        else if (absAverageFreq > falseLockThreshold) begin
+        //else if (absAverageFreq > falseLockThreshold) begin
+        else if (absAverageFreq > {1'b0,falseLockThreshold,1'b0}) begin
             highFreqOffset <= !carrierLock;
             end
         else begin
@@ -503,6 +511,7 @@ carrierLoop carrierLoop(
     .carrierFreqEn(carrierOffsetEn),
     .loopError(demodLoopError),
     .carrierLock(carrierLock),
+    //.sweepOnly(resetFreqAverages),
     .lockCounter(freqLockCounter)
     );
 
@@ -870,7 +879,7 @@ singleFir interpFir(
 `define NEW_DAC_MUX
 `ifdef NEW_DAC_MUX
     reg     [17:0]  iResampOutReg;
-    reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg;
+    reg     [17:0]  iResampInReg,qResampInReg,fmVideoReg,averageFreqReg,averageAbsFreqReg,absAverageFreqReg;
     reg     [17:0]  iSymDataReg,qSymDataReg;
     `ifdef ADD_DESPREADER
     reg     [17:0]  dsSyncCountReg,dsSwapSyncCountReg;
@@ -881,8 +890,6 @@ singleFir interpFir(
             iResampInReg <= iResampIn;
             qResampInReg <= qResampIn;
             fmVideoReg <= fmVideo;
-            averageFreqReg <= averageFreq;
-            averageAbsFreqReg <= averageAbsFreq;
         end
         if (resampSync) begin
             iResampOutReg <= iResamp;
@@ -898,6 +905,9 @@ singleFir interpFir(
             phaseReg <= {phase,6'b0};
             magAccumReg <= {~magAccum[38],magAccum[37:21]};
             freqErrorReg <= {freqError,6'h0};
+            averageFreqReg <= averageFreq;
+            averageAbsFreqReg <= averageAbsFreq;
+            absAverageFreqReg <= absAverageFreq;
         end
     end
 wire fmMode = (demodMode == `MODE_FM);
@@ -951,12 +961,13 @@ always @(posedge clk) begin
             dac0Sync <= 1'b1;
             end
         `DAC_FREQLOCK: begin
-            dac0Data <= {freqLockCounter,2'b0};
+            //dac0Data <= {freqLockCounter,2'b0};
+            dac0Data <= {1'b0,highFreqOffset,carrierLock,15'b0};
             dac0Sync <= 1'b1;
             end
         `DAC_AVGFREQ: begin
-            dac0Data <= averageFreqReg;
-            dac0Sync <= ddcSync;
+            dac0Data <= absAverageFreqReg;
+            dac0Sync <= demodSync;
             end
         `DAC_FREQERROR: begin
             dac0Data <= freqErrorReg;
@@ -1031,10 +1042,10 @@ always @(posedge clk) begin
             end
         `DAC_AVGFREQ: begin
             dac1Data <= averageAbsFreqReg;
-            dac1Sync <= ddcSync;
+            dac1Sync <= demodSync;
             end
         `DAC_FREQERROR: begin
-            dac1Data <= freqErrorReg;
+            dac1Data <= falseLockThreshold;
             dac1Sync <= demodSync;
             end
         `ifdef ADD_DESPREADER

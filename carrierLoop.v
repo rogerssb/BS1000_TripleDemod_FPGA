@@ -32,6 +32,10 @@ module carrierLoop(
     output                      carrierFreqEn,
     output  reg signed  [11:0]  loopError,
     output  reg                 carrierLock,
+    //`define CLF_ADD_SWEEP_CONTROL
+    `ifdef CLF_ADD_SWEEP_CONTROL
+    output  reg                 sweepOnly,
+    `endif
     output  reg         [15:0]  lockCounter
     );
 
@@ -166,10 +170,33 @@ module carrierLoop(
     end
     `endif
 
+    `ifdef CLF_ADD_SWEEP_CONTROL
+    /******************************************************************************/
+    reg                     lagSign;
+    always @(posedge clk) begin
+        if (loopFilterEn) begin
+            if (reset) begin
+                sweepOnly <= 1;
+                lagSign <= 0;
+            end
+            else if (sweepEnable && sweepOnly) begin
+                if (lagSign != lagAccum[39]) begin
+                    sweepOnly <= 0;
+                end
+            end
+            else if (sweepEnable && highFreqOffset && !carrierLock) begin
+                sweepOnly <= 1;
+                lagSign <= lagAccum[39];
+            end
+        end
+    end
+    `else
+    wire                    sweepOnly = highFreqOffset;
+    `endif
 
     /**************************** Adjust Error ************************************/
     wire    signed  [11:0]  negModeError = -modeError;
-    wire                    breakLoop = (zeroError || (sweepEnable && highFreqOffset));
+    wire                    breakLoop = (zeroError || (sweepEnable && sweepOnly));
     always @(posedge clk) begin
         if (loopFilterEn) begin
             if (breakLoop) begin
@@ -233,7 +260,11 @@ module carrierLoop(
     always @(posedge clk) begin
         if (reset || !enableCarrierLock) begin
             lockCounter <= 0;
+            `ifdef SIMULATE
+            carrierLock <= 0;
+            `else
             carrierLock <= 1;
+            `endif
             end
         else if (loopFilterEn) begin
             absModeError <= $unsigned(modeError[11] ? negModeError : modeError);

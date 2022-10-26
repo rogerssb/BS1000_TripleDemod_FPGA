@@ -337,9 +337,9 @@
     `define BS_TOP_DC_GAINS         13'bx_xxxx_xxx1_00xx
 
 `define VITERBISPACE        13'b0_01xx_0010_xxxx
-`define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
-`define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
-`define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+    `define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
+    `define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
+    `define VIT_STATUS             13'bx_xxxx_xxxx_10xx
 `define VIT_CONTROL            13'bx_xxxx_xxxx_11xx
 
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
