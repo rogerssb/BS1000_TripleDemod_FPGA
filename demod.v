@@ -41,6 +41,8 @@ module demod(
     output                      trellisSymEn,
     output      signed  [17:0]  iTrellis,
     output      signed  [17:0]  qTrellis,
+    output      signed  [17:0]  iConstellation,
+    output      signed  [17:0]  qConstellation,
     output                      legacyBit,
     `ifdef ADD_LDPC
     output                      iLdpcSymEn,qLdpcSymEn,
@@ -785,6 +787,8 @@ assign          qSymData = qBsSymData;
 assign          iTrellis = soqTrellisMode ? iResamp : iBsTrellis;
 assign          qTrellis = soqTrellisMode ? qResamp : qBsTrellis;
 assign          trellisSymEn = soqTrellisMode ? iBitEn : (iBitEn & resampSync);
+assign          iConstellation = iBsTrellis;
+assign          qConstellation = qBsTrellis;
 assign          timingLock = bitsyncLock;
 `endif
 

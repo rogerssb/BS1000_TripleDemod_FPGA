@@ -1,10 +1,9 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
--- Date        : Wed Jul 27 18:46:16 2022
--- Host        : DESKTOP-6PPS5M0 running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub
---               C:/Engineering/Triple_Demod/BS1000-FPGA/branches/vivado/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_stub.vhdl
+-- Date        : Mon Jun 13 10:54:12 2022
+-- Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode synth_stub Y:/vivado/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_stub.vhdl
 -- Design      : fifoFft
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7k160tfbg676-1

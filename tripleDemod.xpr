@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="17" Path="C:/Semco/Vivado/Demods2022/tripleDemod.xpr">
+<Project Version="7" Minor="17" Path="Y:/vivado/tripleDemod.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="44e7233ad56b455bb07920429618d9e5"/>
@@ -35,13 +35,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="108"/>
-    <Option Name="WTModelSimExportSim" Val="108"/>
-    <Option Name="WTQuestaExportSim" Val="108"/>
-    <Option Name="WTIesExportSim" Val="108"/>
-    <Option Name="WTVcsExportSim" Val="108"/>
-    <Option Name="WTRivieraExportSim" Val="108"/>
-    <Option Name="WTActivehdlExportSim" Val="108"/>
+    <Option Name="WTXSimExportSim" Val="109"/>
+    <Option Name="WTModelSimExportSim" Val="109"/>
+    <Option Name="WTQuestaExportSim" Val="109"/>
+    <Option Name="WTIesExportSim" Val="109"/>
+    <Option Name="WTVcsExportSim" Val="109"/>
+    <Option Name="WTRivieraExportSim" Val="109"/>
+    <Option Name="WTActivehdlExportSim" Val="109"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -523,13 +523,6 @@
       <File Path="$PPRDIR/ReedSolomon/RS_InterLeave.vhd">
         <FileInfo SFType="VHDL2008">
           <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/rs_decoder/rs_decoder.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
@@ -1199,15 +1192,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../../Xilinx/Vivado/2016.4/data/verilog/src/glbl.v">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/dualViterbiFZ.v">
+      <File Path="C:/Xilinx/Vivado/2016.4/data/verilog/src/glbl.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -1461,6 +1446,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PPRDIR/vm_cordic.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1489,13 +1475,6 @@
     </FileSet>
     <FileSet Name="simTrellisCarrierLoop" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simTrellisCarrierLoop">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/fmMod/cicInterpolate.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -1533,6 +1512,14 @@
       </File>
       <File Path="$PPRDIR/trellis/testTrellisCarrierLoop.v">
         <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -2115,6 +2102,21 @@
         <Define Name="TRIPLE_DEMOD"/>
       </Config>
     </FileSet>
+    <FileSet Name="rs_decoder" Type="BlockSrcs" RelSrcDir="$PSRCDIR/rs_decoder">
+      <File Path="$PSRCDIR/sources_1/ip/rs_decoder/rs_decoder.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="rs_decoder"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="TRIPLE_DEMOD"/>
+      </Config>
+    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -2337,6 +2339,14 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="fifoFft_synth_1" Type="Ft3:Synth" SrcSet="fifoFft" Part="xc7k160tfbg676-1" ConstrsSet="fifoFft" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifoFft_synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="rs_decoder_synth_1" Type="Ft3:Synth" SrcSet="rs_decoder" Part="xc7k160tfbg676-1" ConstrsSet="rs_decoder" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/rs_decoder_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
@@ -2723,6 +2733,21 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="fifoFft_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="fifoFft" Description="Default settings for Implementation." SynthRun="fifoFft_synth_1" IncludeInArchive="false">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="rs_decoder_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="rs_decoder" Description="Default settings for Implementation." SynthRun="rs_decoder_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>

@@ -165,7 +165,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd747;
+    parameter VER_NUMBER = 16'd748;
 
 
 //******************************************************************************
@@ -396,6 +396,7 @@ module semcoDemodTop (
     wire    signed  [17:0]  iDemodSymData;
     wire    signed  [17:0]  qDemodSymData;
     wire    signed  [17:0]  iTrellis,qTrellis;
+    wire    signed  [17:0]  iConstellation,qConstellation;
     wire            [12:0]  mag;
     `ifdef ADD_LDPC
     wire    signed  [17:0]  iLdpc,qLdpc;
@@ -444,6 +445,8 @@ module semcoDemodTop (
         .trellisSymEn(trellisSymEn),
         .iTrellis(iTrellis),
         .qTrellis(qTrellis),
+        .iConstellation(iConstellation),
+        .qConstellation(qConstellation),
         .legacyBit(legacyBit),
         `ifdef ADD_LDPC
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
@@ -1594,6 +1597,12 @@ module semcoDemodTop (
                 dqmBitIn <= soqTrellisBit;
             end
             `endif
+            `ifdef ADD_LDPC
+            `DQM_SRC_LDPC: begin
+                dqmBitEnIn <= ldpcBitEnOut;
+                dqmBitIn <= ldpcBitOut;
+            end
+            `endif
             `DQM_SRC_DEC0_CH0: begin
                 dqmBitEnIn <= dualPcmClkEn;
                 dqmBitIn <= dualDataI;
@@ -2330,9 +2339,9 @@ sdi sdi(
     .dataIn(dataIn),
     .dataOut(sdiDout),
     .iSymEn(iDemodBitEn),
-    .iSymData(iTrellis),
+    .iSymData(iConstellation),
     .qSymEn(qDemodBitEn),
-    .qSymData(qTrellis),
+    .qSymData(qConstellation),
     .eyeSync(demodEyeClkEn),
     .iEye(iDemodEye),.qEye(qDemodEye),
     .eyeOffset(demodEyeOffset),
