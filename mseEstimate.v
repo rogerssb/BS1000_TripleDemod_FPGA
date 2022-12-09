@@ -144,10 +144,13 @@ module mseEstimate
     );
 
     // Calculate the combined MSE including the fudge factor.
-    wire    signed  [LOG_BITS-1:0]  log10CmbMSE = ch0Log10MSE
+    `ifdef COMBINER
+        wire    signed  [LOG_BITS-1:0]  log10CmbMSE = ch0Log10MSE
                                                 + ch1Log10MSE
                                                 - (logValue + log10MseOffset[LOG_BITS-1:0]);
-
+    `else
+        wire    signed  [LOG_BITS-1:0]  log10CmbMSE = 0;
+    `endif
     // Add in the fudge factor offset for non-combiner operation
     wire    signed  [LOG_BITS-1:0] finalLogX = logValue + log10MseOffset[LOG_BITS-1:0];
 

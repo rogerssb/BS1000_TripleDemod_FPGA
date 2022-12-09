@@ -754,6 +754,15 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_RS_DEC      4'b1111
 
+// Combiner subsystem registers start at x0C40
+        `define COMBINER_SPACE          13'b0_1100_010x_xxxx
+        `define COMB_LAG_COEF      5'b0_00xx
+        `define COMB_LEAD_COEF     5'b0_01xx
+        `define COMB_SWEEP_RATE    5'b0_10xx
+        `define COMB_SWEEP_LIMIT   5'b0_110x
+        `define COMB_OPTIONS       5'b0_111x
+        `define COMB_REF_LEVEL     5'b1_00xx
+
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_100x_xxxx
     `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
