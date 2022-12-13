@@ -2270,20 +2270,6 @@ module semcoDemodTop (
                 interp0ClkEn <= sbsDac0ClkEn;
             end
             `endif
-            `ifdef COMBINER_DISTORT
-            13: begin
-                interp0DataIn <= ncoCos;
-                interp0ClkEn <= 1'b1;
-            end
-            14: begin
-                interp0DataIn <= {Noise1, 2'b0};
-                interp0ClkEn <= 1'b1;
-            end
-            `endif
-            15: begin
-                interp0DataIn <= iCombData;
-                interp0ClkEn <= bbClkEn;
-            end
             default: begin
                 interp0DataIn <= demodDac0Data;
                 interp0ClkEn <= demodDac0ClkEn;
@@ -2375,20 +2361,6 @@ module semcoDemodTop (
                 interp1ClkEn <= sbsDac1ClkEn;
             end
             `endif
-            `ifdef COMBINER_DISTORT
-            13: begin
-                interp1DataIn <= ncoSin;
-                interp1ClkEn <= 1'b1;
-            end
-            14: begin
-                interp1DataIn <= {Noise2, 2'b0};
-                interp1ClkEn <= 1'b1;
-            end
-            `endif
-            15: begin
-                interp1DataIn <= qCombData;
-                interp1ClkEn <= bbClkEn;
-            end
             default: begin
                 interp1DataIn <= demodDac1Data;
                 interp1ClkEn <= demodDac1ClkEn;
