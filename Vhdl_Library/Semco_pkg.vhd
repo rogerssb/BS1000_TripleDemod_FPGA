@@ -66,6 +66,7 @@ PACKAGE Semco_pkg IS
 
    type  SFIX_PCI_ARRAY    is array (natural range <>) of SfixPci;
    type  SFIX_SOVA_ARRAY   is array (natural range <>) of SfixSova;
+   type  REAL_ARRAY        is array (natural range <>) of REAL;
    type  INT_ARRAY         is array (natural range <>) of integer;
    type  NATURAL_ARRAY     is array (natural range <>) of natural;
    type  NAT_ARRAY0_31     is array (natural range <>) of natural range 0 to 31;

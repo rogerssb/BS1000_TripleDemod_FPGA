@@ -1844,7 +1844,7 @@ module semcoDemodTop (
         //                           AM ADC Interface
         //******************************************************************************
         wire    signed  [11:0]  amDataIn;
-        // A/D input is inverted and signed, converto to unsigned positive slope
+        // A/D input is inverted and signed, convert to to unsigned positive slope
         wire    unsigned [11:0] amDataIn_u = {amDataIn[11], ~amDataIn[10:0]};
         ad7476Interface amAdc(
             .clk(clk),

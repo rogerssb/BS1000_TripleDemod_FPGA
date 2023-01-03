@@ -29,6 +29,8 @@ Dependencies:
                                HISTORY
 ----------------------------------------------------------------------------
 5-15-21 Initial release FZ
+
+12-13-22 Added pipeline stages between complexPhaseDetector and IF reconstruction
 -------------------------------------------------------------
 */
 
@@ -62,7 +64,7 @@ ENTITY DigitalCombiner IS
       PrevData_n,
       NextData_p,
       NextData_n        : IN  std_logic_vector(4 downto 0);
-      addr              : IN  std_logic_vector(4 downto 0);
+      addr              : IN  std_logic_vector(12 downto 0);
       dataIn            : IN  SLV32;
       dataOut           : OUT SLV32;
       imagout,
@@ -102,7 +104,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          combinerFlag,
          agc0_gt_agc1,
          busClk            : IN  std_logic;
-         addr              : IN  std_logic_vector(4 downto 0);
+         addr              : IN  std_logic_vector(5 downto 0);
          dataIn            : IN  SLV32;
          dataOut           : OUT SLV32;
          Index             : IN  SLV8;
@@ -114,6 +116,25 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          MDB_CombOptions   : OUT SLV16
       );
    END COMPONENT combinerRegs;
+
+   COMPONENT combinerfastagc
+      PORT (
+         clk, ce,
+         reset,
+         cs,
+         busClk,
+         wr0,wr1,wr2,wr3    : IN  std_logic;
+         addr               : IN  std_logic_vector(12 downto 0);
+         din                : IN  SLV32;
+         dout               : OUT SLV32;
+         i_in0,q_in0        : IN  SLV18;     -- Raw inputs
+         i_in1,q_in1        : IN  SLV18;
+         i_out0,q_out0      : OUT SLV18;     -- AGC'd outputs
+         i_out1,q_out1      : OUT SLV18;
+         agcOut0            : OUT std_logic_vector(11 downto 0);
+         agcOut1            : OUT std_logic_vector(11 downto 0)
+      );
+   END COMPONENT combinerfastagc;
 
    COMPONENT IF_Align
       PORT (
@@ -228,29 +249,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT dualQuadDdc;
 
-   component PdClk
-      port (
-         clkIn           : in     std_logic;
-         locked,
-         clk1x,
-         clk2x             : out    std_logic
-      );
-   end component;
-
-   COMPONENT AD9957
-      PORT(
-         clk,
-         reset,
-         DdsMiso        : IN  std_logic;
-         DdsMosi,
-         DdsCS_n,
-         DdsClk,
-         IO_Reset,
-         DdsReset,
-         DdsUpdate      : OUT std_logic
-      );
-   END COMPONENT AD9957;
-
    COMPONENT dqmChip2Chip
       PORT (
          clk,
@@ -288,21 +286,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT;
 
-   COMPONENT DualClock1Kx36
-      PORT (
-         rst,
-         wr_clk,
-         rd_clk,
-         wr_en,
-         rd_en    : IN STD_LOGIC;
-         din      : IN STD_LOGIC_VECTOR(35 DOWNTO 0);
-         dout     : OUT STD_LOGIC_VECTOR(35 DOWNTO 0);
-         prog_full,
-         full,
-         empty    : OUT STD_LOGIC
-      );
-   END COMPONENT;
-
   -- Signals
    signal   Real1Out,
             Imag1Out,
@@ -313,14 +296,18 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             MDB_CombLead,
             MDB_CombRate,
             MDB_CombRefLvl,
-            PhaseInc          : SLV32;
+            PhaseInc,
+            combRegsOut,
+            agcDataOut        : SLV32;
    signal   MDB_CombSwLmt,
             MDB_CombOptions   : SLV16;
    signal   DucCount          : unsigned(1 downto 0) := "00";
    SIGNAL   PrevData,
             NextData          : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   ch0Agc,
-            ch1Agc            : std_logic_vector(11 downto 0);
+            ch1Agc,
+            ch0FastAgc,
+            ch1FastAgc        : std_logic_vector(11 downto 0);
    signal   ch0Log10MseInv,
             ch1Log10MseInv    : STD_LOGIC_VECTOR(10 DOWNTO 0);
    signal   LagCoef,
@@ -336,6 +323,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             GainOutMin,
             RealCmbFF,
             ImagCmbFF,
+            CombReal,
+            CombImag,
             ImagCmbFFDly,
             NcoCos,
             NcoSin,
@@ -344,7 +333,11 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ch0Real,
             ch0Imag,
             ch1Real,
-            ch1Imag           : SLV18;
+            ch1Imag,
+            ch0FastReal,
+            ch0FastImag,
+            ch1FastReal,
+            ch1FastImag       : SLV18;
    signal   fifoOut           : std_logic_vector(35 downto 0);
    signal   NcoData           : std_logic_vector(47 downto 0);
    signal   lag_out           : std_logic_vector(31 downto 0);
@@ -365,6 +358,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ch1SCLK,
             ch1SFS,
             ch1SDATA,
+            agcCS0,
+            agcCS1,
             IF_CW,
             IF_Offset,
             InvertDDC,
@@ -378,15 +373,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of DataOut10,
-            DataOut11,
-            DataOut12,
-            DataOut13,
-            DataOut14,
-            DataOut20,
-            DataOut21,
-            DataOut22,
-            DataOut23,
-            DataOut24,
             ch0Real,
             ch0Imag,
             ch1Real,
@@ -414,9 +400,9 @@ BEGIN
          wr2               => wr2,
          wr3               => wr3,
          busClk            => busClk,
-         addr              => addr,
+         addr              => addr(5 downto 0),
          dataIn            => dataIn,
-         dataOut           => dataOut,
+         dataOut           => combRegsOut,
          Index             => Index,
          combinerFlag      => '1',
          agc0_gt_agc1      => agc0_gt_agc1,
@@ -584,6 +570,34 @@ BEGIN
       qOut2    => ch1Imag
    );
 
+   fastAgc0 : combinerfastagc
+      PORT MAP (
+         clk            => clk46r6,
+         ce             => '1',
+         reset          => reset or not combinerEn,
+         cs             => cs,
+         busClk         => busClk,
+         wr0            => wr0,
+         wr1            => wr1,
+         wr2            => wr2,
+         wr3            => wr3,
+         addr           => addr,
+         din            => dataIn,
+         dout           => agcDataOut,
+         i_in0          => ch0Real,
+         q_in0          => ch0Imag,
+         i_out0         => ch0FastReal,
+         q_out0         => ch0FastImag,
+         agcOut0        => ch0FastAgc,
+         i_in1          => ch1Real,
+         q_in1          => ch1Imag,
+         i_out1         => ch1FastReal,
+         q_out1         => ch1FastImag,
+         agcOut1        => ch1FastAgc
+      );
+
+
+   dataOut <= combRegsOut when (not addr(5)) else agcDataOut;
 
    IF_Align_u : IF_Align
       PORT MAP (
@@ -592,10 +606,10 @@ BEGIN
          reset          => reset or not combinerEn,
          CarrierDetect  => '1',
          ce             => or(gainoutmin),     -- if one channel is turned off, hold current alignment in case a channel is dead.
-         Re1In          => to_sfixed(ch0Real, 0, -17),
-         Im1In          => to_sfixed(ch0Imag, 0, -17),
-         Re2In          => to_sfixed(ch1Real, 0, -17),
-         Im2In          => to_sfixed(ch1Imag, 0, -17),
+         Re1In          => to_sfixed(ch0FastReal, 0, -17),
+         Im1In          => to_sfixed(ch0FastImag, 0, -17),
+         Re2In          => to_sfixed(ch1FastReal, 0, -17),
+         Im2In          => to_sfixed(ch1FastImag, 0, -17),
          Re1Out         => Real1Out,
          Im1Out         => Imag1Out,
          Re2Out         => Real2Out,
@@ -614,8 +628,8 @@ BEGIN
          dQM_AGCn       => MDB_CombRate(28),
          lockthreshold  => MDB_CombRefLvl(28 downto 16),
          lockhysterisis => MDB_CombRefLvl(12 downto 0),
-         ch0agc         => ch0Agc,
-         ch1agc         => ch1Agc,
+         ch0agc         => ch0FastAgc,
+         ch1agc         => ch1FastAgc,
          ch0Dqm         => ch0Log10MseInv,
          ch1Dqm         => ch1Log10MseInv,
          ch0real        => Real1Out,
@@ -690,6 +704,8 @@ BEGIN
    begin
       if (rising_edge(clk46r6)) then
          ResetPdClk  <= Reset;
+         CombReal    <= realOut;
+         CombImag    <= imagOut;
          if (IF_CW) then
             RealCmbFF <= 18x"10000";
             ImagCmbFF <= 18x"10000";
@@ -698,23 +714,23 @@ BEGIN
             ImagCmbFF <= NcoSin;
          else
             if (DdsGain = 1) then
-               RealCmbFF <= realout(16 downto 0) & 1b"0";
-               ImagCmbFF <= imagout(16 downto 0) & 1b"0";
+               RealCmbFF <= CombReal(16 downto 0) & 1b"0";
+               ImagCmbFF <= CombImag(16 downto 0) & 1b"0";
             elsif (DdsGain = 2) then
-               RealCmbFF <= realout(15 downto 0) & 2b"0";
-               ImagCmbFF <= imagout(15 downto 0) & 2b"0";
+               RealCmbFF <= CombReal(15 downto 0) & 2b"0";
+               ImagCmbFF <= CombImag(15 downto 0) & 2b"0";
             elsif (DdsGain = 3) then
-               RealCmbFF <= realout(14 downto 0) & 3b"0";
-               ImagCmbFF <= imagout(14 downto 0) & 3b"0";
+               RealCmbFF <= CombReal(14 downto 0) & 3b"0";
+               ImagCmbFF <= CombImag(14 downto 0) & 3b"0";
             elsif (DdsGain = 4) then
-               RealCmbFF <= realout(13 downto 0) & 4b"0";
-               ImagCmbFF <= imagout(13 downto 0) & 4b"0";
+               RealCmbFF <= CombReal(13 downto 0) & 4b"0";
+               ImagCmbFF <= CombImag(13 downto 0) & 4b"0";
             elsif (DdsGain = 5) then
-               RealCmbFF <= realout(12 downto 0) & 5b"0";
-               ImagCmbFF <= imagout(12 downto 0) & 5b"0";
+               RealCmbFF <= CombReal(12 downto 0) & 5b"0";
+               ImagCmbFF <= CombImag(12 downto 0) & 5b"0";
             else
-               RealCmbFF <= realout;
-               ImagCmbFF <= imagout;
+               RealCmbFF <= CombReal;
+               ImagCmbFF <= CombImag;
             end if;
          end if;
          ImagCmbFFDly <= ImagCmbFF;
