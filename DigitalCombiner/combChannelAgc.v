@@ -13,14 +13,14 @@ module combChannelAGC(
     input                       busClk,
     input                       cs,
     input                       wr0, wr1, wr2, wr3,
-    input               [12:0]  addr,
+    input               [5:0]   addr,
     input               [31:0]  din,
     output              [31:0]  dout,
     input       signed  [17:0]  iIn0,qIn0,
     input       signed  [17:0]  iIn1,qIn1,
     output              [20:0]  nbagcgain0, nbagcgain1,
-    output              [12:0]  squelchLvl,
-    output              [15:0]  squelchRatio
+    output                      agc_d_outputs,
+    output              [15:0]  frontEndRatio0, frontEndRatio1
 );
 
 
@@ -196,8 +196,9 @@ module combChannelAGC(
         .signalLevel1(log2Mag1),
         .loopOutput0(loopOutput0),
         .loopOutput1(loopOutput1),
-        .squelchLvl(squelchLvl),
-        .squelchRatio(squelchRatio)
+        .agc_d_outputs(agc_d_outputs),
+        .frontEndRatio0(frontEndRatio0),
+        .frontEndRatio1(frontEndRatio1)
         );
 
     assign nbagcgain0 = loopOutput0[31:11];

@@ -1780,7 +1780,7 @@ module semcoDemodTop (
         .SideCarClk     (SideCarClk),
         .reset          (!FPGA_ID1 || reset),
         .cs             (combSpace),
-        .addr           (addr[4:0]),
+        .addr           (addr[5:0]),
         .dataIn         (dataIn),
         .dataOut        (combDataOut),
         .wr0            (wr0),

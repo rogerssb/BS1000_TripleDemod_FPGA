@@ -17,13 +17,13 @@ entity combinerFastAgc is
       cs,
       busClk,
       wr0,wr1,wr2,wr3             : IN  std_logic;
-      addr                        : IN  std_logic_vector(12 downto 0);
+      addr                        : IN  std_logic_vector(5 downto 0);
       din                         : IN  SLV32;
       dout                        : OUT SLV32;
       i_in0, q_in0,i_in1, q_in1   : IN  SLV18;
       agcIn0, agcIn1              : IN  std_logic_vector(11 downto 0);
       i_out0,q_out0,i_out1,q_out1 : OUT SLV18;
-      agcOut0, agcOut1            : OUT std_logic_vector(11 downto 0)
+      agcOut0, agcOut1            : OUT std_logic_vector(12 downto 0)
     );
 END combinerFastAgc;
 
@@ -48,15 +48,16 @@ architecture rtl of combinerFastAgc is
          reset, clkEn,
          cs, busClk,
          wr0,wr1,wr2,wr3   : IN  std_logic;
-         addr              : IN  std_logic_vector(12 downto 0);
+         addr              : IN  std_logic_vector(5 downto 0);
          din               : IN  SLV32;
          dout              : OUT SLV32;
          iIn0, qIn0,
          iIn1, qIn1        : IN  SLV18;
+         agc_d_outputs     : OUT std_logic;
          nbagcgain0,
          nbagcgain1        : OUT std_logic_vector(20 downto 0);
-         squelchLvl        : OUT std_logic_vector(12 downto 0);
-         squelchRatio      : OUT SLV16
+         frontEndRatio0,
+         frontEndRatio1    : OUT SLV16
       );
    END COMPONENT;
 
@@ -64,25 +65,55 @@ architecture rtl of combinerFastAgc is
             iAgcIn1,qAgcIn1         : std_logic_vector(47 downto 0);
    signal   nbagcgain0,
             nbagcgain1              : std_logic_vector(20 downto 0);
-   signal   nbagcgain0_u,
-            nbagcgain1_u            : ufixed(12 downto 0);
-   signal   squelchLvl,
-            sum0, sum1              : sfixed(12 downto 0);
-   signal   diff, diff0, diff1      : sfixed(12 downto 0);
-   signal   squelchLvlSlv           : std_logic_vector(12 downto 0);
-   signal   squelchRatioSlv         : SLV16;
-   signal   squelchRatio,
-            ratio0, ratio1          : sfixed(0 downto -15);
+   signal   frontEndRatio0,
+            frontEndRatio1          : SLV16;
+   signal   frontEndRatio0_s,
+            frontEndRatio1_s        : sfixed(1 downto -15);
+   signal   iInt0,qInt0,
+            iInt1,qInt1             : SLV18;
+   signal   agc_d_outputs           : std_logic;
 
    begin
+
+   frontEndRatio0_s <= to_sfixed('0' & frontEndRatio0, frontEndRatio0_s);
+   frontEndRatio1_s <= to_sfixed('0' & frontEndRatio1, frontEndRatio1_s);
 
    input_process : process(clk)
+      variable      i_in0_v,
+                    q_in0_v,
+                    i_in1_v,
+                    q_in1_v,
+                    iGained0_v,
+                    qGained0_v,
+                    iGained1_v,
+                    qGained1_v    : sfixed(0 downto -17);
    begin
       if (rising_edge(clk)) then
-         iAgcIn0 <= i_in0 & 30x"0";
-         qAgcIn0 <= q_in0 & 30x"0";
-         iAgcIn1 <= i_in1 & 30x"0";
-         qAgcIn1 <= q_in1 & 30x"0";
+         -- the A/D inputs have some loss across the motherboard. This normalizes them
+         i_in0_v     := to_sfixed(i_in0, i_in0_v);
+         q_in0_v     := to_sfixed(q_in0, q_in0_v);
+         i_in1_v     := to_sfixed(i_in1, i_in1_v);
+         q_in1_v     := to_sfixed(q_in1, q_in1_v);
+         iGained0_v  := resize(frontEndRatio0_s * i_in0_v, iGained0_v);
+         qGained0_v  := resize(frontEndRatio0_s * q_in0_v, qGained0_v);
+         iGained1_v  := resize(frontEndRatio1_s * i_in1_v, iGained1_v);
+         qGained1_v  := resize(frontEndRatio1_s * q_in1_v, qGained1_v);
+         iAgcIn0 <= to_slv(iGained0_v) & 30x"0";
+         qAgcIn0 <= to_slv(qGained0_v) & 30x"0";
+         iAgcIn1 <= to_slv(iGained1_v) & 30x"0";
+         qAgcIn1 <= to_slv(qGained1_v) & 30x"0";
+
+         if (agc_d_outputs) then
+            i_out0   <= iInt0;
+            q_out0   <= qInt0;
+            i_out1   <= iInt1;
+            q_out1   <= qInt1;
+         else
+            i_out0   <= i_in0;
+            q_out0   <= q_in0;
+            i_out1   <= i_in1;
+            q_out1   <= q_in1;
+         end if;
       end if;
    end process;
 
@@ -93,7 +124,7 @@ architecture rtl of combinerFastAgc is
         exponent     => nbagcgain0(20 downto 16),
         mantissa     => nbagcgain0(15 downto 0),
         din          => iAgcIn0,
-        dout         => i_out0
+        dout         => iInt0
    );
 
    gainQ0 : combVarGain
@@ -103,7 +134,7 @@ architecture rtl of combinerFastAgc is
         exponent     => nbagcgain0(20 downto 16),
         mantissa     => nbagcgain0(15 downto 0),
         din          => qAgcIn0,
-        dout         => q_out0
+        dout         => qInt0
    );
 
 
@@ -114,7 +145,7 @@ architecture rtl of combinerFastAgc is
         exponent     => nbagcgain1(20 downto 16),
         mantissa     => nbagcgain1(15 downto 0),
         din          => iAgcIn1,
-        dout         => i_out1
+        dout         => iInt1
    );
 
    gainQ1 : combVarGain
@@ -124,7 +155,7 @@ architecture rtl of combinerFastAgc is
         exponent     => nbagcgain1(20 downto 16),
         mantissa     => nbagcgain1(15 downto 0),
         din          => qAgcIn1,
-        dout         => q_out1
+        dout         => qInt1
    );
 
    combChannelAGC_u : combChannelAGC
@@ -141,74 +172,42 @@ architecture rtl of combinerFastAgc is
          addr              => addr,
          din               => din,
          dout              => dout,
-         iIn0              => i_out0,
-         qIn0              => q_out0,
+         iIn0              => iInt0,
+         qIn0              => qInt0,
          nbagcgain0        => nbagcgain0,
-         iIn1              => i_out1,
-         qIn1              => q_out1,
+         iIn1              => iInt1,
+         qIn1              => qInt1,
          nbagcgain1        => nbagcgain1,
-         squelchLvl        => squelchLvlSlv,
-         squelchRatio      => squelchRatioSlv
+         agc_d_outputs     => agc_d_outputs,
+         frontEndRatio0    => frontEndRatio0,
+         frontEndRatio1    => frontEndRatio1
    );
-   squelchRatio <= to_sfixed(squelchRatioSlv, squelchRatio);
-   squelchLvl   <= to_sfixed(squelchLvlSlv, squelchLvl);
 
    /*  This routine is compensating for fades in either channel. The desired
         result is to show the lower signal level in the faded channel such that
         the combier will favor the unfaded channel.
         To do this, we run a fast AGC on the two channels at a higher slew rate
-        than the RF section supports. We then subtract the difference in gain from
-        the faded channel, leaving the stronger channel alone.
+        than the RF section supports. We then add the gains to the RF's AGCs.
     */
 
    outProcess : process(clk)
-      variable sum0_v,
-               sum1_v,
+      variable nbAgc0_v,
+               nbAgc1_v,
                agc0_v,
-               agc1_v        : sfixed(12 downto 0);
-      variable agcDiff0_v,
-               agcDiff1_v    : sfixed(12 downto 0);
+               agc1_v,
+               sum0_v,
+               sum1_v      : ufixed(12 downto 0);
    begin
       if (rising_edge(clk)) then
-         nbagcgain0_u <= to_ufixed(nbagcgain0(20 downto 8), 12, 0);
-         nbagcgain1_u <= to_ufixed(nbagcgain1(20 downto 8), 12, 0);
-         diff         <= resize(sfixed(nbagcgain0_u - nbagcgain1_u), diff);
+         agc0_v := to_ufixed('0' & agcIn0, agc0_v);
+         nbAgc0_v := to_ufixed(nbagcgain0(20 downto 8), nbAgc0_v);
+         sum0_v := resize(agc0_v + nbAgc0_v, sum0_v);
+         agc1_v := to_ufixed('0' & agcIn1, agc1_v);
+         nbAgc1_v := to_ufixed(nbagcgain1(20 downto 8), nbAgc1_v);
+         sum1_v := resize(agc1_v + nbAgc1_v, sum1_v);
 
-         agc0_v := to_sfixed('0' & agcIn0, agc0_v);
-         if (agc0_v < squelchLvl) then
-            agcDiff0_v := resize(squelchLvl - agc0_v, agcDiff0_v);
-            ratio0 <= resize(sfixed(agcDiff0_v) * squelchRatio, ratio0);
-            diff0  <= resize(diff * ratio0, diff0);
-         else
-            diff0 <= diff;
-         end if;
-
-            diff1 <= diff;
-
-         -- if the difference is positive, gain on channel 0 is dominate
-         sum0_v := resize(agc0_v - diff0, sum0_v);
-         if (sum0_v(12)) then
-            if (sum0_v(11)) then
-               sum0_v := (others=>'0');
-            else
-               sum0_v := (others=>'1');
-            end if;
-         end if;
-
-          -- if the difference is negative, gain on channel 1 is dominate
-         agc1_v := to_sfixed('0' & agcIn1, agc1_v);
-         sum1_v := resize(agc1_v + diff1, sum1_v);
-         if (sum1_v(12)) then
-            if (sum1_v(11)) then
-               sum1_v := (others=>'0');
-            else
-               sum1_v := (others=>'1');
-            end if;
-         end if;
-         agcOut0 <= agcIn0 when (    diff0(12)) else to_slv(sum0_v(11 downto 0));
-         agcOut1 <= agcIn1 when (not diff1(12)) else to_slv(sum1_v(11 downto 0));
-         sum0 <= sum0_v;   -- just for test points
-         sum1 <= sum1_v;
+         agcOut0 <= to_slv(sum0_v);
+         agcOut1 <= to_slv(sum1_v);
 
       end if;
     end process;

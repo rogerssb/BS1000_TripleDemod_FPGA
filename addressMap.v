@@ -761,17 +761,14 @@
         `define COMB_SWEEP_RATE    6'b00_10xx
         `define COMB_SWEEP_LIMIT   6'b00_110x
         `define COMB_OPTIONS       6'b00_111x
-        `define COMB_REF_LEVEL     6'b01_00xx
+        `define COMB_LOCKS         6'b01_00xx
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
-        `define CALF_SETPOINT      6'b10_01xx
-        `define CALF_GAINS         6'b10_10xx
-        `define CALF_ULIMIT        6'b10_11xx
-        `define CALF_LLIMIT        6'b11_00xx
-        `define CALF_INTEGRATOR0   6'b11_01xx
-        `define CALF_INTEGRATOR1   6'b11_10xx
-        `define CALF_SQUELCHLVL    6'b11_11xx
+        `define CALF_ULIMIT        6'b10_01xx
+        `define CALF_LLIMIT        6'b10_10xx
+        `define CALF_RATIOS        6'b10_11xx
+        `define CALF_INTEGRATOR    6'b11_00xx
 
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_100x_xxxx

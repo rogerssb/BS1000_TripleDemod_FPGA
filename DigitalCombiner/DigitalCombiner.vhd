@@ -64,7 +64,7 @@ ENTITY DigitalCombiner IS
       PrevData_n,
       NextData_p,
       NextData_n        : IN  std_logic_vector(4 downto 0);
-      addr              : IN  std_logic_vector(12 downto 0);
+      addr              : IN  std_logic_vector(5 downto 0);
       dataIn            : IN  SLV32;
       dataOut           : OUT SLV32;
       imagout,
@@ -111,7 +111,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          MDB_CombLag,
          MDB_CombLead,
          MDB_CombRate,
-         MDB_CombRefLvl    : OUT SLV32;
+         MDB_CombLocks    : OUT SLV32;
          MDB_CombSwLmt,
          MDB_CombOptions   : OUT SLV16
       );
@@ -124,15 +124,15 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          cs,
          busClk,
          wr0,wr1,wr2,wr3    : IN  std_logic;
-         addr               : IN  std_logic_vector(12 downto 0);
+         addr               : IN  std_logic_vector(5 downto 0);
          din                : IN  SLV32;
          dout               : OUT SLV32;
          i_in0,q_in0        : IN  SLV18;     -- Raw inputs
          i_in1,q_in1        : IN  SLV18;
+         agcIn0, agcIn1     : IN  std_logic_vector(11 downto 0);
          i_out0,q_out0      : OUT SLV18;     -- AGC'd outputs
          i_out1,q_out1      : OUT SLV18;
-         agcOut0            : OUT std_logic_vector(11 downto 0);
-         agcOut1            : OUT std_logic_vector(11 downto 0)
+         agcOut0, agcOut1   : OUT std_logic_vector(12 downto 0)
       );
    END COMPONENT combinerfastagc;
 
@@ -159,15 +159,10 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       PORT (
          clk,
          reset,
-         am_disable,
          overridech,
-         bestsrcmode,
-         dQM_AGCn,
+         bestsource,
          ch0gtch1          : IN STD_LOGIC;
-         ch0agc,
-         ch1agc            : IN  SLV12;
-         ch0Dqm,
-         ch1Dqm            : IN STD_LOGIC_VECTOR(10 DOWNTO 0);
+         ch0agc, ch1agc    : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
          ch0imag,
          ch0real,
          ch1imag,
@@ -295,7 +290,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
    signal   MDB_CombLag,
             MDB_CombLead,
             MDB_CombRate,
-            MDB_CombRefLvl,
+            MDB_CombLocks,
             PhaseInc,
             combRegsOut,
             agcDataOut        : SLV32;
@@ -305,9 +300,10 @@ ARCHITECTURE rtl OF DigitalCombiner IS
    SIGNAL   PrevData,
             NextData          : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   ch0Agc,
-            ch1Agc,
-            ch0FastAgc,
-            ch1FastAgc        : std_logic_vector(11 downto 0);
+            ch1Agc            : std_logic_vector(11 downto 0);
+   signal   ch0FastAgc,
+            ch1FastAgc,
+            ch0Gain, ch1Gain   : std_logic_vector(12 downto 0);
    signal   ch0Log10MseInv,
             ch1Log10MseInv    : STD_LOGIC_VECTOR(10 DOWNTO 0);
    signal   LagCoef,
@@ -360,6 +356,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ch1SDATA,
             agcCS0,
             agcCS1,
+            dQM_AGCn,
+            orMinGain,
             IF_CW,
             IF_Offset,
             InvertDDC,
@@ -400,7 +398,7 @@ BEGIN
          wr2               => wr2,
          wr3               => wr3,
          busClk            => busClk,
-         addr              => addr(5 downto 0),
+         addr              => addr,
          dataIn            => dataIn,
          dataOut           => combRegsOut,
          Index             => Index,
@@ -414,7 +412,7 @@ BEGIN
          MDB_CombLead      => MDB_CombLead,
          MDB_CombSwLmt     => MDB_CombSwLmt,
          MDB_CombRate      => MDB_CombRate,
-         MDB_CombRefLvl    => MDB_CombRefLvl,
+         MDB_CombLocks     => MDB_CombLocks,
          MDB_CombOptions   => MDB_CombOptions
       );
 
@@ -588,6 +586,8 @@ BEGIN
          q_in0          => ch0Imag,
          i_out0         => ch0FastReal,
          q_out0         => ch0FastImag,
+         agcIn0         => ch0Agc,
+         agcIn1         => ch1Agc,
          agcOut0        => ch0FastAgc,
          i_in1          => ch1Real,
          q_in1          => ch1Imag,
@@ -605,7 +605,7 @@ BEGIN
          clk186         => clk186,
          reset          => reset or not combinerEn,
          CarrierDetect  => '1',
-         ce             => or(gainoutmin),     -- if one channel is turned off, hold current alignment in case a channel is dead.
+         ce             => orMinGain,     -- if one channel is turned off, hold current alignment in case a channel is dead.
          Re1In          => to_sfixed(ch0FastReal, 0, -17),
          Im1In          => to_sfixed(ch0FastImag, 0, -17),
          Re2In          => to_sfixed(ch1FastReal, 0, -17),
@@ -617,21 +617,21 @@ BEGIN
          Index          => Index
      );
 
-  CmplxPhsDet : complexphasedetector_0
+   dQM_AGCn <= MDB_CombRate(28);
+   ch0Gain <= "00" & ch0Log10MseInv when (dqm_AGCn) else ch0FastAgc;
+   ch1Gain <= "00" & ch1Log10MseInv when (dqm_AGCn) else ch1FastAgc;
+
+   CmplxPhsDet : complexphasedetector_0
       PORT MAP (
          clk            => clk46r6,
          reset          => reset or not combinerEn,
-         am_disable     => '0', --MDB_CombRate(16),
          ch0gtch1       => MDB_CombRate(19),
          overridech     => MDB_CombRate(20),
-         bestsrcmode    => MDB_CombRate(24),
-         dQM_AGCn       => MDB_CombRate(28),
-         lockthreshold  => MDB_CombRefLvl(28 downto 16),
-         lockhysterisis => MDB_CombRefLvl(12 downto 0),
-         ch0agc         => ch0FastAgc,
-         ch1agc         => ch1FastAgc,
-         ch0Dqm         => ch0Log10MseInv,
-         ch1Dqm         => ch1Log10MseInv,
+         bestsource     => MDB_CombRate(24),
+         lockthreshold  => MDB_CombLocks(28 downto 16),
+         lockhysterisis => MDB_CombLocks(12 downto 0),
+         ch0agc         => ch0Gain,
+         ch1agc         => ch1Gain,
          ch0real        => Real1Out,
          ch0imag        => Imag1Out,
          ch1real        => Real2Out,
@@ -703,6 +703,7 @@ BEGIN
    IF_BuffProc : process (clk46r6)
    begin
       if (rising_edge(clk46r6)) then
+         orMinGain   <= or(gainoutmin);
          ResetPdClk  <= Reset;
          CombReal    <= realOut;
          CombImag    <= imagOut;

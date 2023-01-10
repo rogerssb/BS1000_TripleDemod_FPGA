@@ -12,8 +12,8 @@ module combVarGain (
     input                       clk, clkEn,
     input               [4:0]   exponent,
     input               [15:0]  mantissa,
-    input         [47:0]  din,
-    output  reg   [17:0]  dout
+    input       signed  [47:0]  din,
+    output  reg signed  [17:0]  dout
 );
 
     // Saturating shifter
@@ -208,7 +208,7 @@ module combVarGain (
             man1 <= man0;
             end
         end
-    wire  [35:0]  scaledValue;
+    wire signed [35:0]  scaledValue;
     mpy18x18PL1 gainScaler (
         .sclr(1'b0),
         .clk(clk),

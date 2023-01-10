@@ -6,36 +6,29 @@ This source code is the Intellectual Property of Koos Technical Services,Inc.
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
+`include "addressMap.v"
 `timescale 1ns/10ps
-// Define the Combiner AGC Loop Filter memory map
-`ifndef CALF_CONTROL
-    `define CALF_CONTROL     13'bx_xxxx_xx10_00xx
-    `define CALF_SETPOINT    13'bx_xxxx_xx10_01xx
-    `define CALF_GAINS       13'bx_xxxx_xx10_10xx
-    `define CALF_ULIMIT      13'bx_xxxx_xx10_11xx
-    `define CALF_LLIMIT      13'bx_xxxx_xx11_00xx
-    `define CALF_INTEGRATOR0 13'bx_xxxx_xx11_01xx
-    `define CALF_INTEGRATOR1 13'bx_xxxx_xx11_10xx
-    `define CALF_SQUELCH     13'bx_xxxx_xx11_11xx
-`endif
 
 module combAgcLoopRegs(
-    input               busClk,
-    input       [12:0]  addr,
+    input               busClk, sysClk,
+    input       [5:0]   addr,
     input       [31:0]  dataIn,
     output  reg [31:0]  dataOut,
     input               cs,
     input               wr0, wr1, wr2, wr3,
-    input       [31:0]  integrator0, integrator1,
+    input       [15:0]  integrator0, integrator1,
     output  reg [7:0]   agcSetpoint     = 8'hE0,
     output  reg         invertError     = 1'b0,
     output  reg         zeroError       = 1'b0,
+    output  reg         byPassAgc       = 1'b0,
+    output  reg         agc_d_outputs   = 1'b0,
     output  reg [4:0]   posErrorGain    = 5'h1B,
     output  reg [4:0]   negErrorGain    = 5'h1B,
     output  reg [31:0]  upperLimit      = 32'h4fffffff,
     output  reg [31:0]  lowerLimit      = 32'h00000000,
-    output  reg [12:0]  squelchLvl      = 13'h100,
-    output  reg [15:0]  squelchRatio    = 16'h0042  // 1/500 or 10dB of range
+    output  reg [15:0]  frontEndRatio0  = 16'h8000,
+    output  reg [15:0]  frontEndRatio1  = 16'h8000
+
 );
 
     always @(posedge busClk) begin
@@ -43,23 +36,19 @@ module combAgcLoopRegs(
         if (cs && wr0) begin
             casex (addr)
                 `CALF_CONTROL: begin
-                    zeroError <= dataIn[0];
-                    invertError <= dataIn[1];
+                    zeroError           <= dataIn[0];
+                    invertError         <= dataIn[1];
+                    byPassAgc           <= dataIn[2];
+                    agc_d_outputs       <= dataIn[3];
                     end
-                `CALF_SETPOINT: begin
-                    agcSetpoint <= dataIn[7:0];
-                    end
-                `CALF_GAINS: begin
-                   posErrorGain <= dataIn[4:0];
-                   end
                 `CALF_ULIMIT: begin
-                    upperLimit[7:0] <= dataIn[7:0];
+                    upperLimit[7:0]     <= dataIn[7:0];
                     end
                 `CALF_LLIMIT: begin
-                    lowerLimit[7:0] <= dataIn[7:0];
+                    lowerLimit[7:0]     <= dataIn[7:0];
                     end
-                `CALF_SQUELCH: begin
-                    squelchLvl[7:0] <= dataIn[7:0];
+                `CALF_RATIOS: begin
+                    frontEndRatio0[7:0] <= dataIn[7:0];
                     end
                 default: ;
             endcase
@@ -67,14 +56,17 @@ module combAgcLoopRegs(
 
         if (cs && wr1) begin
             casex (addr)
+                `CALF_CONTROL: begin
+                    agcSetpoint         <= dataIn[15:8];
+                    end
                 `CALF_ULIMIT: begin
-                    upperLimit[15:8] <= dataIn[15:8];
+                    upperLimit[15:8]    <= dataIn[15:8];
                     end
                 `CALF_LLIMIT: begin
-                    lowerLimit[15:8] <= dataIn[15:8];
+                    lowerLimit[15:8]    <= dataIn[15:8];
                     end
-                `CALF_SQUELCH: begin
-                    squelchLvl[12:8] <= dataIn[12:8];
+                `CALF_RATIOS: begin
+                    frontEndRatio0[15:8] <= dataIn[15:8];
                     end
                 default:  ;
             endcase
@@ -82,17 +74,17 @@ module combAgcLoopRegs(
 
         if (cs && wr2) begin
             casex (addr)
-                `CALF_GAINS: begin
-                   negErrorGain <= dataIn[20:16];
+                `CALF_CONTROL: begin
+                   posErrorGain         <= dataIn[20:16];
                    end
                 `CALF_ULIMIT: begin
-                    upperLimit[23:16] <= dataIn[23:16];
+                    upperLimit[23:16]   <= dataIn[23:16];
                     end
                 `CALF_LLIMIT: begin
-                    lowerLimit[23:16] <= dataIn[23:16];
+                    lowerLimit[23:16]   <= dataIn[23:16];
                     end
-                `CALF_SQUELCH: begin
-                    squelchRatio[7:0] <= dataIn[23:16];
+                `CALF_RATIOS: begin
+                    frontEndRatio1[7:0] <= dataIn[23:16];
                     end
                 default:  ;
             endcase
@@ -100,31 +92,38 @@ module combAgcLoopRegs(
 
         if (cs && wr3) begin
             casex (addr)
+                `CALF_CONTROL: begin
+                   negErrorGain         <= dataIn[28:24];
+                   end
                 `CALF_ULIMIT: begin
-                    upperLimit[31:24] <= dataIn[31:24];
+                    upperLimit[31:24]   <= dataIn[31:24];
                     end
                 `CALF_LLIMIT: begin
-                    lowerLimit[31:24] <= dataIn[31:24];
+                    lowerLimit[31:24]   <= dataIn[31:24];
                     end
-                `CALF_SQUELCH: begin
-                    squelchRatio[15:8] <= dataIn[31:24];
+                `CALF_RATIOS: begin
+                    frontEndRatio1[15:8] <= dataIn[31:24];
                     end
                 default:  ;
             endcase
         end
     end
 
+    reg [31:0]  integrators;    // latch current integrator values while reading
+    always @(posedge sysClk) begin
+        if (~cs) begin
+            integrators <= {integrator1,integrator0};
+        end
+    end
+
     always @* begin
         if (cs) begin
             casex (addr)
-                `CALF_CONTROL:       dataOut = {30'bx,invertError,zeroError};
-                `CALF_SETPOINT:      dataOut = {24'bx,agcSetpoint};
-                `CALF_GAINS:         dataOut = {11'bx,negErrorGain,11'bx,posErrorGain};
+                `CALF_CONTROL:       dataOut = {3'bx,negErrorGain,3'bx,posErrorGain,agcSetpoint,4'bx,agc_d_outputs,byPassAgc,invertError,zeroError};
                 `CALF_ULIMIT:        dataOut = upperLimit;
                 `CALF_LLIMIT:        dataOut = lowerLimit;
-                `CALF_INTEGRATOR0:   dataOut = integrator0;
-                `CALF_INTEGRATOR1:   dataOut = integrator1;
-                `CALF_SQUELCH:       dataOut = {squelchRatio,3'bx,squelchLvl};
+                `CALF_INTEGRATOR:    dataOut = integrators;
+                `CALF_RATIOS:        dataOut = {frontEndRatio1, frontEndRatio0};
                 default:             dataOut = 32'hx;
             endcase
         end

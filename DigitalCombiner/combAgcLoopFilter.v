@@ -13,13 +13,13 @@ module combAgcLoopFilter (
     input           busClk,
     input           cs,
     input           wr0,wr1,wr2,wr3,
-    input   [12:0]  addr,
+    input   [5:0]   addr,
     input   [31:0]  din,
     output  [31:0]  dout,
     input   [11:0]  signalLevel0, signalLevel1,
     output  [31:0]  loopOutput0, loopOutput1,
-    output  [12:0]  squelchLvl,
-    output  [15:0]  squelchRatio
+    output  [15:0]  frontEndRatio0, frontEndRatio1,
+    output          agc_d_outputs
 );
 
     // Microprocessor interface
@@ -33,19 +33,22 @@ module combAgcLoopFilter (
         .dataIn(din),
         .dataOut(dout),
         .busClk(busClk),
+        .sysClk(clk),
         .cs(cs),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .agcSetpoint(agcSetpoint),
         .invertError(invertError),
         .zeroError(zeroError),
+        .byPassAgc(byPassAgc),
         .posErrorGain(posErrorGain),
         .negErrorGain(negErrorGain),
         .upperLimit(upperLimit),
         .lowerLimit(lowerLimit),
-        .integrator0(integrator0),
-        .integrator1(integrator1),
-        .squelchLvl(squelchLvl),
-        .squelchRatio(squelchRatio)
+        .integrator0(integrator0[31:16]),
+        .integrator1(integrator1[31:16]),
+        .frontEndRatio0(frontEndRatio0),
+        .frontEndRatio1(frontEndRatio1),
+        .agc_d_outputs(agc_d_outputs)
         );
 
     // Channel 0 process
@@ -122,8 +125,8 @@ module combAgcLoopFilter (
     //
     wire    signed  [32:0] sum0 = $signed({1'b0,integrator0}) + $signed({leadError0[31],leadError0});
     always @ (posedge clk or posedge reset) begin
-        if (reset) begin
-            integrator0 <= 0;
+        if (reset || byPassAgc) begin
+            integrator0 <= 32'h0000_0800;   // set initial gain to 1
         end
         else if (clkEn) begin
             // Have we overflowed the integrator in the negative direction?
@@ -223,8 +226,8 @@ module combAgcLoopFilter (
     //
     wire    signed  [32:0] sum1 = $signed({1'b0,integrator1}) + $signed({leadError1[31],leadError1});
     always @ (posedge clk or posedge reset) begin
-        if (reset) begin
-            integrator1 <= 0;
+        if (reset || byPassAgc) begin
+            integrator1 <= 32'h0000_0800;   // set initial gain to 1
         end
         else if (clkEn) begin
             // Have we overflowed the integrator in the negative direction?

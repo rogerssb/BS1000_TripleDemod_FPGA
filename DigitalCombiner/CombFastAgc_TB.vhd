@@ -106,7 +106,7 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
          cs,
          busClk,
          wr0,wr1,wr2,wr3    : IN  std_logic;
-         addr               : IN  std_logic_vector(12 downto 0);
+         addr               : IN  std_logic_vector(5 downto 0);
          din                : IN  SLV32;
          dout               : OUT SLV32;
          agcIn0, agcIn1     : IN  std_logic_vector(11 downto 0);
@@ -114,18 +114,47 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
          i_in1,q_in1        : IN  SLV18;
          i_out0,q_out0      : OUT SLV18;
          i_out1,q_out1      : OUT SLV18;
-         agcOut0            : OUT std_logic_vector(11 downto 0);
-         agcOut1            : OUT std_logic_vector(11 downto 0)
+         agcOut0, agcOut1   : OUT std_logic_vector(12 downto 0)
       );
    END COMPONENT combinerfastagc;
 
-   COMPONENT log2
+   COMPONENT complexphasedetector_0
       PORT (
-         clk, clkEn, reset    : IN  std_logic;
-         linear               : IN  SLV16;
-         log                  : OUT SLV8
+         clk,
+         reset,
+         overridech,
+         bestsource,
+         ch0gtch1          : IN STD_LOGIC;
+         ch0agc, ch1agc    : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
+         ch0imag,
+         ch0real,
+         ch1imag,
+         ch1real,
+         lag_coef,
+         lead_coef,
+         swprate           : IN  SLV18;
+         lockhysterisis,
+         lockthreshold     : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+         sweeplmt          : IN  STD_LOGIC_VECTOR(14 DOWNTO 0);
+         maximagout,
+         maxrealout,
+         minimagout,
+         minrealout,
+         imagout,
+         realout,
+         gainoutmax,
+         gainoutmin,
+         phase_detect      : OUT SLV18;
+         agc0_gt_agc1,
+         realxord,
+         imagxord,
+         locked            : OUT STD_LOGIC;
+         imaglock,
+         reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
+         lag_out           : OUT SLV32;
+         nco_control_out   : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
       );
-   END COMPONENT log2;
+   END COMPONENT complexphasedetector_0;
 
    constant Plus1             : Float_1_18 := to_sfixed( 0.707 / 4.0, 0, -17);
    constant Neg1              : Float_1_18 := to_sfixed(-0.707 / 4.0, 0, -17);
@@ -133,11 +162,11 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
    constant One               : Float_1_18 := to_sfixed(1.0, 0, -17);
    constant KHz               : real := 1000.0;
    constant MHz               : real := 1000000.0;
-   constant ALF_CONTROL       : unsigned(12 downto 0) := 13x"0000";
-   constant ALF_SETPOINT      : unsigned(12 downto 0) := 13x"0004";
-   constant ALF_GAINS         : unsigned(12 downto 0) := 13x"0008";
-   constant ALF_ULIMIT        : unsigned(12 downto 0) := 13x"000C";
-   constant ALF_LLIMIT        : unsigned(12 downto 0) := 13x"0010";
+   constant CALF_CONTROL      : unsigned(5 downto 0) := 6x"20";
+   constant CALF_ULIMIT       : unsigned(5 downto 0) := 6x"24";
+   constant CALF_LLIMIT       : unsigned(5 downto 0) := 6x"28";
+   constant CALF_RATIOS       : unsigned(5 downto 0) := 6x"2C";
+   constant CALF_INTEGRATOR   : unsigned(5 downto 0) := 6x"30";
 
    -- Signals
    type     Modulation        is (BPSK, QPSK, OQPSK, SOQPSK);
@@ -160,11 +189,16 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
             OneCycle,
             SineSign,
             TwoWords          : std_logic := '1';
-   signal   addr              : unsigned(12 downto 0) := (others=>'0');
+   signal   addr              : unsigned(5 downto 0) := (others=>'0');
    signal   NoiseI,
             NoiseQ,
             NoisePipeI,
             NoisePipeQ        : SLV16;
+   signal   ch0Gain, ch1Gain   : std_logic_vector(12 downto 0);
+   signal   Real1Out,
+            Imag1Out,
+            Real2Out,
+            Imag2Out          : SLV18;
    signal   IAM_dPipe,
             QAM_dPipe,
             DataI,
@@ -192,11 +226,11 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
             RfAgc0,
             RfAgc1            : real;
    signal   Timer             : integer := 0;
-   signal   Gains             : UInt32 := 32x"001B001B";    --gains above 1B start to oscillate
-   signal   AM_Freq           : real := 25000.0;             -- on sine fades, higher gains seem okay
+   signal   Gains             : SLV16 := 16x"1B1B";    --gains above 1B start to oscillate
+   signal   AM_Freq           : real := 35000.0;             -- on sine fades, higher gains seem okay
    signal   DelayI, DelayQ    : SLV18_ARRAY(363 downto 0) := (others=>(others=>'0'));
-   signal   agcIn0            : SLV12 := 12x"100";
-   signal   agcIn1            : SLV12 := 12x"200";
+   signal   agcIn0            : SLV12 := 12x"150";
+   signal   agcIn1            : SLV12 := 12x"150";
 
 
 BEGIN
@@ -224,20 +258,17 @@ BEGIN
                   mcuMode  <= SETUP;
                when SETUP =>
                   case (addr) is
-                     when ALF_CONTROL =>
-                        DC_DataIn <= 32x"00";
+                     when CALF_CONTROL =>
+                        DC_DataIn <= Gains & 16x"e000";
                         TwoWords  <= '1';
-                     when ALF_SETPOINT =>
-                        DC_DataIn <= 32x"000000e0";
-                        TwoWords  <= '1';
-                     when ALF_GAINS =>
-                        DC_DataIn <= std_logic_vector(Gains);
-                        TwoWords  <= '1';
-                     when ALF_ULIMIT =>
+                     when CALF_ULIMIT =>
                         DC_DataIn <= 32x"4FFFFFFF";
                         TwoWords  <= '1';
-                     when others =>    -- ALF_LLIMIT
+                     when CALF_LLIMIT =>
                         DC_DataIn <= 32x"00000000";
+                        TwoWords  <= '1';
+                     when others =>    -- CALF_RATIOS
+                        DC_DataIn <= 32x"80047ff8";
                         TwoWords  <= '1';
                   end case;
                   mcuMode <= WRITE;
@@ -253,8 +284,8 @@ BEGIN
                   mcuMode  <= FINISH;
                when others =>
                   DC_DataCapt <= DC_DataOut;
-                  if (addr = 13x"10") then
-                     addr <= 13x"00";
+                  if (addr = CALF_RATIOS) then
+                     addr <= CALF_CONTROL;
                      Reset <= '0';
                   elsif (TwoWords) then
                      addr <= addr + 4;
@@ -304,7 +335,7 @@ BEGIN
          AM_Amp <= to_sfixed(0.1125, AM_Amp);
          if (Timer = 2000) then
             OneCycle <= '1';
-            if (AM_Freq > 50.0*KHz) or (agcIn0 > 3000) then
+            if ((AM_Freq > 50.0*KHz)/* or (unsigned(agcIn0) > 3000)*/) then
               stop(0);
             end if;
             Timer <= 0;
@@ -313,8 +344,8 @@ BEGIN
             if (SineSign and not AM_Sines(24+17)) then
                OneCycle <= '0';
                AM_Freq <= AM_Freq + 5.0*KHz;
-               agcIn0 <= to_slv(resize(to_ufixed(agcIn0, 11, 0) - 50, 11, 0));
-               agcIn1 <= to_slv(resize(to_ufixed(agcIn1, 11, 0) + 50, 11, 0));
+--               agcIn0 <= to_slv(resize(to_ufixed(agcIn0, 11, 0) - 50, 11, 0, fixed_saturate, fixed_truncate));
+--               agcIn1 <= to_slv(resize(to_ufixed(agcIn1, 11, 0) + 50, 11, 0, fixed_saturate, fixed_truncate));
             end if;
             if (not OneCycle) then
                Timer <= Timer + 1;
@@ -461,14 +492,53 @@ BEGIN
          agcIn1      => agcIn1,
          i_in0       => to_slv(FiltI),
          q_in0       => to_slv(FiltQ),
-         i_out0      => open,
-         q_out0      => open,
-         agcOut0     => open,
+         i_out0      => Real1Out,
+         q_out0      => Imag1Out,
+         agcOut0     => ch0Gain,
          i_in1       => DelayI(363),
          q_in1       => DelayQ(363),
-         i_out1      => open,
-         q_out1      => open,
-         agcOut1     => open
+         i_out1      => Real2Out,
+         q_out1      => Imag2Out,
+         agcOut1     => ch1Gain
+      );
+
+
+   CmplxPhsDet : complexphasedetector_0
+      PORT MAP (
+         clk            => clk46r6,
+         reset          => reset,
+         ch0gtch1       => '0',
+         overridech     => '0',
+         bestsource     => '0',
+         lockthreshold  => 13x"0",
+         lockhysterisis => 13x"0",
+         ch0agc         => ch0Gain,
+         ch1agc         => ch1Gain,
+         ch0real        => Real1Out,
+         ch0imag        => Imag1Out,
+         ch1real        => Real2Out,
+         ch1imag        => Imag2Out,
+         lag_coef       => 18x"0",
+         lead_coef      => 18x"0",
+         sweeplmt       => 15x"0",
+         swprate        => 18x"0",
+         realout        => open,
+         imagout        => open,
+         reallock       => open,
+         imaglock       => open,
+         locked         => open,
+         agc0_gt_agc1   => open,
+         lag_out        => open,
+         nco_control_out=> open,
+         phase_detect   => open,
+         maximagout     => open,
+         maxrealout     => open,
+         minimagout     => open,
+         minrealout     => open,
+         realxord       => open,
+         imagxord       => open,
+         gainoutmax     => open,
+         gainoutmin     => open
       );
 
 END rtl;

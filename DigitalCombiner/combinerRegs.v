@@ -7,16 +7,7 @@ derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
 
 `timescale 1ns/10ps
-//`include "./../addressMap.v"
-
-`ifndef COMB_LAG_COEF
-`define COMB_LAG_COEF      6'b00_00xx
-`define COMB_LEAD_COEF     6'b00_01xx
-`define COMB_SWEEP_RATE    6'b00_10xx
-`define COMB_SWEEP_LIMIT   6'b00_110x
-`define COMB_OPTIONS       6'b00_111x
-`define COMB_REF_LEVEL     6'b01_00xx
-`endif
+`include "addressMap.v"
 
 module combinerRegs(
     input               busClk,
@@ -31,7 +22,7 @@ module combinerRegs(
     output  reg [31:0]  MDB_CombLead    = 32'h0000,
     output  reg [15:0]  MDB_CombSwLmt   = 16'h0000,
     output  reg [31:0]  MDB_CombRate    = 32'h0000,
-    output  reg [31:0]  MDB_CombRefLvl  = 32'h0000,
+    output  reg [31:0]  MDB_CombLocks   = 32'h0000,
     output  reg [15:0]  MDB_CombOptions = 16'h0000
 );
 
@@ -41,7 +32,7 @@ module combinerRegs(
                 `COMB_LAG_COEF:         MDB_CombLag[7:0]        <= dataIn[7:0];
                 `COMB_LEAD_COEF:        MDB_CombLead[7:0]       <= dataIn[7:0];
                 `COMB_SWEEP_RATE:       MDB_CombRate[7:0]       <= dataIn[7:0];
-                `COMB_REF_LEVEL:        MDB_CombRefLvl[7:0]     <= dataIn[7:0];
+                `COMB_LOCKS:            MDB_CombLocks[7:0]      <= dataIn[7:0];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[7:0]      <= dataIn[7:0];
                 default: ;
             endcase
@@ -51,7 +42,7 @@ module combinerRegs(
                 `COMB_LAG_COEF:         MDB_CombLag[15:8]       <= dataIn[15:8];
                 `COMB_LEAD_COEF:        MDB_CombLead[15:8]      <= dataIn[15:8];
                 `COMB_SWEEP_RATE:       MDB_CombRate[15:8]      <= dataIn[15:8];
-                `COMB_REF_LEVEL:        MDB_CombRefLvl[15:8]    <= dataIn[15:8];
+                `COMB_LOCKS:            MDB_CombLocks[15:8]     <= dataIn[15:8];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[15:8]     <= dataIn[15:8];
                 default: ;
             endcase
@@ -61,7 +52,7 @@ module combinerRegs(
                 `COMB_LAG_COEF:         MDB_CombLag[23:16]      <= dataIn[23:16];
                 `COMB_LEAD_COEF:        MDB_CombLead[23:16]     <= dataIn[23:16];
                 `COMB_SWEEP_RATE:       MDB_CombRate[23:16]     <= dataIn[23:16];
-                `COMB_REF_LEVEL:        MDB_CombRefLvl[23:16]   <= dataIn[23:16];
+                `COMB_LOCKS:            MDB_CombLocks[23:16]    <= dataIn[23:16];
                 `COMB_OPTIONS:          MDB_CombOptions[7:0]    <= dataIn[23:16];
                 default: ;
             endcase
@@ -71,7 +62,7 @@ module combinerRegs(
                 `COMB_LAG_COEF:         MDB_CombLag[25:24]      <= dataIn[25:24];  // Upper 6 bits are feedback
  //             `COMB_LEAD_COEF:        MDB_CombLead[31:24]     <= dataIn[31:24];  // Use MSB for Index feedback
                 `COMB_SWEEP_RATE:       MDB_CombRate[31:24]     <= dataIn[31:24];
-                `COMB_REF_LEVEL:        MDB_CombRefLvl[31:24]   <= dataIn[31:24];
+                `COMB_LOCKS:            MDB_CombLocks[31:24]    <= dataIn[31:24];
                 `COMB_OPTIONS:          MDB_CombOptions[15:8]   <= dataIn[31:24];
                 default: ;
             endcase
@@ -86,7 +77,7 @@ module combinerRegs(
                 `COMB_SWEEP_LIMIT,
                 `COMB_OPTIONS:      dataOut = {MDB_CombOptions, MDB_CombSwLmt};
                 `COMB_SWEEP_RATE:   dataOut = MDB_CombRate;
-                `COMB_REF_LEVEL:    dataOut = MDB_CombRefLvl;
+                `COMB_LOCKS:        dataOut = MDB_CombLocks;
                 default:            dataOut = 32'b0;
             endcase
         end
