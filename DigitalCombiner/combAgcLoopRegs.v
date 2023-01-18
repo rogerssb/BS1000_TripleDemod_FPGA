@@ -9,6 +9,19 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 `timescale 1ns/10ps
 
+/*
+#define MDB_CalfControlsLS16         210
+#define MDB_CalfControlsMS16         211
+#define MDB_CalfULimitLS16          212
+#define MDB_CalfULimitMS16          213
+#define MDB_CalfLLimitLS16          214
+#define MDB_CalfLLimitMS16          215
+#define MDB_CalfRatiosLS16          216
+#define MDB_CalfRatiosMS16          217
+#define MDB_CalfIntegrator0         218
+#define MDB_CalfIntegrator1         219
+*/
+
 module combAgcLoopRegs(
     input               busClk, sysClk,
     input       [5:0]   addr,
@@ -22,6 +35,7 @@ module combAgcLoopRegs(
     output  reg         zeroError       = 1'b0,
     output  reg         byPassAgc       = 1'b0,
     output  reg         agc_d_outputs   = 1'b0,
+    output  reg         ifCalibration   = 1'b0,     // not used in hardware. It's a software flag
     output  reg [4:0]   posErrorGain    = 5'h1B,
     output  reg [4:0]   negErrorGain    = 5'h1B,
     output  reg [31:0]  upperLimit      = 32'h4fffffff,
@@ -40,6 +54,7 @@ module combAgcLoopRegs(
                     invertError         <= dataIn[1];
                     byPassAgc           <= dataIn[2];
                     agc_d_outputs       <= dataIn[3];
+                    ifCalibration       <= dataIn[4];
                     end
                 `CALF_ULIMIT: begin
                     upperLimit[7:0]     <= dataIn[7:0];
@@ -119,7 +134,7 @@ module combAgcLoopRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `CALF_CONTROL:       dataOut = {3'bx,negErrorGain,3'bx,posErrorGain,agcSetpoint,4'bx,agc_d_outputs,byPassAgc,invertError,zeroError};
+                `CALF_CONTROL:       dataOut = {3'bx,negErrorGain,3'bx,posErrorGain,agcSetpoint,3'bx,ifCalibration,agc_d_outputs,byPassAgc,invertError,zeroError};
                 `CALF_ULIMIT:        dataOut = upperLimit;
                 `CALF_LLIMIT:        dataOut = lowerLimit;
                 `CALF_INTEGRATOR:    dataOut = integrators;

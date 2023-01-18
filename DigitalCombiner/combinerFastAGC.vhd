@@ -53,7 +53,8 @@ architecture rtl of combinerFastAgc is
          dout              : OUT SLV32;
          iIn0, qIn0,
          iIn1, qIn1        : IN  SLV18;
-         agc_d_outputs     : OUT std_logic;
+         agc_d_outputs,
+         byPassAgc         : OUT std_logic;
          nbagcgain0,
          nbagcgain1        : OUT std_logic_vector(20 downto 0);
          frontEndRatio0,
@@ -71,7 +72,8 @@ architecture rtl of combinerFastAgc is
             frontEndRatio1_s        : sfixed(1 downto -15);
    signal   iInt0,qInt0,
             iInt1,qInt1             : SLV18;
-   signal   agc_d_outputs           : std_logic;
+   signal   agc_d_outputs,
+            byPassAgc              : std_logic;
 
    begin
 
@@ -108,11 +110,16 @@ architecture rtl of combinerFastAgc is
             q_out0   <= qInt0;
             i_out1   <= iInt1;
             q_out1   <= qInt1;
-         else
+         elsif (byPassAgc) then
             i_out0   <= i_in0;
             q_out0   <= q_in0;
             i_out1   <= i_in1;
             q_out1   <= q_in1;
+         else
+            i_out0   <= iAgcIn0(47 downto 30);
+            q_out0   <= qAgcIn0(47 downto 30);
+            i_out1   <= iAgcIn1(47 downto 30);
+            q_out1   <= qAgcIn1(47 downto 30);
          end if;
       end if;
    end process;
@@ -196,18 +203,30 @@ architecture rtl of combinerFastAgc is
                agc0_v,
                agc1_v,
                sum0_v,
-               sum1_v      : ufixed(12 downto 0);
+               sum1_v      : ufixed(13 downto 0);
    begin
       if (rising_edge(clk)) then
-         agc0_v := to_ufixed('0' & agcIn0, agc0_v);
-         nbAgc0_v := to_ufixed(nbagcgain0(20 downto 8), nbAgc0_v);
-         sum0_v := resize(agc0_v + nbAgc0_v, sum0_v);
-         agc1_v := to_ufixed('0' & agcIn1, agc1_v);
-         nbAgc1_v := to_ufixed(nbagcgain1(20 downto 8), nbAgc1_v);
-         sum1_v := resize(agc1_v + nbAgc1_v, sum1_v);
-
-         agcOut0 <= to_slv(sum0_v);
-         agcOut1 <= to_slv(sum1_v);
+         agc0_v := to_ufixed("00" & agcIn0, agc0_v);
+         nbAgc0_v := to_ufixed('0' & nbagcgain0(20 downto 8), nbAgc0_v);
+         agc1_v := to_ufixed("00" & agcIn1, agc1_v);
+         nbAgc1_v := to_ufixed('0' & nbagcgain1(20 downto 8), nbAgc1_v);
+         if (byPassAgc) then
+            sum0_v := agc0_v;
+            sum1_v := agc1_v;
+         else
+            if (nbAgc0_v > agc0_v) then
+               sum0_v := 14x"0";
+            else
+               sum0_v := resize(agc0_v - nbAgc0_v, sum0_v);
+            end if;
+            if (nbAgc1_v > agc1_v) then
+               sum1_v := 14x"0";
+            else
+               sum1_v := resize(agc1_v - nbAgc1_v, sum1_v);
+            end if;
+         end if;
+         agcOut0 <= to_slv(sum0_v(12 downto 0));
+         agcOut1 <= to_slv(sum1_v(12 downto 0));
 
       end if;
     end process;

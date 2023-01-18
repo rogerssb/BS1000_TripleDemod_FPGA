@@ -54,6 +54,7 @@ ENTITY DigitalCombiner IS
       wr0, wr1, wr2, wr3,
       busClk,
       reset,
+      dataI,
       DdsMiso,
       DdsSyncClk,
       NextClk_p,
@@ -112,6 +113,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          MDB_CombLead,
          MDB_CombRate,
          MDB_CombLocks    : OUT SLV32;
+         MDB_dB_Range,
+         MDB_dB_Ratio,
          MDB_CombSwLmt,
          MDB_CombOptions   : OUT SLV16
       );
@@ -146,7 +149,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          Re1In,
          Im1In,
          Re2In,
-         Im2In          : IN  float_1_18;
+         Im2In          : IN  SLV18;
          Index          : OUT SLV8;
          Re1Out,
          Im1Out,
@@ -160,7 +163,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          clk,
          reset,
          overridech,
-         bestsource,
          ch0gtch1          : IN STD_LOGIC;
          ch0agc, ch1agc    : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
          ch0imag,
@@ -172,6 +174,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          swprate           : IN  SLV18;
          lockhysterisis,
          lockthreshold     : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+         db_ratio,
+         db_range          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
          sweeplmt          : IN  STD_LOGIC_VECTOR(14 DOWNTO 0);
          maximagout,
          maxrealout,
@@ -281,6 +285,14 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT;
 
+   COMPONENT vio2x5
+      PORT (
+         clk : IN STD_LOGIC;
+         probe_out0 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+         probe_out1 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
+      );
+   END COMPONENT;
+
   -- Signals
    signal   Real1Out,
             Imag1Out,
@@ -293,12 +305,16 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             MDB_CombLocks,
             PhaseInc,
             combRegsOut,
-            agcDataOut        : SLV32;
+            agcDataOut,
+            dataI0Dly, dataI1Dly  : SLV32;
    signal   MDB_CombSwLmt,
-            MDB_CombOptions   : SLV16;
+            MDB_CombOptions,
+            MDB_dB_Ratio,
+            MDB_dB_Range      : SLV16;
    signal   DucCount          : unsigned(1 downto 0) := "00";
    SIGNAL   PrevData,
-            NextData          : STD_LOGIC_VECTOR(4 DOWNTO 0);
+            NextData,
+            Vio0, Vio1  : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   ch0Agc,
             ch1Agc            : std_logic_vector(11 downto 0);
    signal   ch0FastAgc,
@@ -354,10 +370,18 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ch1SCLK,
             ch1SFS,
             ch1SDATA,
+            dataI0, dataI1,
+            dataEn0, dataEn1,
             agcCS0,
             agcCS1,
             dQM_AGCn,
             orMinGain,
+
+            error0,
+            error1,
+            dataI0DlyD,
+            dataI1DlyD,
+
             IF_CW,
             IF_Offset,
             InvertDDC,
@@ -381,6 +405,11 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             Imag1Out,
             Real2Out,
             Imag2Out,
+            dataI,
+            error0,
+            error1,
+            dataI0DlyD,
+            dataI1DlyD,
             Index,
             ch0Agc,
             ch1Agc,
@@ -413,8 +442,23 @@ BEGIN
          MDB_CombSwLmt     => MDB_CombSwLmt,
          MDB_CombRate      => MDB_CombRate,
          MDB_CombLocks     => MDB_CombLocks,
-         MDB_CombOptions   => MDB_CombOptions
+         MDB_CombOptions   => MDB_CombOptions,
+         MDB_dB_Range      => MDB_dB_Range,
+         MDB_dB_Ratio      => MDB_dB_Ratio
       );
+
+/*
+#define MDB_combLagLS16             200
+#define MDB_combLagMS16             201
+#define MDB_combLeadLS16            202
+#define MDB_combLeadMS16            203
+#define MDB_combRateLS16            204
+#define MDB_combRateMS16            205
+#define MDB_combLimit               206
+#define MDB_combOptions             207
+#define MDB_combLocksLS16           208
+#define MDB_combLocksMS16           209
+*/
 
    DdsCS_n        <= MDB_CombOptions(0);
    DdsSClk        <= MDB_CombOptions(1);
@@ -517,6 +561,10 @@ BEGIN
    ch1SCLK        <= DataOut23(6);
    ch1SFS         <= DataOut23(5);
    ch1SDATA       <= DataOut23(7);
+   dataI0         <= DataOut11(7);
+   dataI1         <= DataOut21(7);
+   dataEn0        <= DataOut11(6);
+   dataEn1        <= DataOut21(6);
 
 
    c2c : dqmChip2Chip   -- only use the combiner section
@@ -606,10 +654,10 @@ BEGIN
          reset          => reset or not combinerEn,
          CarrierDetect  => '1',
          ce             => orMinGain,     -- if one channel is turned off, hold current alignment in case a channel is dead.
-         Re1In          => to_sfixed(ch0FastReal, 0, -17),
-         Im1In          => to_sfixed(ch0FastImag, 0, -17),
-         Re2In          => to_sfixed(ch1FastReal, 0, -17),
-         Im2In          => to_sfixed(ch1FastImag, 0, -17),
+         Re1In          => ch0FastReal,
+         Im1In          => ch0FastImag,
+         Re2In          => ch1FastReal,
+         Im2In          => ch1FastImag,
          Re1Out         => Real1Out,
          Im1Out         => Imag1Out,
          Re2Out         => Real2Out,
@@ -627,7 +675,6 @@ BEGIN
          reset          => reset or not combinerEn,
          ch0gtch1       => MDB_CombRate(19),
          overridech     => MDB_CombRate(20),
-         bestsource     => MDB_CombRate(24),
          lockthreshold  => MDB_CombLocks(28 downto 16),
          lockhysterisis => MDB_CombLocks(12 downto 0),
          ch0agc         => ch0Gain,
@@ -640,6 +687,8 @@ BEGIN
          lead_coef      => MDB_CombLead(17 downto 0),
          sweeplmt       => MDB_CombSwLmt(14 downto 0),
          swprate        => MDB_CombRate(17 downto 0),
+         db_range       => MDB_dB_Range,
+         db_ratio       => MDB_dB_Ratio,
          realout        => realout,
          imagout        => imagout,
          reallock       => reallock,
@@ -659,11 +708,28 @@ BEGIN
          gainoutmin     => gainoutmin
       );
 
-   -- create a series of rising edges for the ILA to subsample the data for lower frequnecy acquistion
+   Vio : vio2x5
+      PORT MAP (
+         clk => clk93r3,
+         probe_out0 => Vio0,
+         probe_out1 => Vio1
+   );
+
+  -- create a series of rising edges for the ILA to subsample the data for lower frequnecy acquistion
    subClkProc : process(clk93r3)
    begin
       if (rising_edge(clk93r3)) then
          SubSample <= SubSample + 1;
+         if (dataEn0) then
+            dataI0Dly   <= dataI0Dly(30 downto 0) & dataI0;
+            dataI0DlyD  <= dataI0Dly(to_integer(unsigned(Vio0)));
+         end if;
+         if (dataEn1) then
+            dataI1Dly   <= dataI1Dly(30 downto 0) & dataI1;
+            dataI1DlyD  <= dataI1Dly(to_integer(unsigned(Vio1)));
+         end if;
+         error0   <= dataI0DlyD xor dataI;
+         error1   <= dataI1DlyD xor dataI;
       end if;
    end process;
 
@@ -751,3 +817,16 @@ BEGIN
 
 END rtl;
 
+/*
+
+   No Fade, -81dB on TSS200A, 25Mb @2300MHz
+      Both receivers showed 2e-6
+      combiner 0e-8
+   Running 10dB fade at 100Hz.
+      Both receivers 1e-3
+      combiner 3e-6, comparable to one receiver at no fade
+   Running 10dB fade at 5000Hz.
+      Both receivers 3e-3
+      combiner 2e-6, comparable to one receiver at no fade
+
+*/

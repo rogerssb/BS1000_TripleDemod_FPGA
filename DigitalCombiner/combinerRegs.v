@@ -23,7 +23,9 @@ module combinerRegs(
     output  reg [15:0]  MDB_CombSwLmt   = 16'h0000,
     output  reg [31:0]  MDB_CombRate    = 32'h0000,
     output  reg [31:0]  MDB_CombLocks   = 32'h0000,
-    output  reg [15:0]  MDB_CombOptions = 16'h0000
+    output  reg [15:0]  MDB_CombOptions = 16'h0000,
+    output  reg [15:0]  MDB_dB_Range    = 16'h1800,
+    output  reg [15:0]  MDB_dB_Ratio    = 16'h03AA
 );
 
     always @(posedge busClk) begin
@@ -34,6 +36,7 @@ module combinerRegs(
                 `COMB_SWEEP_RATE:       MDB_CombRate[7:0]       <= dataIn[7:0];
                 `COMB_LOCKS:            MDB_CombLocks[7:0]      <= dataIn[7:0];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[7:0]      <= dataIn[7:0];
+                `COMB_DB_RANGE:         MDB_dB_Range[7:0]       <= dataIn[7:0];
                 default: ;
             endcase
         end
@@ -44,6 +47,7 @@ module combinerRegs(
                 `COMB_SWEEP_RATE:       MDB_CombRate[15:8]      <= dataIn[15:8];
                 `COMB_LOCKS:            MDB_CombLocks[15:8]     <= dataIn[15:8];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[15:8]     <= dataIn[15:8];
+                `COMB_DB_RANGE:         MDB_dB_Range[15:8]      <= dataIn[15:8];
                 default: ;
             endcase
         end
@@ -54,6 +58,7 @@ module combinerRegs(
                 `COMB_SWEEP_RATE:       MDB_CombRate[23:16]     <= dataIn[23:16];
                 `COMB_LOCKS:            MDB_CombLocks[23:16]    <= dataIn[23:16];
                 `COMB_OPTIONS:          MDB_CombOptions[7:0]    <= dataIn[23:16];
+                `COMB_DB_RATIO:         MDB_dB_Ratio[7:0]       <= dataIn[23:16];
                 default: ;
             endcase
         end
@@ -64,6 +69,7 @@ module combinerRegs(
                 `COMB_SWEEP_RATE:       MDB_CombRate[31:24]     <= dataIn[31:24];
                 `COMB_LOCKS:            MDB_CombLocks[31:24]    <= dataIn[31:24];
                 `COMB_OPTIONS:          MDB_CombOptions[15:8]   <= dataIn[31:24];
+                `COMB_DB_RATIO:         MDB_dB_Ratio[15:8]      <= dataIn[31:24];
                 default: ;
             endcase
         end
@@ -78,6 +84,8 @@ module combinerRegs(
                 `COMB_OPTIONS:      dataOut = {MDB_CombOptions, MDB_CombSwLmt};
                 `COMB_SWEEP_RATE:   dataOut = MDB_CombRate;
                 `COMB_LOCKS:        dataOut = MDB_CombLocks;
+                `COMB_DB_RANGE,
+                `COMB_DB_RATIO:     dataOut = {MDB_dB_Ratio, MDB_dB_Range};
                 default:            dataOut = 32'b0;
             endcase
         end

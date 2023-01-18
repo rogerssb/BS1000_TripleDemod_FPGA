@@ -1822,7 +1822,9 @@ module semcoDemodTop (
         .DdsSClk        (DdsSClk),
         .DdsMosi        (DdsMosi),
         .DdsMiso        (DdsMiso),
-        .DdsSyncClk     (DdsSyncClk)
+        .DdsSyncClk     (DdsSyncClk),
+
+        .dataI          (bertDataIn)
     );
 
 
@@ -1894,7 +1896,8 @@ module semcoDemodTop (
         .dqmCLK         (mseMCLK),   // demod DQM is out only
         .dqmFS          (mseMFS),    // the same data is sent to toNext and toPrev
         .dqmDATA        (mseMDATA),
-
+        .dataEn         (bertClkEn),
+        .dataI          (bertDataIn),
         .PrevData_p     (PrevData_p),
         .PrevData_n     (PrevData_n),
         .NextData_p     (NextData_p),

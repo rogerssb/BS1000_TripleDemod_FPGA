@@ -123,7 +123,6 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
          clk,
          reset,
          overridech,
-         bestsource,
          ch0gtch1          : IN STD_LOGIC;
          ch0agc, ch1agc    : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
          ch0imag,
@@ -135,6 +134,8 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
          swprate           : IN  SLV18;
          lockhysterisis,
          lockthreshold     : IN STD_LOGIC_VECTOR(12 DOWNTO 0);
+         db_ratio,
+         db_range          : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
          sweeplmt          : IN  STD_LOGIC_VECTOR(14 DOWNTO 0);
          maximagout,
          maxrealout,
@@ -167,6 +168,9 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
    constant CALF_LLIMIT       : unsigned(5 downto 0) := 6x"28";
    constant CALF_RATIOS       : unsigned(5 downto 0) := 6x"2C";
    constant CALF_INTEGRATOR   : unsigned(5 downto 0) := 6x"30";
+   constant PULSE_DELAY       : natural := 511;
+
+   constant SINE_FADE         : std_logic := '1';
 
    -- Signals
    type     Modulation        is (BPSK, QPSK, OQPSK, SOQPSK);
@@ -190,30 +194,36 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
             SineSign,
             TwoWords          : std_logic := '1';
    signal   addr              : unsigned(5 downto 0) := (others=>'0');
-   signal   NoiseI,
-            NoiseQ,
-            NoisePipeI,
-            NoisePipeQ        : SLV16;
+   signal   Noise0,
+            Noise1,
+            NoisePipe0,
+            NoisePipe1        : SLV16;
    signal   ch0Gain, ch1Gain   : std_logic_vector(12 downto 0);
    signal   Real1Out,
             Imag1Out,
             Real2Out,
-            Imag2Out          : SLV18;
-   signal   IAM_dPipe,
-            QAM_dPipe,
-            DataI,
+            Imag2Out,
+            i_in0,
+            q_in0,
+            i_in1,
+            q_in1             : SLV18;
+   signal   DataI,
             DataQ,
-            IAM_d,
-            QAM_d,
-            AM_Mod,
+            AM_Mod0,
+            AM_Mod1,
             AM_Amp,
             FiltI,
             FiltQ,
+            IAM_dPipe,
+            QAM_dPipe,
+            IAM_d,
+            QAM_d,
             NoisyI,
-            NoisyQ            : FLOAT_1_18 := to_sfixed(0.001, 0, -17);
-   signal   NoiseGain,
-            NoiseGainedI,
-            NoiseGainedQ      : sfixed(1 downto -16) := (others=>'0');
+            NoisyQ            : FLOAT_1_18 := to_sfixed(0.075, 0, -17);
+   signal   NoiseGain0,
+            NoiseGain1,
+            NoiseGained0,
+            NoiseGained1      : sfixed(1 downto -16) := (others=>'0');
    signal   LpfIn,
             LpfOut            : std_logic_vector(47 downto 0);
    signal   AM_Sines          : std_logic_vector(47 downto 0);
@@ -228,9 +238,15 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
    signal   Timer             : integer := 0;
    signal   Gains             : SLV16 := 16x"1B1B";    --gains above 1B start to oscillate
    signal   AM_Freq           : real := 35000.0;             -- on sine fades, higher gains seem okay
-   signal   DelayI, DelayQ    : SLV18_ARRAY(363 downto 0) := (others=>(others=>'0'));
+   signal   DelayI, DelayQ    : SLV18_ARRAY(PULSE_DELAY-1 downto 0) := (others=>(others=>'0'));
    signal   agcIn0            : SLV12 := 12x"150";
    signal   agcIn1            : SLV12 := 12x"150";
+   signal   Agc0              : real := -80.0;
+   signal   Agc1              : real := -80.0;
+   signal   Agc0Out,
+            Agc1Out           : real;
+
+   alias locked is << signal .combfastagc_tb.CmplxPhsDet.U0.complexphasedetector_struct.logical2.locked : std_logic >>;
 
 
 BEGIN
@@ -332,28 +348,30 @@ BEGIN
    begin
       if (rising_edge(clk46r6)) then
          PrnEn <= '0';
-         AM_Amp <= to_sfixed(0.1125, AM_Amp);
          if (Timer = 2000) then
             OneCycle <= '1';
-            if ((AM_Freq > 50.0*KHz)/* or (unsigned(agcIn0) > 3000)*/) then
+            if (Agc0Out > 0.0) then
               stop(0);
             end if;
             Timer <= 0;
+         elsif (Timer = 600) then
+            AM_Amp <= resize(AM_Amp + 0.025, AM_Amp);
+  --             AM_Freq <= AM_Freq + 5.0*KHz;
+  --             Agc0 <= Agc0 + 1.0;
+  --             Agc1 <= Agc1 - 1.0;
+               Timer <= Timer + 1;
          else
             SineSign <= AM_Sines(24+17);
             if (SineSign and not AM_Sines(24+17)) then
                OneCycle <= '0';
-               AM_Freq <= AM_Freq + 5.0*KHz;
---               agcIn0 <= to_slv(resize(to_ufixed(agcIn0, 11, 0) - 50, 11, 0, fixed_saturate, fixed_truncate));
---               agcIn1 <= to_slv(resize(to_ufixed(agcIn1, 11, 0) + 50, 11, 0, fixed_saturate, fixed_truncate));
             end if;
             if (not OneCycle) then
                Timer <= Timer + 1;
             end if;
          end if;
 
-         DelayI <= DelayI(362 downto 0) & to_slv(resize(FiltI/**0.75*/, FiltI));
-         DelayQ <= DelayQ(362 downto 0) & to_slv(resize(FiltQ/**0.75*/, FiltI));
+         DelayI <= DelayI(PULSE_DELAY-2 downto 0) & to_slv(resize(FiltI/**0.75*/, FiltI));
+         DelayQ <= DelayQ(PULSE_DELAY-2 downto 0) & to_slv(resize(FiltQ/**0.75*/, FiltI));
 
          DataRate <= DataRate + 1 when (DataRate < 90) else 0;
          if (DataRate = 0) then
@@ -381,7 +399,8 @@ BEGIN
       end if;
    end process Delay_process;
 
-   NoiseGain   <= to_sfixed(0.0, NoiseGain);
+   NoiseGain0   <= to_sfixed(0.0, NoiseGain0);
+   NoiseGain1   <= to_sfixed(0.0, NoiseGain1);
    AM_FreqReal <= (2.0**16)*(2.0**16)*(AM_Freq)/(46.6*MHz);
 
    NoiseGen1 : gng
@@ -395,7 +414,7 @@ BEGIN
           rstn       => not Reset,
           ce         => '1',
           valid_out  => open,
-          data_out   => NoiseI
+          data_out   => Noise0
       );
 
   NoiseGen2 : gng
@@ -409,7 +428,7 @@ BEGIN
          rstn       => not Reset,
          ce         => '1',
          valid_out  => open,
-         data_out   => NoiseQ
+         data_out   => Noise1
       );
 
    -- generate the AM modulation frequencies
@@ -419,7 +438,7 @@ BEGIN
          aresetn              => not reset,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => to_slv(to_sfixed(AM_FreqReal, 31, 0)),
-         m_axis_data_tready   => OneCycle,
+         m_axis_data_tready   => OneCycle or SINE_FADE,
          s_axis_config_tready => open,
          m_axis_data_tvalid   => open,
          m_axis_data_tdata    => AM_Sines
@@ -429,11 +448,12 @@ BEGIN
    begin
       if (rising_edge(clk46r6)) then
          if (Reset) then
-            NoisePipeI     <= (others=>'0');
-            NoisePipeQ     <= (others=>'0');
-            NoiseGainedI   <= (others=>'0');
-            NoiseGainedQ   <= (others=>'0');
-            AM_Mod         <= (others=>'0');
+            NoisePipe0     <= (others=>'0');
+            NoisePipe1     <= (others=>'0');
+            NoiseGained0   <= (others=>'0');
+            NoiseGained1   <= (others=>'0');
+            AM_Mod0        <= (others=>'0');
+            AM_Mod1        <= (others=>'0');
             IAM_dPipe      <= (others=>'0');
             QAM_dPipe      <= (others=>'0');
             IAM_d          <= (others=>'0');
@@ -441,18 +461,19 @@ BEGIN
             NoisyI         <= (others=>'0');
             NoisyQ         <= (others=>'0');
          else
-            NoisePipeI     <= NoiseI;
-            NoisePipeQ     <= NoiseQ;
-            NoiseGainedI   <= resize(to_sfixed(NoisePipeI, 4, -11) * NoiseGain, NoiseGainedI);
-            NoiseGainedQ   <= resize(to_sfixed(NoisePipeQ, 4, -11) * NoiseGain, NoiseGainedQ);
+            NoisePipe0     <= Noise0;
+            NoisePipe1     <= Noise1;
+            NoiseGained0   <= resize(to_sfixed(NoisePipe0, 4, -11) * NoiseGain0, NoiseGained0);
+            NoiseGained1   <= resize(to_sfixed(NoisePipe1, 4, -11) * NoiseGain1, NoiseGained1);
 
-            AM_Mod         <= resize(0.25 - AM_Amp + (AM_Amp * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod);
-            IAM_dPipe      <= resize(AM_Mod/* * DataI*/, IAM_d, fixed_wrap, fixed_truncate);
-            QAM_dPipe      <= resize(AM_Mod/* * DataQ*/, IAM_d, fixed_wrap, fixed_truncate);
+            AM_Mod0        <= resize(0.25 - AM_Amp + (AM_Amp * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod0, FIXED_SATURATE, FIXED_TRUNCATE);
+            AM_Mod1        <= resize(0.25 - AM_Amp - (AM_Amp * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod1, FIXED_SATURATE, FIXED_TRUNCATE);
+            IAM_dPipe      <= resize(AM_Mod0/* * DataI*/, IAM_d, fixed_saturate, fixed_truncate);
+            QAM_dPipe      <= resize(AM_Mod1/* * DataQ*/, IAM_d, fixed_saturate, fixed_truncate);
             IAM_d          <= IAM_dPipe;
             QAM_d          <= QAM_dPipe;
-            NoisyI         <= resize(IAM_d + NoiseGainedI, NoisyI);
-            NoisyQ         <= resize(QAM_d + NoiseGainedQ, NoisyQ);
+            NoisyI         <= resize(IAM_d + NoiseGained0, NoisyI);
+            NoisyQ         <= resize(QAM_d + NoiseGained1, NoisyQ);
          end if;
       end if;
    end process DataGen_process;
@@ -474,6 +495,19 @@ BEGIN
    FiltQ <= to_sfixed(LpfOut(17 downto 00), FiltQ);
 
 
+Modulations : if (SINE_FADE) generate
+         i_in0 <= to_slv(FiltI);
+         q_in0 <= to_slv(FiltI);
+         i_in1 <= to_slv(FiltQ);
+         q_in1 <= to_slv(FiltQ);
+elsif (not SINE_FADE) generate
+         i_in0 <= to_slv(FiltI);
+         q_in0 <= to_slv(FiltI);
+         i_in1 <= DelayI(PULSE_DELAY-1);
+         q_in1 <= DelayQ(PULSE_DELAY-1);
+end generate;
+   agcIn0 <= std_logic_vector(to_unsigned(integer(((Agc0/20.0 + 5.5) / 4.4) * 4096.0),12));
+   agcIn1 <= std_logic_vector(to_unsigned(integer(((Agc1/20.0 + 5.5) / 4.4) * 4096.0),12));
    combinerFastAgc_u : combinerfastagc
       PORT MAP (
          clk         => clk46r6,
@@ -490,17 +524,22 @@ BEGIN
          dout        => DC_DataOut,
          agcIn0      => agcIn0,
          agcIn1      => agcIn1,
-         i_in0       => to_slv(FiltI),
-         q_in0       => to_slv(FiltQ),
+
+         i_in0       =>  i_in0,
+         q_in0       =>  q_in0,
+         i_in1       =>  i_in1,
+         q_in1       =>  q_in1,
+
          i_out0      => Real1Out,
          q_out0      => Imag1Out,
          agcOut0     => ch0Gain,
-         i_in1       => DelayI(363),
-         q_in1       => DelayQ(363),
          i_out1      => Real2Out,
          q_out1      => Imag2Out,
          agcOut1     => ch1Gain
       );
+
+   Agc0Out <= (((real(to_integer(unsigned(ch0Gain)))/ 4096.0)*4.4)-5.5)*20.0;
+   Agc1Out <= (((real(to_integer(unsigned(ch1Gain)))/ 4096.0)*4.4)-5.5)*20.0;
 
 
    CmplxPhsDet : complexphasedetector_0
@@ -509,9 +548,10 @@ BEGIN
          reset          => reset,
          ch0gtch1       => '0',
          overridech     => '0',
-         bestsource     => '0',
          lockthreshold  => 13x"0",
          lockhysterisis => 13x"0",
+         db_range       => 16x"3AAA",
+         db_ratio       => 16x"1800",
          ch0agc         => ch0Gain,
          ch1agc         => ch1Gain,
          ch0real        => Real1Out,
@@ -540,6 +580,14 @@ BEGIN
          gainoutmax     => open,
          gainoutmin     => open
       );
+
+   lock_process : process (clk46r6)
+   begin
+      if (rising_edge(clk46r6)) then
+         locked <= force '1';
+      end if;
+   end process;
+
 
 END rtl;
 

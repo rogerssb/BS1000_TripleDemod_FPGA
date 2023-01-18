@@ -47,6 +47,7 @@ ENTITY DC_DemodTop IS
       testMode,
       FPGA_ID0,
       FPGA_ID1,
+      dataI, dataEn,
       dqmDATA,
       dqmCLK,
       dqmFS             : IN  std_logic;
@@ -118,7 +119,7 @@ BEGIN
             end if;
 
             TxData(0) <= TxData(1) when (testMode) else adc0(7 downto 0);
-            TxData(1) <= TxData(2) when (testMode) else "00" & adc0(13 downto 8);
+            TxData(1) <= TxData(2) when (testMode) else  dataI & dataEn & adc0(13 downto 8);
             TxData(2) <= TxData(3) when (testMode) else amDataIn(7 downto 0);
             TxData(3) <= TxData(4) when (testMode) else dqmDATA & dqmCLK & dqmFS & "0" & amDataIn(11 downto 8);
             TxData(4) <= std_logic_vector(TxData4);   -- used as test channel

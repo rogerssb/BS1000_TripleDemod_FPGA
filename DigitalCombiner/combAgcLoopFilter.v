@@ -19,7 +19,7 @@ module combAgcLoopFilter (
     input   [11:0]  signalLevel0, signalLevel1,
     output  [31:0]  loopOutput0, loopOutput1,
     output  [15:0]  frontEndRatio0, frontEndRatio1,
-    output          agc_d_outputs
+    output          agc_d_outputs, byPassAgc
 );
 
     // Microprocessor interface
@@ -27,7 +27,7 @@ module combAgcLoopFilter (
     wire    [31:0]  lowerLimit;
     wire    [31:0]  upperLimit;
     wire    [7:0]   agcSetpoint;
-    reg     [31:0]  integrator0, integrator1;
+   (* MARK_DEBUG="true" *)    reg     [31:0]  integrator0, integrator1;
     combAgcLoopRegs loopRegs(
         .addr(addr),
         .dataIn(din),
@@ -54,7 +54,7 @@ module combAgcLoopFilter (
     // Channel 0 process
     /**************************** Adjust Error ************************************/
     reg  signed [11:0]   loopError0;
-    wire signed [12:0]   error0 = $signed({1'b0,agcSetpoint,4'b0}) - $signed({1'b0,signalLevel0});
+   (* MARK_DEBUG="true" *)    wire signed [12:0]   error0 = $signed({1'b0,agcSetpoint,4'b0}) - $signed({1'b0,signalLevel0});
     wire signed [12:0]   negError0 = $signed({1'b0,signalLevel0}) - $signed({1'b0,agcSetpoint,4'b0});
     always @(posedge clk) begin
         if (zeroError) begin
@@ -155,7 +155,7 @@ module combAgcLoopFilter (
     // Channel 1 process
     /**************************** Adjust Error ************************************/
     reg  signed [11:0]   loopError1;
-    wire signed [12:0]   Error1 = $signed({1'b0,agcSetpoint,4'b0}) - $signed({1'b0,signalLevel1});
+   (* MARK_DEBUG="true" *)    wire signed [12:0]   Error1 = $signed({1'b0,agcSetpoint,4'b0}) - $signed({1'b0,signalLevel1});
     wire signed [12:0]   negError1 = $signed({1'b0,signalLevel1}) - $signed({1'b0,agcSetpoint,4'b0});
     always @(posedge clk) begin
         if (zeroError) begin

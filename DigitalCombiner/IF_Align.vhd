@@ -56,7 +56,7 @@ entity IF_Align is
          Re1In,
          Im1In,
          Re2In,
-         Im2In          : IN  FLOAT_1_18;
+         Im2In          : IN  SLV18;
          Index          : OUT SLV8;
          Re1Out,
          Im1Out,
@@ -277,10 +277,10 @@ begin
          clk         => clk46r6,
          reset       => Reset,
          AbeforeB    => IndexAcc(IndexAcc'left),
-         RealIn1     => to_slv(Re1In),
-         ImagIn1     => to_slv(Im1In),
-         RealIn2     => to_slv(Re2In),
-         ImagIn2     => to_slv(Im2In),
+         RealIn1     => Re1In,
+         ImagIn1     => Im1In,
+         RealIn2     => Re2In,
+         ImagIn2     => Im2In,
          Diff        => IndexAbs,
          RealOut1    => Re1Out,
          ImagOut1    => Im1Out,

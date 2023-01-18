@@ -27,3 +27,5 @@ set_false_path -from [get_pins topRegs/reset_reg_rep/C] -to [get_pins {Combiner/
 set_input_delay -clock [get_clocks [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]] 2.000 [get_ports {SideCar[32]}]
 set_output_delay -clock [get_clocks [get_clocks -of_objects [get_pins systemClock/inst/mmcm_adv_inst/CLKOUT0]]] 2.000 [get_ports {SideCar[*]}]
 
+
+

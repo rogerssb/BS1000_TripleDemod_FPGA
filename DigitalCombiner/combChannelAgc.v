@@ -19,7 +19,7 @@ module combChannelAGC(
     input       signed  [17:0]  iIn0,qIn0,
     input       signed  [17:0]  iIn1,qIn1,
     output              [20:0]  nbagcgain0, nbagcgain1,
-    output                      agc_d_outputs,
+    output                      agc_d_outputs, byPassAgc,
     output              [15:0]  frontEndRatio0, frontEndRatio1
 );
 
@@ -197,6 +197,7 @@ module combChannelAGC(
         .loopOutput0(loopOutput0),
         .loopOutput1(loopOutput1),
         .agc_d_outputs(agc_d_outputs),
+        .byPassAgc(byPassAgc),
         .frontEndRatio0(frontEndRatio0),
         .frontEndRatio1(frontEndRatio1)
         );

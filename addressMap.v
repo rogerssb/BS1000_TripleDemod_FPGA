@@ -762,6 +762,8 @@
         `define COMB_SWEEP_LIMIT   6'b00_110x
         `define COMB_OPTIONS       6'b00_111x
         `define COMB_LOCKS         6'b01_00xx
+        `define COMB_DB_RANGE      6'b01_010x
+        `define COMB_DB_RATIO      6'b01_011x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
