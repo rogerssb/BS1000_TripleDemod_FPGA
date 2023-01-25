@@ -158,7 +158,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT IF_Align;
 
-   COMPONENT complexphasedetector_0
+   COMPONENT complexphasedetectorswap_0
       PORT (
          clk,
          reset,
@@ -185,17 +185,16 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          realout,
          gainoutmax,
          gainoutmin,
-         phase_detect      : OUT SLV18;
+         phase_detect       : OUT SLV18;
          agc0_gt_agc1,
          realxord,
          imagxord,
          locked            : OUT STD_LOGIC;
          imaglock,
          reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
-         lag_out           : OUT SLV32;
-         nco_control_out   : OUT STD_LOGIC_VECTOR(21 DOWNTO 0)
+         lag_out           : OUT SLV32
       );
-   END COMPONENT complexphasedetector_0;
+   END COMPONENT;
 
    component DUC
          port (
@@ -669,7 +668,7 @@ BEGIN
    ch0Gain <= "00" & ch0Log10MseInv when (dqm_AGCn) else ch0FastAgc;
    ch1Gain <= "00" & ch1Log10MseInv when (dqm_AGCn) else ch1FastAgc;
 
-   CmplxPhsDet : complexphasedetector_0
+   CmplxPhsDet : complexphasedetectorswap_0
       PORT MAP (
          clk            => clk46r6,
          reset          => reset or not combinerEn,
@@ -696,7 +695,6 @@ BEGIN
          locked         => locked,
          agc0_gt_agc1   => agc0_gt_agc1,
          lag_out        => lag_out,
-         nco_control_out=> nco_control_out,
          phase_detect   => phase_detect,
          maximagout     => maximagout,
          maxrealout     => maxrealout,
@@ -817,16 +815,3 @@ BEGIN
 
 END rtl;
 
-/*
-
-   No Fade, -81dB on TSS200A, 25Mb @2300MHz
-      Both receivers showed 2e-6
-      combiner 0e-8
-   Running 10dB fade at 100Hz.
-      Both receivers 1e-3
-      combiner 3e-6, comparable to one receiver at no fade
-   Running 10dB fade at 5000Hz.
-      Both receivers 3e-3
-      combiner 2e-6, comparable to one receiver at no fade
-
-*/

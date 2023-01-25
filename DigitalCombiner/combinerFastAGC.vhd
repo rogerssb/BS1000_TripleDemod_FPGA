@@ -105,12 +105,7 @@ architecture rtl of combinerFastAgc is
          iAgcIn1 <= to_slv(iGained1_v) & 30x"0";
          qAgcIn1 <= to_slv(qGained1_v) & 30x"0";
 
-         if (agc_d_outputs) then
-            i_out0   <= iInt0;
-            q_out0   <= qInt0;
-            i_out1   <= iInt1;
-            q_out1   <= qInt1;
-         elsif (byPassAgc) then
+         if (byPassAgc) then
             i_out0   <= i_in0;
             q_out0   <= q_in0;
             i_out1   <= i_in1;

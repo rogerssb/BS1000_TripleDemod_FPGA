@@ -78,10 +78,10 @@ module semcoDemodTop (
     output              amDacCSn,
 
     // Video Switch Select Lines            these are redefined in NGR demod
-    output      [1:0]   video0InSelect,     // Filt0[1:0] same as non_NGR
-    output reg  [1:0]   video0OutSelect,    // Filt1[2], Filt0[2]
-    output      [1:0]   video1InSelect,     // Filt0[1:0] same as non_NGR
-    output reg  [1:0]   video1OutSelect,    // AGC 50, Ana 50 switches
+    output      [1:0]   video0InSelect,     // Filt1[2], Filt0[2]
+    output reg  [1:0]   video0OutSelect,    // Filt0[1:0] same as non_NGR
+    output      [1:0]   video1InSelect,     // AGC 50, Ana 50 switches
+    output reg  [1:0]   video1OutSelect,    // Filt1[1:0] same as non_NGR
                // I didn't rename the pins to conserve the pinout.xdc files
     `else   //R6100
 
@@ -333,6 +333,7 @@ module semcoDemodTop (
     `ifdef COMBINER
         wire            [17:0]  combinerIF;
         wire    clk93r3 = clk;
+        wire            combinerEn;
         always @(posedge clk) begin
             adc0Reg <= adc0;
             if (combinerEn) begin
@@ -2587,17 +2588,18 @@ sdi sdi(
             .vid3Select(vid3Select)
         );
 
-        assign video0InSelect = vid0Select[1:0];
-        assign video1InSelect = vid1Select[1:0];
         wire   ngrMode = vid3Select[0];
 
+        assign video0InSelect = ngrMode ? {vid1Select[2], vid0Select[2]} : vid0Select[1:0]; // Sw_Vid_0_A[1:0]  Pin D18:D20
+        assign video1InSelect = ngrMode ? vid2Select[1:0] : vid1Select[1:0];                // Sw_Vid_1_A[1:0]  Pin D14:D16
+
         always @* begin
-            if (ngrMode) begin
-                video0OutSelect[0] = vid0Select[2];
-                video0OutSelect[1] = vid1Select[2];
-                {Sw50Ohm, video1OutSelect} = vid2Select;
+            if (ngrMode) begin // NGR_DEMOD
+                video0OutSelect = vid0Select[1:0];    // Sw_Filt_0_A0  Pin D26:D28
+                video1OutSelect = vid1Select[1:0];    // Sw_Filt_1_A[1:0]  Pin D22, D24
+                Sw50Ohm = vid2Select[2];    // Sw_50_Ohm, Sw_Vid_1_A[1:0] Pins D11, D14:D16
             end
-            else begin // NGR_DEMOD
+            else begin  //Original R6080
 
             //This is to fix an error on the board layout
                 case (vid0Select[1:0])
