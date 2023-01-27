@@ -162,6 +162,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       PORT (
          clk,
          reset,
+         enmasterswitching,
          overridech,
          ch0gtch1          : IN STD_LOGIC;
          ch0agc, ch1agc    : IN  STD_LOGIC_VECTOR(12 DOWNTO 0);
@@ -192,7 +193,9 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          locked            : OUT STD_LOGIC;
          imaglock,
          reallock          : OUT STD_LOGIC_VECTOR(12 DOWNTO 0);
-         lag_out           : OUT SLV32
+         lag_out           : OUT SLV32;
+         power             : OUT STD_LOGIC_VECTOR(17 DOWNTO 0)
+
       );
    END COMPONENT;
 
@@ -391,6 +394,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ResetPdClk        : STD_LOGIC;
    signal   DdsGain           : unsigned(2 downto 0);
    signal   SubSample         : uint32;
+   signal   power             : STD_LOGIC_VECTOR(17 DOWNTO 0);
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of DataOut10,
@@ -404,6 +408,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             Imag1Out,
             Real2Out,
             Imag2Out,
+            power,
             dataI,
             error0,
             error1,
@@ -631,15 +636,16 @@ BEGIN
          dout           => agcDataOut,
          i_in0          => ch0Real,
          q_in0          => ch0Imag,
-         i_out0         => ch0FastReal,
-         q_out0         => ch0FastImag,
          agcIn0         => ch0Agc,
          agcIn1         => ch1Agc,
-         agcOut0        => ch0FastAgc,
          i_in1          => ch1Real,
          q_in1          => ch1Imag,
+
+         i_out0         => ch0FastReal,
+         q_out0         => ch0FastImag,
          i_out1         => ch1FastReal,
          q_out1         => ch1FastImag,
+         agcOut0        => ch0FastAgc,
          agcOut1        => ch1FastAgc
       );
 
@@ -676,6 +682,7 @@ BEGIN
          overridech     => MDB_CombRate(20),
          lockthreshold  => MDB_CombLocks(28 downto 16),
          lockhysterisis => MDB_CombLocks(12 downto 0),
+         enmasterswitching => MDB_CombRate(24),
          ch0agc         => ch0Gain,
          ch1agc         => ch1Gain,
          ch0real        => Real1Out,
@@ -703,7 +710,8 @@ BEGIN
          realxord       => realxord,
          imagxord       => imagxord,
          gainoutmax     => gainoutmax,
-         gainoutmin     => gainoutmin
+         gainoutmin     => gainoutmin,
+         power          => power
       );
 
    Vio : vio2x5

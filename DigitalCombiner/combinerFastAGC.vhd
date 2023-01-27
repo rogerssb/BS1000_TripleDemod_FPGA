@@ -73,7 +73,8 @@ architecture rtl of combinerFastAgc is
    signal   iInt0,qInt0,
             iInt1,qInt1             : SLV18;
    signal   agc_d_outputs,
-            byPassAgc              : std_logic;
+            byPassAgc               : std_logic;
+   signal   myAgc0, myAgc1          : std_logic_vector(12 downto 0);
 
    begin
 
@@ -110,11 +111,15 @@ architecture rtl of combinerFastAgc is
             q_out0   <= q_in0;
             i_out1   <= i_in1;
             q_out1   <= q_in1;
+            agcOut0  <= '0' & agcIn0;
+            agcOut1  <= '0' & agcIn1;
          else
             i_out0   <= iAgcIn0(47 downto 30);
             q_out0   <= qAgcIn0(47 downto 30);
             i_out1   <= iAgcIn1(47 downto 30);
             q_out1   <= qAgcIn1(47 downto 30);
+            agcOut0  <= myAgc0;
+            agcOut1  <= myAgc1;
          end if;
       end if;
    end process;
@@ -180,6 +185,7 @@ architecture rtl of combinerFastAgc is
          iIn1              => iInt1,
          qIn1              => qInt1,
          nbagcgain1        => nbagcgain1,
+         byPassAgc         => byPassAgc,
          agc_d_outputs     => agc_d_outputs,
          frontEndRatio0    => frontEndRatio0,
          frontEndRatio1    => frontEndRatio1
@@ -205,23 +211,18 @@ architecture rtl of combinerFastAgc is
          nbAgc0_v := to_ufixed('0' & nbagcgain0(20 downto 8), nbAgc0_v);
          agc1_v := to_ufixed("00" & agcIn1, agc1_v);
          nbAgc1_v := to_ufixed('0' & nbagcgain1(20 downto 8), nbAgc1_v);
-         if (byPassAgc) then
-            sum0_v := agc0_v;
-            sum1_v := agc1_v;
+         if (nbAgc0_v > agc0_v) then
+            sum0_v := 14x"0";
          else
-            if (nbAgc0_v > agc0_v) then
-               sum0_v := 14x"0";
-            else
-               sum0_v := resize(agc0_v - nbAgc0_v, sum0_v);
-            end if;
-            if (nbAgc1_v > agc1_v) then
-               sum1_v := 14x"0";
-            else
-               sum1_v := resize(agc1_v - nbAgc1_v, sum1_v);
-            end if;
+            sum0_v := resize(agc0_v - nbAgc0_v, sum0_v);
          end if;
-         agcOut0 <= to_slv(sum0_v(12 downto 0));
-         agcOut1 <= to_slv(sum1_v(12 downto 0));
+         if (nbAgc1_v > agc1_v) then
+            sum1_v := 14x"0";
+         else
+            sum1_v := resize(agc1_v - nbAgc1_v, sum1_v);
+         end if;
+         myAgc0 <= to_slv(sum0_v(12 downto 0));
+         myAgc1 <= to_slv(sum1_v(12 downto 0));
 
       end if;
     end process;
