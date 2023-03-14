@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd682;
+    parameter VER_NUMBER = 16'd10682;
 
 
 //******************************************************************************
@@ -533,13 +533,40 @@ module stcDemodTop (
         .HxEstI(HxEstI),
         .Peaks(stcPeaks),
         .DeltaTau(stcDeltaTau),
-        .DataOut(stcBit),
+        .DataOut(stcBitOut),
         .Dac0Data(stcDac0Data),
         .Dac0ClkEn(stcDac0ClkEn),
         .Dac1Data(stcDac1Data),
         .Dac1ClkEn(stcDac1ClkEn),
         .Dac2Data(stcDac2Data),
         .Dac2ClkEn(stcDac2ClkEn)
+    );
+
+//******************************************************************************
+//                            Derandomizer
+//******************************************************************************
+
+    reg dualDecoderSpace;
+    always @* begin
+        casex(addr)
+            `DUAL_DECODERSPACE:     dualDecoderSpace = cs;
+            default:                dualDecoderSpace = 0;
+        endcase
+    end
+
+    wire    [31:0]  dualDecDout;
+    stcDerandomizer stcDerand (
+        .reset(reset),
+        .en(dualDecoderSpace),
+        .busClk(busClk),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(dualDecDout),
+        .clk(clk),
+        .bitInputEn(stcBitEnOut),
+        .bitInput(stcBitOut),
+        .bitOutput(decBitOut)
     );
 
 //******************************************************************************
@@ -586,11 +613,11 @@ module stcDemodTop (
         casex (cAndD0SourceSelect)
             `CandD_SRC_STC: begin
                 cAndD0ClkEn = stcBitEnOut;
-                cAndD0DataIn = {stcBit,2'b0};
+                cAndD0DataIn = {decBitOut,2'b0};
             end
             default:   begin
                 cAndD0ClkEn = stcBitEnOut;
-                cAndD0DataIn = {stcBit,2'b0};
+                cAndD0DataIn = {decBitOut,2'b0};
             end
         endcase
     end
@@ -626,11 +653,11 @@ module stcDemodTop (
         casex (cAndD1SourceSelect)
             `CandD_SRC_STC: begin
                 cAndD1ClkEn = stcBitEnOut;
-                cAndD1DataIn = {stcBit,2'b0};
+                cAndD1DataIn = {decBitOut,2'b0};
             end
             default:   begin
                 cAndD1ClkEn = stcBitEnOut;
-                cAndD1DataIn = {stcBit,2'b0};
+                cAndD1DataIn = {decBitOut,2'b0};
             end
         endcase
     end
@@ -657,9 +684,9 @@ module stcDemodTop (
     assign ch1ClkOut = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
     assign ch3ClkOut = cAndD1ClkOut;
-//    assign ch1DataOut = stcBit;
+//    assign ch1DataOut = decBitOut;
 //    assign ch1ClkOut = stcBitEnOut;
-//    assign ch3DataOut = stcBit;
+//    assign ch3DataOut = decBitOut;
 //    assign ch3ClkOut = stcBitEnOut;
 
     assign          pll2_REF = 1'b0;
@@ -1072,6 +1099,8 @@ module stcDemodTop (
 
             `PILOT_LF_SPACE:    rd_mux = pilotDout;
 
+            `DUAL_DECODERSPACE: rd_mux = dualDecDout;
+
             `VIDFIR0SPACE,
             `INTERP0SPACE:      rd_mux = interp0Dout;
 
@@ -1145,6 +1174,15 @@ module stcDemodTop (
                 end
                 else begin
                     rd_mux = pilotDout[15:0];
+                end
+            end
+
+            `DUAL_DECODERSPACE: begin
+                if (addr[1]) begin
+                    rd_mux = dualDecDout[31:16];
+                end
+                else begin
+                    rd_mux = dualDecDout[15:0];
                 end
             end
 
