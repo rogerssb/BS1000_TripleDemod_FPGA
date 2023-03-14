@@ -13,10 +13,6 @@
 `define SEMCO_DEMOD_IMAGE           16'h6
 `define LDPC_DEMOD_IMAGE            16'h7
 `define STC_DEMOD_IMAGE             16'h8
-// FPGA2: Two channel viterbi with PCM decoder
-`define VITERBI_DEMOD_IMAGE         16'd9
-// STC Modulator on a BS1000
-`define STC_MOD_IMAGE               16'd10
 
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
@@ -133,16 +129,11 @@
 `define ADD_MULTIBOOT
 `endif
 
-`ifdef STC_TRIPLE_MOD
-`define STC_MOD
-`define R6100
-`endif
 `ifdef STC_MOD
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
-`define ADD_TAU
 `endif
 
 `ifdef BITSYNC_BERT
@@ -698,7 +689,6 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-    // not sure why but the software didn't like address at 30, so changed to 40
 `define STC_DEMOD_SPACE     13'b0_00xx_010x_xxxx
     `define STC_CLOCKS_PER_BIT  13'bx_xxxx_xxx0_00xx
     `define STC_HX_THRESH       13'bx_xxxx_xxx0_01xx
@@ -711,6 +701,38 @@
     `define FM_MOD_DEV          13'bxxxx_xxx0_01xx
     `define FM_MOD_BITRATE      13'bxxxx_xxx0_10xx
     `define FM_MOD_CIC          13'bxxxx_xxx0_11xx
+
+`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+    `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
+        `define DEC_DERAND_MODE_OFF     3'b000
+        `define DEC_DERAND_MODE_RNRZ15  3'b001
+        `define DEC_DERAND_MODE_RNRZ9   3'b010
+        `define DEC_DERAND_MODE_RNRZ11  3'b011
+        `define DEC_DERAND_MODE_RNRZ17  3'b100
+        `define DEC_DERAND_MODE_RNRZ23  3'b101
+        `define DEC_CLK_PHASE_0         2'b00
+        `define DEC_CLK_PHASE_180       2'b01
+        `define DEC_CLK_PHASE_90        2'b10
+        `define DEC_CLK_PHASE_270       2'b11
+        `define DEC_SRC_DEMOD           3'b000
+        `define DEC_SRC_SC0             3'b001
+        `define DEC_SRC_SC1             3'b010
+        `define DEC_SRC_VITERBI         3'b011
+        `define DEC_SRC_LDPC            3'b100
+        `define DEC_SRC_SBS             3'b101
+        // These are used to define the PCM decoder modes and are
+        // shared with the PN Generator which is not used in this build
+        `define PNGEN_PCM_NRZL          4'b0000
+        `define PNGEN_PCM_NRZM          4'b0001
+        `define PNGEN_PCM_NRZS          4'b0010
+        `define PNGEN_PCM_BIPL          4'b0100
+        `define PNGEN_PCM_BIPM          4'b0101
+        `define PNGEN_PCM_BIPS          4'b0110
+        `define PNGEN_PCM_DMM           4'b1000
+        `define PNGEN_PCM_DMS           4'b1001
+        `define PNGEN_PCM_MDMM          4'b1010
+        `define PNGEN_PCM_MDMS          4'b1011
 
 // PLL subsystem registers
 `define PLL0SPACE           13'b0_00xx_1010_xxxx
@@ -789,20 +811,18 @@
 //-------------------------------- STC Mod ------------------------------------
 
 // Top level registers
-`define STC_MOD_SPACE       13'b0_00xx_00xx_xxxx
+`define STC_MOD_SPACE       13'b0_00xx_000x_xxxx
     // Define the system top level memory map
-    `define SYS_RESET           13'bx_xxxx_xx00_000x
-    `define SYS_VERSION         13'bx_xxxx_xx00_001x
-    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xx00_01xx
-    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xx00_10xx
-    `define SYS_REBOOT_ADDR     13'bx_xxxx_xx00_11xx
-    `define SYS_TYPE            13'bx_xxxx_xx01_000x
-    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xx01_001x
-    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xx01_01xx
-    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xx01_10xx
-    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xx01_11xx
-    `define SYS_STCMOD_H0TAU    13'bx_xxxx_xx10_00xx
-    `define SYS_STCMOD_H1TAU    13'bx_xxxx_xx10_01xx
+    `define SYS_RESET           13'bx_xxxx_xxx0_000x
+    `define SYS_VERSION         13'bx_xxxx_xxx0_001x
+    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xxx0_01xx
+    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xxx0_10xx
+    `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
+    `define SYS_TYPE            13'bx_xxxx_xxx1_000x
+    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xxx1_001x
+    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xxx1_01xx
+    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xxx1_10xx
+    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xxx1_11xx
 
 `define FMMODSPACE              13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
