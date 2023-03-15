@@ -11,24 +11,24 @@ derivative rights in exchange for negotiated compensation.
 `include "addressMap.v"
 
 module semcoTopRegs(
-    input               busClk,
-    input       [12:0]  addr,
+ (* MARK_DEBUG="true" *)     input               busClk,
+  (* MARK_DEBUG="true" *)     input       [12:0]  addr,
     input       [31:0]  dataIn,
     output  reg [31:0]  dataOut,
-    input               cs,
-    input               wr0, wr1, wr2, wr3,
+  (* MARK_DEBUG="true" *)     input               cs,
+  (* MARK_DEBUG="true" *)     input               wr0, wr1, wr2, wr3,
     input               clk,
     input       [15:0]  versionNumber,
     input       [15:0]  fpgaType,
     output  reg         reset,
-    output  reg         reboot,
-    output  reg [31:0]  rebootAddress,
+  (* MARK_DEBUG="true" *)     output  reg         reboot,
+  (* MARK_DEBUG="true" *)     output  reg [31:0]  rebootAddress,
     output  reg [2:0]   dac0InputSelect,
     output  reg [2:0]   dac1InputSelect,
     output  reg [2:0]   dac2InputSelect,
     output  reg [3:0]   ch0MuxSelect,
     output  reg [3:0]   ch1MuxSelect,
-    output  reg         pngenEnable,    
+    output  reg         pngenEnable,
     output  reg         framerEnable
 );
 
@@ -76,7 +76,7 @@ module semcoTopRegs(
 
 
     //************************* Reboot Trigger ************************************
-    reg reboot_decode;
+ (* MARK_DEBUG="true" *)     reg reboot_decode;
     always @(posedge busClk)
         begin
         if (cs && wr3)
@@ -95,7 +95,7 @@ module semcoTopRegs(
         end
     end
 
-    reg [7:0]reboot_decode_sync;
+ (* MARK_DEBUG="true" *)     reg [7:0]reboot_decode_sync;
     always @ (posedge clk) begin
         reboot_decode_sync <= {reboot_decode_sync[6:0],reboot_decode};
         reboot <= (reboot_decode_sync[7:6] == 2'b10);

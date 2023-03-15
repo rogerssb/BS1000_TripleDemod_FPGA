@@ -119,9 +119,9 @@ module semcoDemodTop (
         output  reg         Sw50Ohm,
         input               FPGA_ID0, FPGA_ID1,
 
-        `ifdef COMBINER // assumes the sidecar is attached, the SBS signals are defined later
+//        `ifdef COMBINER // assumes the sidecar is attached, the SBS signals are defined later
             inout    [40:1]     SideCar,
-        `elsif ADD_BITSYNC
+ /*       `elsif ADD_BITSYNC
             // Bitsync ADC
             input       [13:0]  bsAdc,
             input               bsAdc_overflow,
@@ -135,7 +135,7 @@ module semcoDemodTop (
             output              bsDacSELn,
             output              bsDacSCLK, bsDacMOSI,
         `endif  //ADD_BITSYNC
-
+*/
        `ifdef COMBINER  // both sides need these signals
             input  [4:0]        PrevData_p,
                                 PrevData_n,
@@ -145,7 +145,7 @@ module semcoDemodTop (
                                 NextClk_n,
                                 PrevClk_p,
                                 PrevClk_n,
-        `else // combiner
+        `elsif COMBINER_DEMOD // combiner
 
         // interFpga data
             output [4:0]        PrevData_p,
@@ -173,7 +173,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd1746;
+    parameter VER_NUMBER = 16'd1747;
 
 
 //******************************************************************************
@@ -400,6 +400,47 @@ module semcoDemodTop (
     end
     `endif
 
+    `ifdef R6100
+    //Assume IF/BS Sidecar is used. This is just muxing
+    wire        [17:0]  DdsData;
+    wire                DdsIO_Reset;
+    wire                DdsIO_Update;
+    wire                DdsReset;
+    wire                DdsCS_n;
+    wire                DdsSClk;
+    wire                DdsMosi;
+    wire                IF_BS_n;
+    wire      [13:0]    bsAdc;
+    wire                bsAdc_overflow, bsAdc_powerDown;
+    // Input Impedance and Topology controls
+    wire                bsHighImpedance, bsSingleEnded;
+
+    // Gain and Offset DAC interfaces
+    wire                bsDacSELn, bsDacSCLK, bsDacMOSI;
+
+   ifBsMux ifBsMux (
+        .IF_BS_n         (IF_BS_n),
+        .SideCar         (SideCar),
+        .DdsData         (DdsData),
+        .DdsIO_Reset     (DdsIO_Reset),
+        .DdsIO_Update    (DdsIO_Update),
+        .DdsReset        (DdsReset),
+        .DdsCS_n         (DdsCS_n),
+        .DdsSClk         (DdsSClk),
+        .DdsMosi         (DdsMosi),
+        .DdsMiso         (DdsMiso),
+        .SideCarClk      (SideCarClk),
+        .DdsSyncClk      (DdsSyncClk),
+        .bsAdc_powerDown (bsAdc_powerDown),
+        .bsHighImpedance (bsHighImpedance),
+        .bsSingleEnded   (bsSingleEnded),
+        .bsDacSELn       (bsDacSELn),
+        .bsDacSCLK       (bsDacSCLK),
+        .bsDacMOSI       (bsDacMOSI),
+        .bsAdc           (bsAdc),
+        .bsAdc_overflow  (bsAdc_overflow)
+    );
+    `endif
 
 //******************************************************************************
 //                             Top Level Registers
@@ -715,48 +756,6 @@ module semcoDemodTop (
     );
 
 `endif //ADD_SUBCARRIER
-
-`ifdef COMBINER
-//Assume IF/BS Sidecar is used. This is just muxing
-    wire        [17:0]  DdsData;
-    wire                DdsIO_Reset;
-    wire                DdsIO_Update;
-    wire                DdsReset;
-    wire                DdsCS_n;
-    wire                DdsSClk;
-    wire                DdsMosi;
-    wire                IF_BS_n;
-    wire      [13:0]    bsAdc;
-    wire                bsAdc_overflow, bsAdc_powerDown;
-    // Input Impedance and Topology controls
-    wire                bsHighImpedance, bsSingleEnded;
-
-    // Gain and Offset DAC interfaces
-    wire                bsDacSELn, bsDacSCLK, bsDacMOSI;
-
-   ifBsMux ifBsMux (
-        .IF_BS_n         (IF_BS_n),
-        .SideCar         (SideCar),
-        .DdsData         (DdsData),
-        .DdsIO_Reset     (DdsIO_Reset),
-        .DdsIO_Update    (DdsIO_Update),
-        .DdsReset        (DdsReset),
-        .DdsCS_n         (DdsCS_n),
-        .DdsSClk         (DdsSClk),
-        .DdsMosi         (DdsMosi),
-        .DdsMiso         (DdsMiso),
-        .SideCarClk      (SideCarClk),
-        .DdsSyncClk      (DdsSyncClk),
-        .bsAdc_powerDown (bsAdc_powerDown),
-        .bsHighImpedance (bsHighImpedance),
-        .bsSingleEnded   (bsSingleEnded),
-        .bsDacSELn       (bsDacSELn),
-        .bsDacSCLK       (bsDacSCLK),
-        .bsDacMOSI       (bsDacMOSI),
-        .bsAdc           (bsAdc),
-        .bsAdc_overflow  (bsAdc_overflow)
-    );
-`endif
 
     //******************************************************************************
     //                    Standalone Single Channel Bitsync
@@ -1747,7 +1746,7 @@ module semcoDemodTop (
         .magClkEn(magClkEn),
         .mag(mag),
         .sourceSelect(dqmSourceSelect),
-        .combinerMode(dqmCombinerMode),
+        .combinerMode(),
         .dqmStartOfFrame(),
         .mseSum(mseSum),
         .log10MseSum(log10MSE),
@@ -1811,7 +1810,7 @@ module semcoDemodTop (
         .locked         (combLocked),
         .imaglock       (ImagLock),
         .reallock       (RealLock),
-        .agc0_gt_agc1   (),
+        .agc0_gt_agc1   (bestSrcSel),
         .realxord       (),
         .imagxord       (),
         .ifBS_n         (IF_BS_n),
@@ -2211,7 +2210,11 @@ module semcoDemodTop (
     `else
     assign ch1ClkOut = cAndD1ClkOut;
     assign ch1DataOut = cAndD1DataOut[2];
-    assign ch3ClkOut = cAndD1ClkOut;
+        `ifdef COMBINER
+        assign ch3ClkOut = !bestSrcSel;
+        `else
+        assign ch3ClkOut = cAndD1ClkOut;
+        `endif
     assign ch3DataOut = cAndD1DataOut[2];
     `endif //TEST_LDPC
     `endif //BYPASS_MULTIH_DECODER

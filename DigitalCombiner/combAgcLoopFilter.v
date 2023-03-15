@@ -48,7 +48,8 @@ module combAgcLoopFilter (
         .integrator1(integrator1[31:16]),
         .frontEndRatio0(frontEndRatio0),
         .frontEndRatio1(frontEndRatio1),
-        .agc_d_outputs(agc_d_outputs)
+        .agc_d_outputs(agc_d_outputs),
+        .ifCalibration()
         );
 
     // Channel 0 process

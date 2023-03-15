@@ -384,6 +384,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             dataI0DlyD,
             dataI1DlyD,
 
+            CombinerReset,
             IF_CW,
             IF_Offset,
             InvertDDC,
@@ -485,6 +486,8 @@ BEGIN
    ifBS_n         <= MDB_CombOptions(15);
 
    PhaseInc    <= MDB_CombRate;
+
+   CombinerReset <= reset or not(combinerEn or ifBS_n);
 
    GenIBufs : for n in 0 to 4 generate
    begin
@@ -624,7 +627,7 @@ BEGIN
       PORT MAP (
          clk            => clk46r6,
          ce             => '1',
-         reset          => reset or not combinerEn,
+         reset          => CombinerReset,
          cs             => cs,
          busClk         => busClk,
          wr0            => wr0,
@@ -656,7 +659,7 @@ BEGIN
       PORT MAP (
          clk46r6        => clk46r6,
          clk186         => clk186,
-         reset          => reset or not combinerEn,
+         reset          => CombinerReset,
          CarrierDetect  => '1',
          ce             => orMinGain,     -- if one channel is turned off, hold current alignment in case a channel is dead.
          Re1In          => ch0FastReal,
@@ -671,32 +674,32 @@ BEGIN
      );
 
    dQM_AGCn <= MDB_CombRate(28);
-   ch0Gain <= "00" & ch0Log10MseInv when (dqm_AGCn) else ch0FastAgc;
-   ch1Gain <= "00" & ch1Log10MseInv when (dqm_AGCn) else ch1FastAgc;
+   ch0Gain <= ch0Log10MseInv & "00" when (dqm_AGCn) else ch0FastAgc;
+   ch1Gain <= ch1Log10MseInv & "00" when (dqm_AGCn) else ch1FastAgc;
 
    CmplxPhsDet : complexphasedetectorswap_0
       PORT MAP (
-         clk            => clk46r6,
-         reset          => reset or not combinerEn,
-         ch0gtch1       => MDB_CombRate(19),
-         overridech     => MDB_CombRate(20),
-         lockthreshold  => MDB_CombLocks(28 downto 16),
-         lockhysterisis => MDB_CombLocks(12 downto 0),
-         enmasterswitching => MDB_CombRate(24),
-         ch0agc         => ch0Gain,
-         ch1agc         => ch1Gain,
-         ch0real        => Real1Out,
-         ch0imag        => Imag1Out,
-         ch1real        => Real2Out,
-         ch1imag        => Imag2Out,
-         lag_coef       => MDB_CombLag(17 downto 0),
-         lead_coef      => MDB_CombLead(17 downto 0),
-         sweeplmt       => MDB_CombSwLmt(14 downto 0),
-         swprate        => MDB_CombRate(17 downto 0),
-         db_range       => MDB_dB_Range,
-         db_ratio       => MDB_dB_Ratio,
-         realout        => realout,
-         imagout        => imagout,
+         clk            => clk46r6,                            -- MDB_combDbRange             199
+         reset          => CombinerReset,                      -- MDB_combLagLS16             200
+         ch0gtch1       => MDB_CombRate(19),                   -- MDB_combLagMS16             201
+         overridech     => MDB_CombRate(20),                   -- MDB_combLeadLS16            202
+         lockthreshold  => MDB_CombLocks(28 downto 16),        -- MDB_combLeadMS16            203
+         lockhysterisis => MDB_CombLocks(12 downto 0),         -- MDB_combRateLS16            204
+         enmasterswitching => MDB_CombRate(24),                -- MDB_combRateMS16            205
+         ch0agc         => ch0Gain,                            -- MDB_combLimit               206
+         ch1agc         => ch1Gain,                            -- MDB_combOptions             207
+         ch0real        => Real1Out,                           -- MDB_combLocksLS16           208
+         ch0imag        => Imag1Out,                           -- MDB_combLocksMS16           209
+         ch1real        => Real2Out,                           -- MDB_CalfControlsLS16        210
+         ch1imag        => Imag2Out,                           -- MDB_CalfControlsMS16        211
+         lag_coef       => MDB_CombLag(17 downto 0),           -- MDB_CalfULimitLS16          212
+         lead_coef      => MDB_CombLead(17 downto 0),          -- MDB_CalfULimitMS16          213
+         sweeplmt       => MDB_CombSwLmt(14 downto 0),         -- MDB_CalfLLimitLS16          214
+         swprate        => MDB_CombRate(17 downto 0),          -- MDB_CalfLLimitMS16          215
+         db_range       => MDB_dB_Range,                       -- MDB_CalfRatiosLS16          216
+         db_ratio       => MDB_dB_Ratio,                       -- MDB_CalfRatiosMS16          217
+         realout        => realout,                            -- MDB_CalfIntegrator0         218
+         imagout        => imagout,                            -- MDB_CalfIntegrator1         219
          reallock       => reallock,
          imaglock       => imaglock,
          locked         => locked,

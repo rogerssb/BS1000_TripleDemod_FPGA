@@ -1,11 +1,12 @@
 module multibootK7(
-    input           clk, 
-    input           pulse, 
-    input   [31:0]  addr, 
+    input           clk,
+    input           pulse,
+    input   [31:0]  addr,
     input           reset
 );
 
-    reg [32:0] mem [7:0];
+   (* MARK_DEBUG="true" *)    reg [8:0]  idCode;
+    reg [32:0] mem [9:0];
 
     always @ (posedge clk) begin
         if (pulse) begin
@@ -15,29 +16,39 @@ module multibootK7(
             mem[1] = 33'h1_aa_99_55_66;
             // NOOP
             mem[2] = 33'h1_20_00_00_00;
-            // Write 1 Word to WBSTAR
-            mem[3] = 33'h1_30_02_00_01;
-            // Load the address
-            mem[4] = {1'b1,8'h00,addr[31:8]};
-            // Write 1 Word to CMD
-            mem[5] = 33'h1_30_00_80_01;
-            // IPROG Command
-            mem[6] = 33'h1_00_00_00_0f;
+
+            // Read IDCODE
+            mem[3] = 33'h1_28_01_8_0_01;
             // NOOP
-            mem[7] = 33'h1_20_00_00_00;
+            mem[4] = 33'h1_20_00_00_00;
+
+            // Write 1 Word to WBSTAR
+            mem[5] = 33'h1_30_02_00_01;
+            // Load the address
+            mem[6] = {1'b1,8'h00,addr[31:8]};
+            // Write 1 Word to CMD
+            mem[7] = 33'h1_30_00_80_01;
+            // IPROG Command
+            mem[8] = 33'h1_00_00_00_0f;
+            // NOOP
+            mem[9] = 33'h1_20_00_00_00;
+        end
+        else if (cnt == 5 && idCode == 16'h051) begin
+            mem[6] = {1'b1,8'h00,addr[30:7]};   // double the address for 7k325 builds
         end
     end
 
 // data writes
-reg [7 : 0] cnt;
+   (* MARK_DEBUG="true" *) reg [7 : 0] cnt;
 always @ (posedge clk)
     if (reset) cnt <= 8'd255;
     else if (pulse) cnt <= 8'd0;
-    else if (cnt < 8'd8) cnt <= cnt + 8'd1;
+    else if (cnt < 8'd10) cnt <= cnt + 8'd1;
 
-reg [32:0] d;
+  (* MARK_DEBUG="true" *) reg [32:0] d;
 reg [31:0] i;
-reg ena;
+ (* MARK_DEBUG="true" *) wire [31:0] iCapeOut;
+ (* MARK_DEBUG="true" *) reg ena;
 
 always @ (posedge clk) begin
     if (reset) begin
@@ -55,6 +66,9 @@ always @ (posedge clk) begin
               d[ 0],d[ 1],d[ 2],d[ 3],d[ 4],d[ 5],d[ 6],d[ 7]
              };
         ena <= !d[32];
+        if (cnt == 4) begin
+            idCode <= iCapeOut[20:12];
+        end
     end
 end
 
@@ -63,7 +77,7 @@ ICAPE2 icape
     .CLK(clk),
     .CSIB(ena),
     .I(i),
-    .O(),
+    .O(iCapeOut),
     .RDWRB(ena)
     );
 
