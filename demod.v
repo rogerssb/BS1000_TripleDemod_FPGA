@@ -470,12 +470,35 @@ always @(posedge clk) begin
 /******************************************************************************
                              AFC/Sweep/Costas Loop
 ******************************************************************************/
+
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    wire    signed  [11:0] fastResampPhase;
+    vm_cordic_fast clfDemod(
+        .clk(clk),
+        /*
+        .ena(resampSync),
+        .x(iResamp[17:4]),
+        .y(qResamp[17:4]),
+        */
+        .ena(iSymEn),
+        .x(iBsTrellis[17:4]),
+        .y(qBsTrellis[17:4]),
+        .m(),
+        .p(fastResampPhase),
+        .enOut(fastResampPhaseEn)
+    );
+    `endif
+
+
 wire    [17:0]  offsetError;
 wire            offsetErrorEn;
 wire    [11:0]  demodLoopError;
 wire    [15:0]  freqLockCounter;
 wire    [31:0]  freqDout;
 wire    [11:0]  rndOffsetError = offsetError[17:6] + offsetError[5];
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    wire    signed  [11:0]  resampPhase;
+    `endif
 //reg     [11:0]   rndOffsetError;
 //always @(posedge clk) begin
 //    if (offsetErrorEn) begin
@@ -505,6 +528,12 @@ carrierLoop carrierLoop(
     .demodMode(demodMode),
     .phase(phase),
     .freq(freq),
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    //.resampPhaseEn(iBitEn),
+    //.resampPhase(resampPhase),
+    .resampPhaseEn(fastResampPhaseEn),
+    .resampPhase(fastResampPhase),
+    `endif
     .highFreqOffset(highFreqOffset),
     .offsetError(rndOffsetError),
     .offsetErrorEn(offsetErrorEn),
@@ -689,6 +718,7 @@ bitsync bitsync(
     .dout(bitsyncDout),
     .i(iResamp), .q(qResamp),
     .au(qResamp),
+    .track(carrierLock),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     `ifdef SYM_DEVIATION
@@ -719,6 +749,9 @@ bitsync bitsync(
     .sdiSymEn(sdiSymEn),
     .iTrellis(iBsTrellis),.qTrellis(qBsTrellis),
     .legacyBit(legacyBit),
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    .phase(resampPhase),
+    `endif
     `ifdef ADD_LDPC
     .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
     .iLdpc(iLdpc), .qLdpc(qLdpc),
@@ -999,8 +1032,8 @@ always @(posedge clk) begin
 
     case (dac1Select)
         `DAC_I: begin
-            dac1Data <= iResampOutReg;
-            dac1Sync <= resampSync;
+            dac1Data <= iResampInReg;
+            dac1Sync <= ddcSync;
             end
         `DAC_Q: begin
             dac1Data <= qResampInReg;

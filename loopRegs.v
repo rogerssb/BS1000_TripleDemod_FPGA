@@ -26,6 +26,7 @@ module loopRegs(
     output  reg                 ctrl2,
     output  reg                 clearAccum,
     output  reg                 ctrl4,
+    output  reg         [1:0]   acqTrkControl,
     output  reg         [4:0]   leadExp,
     output  reg         [7:0]   leadMan,
     output  reg         [4:0]   lagExp,
@@ -74,6 +75,9 @@ module loopRegs(
         end
         if (cs && wr1) begin
             casex (addr)
+                `LF_CONTROL: begin
+                    acqTrkControl <= dataIn[9:8];
+                    end
                 `LF_LEAD_LAG: begin
                    lagMan <= dataIn[15:8];
                    end
@@ -146,7 +150,10 @@ module loopRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `LF_CONTROL:        dataOut = {lockStatus,26'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
+                `LF_CONTROL:        dataOut = {lockStatus,15'b0,
+                                               6'b0,acqTrkControl,
+                                               3'b0,ctrl4,
+                                               clearAccum,ctrl2,invertError,zeroError};
                 `LF_LEAD_LAG:       dataOut = {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
                 `LF_LIMIT:          dataOut = limit;
                 `LF_LOOPDATA0:      dataOut = loopData;

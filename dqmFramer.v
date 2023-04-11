@@ -161,6 +161,7 @@ module dqmFramer #(parameter VERSION=4'd0)
     always @(posedge clk) begin
         if (reset || (payloadState == `PAY_STATE_FLUSH)) begin
             dqmState <= `DQM_STATE_IDLE;
+            headerSR <= {`DQM_SYNC_WORD,12'b0,VERSION,dqm};
             pingReadEnable <= 1;
             pongReadEnable <= 1;
         end
@@ -169,7 +170,6 @@ module dqmFramer #(parameter VERSION=4'd0)
                 `DQM_STATE_IDLE: begin
                     pingReadEnable <= 0;
                     pongReadEnable <= 0;
-                    headerSR <= {`DQM_SYNC_WORD,12'b0,VERSION,dqm};
                     if (payloadBitEn && startFrame) begin
                         shiftCount <= 47;
                         if (divClkEn) begin
@@ -211,6 +211,7 @@ module dqmFramer #(parameter VERSION=4'd0)
                     if (divClkEn) begin
                         if (shiftCount == 0) begin
                             dqmState <= `DQM_STATE_IDLE;
+                            headerSR <= {`DQM_SYNC_WORD,12'b0,VERSION,dqm};
                             pingReadEnable <= 0;
                             pongReadEnable <= 0;
                         end
@@ -254,6 +255,23 @@ module dqmFramer #(parameter VERSION=4'd0)
     end
 
     assign dqmStartOfFrame = startFrame;
+
+    //`define DQM_ADD_ILA
+    `ifdef DQM_ADD_ILA
+
+    dqmILA dqmILA(
+        .clk(clk), 
+        .probe0(payloadBitCount), 
+        .probe1(shiftCount[13:0]), 
+        .probe2(startFrame), 
+        .probe3(payloadBitEn), 
+        .probe4(dqmBitEn), 
+        .probe5(dqmBit),
+        .probe6(1'b0), 
+        .probe7(1'b0)
+    );
+
+    `endif
 
 endmodule
 

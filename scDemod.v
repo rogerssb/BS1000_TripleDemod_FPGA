@@ -525,6 +525,7 @@ bitsync bitsync(
     .dout(bitsyncDout),
     .i(iResamp), .q(qResamp),
     .au(qResamp),
+    .track(1'b1),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     `ifdef SYM_DEVIATION

@@ -365,10 +365,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports DQMOut]
 set_property DRIVE 12 [get_ports DQMOut]
 set_property SLEW SLOW [get_ports DQMOut]
 
-set_property IOSTANDARD LVCMOS18 [get_ports lockLed0n]
 set_property DRIVE 12 [get_ports lockLed0n]
 set_property SLEW SLOW [get_ports lockLed0n]
-set_property IOSTANDARD LVCMOS18 [get_ports lockLed1n]
 set_property DRIVE 12 [get_ports lockLed1n]
 set_property SLEW SLOW [get_ports lockLed1n]
 

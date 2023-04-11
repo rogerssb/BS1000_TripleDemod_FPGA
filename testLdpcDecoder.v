@@ -6,7 +6,7 @@
 
     //`define TEST_4096
     //`define TEST_R12
-    `define TEST_R23
+    //`define TEST_R23
 
     `ifdef FIXED_CODEWORD
         `define TEST_DATA_I "c:/modem/vivado/testData/ldpcTestPattern_I_1024_4_5.txt"
@@ -14,7 +14,7 @@
     `else //FIXED_CODEWORD
         `ifdef TEST_4096
             `define CODE_LENGTH `LDPC_CODE_LENGTH_4096
-            `define SYNC_THRESHOLD 11'd250
+            `define LDPC_SYNC_THRESHOLD 11'd250
             `ifdef TEST_R12
                 `define CODE_RATE `LDPC_RATE_1_2
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_4096_1_2.txt"
@@ -30,7 +30,7 @@
             `endif
         `else
             `define CODE_LENGTH `LDPC_CODE_LENGTH_1024
-            `define SYNC_THRESHOLD 11'd62
+            `define LDPC_SYNC_THRESHOLD 11'd62
             `ifdef TEST_R12
                 `define CODE_RATE `LDPC_RATE_1_2
                 `define TEST_DATA_I "c:/modem/vivado/testData/ldpcSimWaveform_I_1024_1_2.txt"
@@ -52,6 +52,11 @@ module test;
     parameter HC = 1e9/CLOCK_FREQ/2;
     parameter C = 2*HC;
     parameter CLOCK_DECIMATION = 64;
+
+    /*
+    Instantiate the global internals for the FPGA library
+    */
+    glbl glbl();
 
     reg     reset;
     initial reset = 0;
@@ -79,7 +84,8 @@ module test;
         `ifdef ROTATE_90
         initial iSelect = 1;
         `else
-        initial iSelect = 0;
+        //initial iSelect = 0;
+        initial iSelect = 1;
         `endif
     `endif //FIXED_CODEWORD
     reg     iSymEn,qSymEn;
@@ -191,7 +197,7 @@ module test;
 
 
     //************************** uP Interface *********************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
         `include "upSpiTasks.v"
     `else
         `include "upBusTasks.v"
@@ -207,20 +213,20 @@ module test;
         // Set for inverse of 0.45 which is a smidge less than the AGC setpoint of 0.5 to
         // account for shaping filter losses.
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00018e39);
-        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
+        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00028000);
         //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00048000);
-        write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00008000);
+        //write32(createAddress(`LDPCSPACE, `LDPC_INVERSE_MEAN), 32'h00008000);
         write32(createAddress(`LDPCSPACE, `LDPC_OUTPUT_CLK_DIV),32'd70);
         write32(createAddress(`LDPCSPACE, `LDPC_DLL_CENTER_FREQ),32'd51130563);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_GAINS),16'h0018);
         write16(createAddress(`LDPCSPACE, `LDPC_DLL_FDBK_DIV),16'd1);
-        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,`SYNC_THRESHOLD,
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b0,4'b0,`LDPC_SYNC_THRESHOLD,
                                                           10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`CODE_RATE});
         // Wait 2 bit periods
         repeat (2*`CLOCKS_PER_BIT) @ (posedge clk) ;
 
         // Set the run bit
-        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,`SYNC_THRESHOLD,
+        write32(createAddress(`LDPCSPACE, `LDPC_CONTROL),{1'b1,4'b0,`LDPC_SYNC_THRESHOLD,
                                                           10'b0,`LDPC_DERAND_NONE,`CODE_LENGTH,1'b0,`CODE_RATE});
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;
@@ -231,7 +237,7 @@ module test;
 
 
     //******************************* UUT *************************************
-    `ifdef TRIPLE_DEMOD
+    `ifdef R6100
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),

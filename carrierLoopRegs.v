@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -163,7 +163,7 @@ module carrierLoopRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `CLF_CONTROL:        dataOut = {lockStatus,16'b0,6'b0,acqTrackControl,3'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
+                `CLF_CONTROL:        dataOut = {lockStatus,15'b0,6'b0,acqTrackControl,3'b0,ctrl4,clearAccum,ctrl2,invertError,zeroError};
                 `CLF_LEAD_LAG:       dataOut = {leadMan,3'bx,leadExp,lagMan,3'bx,lagExp};
                 `CLF_ULIMIT:         dataOut = upperLimit;
                 `CLF_LLIMIT:         dataOut = lowerLimit;

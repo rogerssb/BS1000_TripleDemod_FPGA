@@ -17,6 +17,9 @@
 `define VITERBI_DEMOD_IMAGE         16'd9
 // STC Modulator on a BS1000
 `define STC_MOD_IMAGE               16'd10
+`define LDPC_12_DEMOD_IMAGE         16'd11
+`define LDPC_23_DEMOD_IMAGE         16'd12
+`define LDPC_45_DEMOD_IMAGE         16'd13
 
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
@@ -59,6 +62,7 @@
 `define ADD_FRAMER
 `define ADD_BITSYNC
 `define ADD_MULTIBOOT
+`define ADD_IDCODE
 `define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
@@ -68,16 +72,47 @@
 `define ADD_FRAMER
 `define ADD_BITSYNC
 `define ADD_MULTIBOOT
+`define ADD_IDCODE
 `define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
 
 `ifdef TRIPLE_LDPC
+`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define LDPC_DEMOD
 `define ADD_MULTIBOOT
+`define ADD_IDCODE
 `define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
+
+`ifdef TRIPLE_LDPC_12
+`define FPGA_TYPE           `LDPC_12_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
+`ifdef TRIPLE_LDPC_23
+`define FPGA_TYPE           `LDPC_23_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
+`ifdef TRIPLE_LDPC_45
+`define FPGA_TYPE           `LDPC_45_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
 
 `ifdef SEMCO_DEMOD
 `define FPGA_TYPE           `SEMCO_DEMOD_IMAGE
@@ -98,6 +133,10 @@
 `define NO_LDPC_ENC
 `endif
 
+`ifdef ADD_SOQPSK
+//`define CLF_SOQPSK_USE_RESAMP_PHASE
+`endif
+
 `ifdef MULTIH_DEMOD
 `define FPGA_TYPE           `MULTIH_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
@@ -107,7 +146,7 @@
 `define ADD_CMA
 `define ADD_MULTIH
 `define ADD_DQM
-//`define ADD_SUPERBAUD_TED
+`define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
@@ -119,7 +158,6 @@
 `endif
 
 `ifdef LDPC_DEMOD
-`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
@@ -455,7 +493,7 @@
         `define SYS_DAC_INPUT_SEL_DEMOD 3'b000
     `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
     `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
+    `define SYS_IDCODE          13'bx_xxxx_xxx1_001x
     `define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
     `define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
         `define SYS_OUTPUT_SEL_CH0_BS   4'b0000

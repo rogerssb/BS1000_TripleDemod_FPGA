@@ -20,6 +20,7 @@ module loopFilter (
     input               [31:0]  din,
     output              [31:0]  dout,
     input       signed  [11:0]  error,
+    input                       track,
     output      signed  [31:0]  loopFreq,
     output                      ctrl2,
     output                      ctrl4,
@@ -30,7 +31,8 @@ module loopFilter (
 );
 
     // Microprocessor interface
-    wire            [4:0]   lead, lag;
+    wire            [1:0]   acqTrkControl;
+    wire            [4:0]   leadExp, lagExp;
     wire    signed  [31:0]  limit;
     wire            [31:0]  loopOffset;
     wire    signed  [31:0]  lowerLimit = -limit;
@@ -52,9 +54,10 @@ module loopFilter (
         .ctrl2(ctrl2),
         .clearAccum(clearAccum),
         .ctrl4(ctrl4),
-        .leadExp(lead),
+        .acqTrkControl(acqTrkControl),
+        .leadExp(leadExp),
         .leadMan(),
-        .lagExp(lag),
+        .lagExp(lagExp),
         .lagMan(),
         .limit(limit),
         .loopData(),
@@ -87,13 +90,38 @@ module loopFilter (
 
     /*************************** Lead Gain Section ********************************/
 
+    wire            [5:0]   leadSum = {1'b0,leadExp} - {4'b0,acqTrkControl};
+    reg             [4:0]   leadGain;
     reg     signed  [31:0]  leadError;
     always @(posedge clk) begin
+        // NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+        // zero, 1/2, 1/4, and 1/8. This is accomplished by subtracting the acqTrackControl
+        // value from the lead exponent.
+
+        // Set lead gain
+        if (track) begin
+            // Are we using the leadExp to force the lead term to zero?
+            if (leadExp == 0) begin
+                leadGain <= 0;
+            end
+            // Did the difference overflow?
+            if (leadSum[5]) begin
+                // Yes. Limit to the minimum.
+                leadGain <= 1;
+            end
+            else begin
+                leadGain <= leadSum[4:0];
+            end
+        end
+        else begin
+            leadGain <= leadExp;
+        end
+
         if (reset) begin
             leadError <= 0;
         end
         else if (clkEn) begin
-            case(lead)
+            case(leadGain)
                   5'h00: leadError <= 0;
                   5'h01: leadError <= $signed({{30{loopError[11]}},loopError[11:10]});
                   5'h02: leadError <= $signed({{29{loopError[11]}},loopError[11:9]});
@@ -132,13 +160,38 @@ module loopFilter (
 
     /*************************** Lead Gain Section ********************************/
 
+    // NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+    // zero, 1/2, 1/4, and 1/8. In the loop filter calculations, the lag term is
+    // proportional to the square of the loopwidth. That's why the acqTrackControl
+    // is shifted left one bit in this calculation.
+    wire            [5:0]   lagSum = {1'b0,lagExp} - {3'b0,acqTrkControl,1'b0};
+    reg             [4:0]   lagGain;
     reg     signed  [31:0]  lagError;
     always @(posedge clk) begin
+        // Set lag gain
+        if (track) begin
+            // Are we using the lagExp to force the lag term to zero?
+            if (lagExp == 0) begin
+                lagGain <= 0;
+            end
+            // Did the difference overflow?
+            else if (lagSum[5]) begin
+                // Yes. Limit to the minimum.
+                lagGain <= 1;
+            end
+            else begin
+                lagGain <= lagSum[4:0];
+            end
+        end
+        else begin
+            lagGain <= lagExp;
+        end
+
         if (reset) begin
             lagError <= 0;
         end
         else if (clkEn) begin
-            case(lag)
+            case(lagGain)
                   5'h00: lagError <= 0;
                   5'h01: lagError <= $signed({{30{loopError[11]}},loopError[11:10]});
                   5'h02: lagError <= $signed({{29{loopError[11]}},loopError[11:9]});

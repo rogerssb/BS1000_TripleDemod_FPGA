@@ -20,6 +20,7 @@ module semcoTopRegs(
     input               clk,
     input       [15:0]  versionNumber,
     input       [15:0]  fpgaType,
+    input       [8:0]   idCode,
     output  reg         reset,
     output  reg         reboot,
     output  reg [31:0]  rebootAddress,
@@ -28,7 +29,7 @@ module semcoTopRegs(
     output  reg [2:0]   dac2InputSelect,
     output  reg [3:0]   ch0MuxSelect,
     output  reg [3:0]   ch1MuxSelect,
-    output  reg         pngenEnable,    
+    output  reg         pngenEnable,
     output  reg         framerEnable
 );
 
@@ -153,8 +154,9 @@ module semcoTopRegs(
                 `SYS_SUBSYSTEM_CTRL: begin
                     dataOut = {24'b0,pngenEnable, framerEnable, 6'b0};
                     end
-                `SYS_TYPE: begin
-                    dataOut = {16'b0,fpgaType};
+                `SYS_TYPE,
+                `SYS_IDCODE: begin
+                    dataOut = {7'b0,idCode,fpgaType};
                     end
                 `SYS_DAC_INPUT_SEL: begin
                     dataOut = {8'b0,
