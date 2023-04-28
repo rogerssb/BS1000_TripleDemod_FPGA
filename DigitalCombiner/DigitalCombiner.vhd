@@ -378,6 +378,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             agcCS1,
             dQM_AGCn,
             orMinGain,
+            unstableBitOnDMDRev2_1,
+            unstableBitOnDMDRev2_2,
 
             error0,
             error1,
@@ -480,7 +482,7 @@ BEGIN
    -- 10 is available
    DdsIO_Reset    <= MDB_CombOptions(11);
 
---   combinerBB     <= MDB_CombOptions(12);
+   dQM_AGCn       <= MDB_CombOptions(12);
    DdsIO_Update   <= MDB_CombOptions(13);
    DdsReset       <= MDB_CombOptions(14);
    ifBS_n         <= MDB_CombOptions(15);
@@ -560,18 +562,21 @@ BEGIN
 
    ch0Adc17       <= DataOut11(5 downto 0) & DataOut10 & "0000";
    ch1Adc17       <= DataOut21(5 downto 0) & DataOut20 & "0000";
-   ch0Agc         <= DataOut13(3 downto 0) & DataOut12;
-   ch1Agc         <= DataOut23(3 downto 0) & DataOut22;
-   ch0SCLK        <= DataOut13(6);
-   ch0SFS         <= DataOut13(5);
-   ch0SDATA       <= DataOut13(7);
-   ch1SCLK        <= DataOut23(6);
-   ch1SFS         <= DataOut23(5);
-   ch1SDATA       <= DataOut23(7);
+   ch0Agc         <= DataOut13(7 downto 4) & DataOut12;
+   ch1Agc         <= DataOut23(7 downto 4) & DataOut22;
+   ch0SCLK        <= DataOut13(1);
+   ch0SFS         <= DataOut13(0);
+   ch0SDATA       <= DataOut13(2);
+   ch1SCLK        <= DataOut23(1);
+   ch1SFS         <= DataOut23(0);
+   ch1SDATA       <= DataOut23(2);
    dataI0         <= DataOut11(7);
    dataI1         <= DataOut21(7);
    dataEn0        <= DataOut11(6);
    dataEn1        <= DataOut21(6);
+-- I've seen sporadic errors on the DataOut23(3) signal. DataOut13 is ok
+   unstableBitOnDMDRev2_1 <= DataOut13(3);
+   unstableBitOnDMDRev2_2 <= DataOut23(3);
 
 
    c2c : dqmChip2Chip   -- only use the combiner section
@@ -673,7 +678,6 @@ BEGIN
          Index          => Index
      );
 
-   dQM_AGCn <= MDB_CombRate(28);
    ch0Gain <= ch0Log10MseInv & "00" when (dqm_AGCn) else ch0FastAgc;
    ch1Gain <= ch1Log10MseInv & "00" when (dqm_AGCn) else ch1FastAgc;
 

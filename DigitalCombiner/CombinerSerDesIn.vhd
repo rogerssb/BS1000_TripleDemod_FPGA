@@ -112,10 +112,17 @@ architecture rtl of CombinerSerDesIn is
             LockedXn,
             Lock200           : std_logic;
    signal   Demux1,
-            Demux2            : SLV8_ARRAY(PORTS-1 downto 0);
+            Demux2,
+            PrevOut1,
+            Prevout2,
+            Error1,
+            Error2:            SLV8_ARRAY(PORTS-1 downto 0);
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
    signal   Count             : UINT8 := x"00";
+
+   attribute MARK_DEBUG : string;
+   attribute MARK_DEBUG of Error1, Error2 : signal is "TRUE";
 
 begin
 
@@ -205,12 +212,6 @@ begin
       end if;
    end process;
 
-   DataOut10 <= Demux1(0);
-   DataOut11 <= Demux1(1);
-   DataOut12 <= Demux1(2);
-   DataOut13 <= Demux1(3);
-   DataOut14 <= Demux1(4);
-
 
    DeInterlace2 : process(ClkX1)
    begin
@@ -236,10 +237,44 @@ begin
       end if;
    end process;
 
-   DataOut20 <= Demux2(0);
-   DataOut21 <= Demux2(1);
-   DataOut22 <= Demux2(2);
-   DataOut23 <= Demux2(3);
-   DataOut24 <= Demux2(4);
+   OutProcess : process(Clk93r3)
+   begin
+      if (rising_edge(Clk93r3)) then
+         DataOut10 <= Demux1(0);
+         DataOut11 <= Demux1(1);
+         DataOut12 <= Demux1(2);
+         DataOut13 <= Demux1(3);
+         DataOut14 <= Demux1(4);
+
+         DataOut20 <= Demux2(0);
+         DataOut21 <= Demux2(1);
+         DataOut22 <= Demux2(2);
+         DataOut23 <= Demux2(3);
+         DataOut24 <= Demux2(4);
+
+         PrevOut1(0) <=  DataOut10;
+         PrevOut1(1) <=  DataOut11;
+         PrevOut1(2) <=  DataOut12;
+         PrevOut1(3) <=  DataOut13;
+         PrevOut1(4) <=  DataOut14;
+         PrevOut2(0) <=  DataOut20;
+         PrevOut2(1) <=  DataOut21;
+         PrevOut2(2) <=  DataOut22;
+         PrevOut2(3) <=  DataOut23;
+         PrevOut2(4) <=  DataOut24;
+
+         Error1(0)   <= DataOut10 xor std_logic_vector(unsigned(PrevOut1(0)) + x"11");
+         Error1(1)   <= DataOut11 xor std_logic_vector(unsigned(PrevOut1(1)) + x"11");
+         Error1(2)   <= DataOut12 xor std_logic_vector(unsigned(PrevOut1(2)) + x"11");
+         Error1(3)   <= DataOut13 xor std_logic_vector(unsigned(PrevOut1(3)) + x"11");
+         Error1(4)   <= DataOut14 xor std_logic_vector(unsigned(PrevOut1(4)) + x"11");
+         Error2(0)   <= DataOut20 xor std_logic_vector(unsigned(PrevOut2(0)) + x"11");
+         Error2(1)   <= DataOut21 xor std_logic_vector(unsigned(PrevOut2(1)) + x"11");
+         Error2(2)   <= DataOut22 xor std_logic_vector(unsigned(PrevOut2(2)) + x"11");
+         Error2(3)   <= DataOut23 xor std_logic_vector(unsigned(PrevOut2(3)) + x"11");
+         Error2(4)   <= DataOut24 xor std_logic_vector(unsigned(PrevOut2(4)) + x"11");
+      end if;
+   end process;
+
 
 end rtl;

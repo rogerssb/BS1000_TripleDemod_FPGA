@@ -1,13 +1,14 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
-// Date        : Mon Jun 13 10:54:12 2022
-// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim Y:/vivado/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_sim_netlist.v
+// Date        : Wed Mar 29 11:38:19 2023
+// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim
+//               C:/Semco/Vivado/Demods2022/tripleDemod.srcs/sources_1/ip/fifoFft/fifoFft_sim_netlist.v
 // Design      : fifoFft
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tffv676-2
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 

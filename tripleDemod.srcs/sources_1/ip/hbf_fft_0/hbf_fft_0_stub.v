@@ -1,13 +1,13 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
-// Date        : Mon Apr 04 13:58:04 2022
-// Host        : DESKTOP-T5IKR3F running 64-bit major release  (build 9200)
+// Date        : Wed Mar 29 11:44:27 2023
+// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
-//               C:/modem/vivado/tripleDemod.srcs/sources_1/ip/hbf_fft_0_1/hbf_fft_0_stub.v
+//               C:/Semco/Vivado/Demods2022/tripleDemod.srcs/sources_1/ip/hbf_fft_0/hbf_fft_0_stub.v
 // Design      : hbf_fft_0
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k325tffv676-2
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.

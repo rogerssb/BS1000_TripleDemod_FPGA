@@ -143,8 +143,8 @@ set_property PULLUP true [get_ports FPGA_ID1]
 set_property IOSTANDARD LVCMOS33 [get_ports FPGA_ID*]
 
 # 3, 4 and clk are reversed on R6100
-set_property PACKAGE_PIN AC16 [get_ports NextClk_n]
 set_property PACKAGE_PIN AB16 [get_ports NextClk_p]
+set_property PACKAGE_PIN AC16 [get_ports NextClk_n]
 set_property PACKAGE_PIN AA17 [get_ports {NextData_p[0]}]
 set_property PACKAGE_PIN AA18 [get_ports {NextData_n[0]}]
 set_property PACKAGE_PIN AA14 [get_ports {NextData_p[1]}]
@@ -153,10 +153,10 @@ set_property PACKAGE_PIN AC14 [get_ports {NextData_p[2]}]
 set_property PACKAGE_PIN AD14 [get_ports {NextData_n[2]}]
 set_property PACKAGE_PIN Y15 [get_ports {NextData_p[3]}]
 set_property PACKAGE_PIN Y16 [get_ports {NextData_n[3]}]
-set_property PACKAGE_PIN AB15 [get_ports {NextData_n[4]}]
 set_property PACKAGE_PIN AB14 [get_ports {NextData_p[4]}]
-set_property PACKAGE_PIN AC17 [get_ports PrevClk_n]
+set_property PACKAGE_PIN AB15 [get_ports {NextData_n[4]}]
 set_property PACKAGE_PIN AB17 [get_ports PrevClk_p]
+set_property PACKAGE_PIN AC17 [get_ports PrevClk_n]
 set_property PACKAGE_PIN AC18 [get_ports {PrevData_p[0]}]
 set_property PACKAGE_PIN AD18 [get_ports {PrevData_n[0]}]
 set_property PACKAGE_PIN AA19 [get_ports {PrevData_p[1]}]
@@ -165,8 +165,8 @@ set_property PACKAGE_PIN AD20 [get_ports {PrevData_p[2]}]
 set_property PACKAGE_PIN AE20 [get_ports {PrevData_n[2]}]
 set_property PACKAGE_PIN Y17 [get_ports {PrevData_p[3]}]
 set_property PACKAGE_PIN Y18 [get_ports {PrevData_n[3]}]
-set_property PACKAGE_PIN AB20 [get_ports {PrevData_n[4]}]
 set_property PACKAGE_PIN AB19 [get_ports {PrevData_p[4]}]
+set_property PACKAGE_PIN AB20 [get_ports {PrevData_n[4]}]
 
 set_property DRIVE 12 [get_ports {SideCar[*]}]
 set_property SLEW FAST [get_ports {SideCar[*]}]
@@ -308,6 +308,10 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
+
+
+
 
 
 

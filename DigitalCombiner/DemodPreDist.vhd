@@ -54,7 +54,7 @@ ENTITY DemodPreDist IS
          FPGA_ID0,
          FPGA_ID1          : IN  std_logic;
          adc0In            : IN  SLV18;
-         addr              : IN  std_logic_vector(4 downto 0);
+         addr              : IN  std_logic_vector(5 downto 0);
          dataIn            : IN  std_logic_vector(31 downto 0);
          dataOut           : OUT std_logic_vector(31 downto 0);
          chAgc             : OUT SLV12;
@@ -199,20 +199,19 @@ ARCHITECTURE rtl OF DemodPreDist IS
          combinerFlag,
          agc0_gt_agc1,
          busClk            : IN  std_logic;
-         addr              : IN  std_logic_vector(4 downto 0);
+         addr              : IN  std_logic_vector(5 downto 0);
          dataIn            : IN  SLV32;
          dataOut           : OUT SLV32;
          Index             : IN  SLV8;
          MDB_CombLag,
          MDB_CombLead,
          MDB_CombRate,
-         MDB_CombRefLvl    : OUT SLV32;
+         MDB_CombLocks     : OUT SLV32;
          MDB_CombSwLmt,
          MDB_CombOptions   : OUT SLV16
       );
    END COMPONENT combinerRegs;
    -- Signals
-   signal   SimReset          : std_logic := '1';
    signal   DucEn             : SLV4 := "0001";
    signal   DataI,
             DataQ,
@@ -252,9 +251,11 @@ ARCHITECTURE rtl OF DemodPreDist IS
    signal   MDB_CombLag,
             MDB_CombLead,
             MDB_CombRate,
-            MDB_CombRefLvl    : SLV32;
+            MDB_CombLocks     : SLV32;
    signal   MDB_CombSwLmt,
             MDB_CombOptions   : SLV16;
+   signal   Reset46r6,
+            Reset186          : std_logic;
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of NoiseI, NoiseQ, NcoCos, NcoSin  : signal is "TRUE";
@@ -283,7 +284,7 @@ BEGIN
          MDB_CombLead      => MDB_CombLead,
          MDB_CombSwLmt     => MDB_CombSwLmt,
          MDB_CombRate      => MDB_CombRate,
-         MDB_CombRefLvl    => MDB_CombRefLvl,
+         MDB_CombLocks     => MDB_CombLocks,
          MDB_CombOptions   => MDB_CombOptions
       );
 
@@ -292,7 +293,7 @@ BEGIN
    PhaseInc    <= MDB_CombRate;
    chAgc       <= MDB_CombSwLmt(11 downto 0);
    Delay       <= MDB_CombOptions(7 downto 0);
-   AM_Amp      <= MDB_CombRefLvl(17 downto 0);
+   AM_Amp      <= MDB_CombLocks(17 downto 0);
 
    NoiseGen1 : gng
       GENERIC MAP (
@@ -389,7 +390,7 @@ BEGIN
    AM_NCO : OffsetNCO
       PORT MAP (
          aclk                 => clk46r6,
-         aresetn              => not Reset,
+         aresetn              => not Reset46r6,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => AM_Freq,
          m_axis_data_tready   => '1',
@@ -422,7 +423,7 @@ BEGIN
       )
       PORT MAP(
          clk         => clk46r6,
-         reset       => Reset,
+         reset       => Reset46r6,
          ce          => '1',
          ValidIn     => '1',
          StartIn     => '0',
@@ -440,7 +441,8 @@ BEGIN
    Delay_process: process (clk46r6)
    begin
       if (rising_edge(clk46r6)) then
-         if (Reset) then
+         Reset46r6 <= Reset;
+         if (Reset46r6) then
             NoisePipeI     <= (others=>'0');
             NoisePipeQ     <= (others=>'0');
             NoiseGainedI   <= (others=>'0');
@@ -458,7 +460,7 @@ BEGIN
             NoiseGainedI   <= resize(to_sfixed(NoisePipeI, 4, -11) * to_sfixed(NoiseGain, NoiseGainedI), NoiseGainedI);
             NoiseGainedQ   <= resize(to_sfixed(NoisePipeQ, 4, -11) * to_sfixed(NoiseGain, NoiseGainedQ), NoiseGainedQ);
 
-            AM_Mod         <= resize(1.0 + (to_sfixed(AM_Amp, 1, -16) * to_sfixed(AM_Sines(24+17 downto 24), 0, -17)), AM_Mod);
+            AM_Mod         <= resize(1.0 + (to_sfixed(AM_Amp, 1, -16) * to_sfixed(AM_Sines(17 downto 0), 0, -17)), AM_Mod);
             IAM_dPipe      <= resize(AM_Mod * NcodI, IAM_d, fixed_wrap, fixed_truncate);
             QAM_dPipe      <= resize(AM_Mod * NcodQ, IAM_d, fixed_wrap, fixed_truncate);
             IAM_d          <= IAM_dPipe;
@@ -474,7 +476,7 @@ BEGIN
    LowpassNoise : Lowpass66
       PORT MAP (
          aclk                 => clk186,      -- run at 4x clock rate to reduce DSPs
-         aresetn              => not Reset,
+         aresetn              => not Reset186,
          s_axis_data_tvalid   => '1',
          s_axis_data_tdata    => LpfIn,
          s_axis_data_tready   => open,
@@ -482,13 +484,20 @@ BEGIN
          m_axis_data_tdata    => LpfOut
    );
 
-   FiltI <= to_sfixed(LpfOut(41 downto 24), FiltI);
-   FiltQ <= to_sfixed(LpfOut(17 downto 00), FiltQ);
+   Reset186Process : process(clk186)
+   begin
+      if (rising_edge(clk186)) then
+         Reset186 <= Reset;
+
+         FiltI <= to_sfixed(LpfOut(41 downto 24), FiltI);
+         FiltQ <= to_sfixed(LpfOut(17 downto 00), FiltQ);
+      end if;
+   end process;
 
    AGCs : DualAgc
       PORT MAP (
          Clk         => clk46r6,
-         Reset       => Reset or SimReset,
+         Reset       => Reset46r6,
          Attack      => 3x"7",
          Decay       => 3x"6",
          RealIn      => FiltI,

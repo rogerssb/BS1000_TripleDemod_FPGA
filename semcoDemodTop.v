@@ -173,8 +173,15 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd1747;
-
+    parameter VERSION_NUMBER = 16'd750;
+    // Adding a Demod Mode feedback to the version number to make sure of what FPGA image is loaded
+    `ifdef TRIPLE_MULTIH
+        parameter VER_NUMBER = VERSION_NUMBER + 20000;
+    `elsif ADD_LDPC
+        parameter VER_NUMBER = VERSION_NUMBER + 10000;
+    `else
+        parameter VER_NUMBER = VERSION_NUMBER;
+    `endif
 
 //******************************************************************************
 //                          Clock Distribution
@@ -373,7 +380,7 @@ module semcoDemodTop (
             .clk186         (clk186),
             .reset          (reset),
             .cs             (combSpace),
-            .addr           (addr[4:0]),
+            .addr           (addr[5:0]),
             .dataIn         (dataIn),
             .dataOut        (combDataOut),
             .wr0            (wr0),
@@ -458,6 +465,7 @@ module semcoDemodTop (
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
+    wire    [8:0]   idCode;
     semcoTopRegs topRegs(
         .busClk(busClk),
         .cs(semcoTopSpace),
@@ -471,6 +479,7 @@ module semcoDemodTop (
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
+        .idCode(idCode),
         .dac0InputSelect(),
         .dac1InputSelect(),
         .dac2InputSelect(),
@@ -489,7 +498,8 @@ module semcoDemodTop (
         .clk(clk),
         .pulse(reboot),
         .addr(boot_addr),
-        .reset(reset)
+        .reset(reset),
+        .idCode(idCode)
     );
 
 `endif //ADD_MULTIBOOT
@@ -1846,7 +1856,7 @@ module semcoDemodTop (
         //                           AM ADC Interface
         //******************************************************************************
         wire    signed  [11:0]  amDataIn;
-        // A/D input is inverted and signed, convert to to unsigned positive slope
+        // A/D input is inverted and signed, convert it to unsigned positive slope
         wire    unsigned [11:0] amDataIn_u = {amDataIn[11], ~amDataIn[10:0]};
         ad7476Interface amAdc(
             .clk(clk),
@@ -1887,7 +1897,6 @@ module semcoDemodTop (
      DC_DemodTop combinerOut(
         .clk93r3        (clk),
         .Reset          (reset),
-        .testMode       (1'b0),
         .FPGA_ID0       (FPGA_ID0),
         .FPGA_ID1       (FPGA_ID1),
         .adc0           (adc0In[17:4]), // grab just the raw a/d data. I'll convert to 18 bit signed in combiner

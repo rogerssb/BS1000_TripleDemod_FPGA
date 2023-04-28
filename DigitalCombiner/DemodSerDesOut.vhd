@@ -16,9 +16,9 @@
       There are 5 byte wide data channels and are split up as:
       Ch0   RawRF[7:0]
       Ch1   Clk & Data & RawRF[13:8]
-      Ch2   Vid1[7:0]
-      Ch3   "000" DqmEn & Vid1[13:8]
-      Ch4   DQM Bytes Muxed, MSB when DqmEn is high followed by LSB
+      Ch2   AGC[7:0]
+      Ch3   dqmDATA & dqmCLK & dqmFS & "0" &  & AGC[11:8]
+      Ch4   Running 11, 22, 33...
 
       Ch1 is ID 00, Ch2 is 01 and Cmb is 10
 

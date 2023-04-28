@@ -44,7 +44,6 @@ ENTITY DC_DemodTop IS
    PORT(
       clk93r3,
       Reset,
-      testMode,
       FPGA_ID0,
       FPGA_ID1,
       dataI, dataEn,
@@ -84,20 +83,40 @@ ARCHITECTURE rtl OF DC_DemodTop IS
       );
    end component DemodSerDesOut;
 
+   COMPONENT vio2x5
+      PORT (
+         clk            : IN STD_LOGIC;
+         probe_out0     : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+         probe_out1     : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
+      );
+   END COMPONENT;
 
-   constant CHANNEL_1         : std_logic_vector(1 downto 0) := "00";
-   constant CHANNEL_2         : std_logic_vector(1 downto 0) := "01";
-   constant COMBINER          : std_logic_vector(1 downto 0) := "10";
-   constant PORTS             : integer := 5;
+   constant CHANNEL_1            : std_logic_vector(1 downto 0) := "00";
+   constant CHANNEL_2            : std_logic_vector(1 downto 0) := "01";
+   constant COMBINER             : std_logic_vector(1 downto 0) := "10";
+   constant PORTS                : integer := 5;
 
   -- Signals
-   signal   ID             : std_logic_vector(1 downto 0);
-   signal   TxData4        : UINT8 := x"55";
-   signal   TxData         : SLV8_ARRAY(PORTS - 1 downto 0);
+   signal   ID                   : std_logic_vector(1 downto 0);
+   signal   TxData4              : UINT8 := x"55";
+   signal   TxData               : SLV8_ARRAY(PORTS - 1 downto 0);
    signal   Active1,
-            Active2        : std_logic;
+            Active2,
+            testMode             : std_logic;
+   signal   probe_out0,
+            probe_out1           : STD_LOGIC_VECTOR(4 DOWNTO 0);
+   signal   unstableBitOnDMDRev2 : std_logic := '0';
 
 BEGIN
+
+
+   DC_VIO : vio2x5
+      PORT MAP (
+         clk            => clk93r3,
+         probe_out0     => probe_out0,
+         probe_out1     => probe_out1
+   );
+   testMode <= probe_out0(0);
 
    ID <= FPGA_ID1 & FPGA_ID0;
 
@@ -121,13 +140,14 @@ BEGIN
             TxData(0) <= TxData(1) when (testMode) else adc0(7 downto 0);
             TxData(1) <= TxData(2) when (testMode) else  dataI & dataEn & adc0(13 downto 8);
             TxData(2) <= TxData(3) when (testMode) else amDataIn(7 downto 0);
-            TxData(3) <= TxData(4) when (testMode) else dqmDATA & dqmCLK & dqmFS & "0" & amDataIn(11 downto 8);
+            -- I've seen sporadic errors on the combiner DataOut23(3) signal. DataOut13 is ok
+            TxData(3) <= TxData(4) when (testMode) else amDataIn(11 downto 8) & unstableBitOnDMDRev2 & dqmDATA & dqmCLK & dqmFS;
             TxData(4) <= std_logic_vector(TxData4);   -- used as test channel
          end if;
       end if;
    end process IF_Clk_process;
 
-   Active1 <= '1' when (ID = CHANNEL_1) else '0';
+   Active1 <= (ID ?= CHANNEL_1);
 
    Ch1SerDes : DemodSerDesOut
       Generic Map(
@@ -144,7 +164,7 @@ BEGIN
          RefClkOut_n => PrevClk_n
       );
 
-   Active2 <= '1' when (ID = CHANNEL_2) else '0';
+   Active2 <= (ID ?= CHANNEL_2);
 
    Ch2SerDes : DemodSerDesOut
       Generic Map(
