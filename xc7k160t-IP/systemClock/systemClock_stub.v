@@ -1,12 +1,12 @@
 // Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2016.4 (win64) Build 1733598 Wed Dec 14 22:35:39 MST 2016
-// Date        : Thu Feb 14 11:21:53 2019
-// Host        : Sherlock running 64-bit Service Pack 1  (build 7601)
+// Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
+// Date        : Fri Oct 11 06:10:40 2019
+// Host        : Lenny running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/systemClock/systemClock_stub.v
 // Design      : systemClock
 // Purpose     : Stub declaration of top-level module interface
-// Device      : xc7k325tffg676-1
+// Device      : xc7k160tfbg676-1
 // --------------------------------------------------------------------------------
 
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.

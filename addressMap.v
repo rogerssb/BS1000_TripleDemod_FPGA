@@ -54,6 +54,7 @@
 `define USE_DEMOD_CandD
 //`define ADD_TURBO
 `define ADD_MSE
+`define ADD_RSENCODER
 `endif
 
 `ifdef TRIPLE_DEMOD
@@ -181,13 +182,17 @@
 `define STC_DEMOD
 `define R6100
 `define ADD_AM
+`define ADD_HB0_BYPASS
 `endif
 
 `ifdef STC_DEMOD
+`define FPGA_TYPE           `STC_DEMOD_IMAGE
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
 `endif
 
 `ifdef STC_MOD
@@ -268,9 +273,9 @@
     `define DEC_CLK_PHASE_180       2'b01
     `define DEC_CLK_PHASE_90        2'b10
     `define DEC_CLK_PHASE_270       2'b11
-    `define DEC_INPUT_BS            2'b00
-    `define DEC_INPUT_TURBO         2'b01
-    `define DEC_INPUT_VITERBI       2'b10
+    `define DEC_INPUT_BS            3'b000
+    `define DEC_INPUT_TURBO         3'b001
+    `define DEC_INPUT_VITERBI       3'b010
 
 `ifdef USE_DEMOD_CandD
 
@@ -379,6 +384,11 @@
     `define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
     `define VIT_STATUS             13'bx_xxxx_xxxx_10xx
 `define VIT_CONTROL            13'bx_xxxx_xxxx_11xx
+    `define VIT_MODE_SINGLE_CH      3'b000
+    `define VIT_MODE_IND_CH         3'b001
+    `define VIT_MODE_DUAL_CH        3'b010
+    `define VIT_MODE_OFFSET_CH      3'b011
+    `define VIT_MODE_OFFSET_INTLV   3'b100
 
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
 `define BITSYNCSPACE        `CH0_BITSYNCSPACE
@@ -442,6 +452,7 @@
         `define PNGEN_FEC_OFF           2'b00
         `define PNGEN_FEC_CONV          2'b01
         `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_FEC_RS            2'b11
         `define PNGEN_LDPC_R1_2         2'b00
         `define PNGEN_LDPC_R2_3         2'b01
         //`define PNGEN_LDPC_R3_4         2'b10
@@ -451,6 +462,7 @@
         `define PNGEN_LDPC_RND_OFF      2'b00
         `define PNGEN_LDPC_RND_CCSDS    2'b01
         `define PNGEN_LDPC_RND_IRIG     2'b10
+    `define PNGEN_RS_ASM            13'bx_xxxx_xxxx_11xx
 
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b1_00xx_0000_xxxx
@@ -922,7 +934,7 @@
         `define SYS_DAC_INPUT_SEL_DEMOD 3'b000
     `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
     `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
+    `define SYS_IDCODE          13'bx_xxxx_xxx1_001x
     `define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
     `define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
         `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
@@ -938,16 +950,50 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define STC_DEMOD_SPACE     13'b0_00xx_0011_xxxx
-    `define STC_CLOCKS_PER_BIT  13'bxxxx_xxxx_00xx
-    `define STC_HX_THRESH    13'bxxxx_xxxx_01xx
-    `define STC_DAC_SELECT      13'bxxxx_xxxx_10xx
+`define STC_DEMOD_SPACE     13'b0_00xx_010x_xxxx
+    `define STC_CLOCKS_PER_BIT  13'bx_xxxx_xxx0_00xx
+    `define STC_HX_THRESH       13'bx_xxxx_xxx0_01xx
+    `define STC_DAC_SELECT      13'bx_xxxx_xxx0_10xx
+    `define STC_PEAK_MAGS       13'bx_xxxx_xxx0_11xx
+    `define STC_DELTA_TAU       13'bx_xxxx_xxx1_00xx
 
 `define FMMODSPACE          13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         13'bxxxx_xxx0_00xx
     `define FM_MOD_DEV          13'bxxxx_xxx0_01xx
     `define FM_MOD_BITRATE      13'bxxxx_xxx0_10xx
     `define FM_MOD_CIC          13'bxxxx_xxx0_11xx
+
+`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+    `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
+        `define DEC_DERAND_MODE_OFF     3'b000
+        `define DEC_DERAND_MODE_RNRZ15  3'b001
+        `define DEC_DERAND_MODE_RNRZ9   3'b010
+        `define DEC_DERAND_MODE_RNRZ11  3'b011
+        `define DEC_DERAND_MODE_RNRZ17  3'b100
+        `define DEC_DERAND_MODE_RNRZ23  3'b101
+        `define DEC_CLK_PHASE_0         2'b00
+        `define DEC_CLK_PHASE_180       2'b01
+        `define DEC_CLK_PHASE_90        2'b10
+        `define DEC_CLK_PHASE_270       2'b11
+        `define DEC_SRC_DEMOD           3'b000
+        `define DEC_SRC_SC0             3'b001
+        `define DEC_SRC_SC1             3'b010
+        `define DEC_SRC_VITERBI         3'b011
+        `define DEC_SRC_LDPC            3'b100
+        `define DEC_SRC_SBS             3'b101
+        // These are used to define the PCM decoder modes and are
+        // shared with the PN Generator which is not used in this build
+        `define PNGEN_PCM_NRZL          4'b0000
+        `define PNGEN_PCM_NRZM          4'b0001
+        `define PNGEN_PCM_NRZS          4'b0010
+        `define PNGEN_PCM_BIPL          4'b0100
+        `define PNGEN_PCM_BIPM          4'b0101
+        `define PNGEN_PCM_BIPS          4'b0110
+        `define PNGEN_PCM_DMM           4'b1000
+        `define PNGEN_PCM_DMS           4'b1001
+        `define PNGEN_PCM_MDMM          4'b1010
+        `define PNGEN_PCM_MDMS          4'b1011
 
 // PLL subsystem registers
 `define PLL0SPACE           13'b0_00xx_1010_xxxx
@@ -989,7 +1035,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-            `define CandD_SRC_RD_SOL        4'b1111
+        `define CandD_SRC_RD_SOL        4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
