@@ -422,6 +422,8 @@ module rsEncoder(
             fifoRdEn <= 0;
         end
     end
+    assign rsBit = outSR[7];
+    assign rsBitEn = (clkEn && infoBitValid);
 
 endmodule
 
