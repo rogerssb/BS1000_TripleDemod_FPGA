@@ -51,7 +51,7 @@ module rsEncoder(
 
     `ifdef SIMULATE
     reg             rsReset;
-    initial         rsReset = 1;
+    initial         rsReset = 0;
     `endif
 
     // Number of information Symbols

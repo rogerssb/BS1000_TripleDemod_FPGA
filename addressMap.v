@@ -47,6 +47,7 @@
 `endif
 
 `ifdef BITSYNC_BERT
+`define USE_VIVADO_CORES
 `define USE_BUS_CLOCK
 `define DF_CIC_COMP_USE_MPY
 `define BS_CIC_COMP_USE_MPY

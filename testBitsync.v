@@ -4,10 +4,15 @@
 `define ENABLE_AGC
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
-`define ADD_BERT_TEST
+//`define ADD_BERT_TEST
 `define ADD_PNGEN_TEST
 
 module test;
+
+    /*
+    Instantiate the global internals for the FPGA library
+    */
+    glbl glbl();
 
 reg reset,clk,we0,we1,we2,we3,rd;
 reg txRegCS;
@@ -877,7 +882,7 @@ initial begin
     `ifdef ADD_PNGEN_TEST
     write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h480000b8);// PN8, restart true
     write32(createAddress(`PNGEN_SPACE,`PNGEN_RATE), 32'he0ea0ea); // 5.125 Mbps
-    write16(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),16'h00);   // NRZ-L
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0001_0300);   // NRZ-L and RS Encoded
     write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h080000b8);// PN8, restart false
     `endif
 
@@ -959,6 +964,10 @@ initial begin
     write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h4);
     #(2*bitrateSamplesInt*C) ;
     write32(createAddress(`BERT_SPACE,`TEST_CONTROL), 32'h0);
+    `endif
+
+    `ifdef ADD_PNGEN_TEST
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0000_0300);   // NRZ-L and RS Encoded
     `endif
 
     #(2*100*bitrateSamplesInt*C) ;

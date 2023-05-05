@@ -221,7 +221,7 @@ module pngenTop(
         .rsParity32(rsParity32),
         .rsASMEnable(rsASMEnable),
         .rsEncoderASM(rsEncoderASM),
-        .infoBitValid(infoClkEn),
+        .infoBitValid(pnClkEn),
         .infoBit(pnBit0),
         .inputReady(rsInputReady),
         .rsBitEn(rsBitEn),
