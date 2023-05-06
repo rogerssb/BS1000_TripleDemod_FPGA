@@ -4,6 +4,7 @@
 `define ENABLE_AGC
 //`define ADD_FIFOS
 //`define MATLAB_VECTORS
+//`define ADD_BITSYNC_TEST
 //`define ADD_BERT_TEST
 `define ADD_PNGEN_TEST
 
@@ -36,6 +37,7 @@ always #HC clk = clk^clken;
 `define TWO_POW_31      2147483648.0
 `define TWO_POW_17      131072.0
 
+`ifdef ADD_BITSYNC_TEST
 //******************************************************************************
 //                        Channel 0 Generated Waveform
 //******************************************************************************
@@ -278,7 +280,7 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
         .iEye(iEye),.qEye(qEye),
         .eyeOffset(eyeOffset)
     );
-
+`endif //ADD_BITSYNC_TEST
 
 `ifdef ADD_TURBO
 /******************************************************************************
@@ -316,6 +318,8 @@ always @* rxInputReal = $itor($signed(rxInput))/(2**17);
     );
 
 `endif
+
+`ifdef ADD_BITSYNC_TEST
 
     reg ch0DecoderSpace;
     always @* begin
@@ -530,6 +534,7 @@ mcp48xxInterface dacInterface (
     `endif //NEW_FIFO
     `endif
 
+`endif //ADD_BITSYNC_TEST
 
     `ifdef ADD_BERT_TEST
     reg bertSpace;
@@ -578,6 +583,24 @@ mcp48xxInterface dacInterface (
         .pnClkEn(pnClkEn),
         .pnBit(pnBit)
     );
+
+    framerTop framer(
+        .reset(reset),
+        .busClk(bc),
+        .cs(!txRegCS),
+        .wr0(we0), .wr1(we1), .wr2(we2), .wr3(we3),
+        .addr(a),
+        .din(d),
+        .clk(clk),
+        .clkEn(pnClkEn),
+        .dataBitIn(pnBit),
+        .rotation(),
+        .framedBitOut(framerDataOut),
+        .framesync(framesync),
+        .framesyncPulse()
+    );
+
+
     `endif
 
 `ifdef MATLAB_VECTORS
@@ -759,22 +782,25 @@ initial begin
     // The 13.0 is to translate from SNR to EBNO which is 10log10(bitrate/bandwidth).
     $initGaussPLI(1,8.0 + 11.5 - 13.0,131072.0);
     `endif
-    bitsyncTop.df0.dfReset = 1;
-    bitsyncTop.df1.dfReset = 1;
-    interpReset = 0;
     reset = 0;
     clk = 0;
     rd = 0;
     we0 = 0; we1 = 0; we2 = 0; we3 = 0;
     d = 32'hz;
     txRegCS = 0;
+    `ifdef ADD_BITSYNC_TEST
+    bitsyncTop.df0.dfReset = 1;
+    bitsyncTop.df1.dfReset = 1;
+    interpReset = 0;
     txScaleFactor = 0.125;
+    `endif
 
 
     // Turn on the clock
     clken=1;
     #(10*C) ;
 
+    `ifdef ADD_BITSYNC_TEST
     // Init the Tx data generator registers
     // Init the interpolator FIR
     ch0Interpolate.videoFir.singleFirCoeffRegs.c0 = 16'h0;
@@ -792,11 +818,16 @@ initial begin
     write32(createAddress(`INTERP0SPACE, `INTERP_CIC_MANTISSA), modInterpMantissa);
     write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_MANTISSA),0);
     write16(createAddress(`INTERP0SPACE, `INTERP_GAIN_EXPONENT),16);
+    `endif //ADD_BITSYNC_TEST
+
+
     // Reset to start the transmitter
     #(16*C) ;
     reset = 1;
     #(2*C) ;
     reset = 0;
+
+    `ifdef ADD_BITSYNC_TEST
     #(16*C) ;
     reset = 1;
     #(2*C) ;
@@ -805,6 +836,7 @@ initial begin
     reset = 1;
     #(2*C) ;
     reset = 0;
+
     write16(createAddress(`INTERP0SPACE, `INTERP_CONTROL),8);
     txRegCS = 0;
 
@@ -867,6 +899,7 @@ initial begin
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL),0);
     write32(createAddress(`INTERP2SPACE, `INTERP_CIC_EXPONENT), 8);
     write32(createAddress(`INTERP2SPACE, `INTERP_CIC_MANTISSA), 32'h00012000);
+    `endif //ADD_BITSYNC_TEST
 
     `ifdef ADD_BERT_TEST
     write32(createAddress(`BERT_SPACE,`BERT_POLY), 32'h080000b8);
@@ -880,21 +913,36 @@ initial begin
     `endif
 
     `ifdef ADD_PNGEN_TEST
+
     write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h480000b8);// PN8, restart true
-    write32(createAddress(`PNGEN_SPACE,`PNGEN_RATE), 32'he0ea0ea); // 5.125 Mbps
-    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0001_0300);   // NRZ-L and RS Encoded
+    //write32(createAddress(`PNGEN_SPACE,`PNGEN_RATE), 32'he0ea0ea); // 5.125 Mbps
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_RATE), 32'haf8af8c); // 4.000 Mbps
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0002_0300);   // NRZ-L and RS Encoded
     write32(createAddress(`PNGEN_SPACE,`PNGEN_POLY), 32'h080000b8);// PN8, restart false
-    `endif
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_RS_ASM), 32'h12345678);
+    write32(createAddress(`FRAMER_SPACE,`FRAMER_CONTROL), {16'd254,2'b0,6'd30,8'd7});
+    write32(createAddress(`FRAMER_SPACE,`FRAMER_SYNCWORD), 32'h12345678);
+    write32(createAddress(`FRAMER_SPACE,`FRAMER_SYNCWORD_MASK), 32'hffffffff);
+
+    reset = 1;
+    #(2*C) ;
+    reset = 0;
+
+    `else
 
     write16(createAddress(`DMSE_SPACE,`DMSE_CH0_AVG_LENGTH),16'd255);
     write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MEAN),16'd21627);
     write16(createAddress(`DMSE_SPACE,`DMSE_CH0_MSE_OFFSET),16'd0);
+
+    `endif
 
 
     `ifdef ADD_TURBO
     write32(createAddress(`TURBOSPACE, `TURBO_INVERSE_MEAN), 32'h00008000);
     write32(createAddress(`TURBOSPACE, `TURBO_DAC_SELECT), 32'h00000000);
     `endif
+
+    `ifdef ADD_BITSYNC_TEST
 
     write32(createAddress(`DUAL_DECODERSPACE, `DEC_CONTROL), 32'h00400004);
 
@@ -954,6 +1002,8 @@ initial begin
     write32(createAddress(`INTERP1SPACE, `INTERP_CONTROL), 32'h8);
     write32(createAddress(`INTERP2SPACE, `INTERP_CONTROL), 32'h8);
 
+    `endif //ADD_BITSYNC_TEST
+
     `ifdef ADD_BERT_TEST
     bertReset = 1;
     #(2*bitrateSamplesInt*C) ;
@@ -967,10 +1017,14 @@ initial begin
     `endif
 
     `ifdef ADD_PNGEN_TEST
-    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0000_0300);   // NRZ-L and RS Encoded
+    write32(createAddress(`PNGEN_SPACE,`PNGEN_PCM_MODE),32'h0003_0300);   // NRZ-L and RS Encoded
     `endif
 
+    `ifdef ADD_BITSYNC_TEST
     #(2*100*bitrateSamplesInt*C) ;
+    `endif //ADD_BITSYNC_TEST
+
+
     `ifdef MATLAB_VECTORS
     $fclose(outfile);
     `endif

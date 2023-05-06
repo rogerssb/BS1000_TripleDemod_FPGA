@@ -32,7 +32,7 @@ module rsEncoder(
             currentParity <= !rsParity32;
             resetCount <= 0;
         end
-        else if (clkEn) begin 
+        else if (clkEn) begin
             if (currentParity != rsParity32) begin
                 currentParity <= rsParity32;
                 encReset <= 1;
@@ -58,7 +58,7 @@ module rsEncoder(
 
     `ifdef RSENC_VARIABLE_R
 
-    wire    [7:0]   kMinus1 = rsParity32 ? 8'd222 : 8'd238;   
+    wire    [7:0]   kMinus1 = rsParity32 ? 8'd222 : 8'd238;
     wire    [7:0]   r =       rsParity32 ? 8'd32  : 8'd16;
     reg             encCtrlValid;
     reg             encCtrlRestarted;
@@ -83,7 +83,7 @@ module rsEncoder(
 
     `else //RSENC_VARIABLE_R
 
-    wire    [7:0]   kMinus1 = rsParity32 ? 8'd222 : 8'd238;   
+    wire    [7:0]   kMinus1 = rsParity32 ? 8'd222 : 8'd238;
     wire    [7:0]   r =       rsParity32 ? 8'd32  : 8'd16;
 
     `endif //RSENC_VARIABLE_R
@@ -202,7 +202,7 @@ module rsEncoder(
     // Output FIFO
     wire    [7:0]   fifoByte;
     reg             fifoRdEn;
-    fifo8x32 fifo(
+    fifo8x64 fifo(
         .clk(clk),
         .clkEn(1'b1),
         .reset(encReset),

@@ -466,11 +466,11 @@
     `define PNGEN_RS_ASM            13'bx_xxxx_xxxx_11xx
 
 // Framesync subsystem registers
-`define FRAMER_SPACE            13'b1_00xx_0000_xxxx
-    `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
-    `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
-    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
-    `define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
+`define FRAMER_SPACE            13'b1_00xx_000x_xxxx
+    `define FRAMER_CONTROL          13'bx_xxxx_xxx0_00xx
+    `define FRAMER_SYNCWORD         13'bx_xxxx_xxx0_01xx
+    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxx0_10xx
+    `define FRAMER_STATUS           13'bx_xxxx_xxx0_11xx
     `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
 
 // Dual MSE subsystem registers
