@@ -485,6 +485,7 @@ module semcoDemodTop (
         .dac2InputSelect(),
         .ch0MuxSelect(),
         .ch1MuxSelect(),
+        .combinerTestMode(combinerTestMode),
         .pngenEnable(pngenEnable),
         .framerEnable(framerEnable)
     );
@@ -1899,6 +1900,7 @@ module semcoDemodTop (
         .Reset          (reset),
         .FPGA_ID0       (FPGA_ID0),
         .FPGA_ID1       (FPGA_ID1),
+        .testMode       (combinerTestMode),
         .adc0           (adc0In[17:4]), // grab just the raw a/d data. I'll convert to 18 bit signed in combiner
         .amDataIn       (amDataIn_u),
         // DQM serial inputs

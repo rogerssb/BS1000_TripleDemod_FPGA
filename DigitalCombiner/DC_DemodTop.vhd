@@ -46,6 +46,7 @@ ENTITY DC_DemodTop IS
       Reset,
       FPGA_ID0,
       FPGA_ID1,
+      testMode,
       dataI, dataEn,
       dqmDATA,
       dqmCLK,
@@ -83,14 +84,6 @@ ARCHITECTURE rtl OF DC_DemodTop IS
       );
    end component DemodSerDesOut;
 
-   COMPONENT vio2x5
-      PORT (
-         clk            : IN STD_LOGIC;
-         probe_out0     : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out1     : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
-      );
-   END COMPONENT;
-
    constant CHANNEL_1            : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2            : std_logic_vector(1 downto 0) := "01";
    constant COMBINER             : std_logic_vector(1 downto 0) := "10";
@@ -101,22 +94,12 @@ ARCHITECTURE rtl OF DC_DemodTop IS
    signal   TxData4              : UINT8 := x"55";
    signal   TxData               : SLV8_ARRAY(PORTS - 1 downto 0);
    signal   Active1,
-            Active2,
-            testMode             : std_logic;
+            Active2             : std_logic;
    signal   probe_out0,
             probe_out1           : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   unstableBitOnDMDRev2 : std_logic := '0';
 
 BEGIN
-
-
-   DC_VIO : vio2x5
-      PORT MAP (
-         clk            => clk93r3,
-         probe_out0     => probe_out0,
-         probe_out1     => probe_out1
-   );
-   testMode <= probe_out0(0);
 
    ID <= FPGA_ID1 & FPGA_ID0;
 
