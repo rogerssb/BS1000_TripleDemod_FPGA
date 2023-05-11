@@ -44,10 +44,14 @@ module pngenTop(
         .vitG2Inv(vitG2Inv),
         .ldpcRate(ldpcRate),
         .ldpcBlockSize(ldpcBlockSize),
+        `ifdef ADD_RSENCODER
         .ldpcRandomize(ldpcRandomize),
         .rsParity32(rsParity32),
         .rsASMEnable(rsASMEnable),
         .rsEncoderASM(rsEncoderASM)
+        `else
+        .ldpcRandomize(ldpcRandomize)
+        `endif
     );
 
     // Phase Accumulator
@@ -234,7 +238,9 @@ module pngenTop(
         case (fecMode)
             `PNGEN_FEC_CONV:    pause = holdConvEnc;
             `PNGEN_FEC_LDPC:    pause = holdLdpc;
+            `ifdef ADD_RSENCODER
             `PNGEN_FEC_RS:      pause = holdRS;
+            `endif
             default:            pause = 0;
         endcase
     end
