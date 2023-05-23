@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc. 
+This source code is the Intellectual Property of Koos Technical Services,Inc.
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -9,7 +9,7 @@ derivative rights in exchange for negotiated compensation.
 `timescale 1ns / 10 ps
 
 module leadGain12 (
-    input                       clk, clkEn, reset, 
+    input                       clk, clkEn, reset,
     input       signed  [11:0]  error,
     input               [1:0]   acqTrackControl,
     input                       track,
@@ -21,14 +21,18 @@ module leadGain12 (
 
     // NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
     // zero, 1/2, 1/4, and 1/8. This is accomplished by subtracting the acqTrackControl
-    // value from the lead exponent. 
+    // value from the lead exponent.
     wire    [5:0]   leadSum = {1'b0,leadExp} - {4'b0,acqTrackControl};
     reg     [4:0]   leadGain;
     always @(posedge clk) begin
         // Set lead gain
-        if (track) begin
+        // Are we using the gain to force the lead term to zero?
+        if (leadExp == 0) begin
+            leadGain <= 0;
+        end
+        else if (track) begin
             // Did the difference overflow?
-            if (leadSum[5]) begin   
+            if (leadSum[5]) begin
                 // Yes. Limit to the minimum.
                 leadGain <= 1;
             end
@@ -47,9 +51,9 @@ module leadGain12 (
         else if (clkEn) begin
             case(leadGain)
                 5'h00: leadError <= $signed(40'h0);
-                5'h01: leadError <= $signed({{30{error[11]}},error[11:2]});      
-                5'h02: leadError <= $signed({{29{error[11]}},error[11:1]});      
-                5'h03: leadError <= $signed({{28{error[11]}},error});      
+                5'h01: leadError <= $signed({{30{error[11]}},error[11:2]});
+                5'h02: leadError <= $signed({{29{error[11]}},error[11:1]});
+                5'h03: leadError <= $signed({{28{error[11]}},error});
                 5'h04: leadError <= $signed({{27{error[11]}},error, 1'b0});
                 5'h05: leadError <= $signed({{26{error[11]}},error, 2'b0});
                 5'h06: leadError <= $signed({{25{error[11]}},error, 3'b0});

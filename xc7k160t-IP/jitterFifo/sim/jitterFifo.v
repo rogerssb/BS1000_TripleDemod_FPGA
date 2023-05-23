@@ -1,4 +1,4 @@
-// (c) Copyright 1995-2019 Xilinx, Inc. All rights reserved.
+// (c) Copyright 1995-2023 Xilinx, Inc. All rights reserved.
 // 
 // This file contains confidential and proprietary information
 // of Xilinx, Inc. and is protected under U.S. and
@@ -96,7 +96,7 @@ output wire prog_full;
     .C_DOUT_WIDTH(3),
     .C_ENABLE_RLOCS(0),
     .C_FAMILY("kintex7"),
-    .C_FULL_FLAGS_RST_VAL(0),
+    .C_FULL_FLAGS_RST_VAL(1),
     .C_HAS_ALMOST_EMPTY(0),
     .C_HAS_ALMOST_FULL(0),
     .C_HAS_BACKUP(0),

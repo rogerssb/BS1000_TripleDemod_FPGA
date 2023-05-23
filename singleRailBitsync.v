@@ -459,6 +459,7 @@ loopFilter sampleLoop(
     .din(din),
     .dout(bsDout),
     .error(loopFilterError),
+    .track(1'b1),
     .loopFreq(sampleFreq),
     .ctrl2(useCompFilter),
     .ctrl4(useSummer),

@@ -545,11 +545,61 @@ module viterbiMultiH
             13 :      begin  phaseError1 <= qOut13 ; end
             14 :      begin  phaseError1 <= qOut14 ; end
             15 :      begin  phaseError1 <= qOut15 ; end
+            16 :      begin  phaseError1 <= qOut16; end
+            17 :      begin  phaseError1 <= qOut17; end
+            18 :      begin  phaseError1 <= qOut18; end
+            19 :      begin  phaseError1 <= qOut19; end
+            20 :      begin  phaseError1 <= qOut20; end
+            21 :      begin  phaseError1 <= qOut21; end
+            22 :      begin  phaseError1 <= qOut22; end
+            23 :      begin  phaseError1 <= qOut23; end
+            24 :      begin  phaseError1 <= qOut24; end
+            25 :      begin  phaseError1 <= qOut25; end
+            26 :      begin  phaseError1 <= qOut26 ; end
+            27 :      begin  phaseError1 <= qOut27 ; end
+            28 :      begin  phaseError1 <= qOut28 ; end
+            29 :      begin  phaseError1 <= qOut29 ; end
+            30 :      begin  phaseError1 <= qOut30 ; end
+            31 :      begin  phaseError1 <= qOut31 ; end
+            32 :      begin  phaseError1 <= qOut32 ; end
+            33 :      begin  phaseError1 <= qOut33 ; end
+            34 :      begin  phaseError1 <= qOut34 ; end
+            35 :      begin  phaseError1 <= qOut35 ; end
+            36 :      begin  phaseError1 <= qOut36 ; end
+            37 :      begin  phaseError1 <= qOut37 ; end
+            38 :      begin  phaseError1 <= qOut38 ; end
+            39 :      begin  phaseError1 <= qOut39 ; end
+            40 :      begin  phaseError1 <= qOut40 ; end
+            41 :      begin  phaseError1 <= qOut41 ; end
+            42 :      begin  phaseError1 <= qOut42 ; end
+            43 :      begin  phaseError1 <= qOut43 ; end
+            44 :      begin  phaseError1 <= qOut44 ; end
+            45 :      begin  phaseError1 <= qOut45 ; end
+            46 :      begin  phaseError1 <= qOut46 ; end
+            47 :      begin  phaseError1 <= qOut47 ; end
+            48 :      begin  phaseError1 <= qOut48 ; end
+            49 :      begin  phaseError1 <= qOut49 ; end
+            50 :      begin  phaseError1 <= qOut50 ; end
+            51 :      begin  phaseError1 <= qOut51 ; end
+            52 :      begin  phaseError1 <= qOut52 ; end
+            53 :      begin  phaseError1 <= qOut53 ; end
+            54 :      begin  phaseError1 <= qOut54 ; end
+            55 :      begin  phaseError1 <= qOut55 ; end
+            56 :      begin  phaseError1 <= qOut56 ; end
+            57 :      begin  phaseError1 <= qOut57 ; end
+            58 :      begin  phaseError1 <= qOut58 ; end
+            59 :      begin  phaseError1 <= qOut59 ; end
+            60 :      begin  phaseError1 <= qOut60 ; end
+            61 :      begin  phaseError1 <= qOut61 ; end
+            62 :      begin  phaseError1 <= qOut62 ; end
+            63 :      begin  phaseError1 <= qOut63 ; end
              // default: begin  phaseError1 <= phaseError1; phaseErrorValid <= 0; end
              default: begin  phaseError1 <= 0; end
            endcase
            //phaseErrorValid <= (index[5:3] == 3'b000);
-           phaseErrorValid <= (index[5:4] == 2'b00);
+           //phaseErrorValid <= (index[5:4] == 2'b00);
+           //phaseErrorValid <= (index[5] == 0);
+           phaseErrorValid <= 1;
         end
      end
 

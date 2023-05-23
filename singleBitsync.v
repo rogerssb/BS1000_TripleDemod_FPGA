@@ -12,7 +12,7 @@ derivative rights in exchange for negotiated compensation.
 `define ENABLE_SLIP
 
 module singleBitsync(
-    input                       sampleClk, 
+    input                       sampleClk,
     input                       reset,
     input                       clkEn,
     `ifdef USE_BUS_CLOCK
@@ -255,6 +255,7 @@ module singleBitsync(
         .din(din),
         .dout(dout),
         .error(loopFilterError),
+        .track(1'b1),
         .loopFreq(sampleFreq),
         .ctrl2(),
         .ctrl4(useSummer),

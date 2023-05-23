@@ -1,14 +1,14 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
--- Date        : Thu Sep 01 14:07:09 2022
+-- Date        : Wed May 17 17:29:45 2023
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               C:/Semco/Vivado/Demods2022/xc7k160t-IP/fifo_EightToOne/fifo_EightToOne_sim_netlist.vhdl
 -- Design      : fifo_EightToOne
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k160tfbg676-1
+-- Device      : xc7k325tffg676-1
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;

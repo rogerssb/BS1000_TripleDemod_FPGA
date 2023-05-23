@@ -24,6 +24,7 @@ module pngenTop(
     wire        [1:0]   fecMode;
     wire        [1:0]   ldpcRate;
     wire        [1:0]   ldpcRandomize;
+    wire        [31:0]  rsEncoderASM;
     pngenRegs pngenRegs(
         .busClk(busClk),
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
@@ -43,7 +44,14 @@ module pngenTop(
         .vitG2Inv(vitG2Inv),
         .ldpcRate(ldpcRate),
         .ldpcBlockSize(ldpcBlockSize),
+        `ifdef ADD_RSENCODER
+        .ldpcRandomize(ldpcRandomize),
+        .rsParity32(rsParity32),
+        .rsASMEnable(rsASMEnable),
+        .rsEncoderASM(rsEncoderASM)
+        `else
         .ldpcRandomize(ldpcRandomize)
+        `endif
     );
 
     // Phase Accumulator
@@ -52,7 +60,7 @@ module pngenTop(
     wire    [32:0]  phaseSum = {1'b0,phase} + {1'b0,pnClockRate};
     reg             infoClkEn;
     reg             everyOtherEn;
-    wire            pause;
+    reg             pause;
 
     always @(posedge clk) begin
         if (reset) begin
@@ -208,7 +216,36 @@ module pngenTop(
     );
     `endif
 
-    assign pause = fecMode==`PNGEN_FEC_CONV ? holdConvEnc :( fecMode==`PNGEN_FEC_LDPC ? holdLdpc : 1'b0) ;
+    `ifdef ADD_RSENCODER
+    wire    holdRS = !rsInputReady;
+    rsEncoder rsEnc (
+        .clk(clk),
+        .clkEn(1'b1),
+        .reset(reset),
+        .rsParity32(rsParity32),
+        .rsASMEnable(rsASMEnable),
+        .rsEncoderASM(rsEncoderASM),
+        .infoBitValid(pnClkEn),
+        .infoBit(pnBit0),
+        .inputReady(rsInputReady),
+        .rsBitEn(rsBitEn),
+        .rsBit(rsBit)
+    );
+    `endif
+
+
+    always @* begin
+        case (fecMode)
+            `PNGEN_FEC_CONV:    pause = holdConvEnc;
+            `PNGEN_FEC_LDPC:    pause = holdLdpc;
+            `ifdef ADD_RSENCODER
+            `PNGEN_FEC_RS:      pause = holdRS;
+            `endif
+            default:            pause = 0;
+        endcase
+    end
+
+
     reg pnBitMux;
     always @(posedge clk) begin
         if (reset) begin
@@ -233,6 +270,13 @@ module pngenTop(
                                 pnBitMux <= ldpcEncBit;
                                 ldpcEncReset <= 0;
                                 convEncReset <= 1;
+                                end
+        `endif
+        `ifdef ADD_RSENCODER
+            `PNGEN_FEC_RS:      begin
+                                pnBitMux <= rsBit;
+                                convEncReset <= 1;
+                                ldpcEncReset <= 1;
                                 end
         `endif
             default:            begin

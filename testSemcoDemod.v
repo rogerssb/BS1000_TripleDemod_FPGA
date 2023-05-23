@@ -2,8 +2,8 @@
 `include "addressMap.v"
 
 //`define FM_TEST
-//`define SOQPSK_TEST
-`define SOQTRELLIS_TEST
+`define SOQPSK_TEST
+//`define SOQTRELLIS_TEST
 //`define LDPC_TEST
 //`define AQPSK_TEST
 //`define QPSK_VIT_TEST
@@ -194,7 +194,7 @@ module test;
             end
             randDataSR <= {randDataSR[62:0],~sr[0]};
             `ifdef SOQPSK_TEST
-            randData <= randDataSR[40];
+            randData <= randDataSR[58];
             `elsif SOQTRELLIS_TEST
             randData <= randDataSR[37];
             `endif
@@ -204,6 +204,9 @@ module test;
 
 
     //************************** uP Interface *********************************
+    reg     testPoint;
+    initial testPoint = 0;
+
     `ifdef R6100
         `include "upSpiTasks.v"
     `else
@@ -227,28 +230,28 @@ module test;
     always @(carrierFreqHz) carrierFreq = $rtoi(carrierFreqHz * `SAMPLE_PERIOD * (2.0**32));
 
     real carrierOffsetFreqHz;
-    initial carrierOffsetFreqHz = 1.0;
+    initial carrierOffsetFreqHz = 25000.0;
     reg signed  [31:0]  carrierOffsetFreq;
     always @* carrierOffsetFreq = $rtoi(carrierOffsetFreqHz * `SAMPLE_PERIOD * (2.0**32));
 
     real carrierLimitHz;
-    initial carrierLimitHz = 60000.0;
+    initial carrierLimitHz = 25000.0;
     reg signed  [31:0]  carrierLimit;
     always @(carrierLimitHz) carrierLimit = $rtoi(carrierLimitHz * `SAMPLE_PERIOD * (2.0**32));
 
     reg         [31:0]  sweepRate;
-    initial sweepRate = 32'h00000000;
+    initial sweepRate = 32'h00010000;
 
     //------------------------------ DDC Settings -----------------------------
     `define NEW_DDC_SETTINGS
     `ifdef NEW_DDC_SETTINGS
-    parameter samplesPerSymbol = 2;
+    parameter decimatedSamplesPerSymbol = 2;
     integer minDdcSamplesPerSymbol;
     initial begin
         `ifdef SOQPSK_ENABLED
-        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol/2.0 + 0.5);
+        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit*2/decimatedSamplesPerSymbol + 0.5);
         `else
-        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/samplesPerSymbol + 0.5);
+        minDdcSamplesPerSymbol = $rtoi(ifSamplesPerBit/decimatedSamplesPerSymbol + 0.5);
         `endif
     end
 
@@ -426,7 +429,11 @@ module test;
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
         `elsif SOQPSK_ENABLED
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),1);    // Zero the error
-        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180808);
+        `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h16160808);
+        `else
+        write32(createAddress(`CARRIERSPACE,`CLF_LEAD_LAG),32'h18180a0a);
+        `endif
         write32(createAddress(`CARRIERSPACE,`CLF_ULIMIT),  carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LLIMIT), -carrierLimit);
         write32(createAddress(`CARRIERSPACE,`CLF_LOOPDATA), sweepRate);
@@ -683,7 +690,14 @@ module test;
         `endif
 
         `ifdef SOQPSK_ENABLED
+        `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
         write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
+        `else
+        // Enable carrier loop with sweep
+        //write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),6);
+        write32(createAddress(`CARRIERSPACE,`CLF_CONTROL),2);
+        `endif
+        //demod.carrierLoop.lagGain.lagAccum = carrierOffsetFreq;
         `endif
 
         `ifdef QPSK_VIT_TEST
@@ -723,6 +737,14 @@ module test;
         write32(createAddress(`SDISPACE,`SDI_CONTROL),32'h00000081);
         repeat (50*`CLOCKS_PER_BIT) @ (posedge clk) ;
         read32(createAddress(`SDISPACE,`SDI_CONTROL));
+
+        // Run the demod
+        repeat (300*`CLOCKS_PER_BIT) @ (posedge clk) ;
+        // Force a phase shift
+        testPoint = 1;
+        demod.ddc.newOffset = 32'h2000_0000;
+        repeat (1) @ (posedge clk) ;
+        demod.ddc.newOffset = 0;
 
         // Run the demod
         repeat (200000*`CLOCKS_PER_BIT) @ (posedge clk) ;

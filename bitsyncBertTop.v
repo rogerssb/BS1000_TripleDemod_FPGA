@@ -84,7 +84,7 @@ module bitsyncBertTop (
 
 );
 
-    parameter VER_NUMBER = 16'd674;
+    parameter VER_NUMBER = 16'd769;
 
 
 //******************************************************************************
@@ -393,7 +393,7 @@ clockAndDataInputSync diffSync(
         endcase
     end
 
-    wire        [1:0]   dualDecInputSelect;
+    wire        [2:0]   dualDecInputSelect;
     reg                 dualCh0Input;
     reg                 dualCh1Input;
     reg                 dualSymEn;
@@ -469,7 +469,7 @@ clockAndDataInputSync diffSync(
         endcase
     end
 
-    wire        [1:0]   ch1DecInputSelect;
+    wire        [2:0]   ch1DecInputSelect;
     reg                 ch1DecInput;
     reg                 ch1DecSymEn;
     reg                 ch1DecSym2xEn;
@@ -581,7 +581,8 @@ clockAndDataInputSync diffSync(
         .dataOut(bertDout),
         .clk(clk),
         .enable(bertClkEn),
-        .data(bertData)
+        .data(bertData),
+        .inputSourceSelect()
     );
 
 

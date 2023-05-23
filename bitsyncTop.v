@@ -541,6 +541,7 @@ pcmAgcLoop #(.RegSpace(`CH1_AGCSPACE)) pcmAgcLoop1(
         .ch0SymData(ch0SymData),
         .ch1SymEn(ch1SymEn),
         .ch1SymData(ch1SymData),
+        .viterbiMode(),
         .ch0BitEnOut(ch0VitBitEn),
         .ch0BitOut(ch0VitBit),
         .ch1BitEnOut(ch1VitBitEn),

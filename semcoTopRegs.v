@@ -20,10 +20,10 @@ module semcoTopRegs(
     input               clk,
     input       [15:0]  versionNumber,
     input       [15:0]  fpgaType,
+    input       [8:0]   idCode,
     output  reg         reset,
     output  reg         reboot,
     output  reg [31:0]  rebootAddress,
-    input       [8:0]   idCode,
     output  reg [2:0]   dac0InputSelect,
     output  reg [2:0]   dac1InputSelect,
     output  reg [2:0]   dac2InputSelect,
@@ -112,8 +112,8 @@ module semcoTopRegs(
             casex (addr)
                 `SYS_SUBSYSTEM_CTRL:begin
                                       combinerTestMode  <= dataIn[5];
-                                      framerEnable      <= dataIn[6];
-                                      pngenEnable       <= dataIn[7];
+                                      framerEnable <= dataIn[6];
+                                      pngenEnable  <= dataIn[7];
                                     end
                 `SYS_REBOOT_ADDR:       rebootAddress[7:0] <= dataIn[7:0];
                 `SYS_DAC_INPUT_SEL:     dac0InputSelect <= dataIn[2:0];
@@ -156,7 +156,8 @@ module semcoTopRegs(
                 `SYS_SUBSYSTEM_CTRL: begin
                     dataOut = {24'b0,pngenEnable, framerEnable, combinerTestMode, 5'b0};
                     end
-                `SYS_TYPE: begin
+                `SYS_TYPE,
+                `SYS_IDCODE: begin
                     dataOut = {7'b0,idCode,fpgaType};
                     end
                 `SYS_DAC_INPUT_SEL: begin

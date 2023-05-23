@@ -20,7 +20,14 @@ module pngenRegs(
     output  reg         vitG2Inv,
     output  reg [1:0]   ldpcRate,
     output  reg         ldpcBlockSize,
+    `ifdef ADD_RSENCODER
+    output  reg [1:0]   ldpcRandomize,
+    output  reg         rsParity32,
+    output  reg         rsASMEnable,
+    output  reg [31:0]  rsEncoderASM
+    `else
     output  reg [1:0]   ldpcRandomize
+    `endif
 );
 
     parameter RegSpace = `PNGEN_SPACE;
@@ -38,11 +45,14 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    pnPolyTaps[7:0] <= din[7:0];
                 `PNGEN_RATE:    pnClockRate[7:0] <= din[7:0];
-                `PNGEN_PCM_MODE: begin    
+                `PNGEN_PCM_MODE: begin
                                 pcmMode[3:0] <= din[3:0];
                                 ldpcRate <= din[6:5];
                                 pcmInvert <= din[7];
                                 end
+                `ifdef ADD_RSENCODER
+                `PNGEN_RS_ASM:  rsEncoderASM[7:0] <= din[7:0];
+                `endif
                 default: ;
             endcase
         end
@@ -51,13 +61,16 @@ module pngenRegs(
                 `PNGEN_POLY:    pnPolyTaps[15:8] <= din[15:8];
                 `PNGEN_RATE:    pnClockRate[15:8] <= din[15:8];
                 `PNGEN_PCM_MODE: begin
-                                fecMode <= din[9:8]; 
+                                fecMode <= din[9:8];
                                 vitG2Inv <= din[10];
                                 ldpcBlockSize <= din[11];
                                 ldpcRandomize <= din[13:12];
                                 inject1E3Errors <= din[14];
                                 injectError <= din[15];
                                 end
+                `ifdef ADD_RSENCODER
+                `PNGEN_RS_ASM:  rsEncoderASM[15:8] <= din[15:8];
+                `endif
                 default: ;
             endcase
         end
@@ -65,6 +78,13 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    pnPolyTaps[23:16] <= din[23:16];
                 `PNGEN_RATE:    pnClockRate[23:16] <= din[23:16];
+                `ifdef ADD_RSENCODER
+                `PNGEN_RS_ASM:  rsEncoderASM[23:16] <= din[23:16];
+                `PNGEN_PCM_MODE:begin
+                                rsParity32 <= din[16];
+                                rsASMEnable <= din[17];
+                                end
+                `endif
                 default: ;
             endcase
         end
@@ -76,6 +96,9 @@ module pngenRegs(
                                 pnPolyMode <= din[31];
                 end
                 `PNGEN_RATE:    pnClockRate[31:24] <= din[31:24];
+                `ifdef ADD_RSENCODER
+                `PNGEN_RS_ASM:  rsEncoderASM[31:24] <= din[31:24];
+                `endif
                 default: ;
             endcase
         end
@@ -86,7 +109,23 @@ module pngenRegs(
             casex (addr)
                 `PNGEN_POLY:    dout = {pnPolyMode, pnRestart, 1'b0, pnPolyLength, pnPolyTaps};
                 `PNGEN_RATE:    dout = pnClockRate;
-                `PNGEN_PCM_MODE:dout = {16'b0,injectError,inject1E3Errors,ldpcRandomize,ldpcBlockSize,vitG2Inv,fecMode,pcmInvert,ldpcRate,1'b0,pcmMode};
+                `ifdef ADD_RSENCODER
+                `PNGEN_PCM_MODE:dout = {12'b0,
+                                        2'b0,rsASMEnable,rsParity32,
+                                        injectError,inject1E3Errors,ldpcRandomize,
+                                        ldpcBlockSize,vitG2Inv,fecMode,
+                                        pcmInvert,ldpcRate,1'b0,
+                                        pcmMode
+                                        };
+                `PNGEN_RS_ASM:  dout = rsEncoderASM;
+                `else
+                `PNGEN_PCM_MODE:dout = {16'b0,
+                                        injectError,inject1E3Errors,ldpcRandomize,
+                                        ldpcBlockSize,vitG2Inv,fecMode,
+                                        pcmInvert,ldpcRate,1'b0,
+                                        pcmMode
+                                        };
+                `endif
                 default:        dout = 32'hx;
             endcase
         end
@@ -94,7 +133,7 @@ module pngenRegs(
             dout = 32'hx;
         end
     end
-    
+
 endmodule
 
 

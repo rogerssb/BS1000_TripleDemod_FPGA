@@ -24,6 +24,10 @@ module carrierLoop(
     input               [4:0]   demodMode,
     input       signed  [11:0]  phase,
     input       signed  [11:0]  freq,
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    input                       resampPhaseEn,
+    input       signed  [11:0]  resampPhase,
+    `endif
     input                       highFreqOffset,
     input       signed  [11:0]  offsetError,
     input                       offsetErrorEn,
@@ -98,6 +102,9 @@ module carrierLoop(
     reg                     loopFilterEn;
     wire    signed  [11:0]  bpskPhase = phase;
     wire    signed  [11:0]  qpskPhase = phase - $signed(12'h200);
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    wire    signed  [11:0]  resampQpskPhase = resampPhase - $signed(12'h200);
+    `endif
     reg                     enableCarrierLock;
     always @(posedge clk) begin
         case (demodMode)
@@ -140,6 +147,20 @@ module carrierLoop(
                 modeError <= {bpskPhase[10:0],1'b1};
                 enableCarrierLock <= 1;
                 end
+            `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+            `MODE_OQPSK,
+            `MODE_SOQPSK: begin
+                loopFilterEn <= resampPhaseEn;
+                modeError <= {resampQpskPhase[9:0],2'b10};
+                enableCarrierLock <= 1;
+                end
+            `MODE_QPSK,
+            `MODE_AQPSK: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= {qpskPhase[9:0],2'b10};
+                enableCarrierLock <= 1;
+                end
+            `else
             `MODE_QPSK,
             `MODE_OQPSK,
             `MODE_SOQPSK,
@@ -148,6 +169,7 @@ module carrierLoop(
                 modeError <= {qpskPhase[9:0],2'b10};
                 enableCarrierLock <= 1;
                 end
+            `endif
             default: begin
                 loopFilterEn <= 1'b1;
                 modeError <= 0;
@@ -165,7 +187,7 @@ module carrierLoop(
             avgErrorReal <= 0.0;
         end
         else if (loopFilterEn) begin
-            avgErrorReal <= (0.999 * avgErrorReal) + (0.001 * modeErrorReal);
+            avgErrorReal <= (0.995 * avgErrorReal) + (0.005 * modeErrorReal);
         end
     end
     `endif

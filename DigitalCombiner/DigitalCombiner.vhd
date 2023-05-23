@@ -287,14 +287,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       );
    END COMPONENT;
 
-   COMPONENT vio2x5
-      PORT (
-         clk : IN STD_LOGIC;
-         probe_out0 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
-         probe_out1 : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
-      );
-   END COMPONENT;
-
   -- Signals
    signal   Real1Out,
             Imag1Out,
@@ -307,16 +299,14 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             MDB_CombLocks,
             PhaseInc,
             combRegsOut,
-            agcDataOut,
-            dataI0Dly, dataI1Dly  : SLV32;
+            agcDataOut        : SLV32;
    signal   MDB_CombSwLmt,
             MDB_CombOptions,
             MDB_dB_Ratio,
             MDB_dB_Range      : SLV16;
    signal   DucCount          : unsigned(1 downto 0) := "00";
    SIGNAL   PrevData,
-            NextData,
-            Vio0, Vio1  : STD_LOGIC_VECTOR(4 DOWNTO 0);
+            NextData          : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   ch0Agc,
             ch1Agc            : std_logic_vector(11 downto 0);
    signal   ch0FastAgc,
@@ -381,11 +371,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             unstableBitOnDMDRev2_1,
             unstableBitOnDMDRev2_2,
 
-            error0,
-            error1,
-            dataI0DlyD,
-            dataI1DlyD,
-
             CombinerReset,
             IF_CW,
             IF_Offset,
@@ -413,10 +398,6 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             Imag2Out,
             power,
             dataI,
-            error0,
-            error1,
-            dataI0DlyD,
-            dataI1DlyD,
             Index,
             ch0Agc,
             ch1Agc,
@@ -721,28 +702,11 @@ BEGIN
          power          => power
       );
 
-   Vio : vio2x5
-      PORT MAP (
-         clk => clk93r3,
-         probe_out0 => Vio0,
-         probe_out1 => Vio1
-   );
-
   -- create a series of rising edges for the ILA to subsample the data for lower frequnecy acquistion
    subClkProc : process(clk93r3)
    begin
       if (rising_edge(clk93r3)) then
          SubSample <= SubSample + 1;
-         if (dataEn0) then
-            dataI0Dly   <= dataI0Dly(30 downto 0) & dataI0;
-            dataI0DlyD  <= dataI0Dly(to_integer(unsigned(Vio0)));
-         end if;
-         if (dataEn1) then
-            dataI1Dly   <= dataI1Dly(30 downto 0) & dataI1;
-            dataI1DlyD  <= dataI1Dly(to_integer(unsigned(Vio1)));
-         end if;
-         error0   <= dataI0DlyD xor dataI;
-         error1   <= dataI1DlyD xor dataI;
       end if;
    end process;
 

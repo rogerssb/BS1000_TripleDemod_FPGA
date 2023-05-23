@@ -177,10 +177,14 @@ module ldpc #(parameter LDPCBITS = 3) (
         end
     end
 
+    //`define USE_FAKE_LDPC_DECODER
     `ifdef USE_FAKE_LDPC_DECODER
 
+    assign ldpcReady = 1'b1;
     assign ldpcBitEnOut = (clkEn & codewordEn);
     assign ldpcBitOut = softDecision[LDPCBITS];
+    wire    [7:0]   iterationNumber = 0;
+    wire    [7:0]   iterationNumberB = 0;
 
     `else // USE_FAKE_LDPC_DECODER
 
@@ -196,7 +200,15 @@ module ldpc #(parameter LDPCBITS = 3) (
     wire    [15:0]  ldpcWriteAddr;
     wire    [7:0]   iterationNumber;
     wire    [7:0]   iterationNumberB;
+    `ifdef TRIPLE_LDPC_23
+    ldpc23Decoder ldpcd(
+    `elsif TRIPLE_LDPC_45
+    ldpc45Decoder ldpcd(
+    `elsif TRIPLE_LDPC_12
+    ldpc12Decoder ldpcd(
+    `else
     ldpcDecoder ldpcd (
+    `endif
         `ifdef LDPC_2X
         .clock_2x(clk2x),
         `endif
@@ -327,5 +339,24 @@ module ldpc #(parameter LDPCBITS = 3) (
             end
         endcase
     end
+
+
+    //`define LDPC_ADD_ILA
+    `ifdef LDPC_ADD_ILA
+
+    dqmILA ldpcILA(
+        .clk(clk),
+        .probe0(14'b0),
+        .probe1(14'b0),
+        .probe2(ldpcBitOut),
+        .probe3(ldpcBitEnOut),
+        .probe4(clkEnOut),
+        .probe5(dllClkEn),
+        .probe6(1'b0),
+        .probe7(1'b0)
+    );
+
+    `endif
+
 endmodule
 

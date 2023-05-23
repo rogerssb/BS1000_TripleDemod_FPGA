@@ -1,3 +1,29 @@
+2016.4:
+ * Version 12.0 (Rev. 12)
+ * No changes
+
+2016.3:
+ * Version 12.0 (Rev. 12)
+ * General: Support for Spartan7 devices
+ * Revision change in one or more subcores
+
+2016.2:
+ * Version 12.0 (Rev. 11)
+ * No changes
+
+2016.1:
+ * Version 12.0 (Rev. 11)
+ * Updated DSP48 register settings for improved power characterisics as suggested by report_drc.  No functional changes.
+ * Revision change in one or more subcores
+
+2015.4.2:
+ * Version 12.0 (Rev. 10)
+ * No changes
+
+2015.4.1:
+ * Version 12.0 (Rev. 10)
+ * No changes
+
 2015.4:
  * Version 12.0 (Rev. 10)
  * Revision change in one or more subcores
@@ -82,7 +108,7 @@
  * Changed all port names to upper case
  * There have been no functional changes to this IP.  The version number has changed to support unique versioning in Vivado starting with 2013.1.
 
-(c) Copyright 2000 - 2015 Xilinx, Inc. All rights reserved.
+(c) Copyright 2000 - 2017 Xilinx, Inc. All rights reserved.
 
 This file contains confidential and proprietary information
 of Xilinx, Inc. and is protected under U.S. and

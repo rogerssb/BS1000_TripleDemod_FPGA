@@ -56,12 +56,14 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1____93.333______0.000______50.0______130.411_____98.325
+// ___clk1x____93.333______0.000______50.0______140.363____103.963
+// ___clk2x___186.667______0.000______50.0______122.636____103.963
+// clkOver2____46.667______0.000______50.0______163.189____103.963
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
 //----------------------------------------------------------------------------
-// __primary________93.333333___________10.000
+// __primary________93.333333____________0.010
 
 `timescale 1ps/1ps
 
@@ -69,18 +71,20 @@ module systemClock_clk_wiz
 
  (// Clock in ports
   // Clock out ports
-  output        clk_out1,
+  output        clk1x,
+  output        clk2x,
+  output        clkOver2,
   // Status and control signals
   output        locked,
-  input         clk_in1
+  input         clkIn
  );
   // Input buffering
   //------------------------------------
-wire clk_in1_systemClock;
+wire clkIn_systemClock;
 wire clk_in2_systemClock;
   IBUF clkin1_ibufg
-   (.O (clk_in1_systemClock),
-    .I (clk_in1));
+   (.O (clkIn_systemClock),
+    .I (clkIn));
 
 
   // Clocking PRIMITIVE
@@ -90,9 +94,9 @@ wire clk_in2_systemClock;
   //    * Unused inputs are tied off
   //    * Unused outputs are labeled unused
 
-  wire        clk_out1_systemClock;
-  wire        clk_out2_systemClock;
-  wire        clk_out3_systemClock;
+  wire        clk1x_systemClock;
+  wire        clk2x_systemClock;
+  wire        clkOver2_systemClock;
   wire        clk_out4_systemClock;
   wire        clk_out5_systemClock;
   wire        clk_out6_systemClock;
@@ -106,9 +110,7 @@ wire clk_in2_systemClock;
   wire        clkfbout_buf_systemClock;
   wire        clkfboutb_unused;
     wire clkout0b_unused;
-   wire clkout1_unused;
    wire clkout1b_unused;
-   wire clkout2_unused;
    wire clkout2b_unused;
    wire clkout3_unused;
    wire clkout3b_unused;
@@ -124,24 +126,32 @@ wire clk_in2_systemClock;
     .COMPENSATION         ("ZHOLD"),
     .STARTUP_WAIT         ("FALSE"),
     .DIVCLK_DIVIDE        (1),
-    .CLKFBOUT_MULT_F      (10.750),
+    .CLKFBOUT_MULT_F      (10.000),
     .CLKFBOUT_PHASE       (0.000),
     .CLKFBOUT_USE_FINE_PS ("FALSE"),
-    .CLKOUT0_DIVIDE_F     (10.750),
+    .CLKOUT0_DIVIDE_F     (10.000),
     .CLKOUT0_PHASE        (0.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
     .CLKOUT0_USE_FINE_PS  ("FALSE"),
+    .CLKOUT1_DIVIDE       (5),
+    .CLKOUT1_PHASE        (0.000),
+    .CLKOUT1_DUTY_CYCLE   (0.500),
+    .CLKOUT1_USE_FINE_PS  ("FALSE"),
+    .CLKOUT2_DIVIDE       (20),
+    .CLKOUT2_PHASE        (0.000),
+    .CLKOUT2_DUTY_CYCLE   (0.500),
+    .CLKOUT2_USE_FINE_PS  ("FALSE"),
     .CLKIN1_PERIOD        (10.714))
   mmcm_adv_inst
     // Output clocks
    (
     .CLKFBOUT            (clkfbout_systemClock),
     .CLKFBOUTB           (clkfboutb_unused),
-    .CLKOUT0             (clk_out1_systemClock),
+    .CLKOUT0             (clk1x_systemClock),
     .CLKOUT0B            (clkout0b_unused),
-    .CLKOUT1             (clkout1_unused),
+    .CLKOUT1             (clk2x_systemClock),
     .CLKOUT1B            (clkout1b_unused),
-    .CLKOUT2             (clkout2_unused),
+    .CLKOUT2             (clkOver2_systemClock),
     .CLKOUT2B            (clkout2b_unused),
     .CLKOUT3             (clkout3_unused),
     .CLKOUT3B            (clkout3b_unused),
@@ -150,7 +160,7 @@ wire clk_in2_systemClock;
     .CLKOUT6             (clkout6_unused),
      // Input clock control
     .CLKFBIN             (clkfbout_buf_systemClock),
-    .CLKIN1              (clk_in1_systemClock),
+    .CLKIN1              (clkIn_systemClock),
     .CLKIN2              (1'b0),
      // Tied to always select the primary input clock
     .CLKINSEL            (1'b1),
@@ -187,9 +197,17 @@ wire clk_in2_systemClock;
 
 
   BUFG clkout1_buf
-   (.O   (clk_out1),
-    .I   (clk_out1_systemClock));
+   (.O   (clk1x),
+    .I   (clk1x_systemClock));
 
+
+  BUFG clkout2_buf
+   (.O   (clk2x),
+    .I   (clk2x_systemClock));
+
+  BUFG clkout3_buf
+   (.O   (clkOver2),
+    .I   (clkOver2_systemClock));
 
 
 

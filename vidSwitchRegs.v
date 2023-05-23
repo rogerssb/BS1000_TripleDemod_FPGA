@@ -17,10 +17,10 @@ module vidSwitchRegs(
     output  reg [31:0]  dout,
     input               cs,
     input               wr0, wr1, wr2, wr3,
-    output  reg [2:0]   vid0Select,
-    output  reg [2:0]   vid1Select,
-    output  reg [2:0]   vid2Select,
-    output  reg [2:0]   vid3Select
+    output  reg [1:0]   vid0Select,
+    output  reg [1:0]   vid1Select,
+    output  reg [1:0]   vid2Select,
+    output  reg [1:0]   vid3Select
 );
 
     parameter RegSpace = `VIDSWITCHSPACE;
@@ -40,8 +40,8 @@ module vidSwitchRegs(
         if (vsSpace && wr0) begin
             casex (addr)
                 `VIDSWITCH_CONTROL:   begin
-                    vid0Select <= din[2:0];
-                    vid1Select <= din[6:4];
+                    vid0Select <= din[1:0];
+                    vid1Select <= din[5:4];
                 end
                 default: ;
             endcase
@@ -49,8 +49,8 @@ module vidSwitchRegs(
         if (vsSpace && wr1) begin
             casex (addr)
                 `VIDSWITCH_CONTROL:   begin
-                    vid2Select <= din[10:8];
-                    vid3Select <= din[14:12];
+                    vid2Select <= din[9:8];
+                    vid3Select <= din[13:12];
                 end
                 default: ;
             endcase
@@ -63,8 +63,8 @@ module vidSwitchRegs(
                 `VIDSWITCH_CONTROL: begin
                     dout = {
                         16'b0,
-                        1'b0,vid3Select,1'b0,vid2Select,
-                        1'b0,vid1Select,1'b0,vid0Select
+                        2'b0,vid3Select,2'b0,vid2Select,
+                        2'b0,vid1Select,2'b0,vid0Select
                     };
                 end
                 default: begin

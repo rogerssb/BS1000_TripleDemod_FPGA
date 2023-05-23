@@ -30,6 +30,7 @@ module bitsync(
     output  reg         [31:0]  dout,
     input       signed  [17:0]  i,q,
     input       signed  [17:0]  au,
+    input                       track,
     output      signed  [17:0]  offsetError,
     output                      offsetErrorEn,
     output              [15:0]  fskDeviation,
@@ -55,6 +56,9 @@ module bitsync(
     output                      sdiSymEn,
     output      signed  [17:0]  iTrellis,qTrellis,
     output  reg                 legacyBit,
+    `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
+    output      signed  [11:0]  phase,
+    `endif
     `ifdef ADD_LDPC
     output                      iLdpcSymEn,qLdpcSymEn,
     output  reg signed  [17:0]  iLdpc,qLdpc,
@@ -308,11 +312,19 @@ module bitsync(
     // Fifo of baseband inputs
     reg     signed  [17:0]  bbSRI[2:0];
     reg     signed  [17:0]  bbSRQ[2:0];
+    `ifdef MULTIH_USE_GARDNER_TED
+    wire fmModes = ( (demodMode == `MODE_2FSK)
+                  || (demodMode == `MODE_PCMTRELLIS)
+                  || (demodMode == `MODE_FM)
+                   );
+    wire multihMode = (demodMode == `MODE_MULTIH);
+    `else //MULTIH_USE_GARDNER_TED
     wire fmModes = ( (demodMode == `MODE_2FSK)
                   || (demodMode == `MODE_MULTIH)
                   || (demodMode == `MODE_PCMTRELLIS)
                   || (demodMode == `MODE_FM)
                    );
+    `endif // MULTIH_USE_GARDNER_TED
     wire dualRailModes = ( (demodMode == `MODE_QPSK)
                         || (demodMode == `MODE_OQPSK)
                         || (demodMode == `MODE_SOQPSK)
@@ -371,6 +383,12 @@ module bitsync(
     wire            [11:0]  syncThreshold;
     wire    signed  [17:0]  multihThreshold = $signed({syncThreshold,6'b0});
     wire    signed  [17:0]  negMultihThreshold = -multihThreshold;
+
+    //`define MULTIH_USE_GARDNER_TED
+    `ifdef  MULTIH_USE_GARDNER_TED
+    wire    signed  [31:0]  gardnerTED;
+    assign  gardnerTED = offTimeI * (lateOnTimeI - earlyOnTimeI);
+    `endif
 
     // DC Offset error variables
     reg     signed  [18:0]  dcError;
@@ -434,6 +452,16 @@ module bitsync(
                 OFFTIME: begin
                     tedState <= ONTIME;
                     `ifndef ADD_SUPERBAUD_TED
+                    `ifdef MULTIH_USE_GARDNER_TED
+                    if (demodMode == `MODE_MULTIH) begin
+
+                        timingErrorI <= gardnerTED[30:13];
+                        timingErrorQ <= gardnerTED[30:13];
+                        transition <= 1;
+
+                    end
+                    else begin
+                    `else  //MULTIH_USE_GARDNER_TED
                     if (demodMode == `MODE_MULTIH) begin
                         // Are the early and late symbols opposite polarity?
                         if (earlySignI != lateSignI) begin
@@ -466,6 +494,7 @@ module bitsync(
                         end
                     end
                     else begin
+                    `endif //MULTIH_USE_GARDNER_TED
                     `else //ADD_SUPERBAUD_TED
                     begin
                     `endif
@@ -688,6 +717,7 @@ module bitsync(
         .din(din),
         .dout(bsDout),
         .error(loopFilterError),
+        .track(track),
         .loopFreq(sampleFreq),
         .ctrl2(useCompFilter),
         .ctrl4(useSummer),
@@ -748,8 +778,9 @@ module bitsync(
     end
 
 
-    `ifdef SIMULATE
+    `ifdef SILOS
     real sampleFreqReal;
+    always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;
     always @(sampleFreq) sampleFreqReal = ((sampleFreq > 2147483647.0) ? sampleFreq-4294967296.0 : sampleFreq)/2147483648.0;
     `endif
 
@@ -896,6 +927,7 @@ module bitsync(
         .din(din),
         .dout(auDout),
         .error(auOffTimeLevel[17:6] + auOffTimeLevel[5]),
+        .track(1'b1),
         .loopFreq(auSampleFreq),
         .ctrl2(),
         .ctrl4(),

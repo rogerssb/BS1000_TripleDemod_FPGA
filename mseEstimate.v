@@ -10,12 +10,14 @@ module mseEstimate
 (
     input                               clk,
     input                               reset,
+    `ifdef ADD_DQM
     input               [2:0]           combinerMode,
     input                               combinerStartOfFrame,
     input   signed      [33:0]          ch0MseSum,
     input   signed      [LOG_BITS-1:0]  ch0Log10MSE,
     input   signed      [33:0]          ch1MseSum,
     input   signed      [LOG_BITS-1:0]  ch1Log10MSE,
+    `endif
     input                               startEstimate,
     input                               magClkEn,
     input               [12:0]          mag,
@@ -127,9 +129,16 @@ module mseEstimate
 
     `define USE_LOG10_MODULE
     `ifdef USE_LOG10_MODULE
+
+    `ifdef ADD_DQM
     wire                            combinerInput = (combinerMode == `DQM_CMD_MODE_OPTRATIO);
     wire            [33:0]          linearValue = combinerInput ? ch0MseSum + ch1MseSum
                                                                 : diffTotal[47:14];
+    `else  //ADD_DQM
+    wire            [33:0]          linearValue = diffTotal[47:14];
+    `endif //ADD_DQM
+
+
     wire    signed  [LOG_BITS-1:0]  logValue;
     log10Estimate
         #(.NUM_ITERS(NUM_ITERS),
@@ -143,14 +152,13 @@ module mseEstimate
         .log10Estimate(logValue)
     );
 
+    `ifdef ADD_DQM
+
     // Calculate the combined MSE including the fudge factor.
-    `ifdef COMBINER
-        wire    signed  [LOG_BITS-1:0]  log10CmbMSE = ch0Log10MSE
+    wire    signed  [LOG_BITS-1:0]  log10CmbMSE = ch0Log10MSE
                                                 + ch1Log10MSE
                                                 - (logValue + log10MseOffset[LOG_BITS-1:0]);
-    `else
-        wire    signed  [LOG_BITS-1:0]  log10CmbMSE = 0;
-    `endif
+
     // Add in the fudge factor offset for non-combiner operation
     wire    signed  [LOG_BITS-1:0] finalLogX = logValue + log10MseOffset[LOG_BITS-1:0];
 
@@ -173,6 +181,17 @@ module mseEstimate
     */
     assign mseSum = diffTotal[47:14];
     assign log10MseSum = finalLogX;
+
+    `else  //ADD_DQM
+
+    // Add in the fudge factor offset for non-combiner operation
+    wire    signed  [LOG_BITS-1:0] finalLogX = logValue + log10MseOffset[LOG_BITS-1:0];
+
+    assign log10MSE = {{16-LOG_BITS{finalLogX[LOG_BITS-1]}},finalLogX};
+    assign mseSum = diffTotal[47:14];
+    assign log10MseSum = finalLogX;
+
+    `endif //ADD_DQM
 
     `else  //USE_LOG10_MODULE
 

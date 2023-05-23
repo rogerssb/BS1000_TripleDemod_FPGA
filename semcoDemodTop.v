@@ -173,7 +173,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VERSION_NUMBER = 16'd750;
+    parameter VERSION_NUMBER = 16'd765;
     // Adding a Demod Mode feedback to the version number to make sure of what FPGA image is loaded
     `ifdef TRIPLE_MULTIH
         parameter VER_NUMBER = VERSION_NUMBER + 20000;
@@ -236,9 +236,10 @@ module semcoDemodTop (
     /******************************************************************************
                                  SPI Config Interface
     ******************************************************************************/
-    wire    [12:0]  addr;
-    wire    [31:0]  dataIn;
-    reg     [31:0]  rd_mux;
+  (* MARK_DEBUG="true" *)   wire    [12:0]  addr;
+  (* MARK_DEBUG="true" *)   wire    [31:0]  dataIn;
+  (* MARK_DEBUG="true" *)   reg     [31:0]  rd_mux;
+  (* MARK_DEBUG="true" *)   wire    cs, wr0, wr2;
     spiBusInterface spi(
         .clk(clk),
         .reset(reset),
@@ -462,10 +463,10 @@ module semcoDemodTop (
     end
 
     wire    [31:0]  boot_addr;
+    wire    [8:0]   idCode;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
-    wire    [8:0]   idCode;
     semcoTopRegs topRegs(
         .busClk(busClk),
         .cs(semcoTopSpace),
@@ -476,10 +477,10 @@ module semcoDemodTop (
         .clk(clk),
         .versionNumber(VER_NUMBER),
         .fpgaType(`FPGA_TYPE),
+        .idCode(idCode),
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
-        .idCode(idCode),
         .dac0InputSelect(),
         .dac1InputSelect(),
         .dac2InputSelect(),
@@ -494,14 +495,26 @@ module semcoDemodTop (
 //******************************************************************************
 //                           Multiboot Controller
 //******************************************************************************
+    `ifdef ADD_IDCODE
+
+    multibootK7_FZ multiboot(
+        .clk(clk),
+        .reset(reset),
+        .pulse(reboot),
+        .addr(boot_addr),
+        .idCode(idCode)
+    );
+
+    `else //ADD_IDCODE
 
     multibootK7 multiboot(
         .clk(clk),
         .pulse(reboot),
         .addr(boot_addr),
-        .reset(reset),
-        .idCode(idCode)
+        .reset(reset)
     );
+
+    `endif //ADD_IDCODE
 
 `endif //ADD_MULTIBOOT
 
@@ -522,9 +535,8 @@ module semcoDemodTop (
     `endif
     wire    signed  [17:0]  iDemodSymData;
     wire    signed  [17:0]  qDemodSymData;
-    wire    signed  [17:0]  iCombData;
-    wire    signed  [17:0]  qCombData;
     wire    signed  [17:0]  iTrellis,qTrellis;
+    wire    signed  [17:0]  iConstellation,qConstellation;
     wire            [12:0]  mag;
     `ifdef ADD_LDPC
     wire    signed  [17:0]  iLdpc,qLdpc;
@@ -541,7 +553,6 @@ module semcoDemodTop (
     wire    signed  [17:0]  iDemodEye,qDemodEye;
     wire            [4:0]   demodEyeOffset;
     wire            [31:0]  demodDout;
-
     demod demod(
         .clk(clk), .reset(reset),
         `ifdef USE_BUS_CLOCK
@@ -574,6 +585,8 @@ module semcoDemodTop (
         .trellisSymEn(trellisSymEn),
         .iTrellis(iTrellis),
         .qTrellis(qTrellis),
+        .iConstellation(iConstellation),
+        .qConstellation(qConstellation),
         .legacyBit(legacyBit),
         `ifdef ADD_LDPC
         .iLdpcSymEn(iLdpcSymEn),.qLdpcSymEn(qLdpcSymEn),
@@ -768,10 +781,11 @@ module semcoDemodTop (
 
 `endif //ADD_SUBCARRIER
 
+
+`ifdef ADD_BITSYNC
     //******************************************************************************
     //                    Standalone Single Channel Bitsync
     //******************************************************************************
-`ifdef ADD_BITSYNC
         reg             [13:0]  bsAdcReg;
         reg     signed  [17:0]  bsAdcIn;
         reg             [1:0]   bsAdcOverflowSR;
@@ -839,6 +853,8 @@ module semcoDemodTop (
             .CS0n(bsDacSELn),
             .CS1n()
         );
+
+
 
 `endif //ADD_BITSYNC
 
@@ -972,6 +988,10 @@ module semcoDemodTop (
 `endif //ADD_TRELLIS
 
 `ifdef ADD_SOQPSK
+//******************************************************************************
+//                        SOQPSK Trellis Decoder
+//******************************************************************************
+
     wire            [17:0]  soqDac0Data;
     wire            [17:0]  soqDac1Data;
     wire            [17:0]  soqDac2Data;
@@ -1234,6 +1254,14 @@ module semcoDemodTop (
                     dualSymEn <= pcmTrellisSymEnOut;
                     dualSym2xEn <= pcmTrellisSym2xEnOut;
                 end
+                `ifdef ADD_SOQPSK
+                else if (soqTrellisMode) begin
+                    dualCh0Input <= soqTrellisBit;
+                    dualCh1Input <= soqTrellisBit;
+                    dualSymEn <= soqTrellisSymEn;
+                    dualSym2xEn <= soqTrellisSym2xEn;
+                end
+                `endif
                 `ifdef ADD_MULTIH
                 else if (multihMode) begin
                     dualCh0Input <= multihBit[0];
@@ -1721,6 +1749,12 @@ module semcoDemodTop (
                 dqmBitIn <= soqTrellisBit;
             end
             `endif
+            `ifdef ADD_LDPC
+            `DQM_SRC_LDPC: begin
+                dqmBitEnIn <= ldpcBitEnOut;
+                dqmBitIn <= ldpcBitOut;
+            end
+            `endif
             `DQM_SRC_DEC0_CH0: begin
                 dqmBitEnIn <= dualPcmClkEn;
                 dqmBitIn <= dualDataI;
@@ -1757,7 +1791,7 @@ module semcoDemodTop (
         .magClkEn(magClkEn),
         .mag(mag),
         .sourceSelect(dqmSourceSelect),
-        .combinerMode(),
+        .combinerMode(dqmCombinerMode),
         .dqmStartOfFrame(),
         .mseSum(mseSum),
         .log10MseSum(log10MSE),
@@ -1986,7 +2020,7 @@ module semcoDemodTop (
     wire    [3:0]   cAndD0SourceSelect;
     reg             cAndD0ClkEn;
     reg     [2:0]   cAndD0DataIn;
-    always @* begin
+    always @(posedge clk) begin
         casex (cAndD0SourceSelect)
             `CandD_SRC_LEGACY_I: begin
                 `ifdef ADD_FRAMER
@@ -2102,73 +2136,73 @@ module semcoDemodTop (
     wire    [3:0]   cAndD1SourceSelect;
     reg             cAndD1ClkEn;
     reg     [2:0]   cAndD1DataIn;
-    always @* begin
+    always @(posedge clk) begin
         casex (cAndD1SourceSelect)
             `CandD_SRC_LEGACY_I: begin
                 `ifdef ADD_FRAMER
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iRotBit,qRotBit,1'b0};
+                cAndD1ClkEn <= iDemodBitEn;
+                cAndD1DataIn <= {iRotBit,qRotBit,1'b0};
                 `else
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+                cAndD1ClkEn <= iDemodBitEn;
+                cAndD1DataIn <= {iDemodBit,qDemodBit,1'b0};
                 `endif
             end
             `CandD_SRC_LEGACY_Q: begin
                 `ifdef ADD_FRAMER
-                cAndD1ClkEn = qDemodBitEn;
-                cAndD1DataIn = {qRotBit,1'b0,1'b0};
+                cAndD1ClkEn <= qDemodBitEn;
+                cAndD1DataIn <= {qRotBit,1'b0,1'b0};
                 `else
-                cAndD1ClkEn = qDemodBitEn;
-                cAndD1DataIn = {qDemodBit,1'b0,1'b0};
+                cAndD1ClkEn <= qDemodBitEn;
+                cAndD1DataIn <= {qDemodBit,1'b0,1'b0};
                 `endif
             end
             `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
-                cAndD1ClkEn = pcmTrellisSymEnOut;
-                cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
+                cAndD1ClkEn <= pcmTrellisSymEnOut;
+                cAndD1DataIn <= {pcmTrellisBit,pcmTrellisBit,1'b0};
             end
             `endif
             `ifdef ADD_SOQPSK
             `CandD_SRC_SOQTRELLIS: begin
-                cAndD1ClkEn = soqTrellisSymEn;
-                cAndD1DataIn = {soqTrellisBit,soqTrellisBit,1'b0};
+                cAndD1ClkEn <= soqTrellisSymEn;
+                cAndD1DataIn <= {soqTrellisBit,soqTrellisBit,1'b0};
             end
             `endif
             //`CandD_SRC_STC:
            `ifdef ADD_PN_GEN
             `CandD_SRC_PNGEN: begin
-                cAndD1ClkEn = pnClkEn;
-                cAndD1DataIn = {pnBit,2'b0};
+                cAndD1ClkEn <= pnClkEn;
+                cAndD1DataIn <= {pnBit,2'b0};
             end
             `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
-                cAndD1ClkEn = ldpcBitEnOut;
-                cAndD1DataIn = {ldpcBitOut,2'b0};
+                cAndD1ClkEn <= ldpcBitEnOut;
+                cAndD1DataIn <= {ldpcBitOut,2'b0};
             end
             `endif
             `ifdef ADD_DQM
             `CandD_SRC_DQM: begin
-                cAndD1ClkEn = dqmBitEn;
-                cAndD1DataIn = {dqmBit,2'b0};
+                cAndD1ClkEn <= dqmBitEn;
+                cAndD1DataIn <= {dqmBit,2'b0};
             end
             `endif
             `CandD_SRC_DEC0_CH0: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
+                cAndD1ClkEn <= dualPcmClkEn;
+                cAndD1DataIn <= {dualDataI,dualDataQ,1'b0};
             end
             `CandD_SRC_DEC0_CH1: begin
-                cAndD1ClkEn = dualPcmClkEn;
-                cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
+                cAndD1ClkEn <= dualPcmClkEn;
+                cAndD1DataIn <= {dualDataQ,dualDataI,1'b0};
             end
             `CandD_SRC_DEC1_CH0: begin
-                cAndD1ClkEn = ch1PcmClkEn;
-                cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
+                cAndD1ClkEn <= ch1PcmClkEn;
+                cAndD1DataIn <= {ch1PcmData,1'b0,1'b0};
             end
             `ifdef ADD_RS_DEC
             `CandD_SRC_RS_DEC: begin
-                cAndD1ClkEn = rsDecBitEnOut;
-                cAndD1DataIn = {rsDecBitOut,2'b0};
+                cAndD1ClkEn <= rsDecBitEnOut;
+                cAndD1DataIn <= {rsDecBitOut,2'b0};
             end
             `endif
             //`CandD_SRC_DEC1_CH1:
@@ -2176,8 +2210,8 @@ module semcoDemodTop (
             //`CandD_SRC_DEC2_CH1:
             //`CandD_SRC_DEC3_CH0:
             default:   begin
-                cAndD1ClkEn = iDemodBitEn;
-                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
+                cAndD1ClkEn <= iDemodBitEn;
+                cAndD1DataIn <= {iDemodBit,qDemodBit,1'b0};
             end
         endcase
     end
@@ -2542,9 +2576,9 @@ sdi sdi(
     .dataIn(dataIn),
     .dataOut(sdiDout),
     .iSymEn(iDemodBitEn),
-    .iSymData(iTrellis),
+    .iSymData(iConstellation),
     .qSymEn(qDemodBitEn),
-    .qSymData(qTrellis),
+    .qSymData(qConstellation),
     .eyeSync(demodEyeClkEn),
     .iEye(iDemodEye),.qEye(qDemodEye),
     .eyeOffset(demodEyeOffset),

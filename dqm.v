@@ -151,5 +151,4 @@ module dqm #(parameter regSpace = `DQMSPACE,
         end
     end
 
-
 endmodule

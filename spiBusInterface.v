@@ -4,16 +4,16 @@
 module spiBusInterface(
     input                   clk,
     input                   reset,
- (* MARK_DEBUG="true" *)    input                   spiClk,
- (* MARK_DEBUG="true" *)    input                   spiCS,
- (* MARK_DEBUG="true" *)    input                   spiDataIn,
- (* MARK_DEBUG="true" *)    output  reg             spiDataOut,
- (* MARK_DEBUG="true" *)    output                  spiDataOE,
- (* MARK_DEBUG="true" *)    output  reg             cs,
- (* MARK_DEBUG="true" *)    output  reg             wr0,wr1,wr2,wr3,
- (* MARK_DEBUG="true" *)    output  reg [12:0]      addr,
- (* MARK_DEBUG="true" *)    output  reg [31:0]      dataIn,
- (* MARK_DEBUG="true" *)    input       [31:0]      dataOut
+    input                   spiClk,
+    input                   spiCS,
+    input                   spiDataIn,
+    output  reg             spiDataOut,
+    output                  spiDataOE,
+    output  reg             cs,
+    output  reg             wr0,wr1,wr2,wr3,
+    output  reg [12:0]      addr,
+    output  reg [31:0]      dataIn,
+    input       [31:0]      dataOut
 );
 
     //--------------------------- SPI Interface -------------------------------

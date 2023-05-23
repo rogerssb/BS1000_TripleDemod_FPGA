@@ -1,7 +1,7 @@
 /******************************************************************************
 Copyright 2008-2015 Koos Technical Services, Inc. All Rights Reserved
 
-This source code is the Intellectual Property of Koos Technical Services,Inc.
+This source code is the Intellectual Property of Koos Technical Services,Inc. 
 (KTS) and is provided under a License Agreement which protects KTS' ownership and
 derivative rights in exchange for negotiated compensation.
 ******************************************************************************/
@@ -117,7 +117,7 @@ endmodule
     module agcLoopRegs(
         input       [12:0]  addr,
         input       [31:0]  dataIn,
-        output  reg [31:0]  dataOut,
+        output      [31:0]  dataOut,
         input               cs,
         input               wr0, wr1, wr2, wr3,
         output  reg [7:0]   agcSetpoint,
@@ -199,7 +199,7 @@ endmodule
         end
     end
 
-//    reg [31:0]dataOut;
+    reg [31:0]dataOut;
     always @* begin
         if (cs) begin
             casex (addr)

@@ -82,6 +82,8 @@ module dualMseEstimate #(parameter regSpace=`DMSE_SPACE) (
         .mag(ch0Mag),
         .meanMag(ch0MseMean),
         .avgLength(ch0MseAvgLength),
+        .mseSum(),
+        .log10MseSum(),
         .log10MseOffset(ch0MseOffset),
         .log10MSE(ch0MSE)
     );
@@ -114,6 +116,8 @@ module dualMseEstimate #(parameter regSpace=`DMSE_SPACE) (
         .mag(ch1Mag),
         .meanMag(ch1MseMean),
         .avgLength(ch1MseAvgLength),
+        .mseSum(),
+        .log10MseSum(),
         .log10MseOffset(ch1MseOffset),
         .log10MSE(ch1MSE)
     );
