@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<Index Version="1" Minor="0">
+	<Repository value="c:/Semco/Vivado/Demods2022/LDPC">
+	</Repository>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_23_11d2:C11.2">
+		</VLNV>
+		<DisplayName value="ldpc_Decoder_23_11d2">
+		</DisplayName>
+		<Description value="Rate 2/3 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_23_11d2/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_45_11d0:C11.0">
+		</VLNV>
+		<DisplayName value="ldpc_Decoder_12_11d2">
+		</DisplayName>
+		<Description value="Rate 4/5 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_45_11.0/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_45_11d1:C11.1">
+		</VLNV>
+		<DisplayName value="ldpc_Decoder_45_11d1">
+		</DisplayName>
+		<Description value="Rate 2/3 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_45_11.1/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_1div2:C10.0">
+		</VLNV>
+		<DisplayName value="ldpc_Decoder_1div2">
+		</DisplayName>
+		<Description value="Rate 1/2 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<ManuallyDisabled value="true">
+		</ManuallyDisabled>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_DECODER_1div2/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_2div3:C10.1">
+		</VLNV>
+		<DisplayName value="LDPC_DECODER_2div3">
+		</DisplayName>
+		<Description value="RATE 2/3 Block size 1k and 4k LDPC Decoder">
+		</Description>
+		<ManuallyDisabled value="true">
+		</ManuallyDisabled>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_DECODER_2div3_10dot1/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+		<VendorDisplayName value="SEMCO">
+		</VendorDisplayName>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_4div5:C10.7">
+		</VLNV>
+		<DisplayName value="LDPC_Decoder_4div5">
+		</DisplayName>
+		<Description value="Rate 4/5 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<ManuallyDisabled value="true">
+		</ManuallyDisabled>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="LDPC_DECODER_4div5_C10dot7/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+	<IP>
+		<VLNV value="xilinx.com:user:ldpc_Decoder_12_C11d2:C11.2">
+		</VLNV>
+		<DisplayName value="ldpc_Decoder_Rate_1/2">
+		</DisplayName>
+		<Description value="Rate 1/2 Block 1k and 4k LDPC Decoder">
+		</Description>
+		<ManuallyDisabled value="true">
+		</ManuallyDisabled>
+		<CoreRevision value="2">
+		</CoreRevision>
+		<ComponentPath value="ldpc_Dec_12_C11.2/component.xml">
+		</ComponentPath>
+		<Families>
+			<Family name="kintex7">
+				<Part status="Production" name="ALL">
+				</Part>
+			</Family>
+		</Families>
+		<Taxonomies>
+			<Taxonomy value="/UserIP">
+			</Taxonomy>
+		</Taxonomies>
+	</IP>
+</Index>
+

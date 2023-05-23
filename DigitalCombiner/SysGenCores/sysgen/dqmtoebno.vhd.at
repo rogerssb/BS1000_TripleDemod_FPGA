@@ -1,0 +1,222 @@
+{
+  'Line_1016' => {
+    'CodeInstance' => 'dqmtoebno_struct/convert',
+    'Instance' => 'convert',
+    'SimulinkInstance' => 'DqmToEbNo/Convert'
+  },
+  'Line_1058' => {
+    'CodeInstance' => 'dqmtoebno_default_clock_driver/clockdriver',
+    'Instance' => 'clockdriver',
+    'SimulinkInstance' => ''
+  },
+  'Line_1089' => {
+    'CodeInstance' => 'dqmtoebno_default_clock_driver',
+    'Instance' => 'dqmtoebno_default_clock_driver',
+    'SimulinkInstance' => ''
+  },
+  'Line_1097' => {
+    'CodeInstance' => 'dqmtoebno_struct',
+    'Instance' => 'dqmtoebno_struct',
+    'SimulinkInstance' => 'DqmToEbNo'
+  },
+  'Line_122' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub2',
+    'Instance' => 'addsub2',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub2'
+  },
+  'Line_151' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub3',
+    'Instance' => 'addsub3',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub3'
+  },
+  'Line_180' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub4',
+    'Instance' => 'addsub4',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub4'
+  },
+  'Line_209' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub5',
+    'Instance' => 'addsub5',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub5'
+  },
+  'Line_238' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult',
+    'Instance' => 'cmult',
+    'SimulinkInstance' => 'DqmToEbNo/CMult'
+  },
+  'Line_264' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult1',
+    'Instance' => 'cmult1',
+    'SimulinkInstance' => 'DqmToEbNo/CMult1'
+  },
+  'Line_290' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult2',
+    'Instance' => 'cmult2',
+    'SimulinkInstance' => 'DqmToEbNo/CMult2'
+  },
+  'Line_316' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult3',
+    'Instance' => 'cmult3',
+    'SimulinkInstance' => 'DqmToEbNo/CMult3'
+  },
+  'Line_342' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult4',
+    'Instance' => 'cmult4',
+    'SimulinkInstance' => 'DqmToEbNo/CMult4'
+  },
+  'Line_368' => {
+    'CodeInstance' => 'dqmtoebno_struct/cmult5',
+    'Instance' => 'cmult5',
+    'SimulinkInstance' => 'DqmToEbNo/CMult5'
+  },
+  'Line_394' => {
+    'CodeInstance' => 'dqmtoebno_struct/constant6',
+    'Instance' => 'constant6',
+    'SimulinkInstance' => 'DqmToEbNo/Constant6'
+  },
+  'Line_401' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay',
+    'Instance' => 'delay',
+    'SimulinkInstance' => 'DqmToEbNo/Delay'
+  },
+  'Line_416' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay1',
+    'Instance' => 'delay1',
+    'SimulinkInstance' => 'DqmToEbNo/Delay1'
+  },
+  'Line_431' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay10',
+    'Instance' => 'delay10',
+    'SimulinkInstance' => 'DqmToEbNo/Delay10'
+  },
+  'Line_446' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay12',
+    'Instance' => 'delay12',
+    'SimulinkInstance' => 'DqmToEbNo/Delay12'
+  },
+  'Line_461' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay2',
+    'Instance' => 'delay2',
+    'SimulinkInstance' => 'DqmToEbNo/Delay2'
+  },
+  'Line_476' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay3',
+    'Instance' => 'delay3',
+    'SimulinkInstance' => 'DqmToEbNo/Delay3'
+  },
+  'Line_491' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay4',
+    'Instance' => 'delay4',
+    'SimulinkInstance' => 'DqmToEbNo/Delay4'
+  },
+  'Line_506' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay5',
+    'Instance' => 'delay5',
+    'SimulinkInstance' => 'DqmToEbNo/Delay5'
+  },
+  'Line_521' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay6',
+    'Instance' => 'delay6',
+    'SimulinkInstance' => 'DqmToEbNo/Delay6'
+  },
+  'Line_536' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay7',
+    'Instance' => 'delay7',
+    'SimulinkInstance' => 'DqmToEbNo/Delay7'
+  },
+  'Line_551' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay8',
+    'Instance' => 'delay8',
+    'SimulinkInstance' => 'DqmToEbNo/Delay8'
+  },
+  'Line_566' => {
+    'CodeInstance' => 'dqmtoebno_struct/delay9',
+    'Instance' => 'delay9',
+    'SimulinkInstance' => 'DqmToEbNo/Delay9'
+  },
+  'Line_581' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult1',
+    'Instance' => 'mult1',
+    'SimulinkInstance' => 'DqmToEbNo/Mult1'
+  },
+  'Line_610' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult2',
+    'Instance' => 'mult2',
+    'SimulinkInstance' => 'DqmToEbNo/Mult2'
+  },
+  'Line_639' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult3',
+    'Instance' => 'mult3',
+    'SimulinkInstance' => 'DqmToEbNo/Mult3'
+  },
+  'Line_64' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub',
+    'Instance' => 'addsub',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub'
+  },
+  'Line_668' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult4',
+    'Instance' => 'mult4',
+    'SimulinkInstance' => 'DqmToEbNo/Mult4'
+  },
+  'Line_697' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult5',
+    'Instance' => 'mult5',
+    'SimulinkInstance' => 'DqmToEbNo/Mult5'
+  },
+  'Line_726' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult6',
+    'Instance' => 'mult6',
+    'SimulinkInstance' => 'DqmToEbNo/Mult6'
+  },
+  'Line_755' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult7',
+    'Instance' => 'mult7',
+    'SimulinkInstance' => 'DqmToEbNo/Mult7'
+  },
+  'Line_784' => {
+    'CodeInstance' => 'dqmtoebno_struct/mult8',
+    'Instance' => 'mult8',
+    'SimulinkInstance' => 'DqmToEbNo/Mult8'
+  },
+  'Line_813' => {
+    'CodeInstance' => 'dqmtoebno_struct/x_cube',
+    'Instance' => 'x_cube',
+    'SimulinkInstance' => 'DqmToEbNo/X_Cube'
+  },
+  'Line_842' => {
+    'CodeInstance' => 'dqmtoebno_struct/x_sq',
+    'Instance' => 'x_sq',
+    'SimulinkInstance' => 'DqmToEbNo/X_Sq'
+  },
+  'Line_871' => {
+    'CodeInstance' => 'dqmtoebno_struct/xto4th',
+    'Instance' => 'xto4th',
+    'SimulinkInstance' => 'DqmToEbNo/Xto4th'
+  },
+  'Line_900' => {
+    'CodeInstance' => 'dqmtoebno_struct/xto4th1',
+    'Instance' => 'xto4th1',
+    'SimulinkInstance' => 'DqmToEbNo/Xto4th1'
+  },
+  'Line_929' => {
+    'CodeInstance' => 'dqmtoebno_struct/xto4th3',
+    'Instance' => 'xto4th3',
+    'SimulinkInstance' => 'DqmToEbNo/Xto4th3'
+  },
+  'Line_93' => {
+    'CodeInstance' => 'dqmtoebno_struct/addsub1',
+    'Instance' => 'addsub1',
+    'SimulinkInstance' => 'DqmToEbNo/AddSub1'
+  },
+  'Line_958' => {
+    'CodeInstance' => 'dqmtoebno_struct/xto5th',
+    'Instance' => 'xto5th',
+    'SimulinkInstance' => 'DqmToEbNo/Xto5th'
+  },
+  'Line_987' => {
+    'CodeInstance' => 'dqmtoebno_struct/xto6th',
+    'Instance' => 'xto6th',
+    'SimulinkInstance' => 'DqmToEbNo/Xto6th'
+  }
+}

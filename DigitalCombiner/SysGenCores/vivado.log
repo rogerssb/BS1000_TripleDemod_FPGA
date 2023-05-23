@@ -1,0 +1,56 @@
+#-----------------------------------------------------------
+# Vivado v2017.2.1 (64-bit)
+# SW Build 1957588 on Wed Aug  9 16:32:24 MDT 2017
+# IP Build 1948039 on Wed Aug  9 18:19:28 MDT 2017
+# Start of session at: Wed May 25 17:22:29 2022
+# Process ID: 30976
+# Current directory: C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores
+# Command line: vivado.exe -mode batch -source ProjectGeneration.tcl -notrace
+# Log file: C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/vivado.log
+# Journal file: C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores\vivado.jou
+#-----------------------------------------------------------
+source ProjectGeneration.tcl -notrace
+WARNING: [Coretcl 2-176] No IPs found
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.2/data/ip'.
+WARNING: [IP_Flow 19-4832] The IP name 'dqmtoebno_floating_point_v7_1_i0' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+WARNING: [Vivado 12-3523] Attempt to change 'Component_Name' from 'dqmtoebno_floating_point_v7_1_i0' to 'dqmtoebno_floating_point_v7_1_i0' is not allowed and is ignored.
+WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'C_BRAM_Usage' from 'No_Usage' to 'Full_Usage' has been ignored for IP 'dqmtoebno_floating_point_v7_1_i0'
+WARNING: [IP_Flow 19-4832] The IP name 'dqmtoebno_floating_point_v7_1_i1' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+WARNING: [Vivado 12-3523] Attempt to change 'Component_Name' from 'dqmtoebno_floating_point_v7_1_i1' to 'dqmtoebno_floating_point_v7_1_i1' is not allowed and is ignored.
+WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'C_BRAM_Usage' from 'No_Usage' to 'Full_Usage' has been ignored for IP 'dqmtoebno_floating_point_v7_1_i1'
+WARNING: [IP_Flow 19-4832] The IP name 'dqmtoebno_floating_point_v7_1_i2' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+WARNING: [Vivado 12-3523] Attempt to change 'Component_Name' from 'dqmtoebno_floating_point_v7_1_i2' to 'dqmtoebno_floating_point_v7_1_i2' is not allowed and is ignored.
+WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'C_BRAM_Usage' from 'No_Usage' to 'Full_Usage' has been ignored for IP 'dqmtoebno_floating_point_v7_1_i2'
+WARNING: [IP_Flow 19-4832] The IP name 'dqmtoebno_floating_point_v7_1_i3' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues.
+WARNING: [Vivado 12-3523] Attempt to change 'Component_Name' from 'dqmtoebno_floating_point_v7_1_i3' to 'dqmtoebno_floating_point_v7_1_i3' is not allowed and is ignored.
+WARNING: [IP_Flow 19-3374] An attempt to modify the value of disabled parameter 'C_BRAM_Usage' from 'No_Usage' to 'Full_Usage' has been ignored for IP 'dqmtoebno_floating_point_v7_1_i3'
+IP Repository Located at : C:/Xilinx/Vivado/2017.2/data/ip
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.2/data/ip'.
+Adding File c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/ip/dqmtoebno_floating_point_v7_1_i0/dqmtoebno_floating_point_v7_1_i0.xci
+Adding File c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/ip/dqmtoebno_floating_point_v7_1_i1/dqmtoebno_floating_point_v7_1_i1.xci
+Adding File c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/ip/dqmtoebno_floating_point_v7_1_i2/dqmtoebno_floating_point_v7_1_i2.xci
+Adding File c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/ip/dqmtoebno_floating_point_v7_1_i3/dqmtoebno_floating_point_v7_1_i3.xci
+Adding File C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/sysgen/dqmtoebno.xdc
+INFO: [IP_Flow 19-1793] Cannot infer any bus interface that matches bus definition xilinx.com:interface:axis:1.0.
+INFO: [IP_Flow 19-1793] Cannot infer any bus interface that matches bus definition xilinx.com:interface:aximm:1.0.
+INFO: [IP_Flow 19-1793] Cannot infer any bus interface that matches bus definition xilinx.com:interface:aximm:1.0.
+INFO: [IP_Flow 19-4753] Inferred signal 'clock' from port 'clk' as interface 'clk'.
+WARNING: [IP_Flow 19-3153] Bus Interface 'clk': ASSOCIATED_BUSIF bus parameter is missing.
+INFO: [IP_Flow 19-2181] Payment Required is not set for this core.
+INFO: [IP_Flow 19-2187] The Product Guide file is missing.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip'.
+WARNING: [IP_Flow 19-3656] If you move the project, the path for repository 'c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip' may become invalid. A better location for the repository would be in a path adjacent to the project. (Current project location is 'c:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog'.)
+0
+Wrote  : <C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/bd/dqmtoebno_bd/dqmtoebno_bd.bd> 
+WARNING: [BD 5-232] No interface pins matched 'get_bd_intf_pins /dqmtoebno_1/*'
+WARNING: [BD 5-232] No interface pins matched 'get_bd_intf_pins /dqmtoebno_1/*'
+WARNING: [BD 5-232] No interface pins matched 'get_bd_intf_pins /dqmtoebno_1/*'
+Wrote  : <C:/Semco/Vivado/Demods2016/DigitalCombiner/SysGenCores/ip_catalog/dqmtoebno.srcs/sources_1/bd/dqmtoebno_bd/dqmtoebno_bd.bd> 
+INFO: [Common 17-206] Exiting Vivado at Wed May 25 17:22:56 2022...

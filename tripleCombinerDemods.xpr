@@ -1682,13 +1682,6 @@
     </FileSet>
     <FileSet Name="simTrellisCarrierLoop" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simTrellisCarrierLoop">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/fmMod/cicInterpolate.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -1731,6 +1724,14 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/fmDemod/fmDemodWithCE.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/testTrellisCarrierLoop.wcfg">
         <FileInfo>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1754,17 +1755,15 @@
     </FileSet>
     <FileSet Name="simResampler" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simResampler">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/dualResampler.v">
+      <File Path="$PPRDIR/resampler/resampler.v">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/resampler/resampler.v">
+      <File Path="$PPRDIR/dualResampler.v">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -2950,9 +2949,7 @@
     </Run>
     <Run Id="complexphasedetectorswap_0_synth_1" Type="Ft3:Synth" SrcSet="complexphasedetectorswap_0" Part="xc7k325tffg676-1" ConstrsSet="complexphasedetectorswap_0" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/complexphasedetectorswap_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2960,9 +2957,7 @@
     </Run>
     <Run Id="synthDemodComb325" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tffg676-1" ConstrsSet="constrsCombiners" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthDemodComb325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2970,9 +2965,7 @@
     </Run>
     <Run Id="synthDemod325" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tffg676-1" ConstrsSet="constrsDemods" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthDemod325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2980,9 +2973,7 @@
     </Run>
     <Run Id="synthDemod160" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="constrsDemods" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthDemod160" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -2990,9 +2981,7 @@
     </Run>
     <Run Id="rs_decoder_synth_1" Type="Ft3:Synth" SrcSet="rs_decoder" Part="xc7k325tffg676-1" ConstrsSet="rs_decoder" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/rs_decoder_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3000,9 +2989,7 @@
     </Run>
     <Run Id="fifo_EightToOne_synth_1" Type="Ft3:Synth" SrcSet="fifo_EightToOne" Part="xc7k325tffg676-1" ConstrsSet="fifo_EightToOne" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_EightToOne_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3010,9 +2997,7 @@
     </Run>
     <Run Id="synthMultiHComb325" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tffg676-1" ConstrsSet="constrsCombiners" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthMultiHComb325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3020,9 +3005,7 @@
     </Run>
     <Run Id="synthMultiH325" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tffg676-1" ConstrsSet="constrsDemods" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthMultiH325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3030,9 +3013,7 @@
     </Run>
     <Run Id="synthMultiH160" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-1" ConstrsSet="constrsDemods" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synthMultiH160" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3040,9 +3021,7 @@
     </Run>
     <Run Id="decayMpy10x8_synth_1" Type="Ft3:Synth" SrcSet="decayMpy10x8" Part="xc7k325tffg676-1" ConstrsSet="decayMpy10x8" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/decayMpy10x8_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -3689,9 +3668,7 @@
     </Run>
     <Run Id="complexphasedetectorswap_0_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-1" ConstrsSet="complexphasedetectorswap_0" Description="Default settings for Implementation." SynthRun="complexphasedetectorswap_0_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3706,9 +3683,7 @@
     </Run>
     <Run Id="implDemodComb325" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="constrsCombiners" Description="Default settings for Implementation." Dir="$PRUNDIR/implDemodComb325" SynthRun="synthDemodComb325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3724,9 +3699,7 @@
     </Run>
     <Run Id="implDemod325" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="constrsDemods" Description="Default settings for Implementation." Dir="$PRUNDIR/implDemod325" SynthRun="synthDemod325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3742,9 +3715,7 @@
     </Run>
     <Run Id="implDemod160" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrsDemods" Description="Default settings for Implementation." Dir="$PRUNDIR/implDemod160" SynthRun="synthDemod160" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3760,9 +3731,7 @@
     </Run>
     <Run Id="rs_decoder_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-1" ConstrsSet="rs_decoder" Description="Default settings for Implementation." SynthRun="rs_decoder_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3777,9 +3746,7 @@
     </Run>
     <Run Id="fifo_EightToOne_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-1" ConstrsSet="fifo_EightToOne" Description="Default settings for Implementation." SynthRun="fifo_EightToOne_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3794,9 +3761,7 @@
     </Run>
     <Run Id="implMultiHComb325" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="constrsCombiners" Description="Default settings for Implementation." Dir="$PRUNDIR/implMultiHComb325" SynthRun="synthMultiHComb325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3814,9 +3779,7 @@
     </Run>
     <Run Id="implMultiH325" Type="Ft2:EntireDesign" Part="xc7k325tffg676-2" ConstrsSet="constrsDemods" Description="Default settings for Implementation." Dir="$PRUNDIR/implMultiH325" SynthRun="synthMultiH325" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3832,9 +3795,7 @@
     </Run>
     <Run Id="implMultiH160" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrsDemods" Description="Default settings for Implementation." Dir="$PRUNDIR/implMultiH160" SynthRun="synthMultiH160" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -3850,9 +3811,7 @@
     </Run>
     <Run Id="decayMpy10x8_impl_1" Type="Ft2:EntireDesign" Part="xc7k325tffg676-1" ConstrsSet="decayMpy10x8" Description="Default settings for Implementation." SynthRun="decayMpy10x8_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
