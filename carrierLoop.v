@@ -22,6 +22,7 @@ module carrierLoop(
     input               [31:0]  din,
     output              [31:0]  dout,
     input               [4:0]   demodMode,
+    input                       track,
     input       signed  [11:0]  phase,
     input       signed  [11:0]  freq,
     `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
@@ -29,6 +30,7 @@ module carrierLoop(
     input       signed  [11:0]  resampPhase,
     `endif
     input                       highFreqOffset,
+    input                       multihLOS,
     input       signed  [11:0]  offsetError,
     input                       offsetErrorEn,
     output      signed  [31:0]  carrierFreqOffset,
@@ -126,7 +128,11 @@ module carrierLoop(
                 //modeError <= freq;
                 //enableCarrierLock <= 0;
                 end
-            `MODE_MULTIH,
+            `MODE_MULTIH: begin
+                loopFilterEn <= ddcClkEn;
+                modeError <= multihLOS ? 0 : freq;
+                enableCarrierLock <= 0;
+                end
             `MODE_FM: begin
                 loopFilterEn <= ddcClkEn;
                 modeError <= freq;
@@ -243,7 +249,7 @@ module carrierLoop(
         .error(loopError),
         .leadExp(leadExp),
         .acqTrackControl(acqTrackControl),
-        .track(carrierLock),
+        .track(track),
         .leadError(leadError)
         );
 
@@ -258,7 +264,7 @@ module carrierLoop(
         .clearAccum(clearAccum),
         .carrierInSync(carrierLock && !highFreqOffset),
         .acqTrackControl(acqTrackControl),
-        .track(carrierLock),
+        .track(track),
         .lagAccum(lagAccum)
         );
 
@@ -287,29 +293,41 @@ module carrierLoop(
             `else
             carrierLock <= 1;
             `endif
-            end
+        end
         else if (loopFilterEn) begin
-            absModeError <= $unsigned(modeError[11] ? negModeError : modeError);
+            case (demodMode)
+                `MODE_MULTIH: begin
+                    if (multihLOS) begin
+                        absModeError <= 12'h7ff;
+                    end
+                    else begin
+                        absModeError <= $unsigned(modeError[11] ? negModeError : modeError);
+                    end
+                end
+                default: begin
+                    absModeError <= $unsigned(modeError[11] ? negModeError : modeError);
+                end
+            endcase
             if (absModeError > syncThreshold) begin
                 if (lockCounter == (16'hffff - lockCount)) begin
                     carrierLock <= 0;
                     lockCounter <= 0;
-                    end
+                end
                 else begin
                     lockCounter <= lockMinus[15:0];
-                    end
                 end
+            end
             else begin
                 if (lockCounter == lockCount) begin
                     carrierLock <= 1;
                     lockCounter <= 0;
-                    end
+                end
                 else begin
                     lockCounter <= lockPlus[15:0];
-                    end
                 end
             end
         end
+    end
 
 
     // Final Outputs

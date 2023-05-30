@@ -22,6 +22,7 @@ module demod(
     input       signed  [17:0]  iRx, qRx,
     input                       bbClkEn,
     input       signed  [17:0]  iBB, qBB,
+    input                       track,
     output                      iSym2xEn,
     output                      iSymEn,
     output      signed  [17:0]  iSymData,
@@ -49,9 +50,12 @@ module demod(
     output      signed  [17:0]  iLdpc,
     output      signed  [17:0]  qLdpc,
     `endif
+    `ifdef ADD_MULTIH
+    output  reg                 multihLOS,
     `ifdef ADD_SUPERBAUD_TED
     output                      multihSymEnEven,
     `endif
+    `endif //ADD_MULTIH
     output              [3:0]   dac0Select,dac1Select,dac2Select,
     output  reg                 dac0Sync,
     output  reg signed  [17:0]  dac0Data,
@@ -424,6 +428,10 @@ always @* begin
             nextFreqSample = fm;
             nextAbsSample = fm[17] ? fmInv : fm;
             end
+        `MODE_MULTIH: begin
+            nextFreqSample = {freqError,6'h0};
+            nextAbsSample = fm[17] ? fmInv : fm;
+        end
         default: begin
             nextFreqSample = {freqError,6'h0};
             nextAbsSample = 0;
@@ -449,18 +457,33 @@ always @(posedge clk) begin
         end
     end
 
-always @(posedge clk) begin
-    if (demodSync) begin
-        if (averageAbsFreq > 18'h10000) begin
-            highFreqOffset <= 1;
-            end
-        //else if (absAverageFreq > falseLockThreshold) begin
-        else if (absAverageFreq > {1'b0,falseLockThreshold,1'b0}) begin
-            highFreqOffset <= !carrierLock;
-            end
-        else begin
-            highFreqOffset <= 0;
-            end
+    always @(posedge clk) begin
+        if (demodSync) begin
+            casex (demodMode)
+                `ifdef ADD_MULTIH
+                `MODE_MULTIH: begin
+                    highFreqOffset<= 0;
+                    if (averageAbsFreq > {1'b0,falseLockThreshold,1'b0}) begin
+                        multihLOS <= 1;
+                    end
+                    else begin
+                        multihLOS <= 0;
+                    end
+                end
+                `endif
+                default: begin
+                    if (averageAbsFreq > 18'h10000) begin
+                        highFreqOffset <= 1;
+                    end
+                    //else if (absAverageFreq > falseLockThreshold) begin
+                    else if (absAverageFreq > {1'b0,falseLockThreshold,1'b0}) begin
+                        highFreqOffset <= !carrierLock;
+                    end
+                    else begin
+                        highFreqOffset <= 0;
+                    end
+                end
+            endcase
         end
     end
 
@@ -526,6 +549,7 @@ carrierLoop carrierLoop(
     .din(din),
     .dout(freqDout),
     .demodMode(demodMode),
+    .track(track),
     .phase(phase),
     .freq(freq),
     `ifdef CLF_SOQPSK_USE_RESAMP_PHASE
@@ -535,6 +559,11 @@ carrierLoop carrierLoop(
     .resampPhase(fastResampPhase),
     `endif
     .highFreqOffset(highFreqOffset),
+    `ifdef ADD_MULTIH
+    .multihLOS(multihLOS),
+    `else
+    .multihLOS(1'b0),
+    `endif
     .offsetError(rndOffsetError),
     .offsetErrorEn(offsetErrorEn),
     .carrierFreqOffset(carrierFreqOffset),
@@ -718,7 +747,7 @@ bitsync bitsync(
     .dout(bitsyncDout),
     .i(iResamp), .q(qResamp),
     .au(qResamp),
-    .track(carrierLock),
+    .track(track),
     .offsetError(offsetError),
     .offsetErrorEn(offsetErrorEn),
     `ifdef SYM_DEVIATION
@@ -998,12 +1027,17 @@ always @(posedge clk) begin
             dac0Sync <= 1'b1;
             end
         `DAC_FREQLOCK: begin
+            `ifdef ADD_MULTIH
+            dac0Data <= {1'b0,multihLOS,16'b0};
+            dac0Sync <= 1'b1;
+            `else
             //dac0Data <= {freqLockCounter,2'b0};
             dac0Data <= {1'b0,highFreqOffset,carrierLock,15'b0};
             dac0Sync <= 1'b1;
+            `endif
             end
         `DAC_AVGFREQ: begin
-            dac0Data <= absAverageFreqReg;
+            dac0Data <= averageFreqReg;
             dac0Sync <= demodSync;
             end
         `DAC_FREQERROR: begin
@@ -1082,7 +1116,8 @@ always @(posedge clk) begin
             dac1Sync <= demodSync;
             end
         `DAC_FREQERROR: begin
-            dac1Data <= falseLockThreshold;
+            //dac1Data <= {1'b0,falseLockThreshold,1'b0};
+            dac1Data <= carrierFreqOffset[24:7];
             dac1Sync <= demodSync;
             end
         `ifdef ADD_DESPREADER

@@ -19,6 +19,7 @@ module multihCarrierLoop(
     clk,reset,
     symEnEven,symEn,sym2xEn,
     iIn,qIn,
+    multihLOS,
     phaseError,
     phaseErrorEn,
     phaseErrorValid,
@@ -48,7 +49,8 @@ module multihCarrierLoop(
 
 input           clk,reset;
 input           symEnEven,symEn,sym2xEn;
-input [17:0]iIn,qIn;
+input   [17:0]  iIn,qIn;
+input           multihLOS;
 input   [7:0]   phaseError;
 input           phaseErrorEn;
 input           phaseErrorValid;
@@ -97,6 +99,7 @@ reg             demodLock;
 wire    [11:0]   syncThreshold;
 wire    [39:0]  lagAccum;
 wire    [2:0]   averageSelect;
+wire    [1:0]   acqTrackControl;
 `ifdef USE_FRACTIONAL_DELAY
 wire    [12:0]  unused0;
 wire    [4:0]   sampleOffset;
@@ -120,6 +123,7 @@ loopRegs loopRegs(
     .ctrl2(),
     .clearAccum(clearAccum),
     .ctrl4(),
+    .acqTrkControl(acqTrackControl),
     .leadMan(),
     .leadExp(leadExp),
     .lagMan(),
@@ -216,18 +220,69 @@ always @(posedge clk) begin
 /***************************** Loop Filter ************************************/
 
 // Instantiate the lead/lag filter gain path
+
+    // NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+    // zero, 1/2, 1/4, and 1/8. This is accomplished by subtracting the acqTrackControl
+    // value from the lead exponent.
+    wire    [5:0]   leadSum = {1'b0,leadExp} - {4'b0,acqTrackControl};
+    reg     [4:0]   leadGainReg;
+    always @(posedge clk) begin
+        if (demodLock) begin
+            // Did the difference overflow?
+            if (leadSum[5]) begin
+                // Yes. Limit to the minimum.
+                leadGainReg <= 1;
+            end
+            else begin
+                leadGainReg <= leadSum[4:0];
+            end
+        end
+        else begin
+            leadGainReg <= leadExp;
+        end
+    end
+
+
 wire    [39:0]  leadError;
 leadGain leadGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
-    .leadExp(leadExp),
+    .leadExp(leadGainReg),
     .leadError(leadError)
     );
+
+    // NOTE: The acqTrackControl tells how much to divide the loopwidth by. The choices are
+    // zero, 1/2, 1/4, and 1/8. In the loop filter calculations, the lag term is
+    // proportional to the square of the loopwidth. That's why the acqTrackControl
+    // is shifted left one bit in this calculation.
+    wire            [5:0]   lagSum = {1'b0,lagExp} - {3'b0,acqTrackControl,1'b0};
+    reg             [4:0]   lagGainReg;
+    reg     signed  [39:0]  lagError;
+    always @(posedge clk) begin
+        // If no signal present, freeze the lag accumulator
+        if (multihLOS) begin
+            lagGainReg <= 0;
+        end
+        // Set lag gain
+        else if (demodLock) begin
+            // Did the difference overflow?
+            if (lagSum[5]) begin
+                // Yes. Limit to the minimum.
+                lagGainReg <= 1;
+            end
+            else begin
+                lagGainReg <= lagSum[4:0];
+            end
+        end
+        else begin
+            lagGainReg <= lagExp;
+        end
+    end
 
 lagGain lagGain (
     .clk(clk), .clkEn(loopFilterEn), .reset(reset),
     .error(loopError),
-    .lagExp(lagExp),
+    .lagExp(lagGainReg),
     .limit(limit),
     .sweepEnable(1'b0),
     .sweepRateMag(32'b0),
@@ -551,6 +606,11 @@ always @(posedge clk) begin
             `DAC_PHERROR: begin
                 dac0Data <= {absModeError,10'b0};
                 dac0ClkEn <= 1;
+                dac0En <= 1;
+                end
+            `DAC_FREQERROR: begin
+                dac0Data <= lagAccum[39:22];
+                dac0ClkEn <= loopFilterEn;
                 dac0En <= 1;
                 end
             `DAC_FREQLOCK: begin

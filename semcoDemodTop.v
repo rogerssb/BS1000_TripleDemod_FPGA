@@ -165,7 +165,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd764;
+    parameter VER_NUMBER = 16'd773;
 
 
 //******************************************************************************
@@ -441,6 +441,7 @@ module semcoDemodTop (
         .iRx(adc0In), .qRx(18'h0),
         .bbClkEn(1'b0),
         .iBB(18'h0), .qBB(18'h0),
+        .track(carrierLock),
         .iSym2xEn(iDemodSym2xEn),
         .iSymEn(iDemodSymEn),
         .iSymData(iDemodSymData),
@@ -468,8 +469,11 @@ module semcoDemodTop (
         .iLdpc(iLdpc),
         .qLdpc(qLdpc),
         `endif
+        `ifdef ADD_MULTIH
+        .multihLOS(multihLOS),
         `ifdef ADD_SUPERBAUD_TED
         .multihSymEnEven(trellisSymEnEven),
+        `endif
         `endif
         .dac0Select(demodDac0Select),
         .dac1Select(demodDac1Select),
@@ -919,6 +923,7 @@ module semcoDemodTop (
         .sym2xEnIn(iDemodSym2xEn & multihMode),
         .iIn(iTrellis),
         .qIn(qTrellis),
+        .multihLOS(multihLOS),
         `ifdef USE_BUS_CLOCK
         .busClk(busClk),
         `endif

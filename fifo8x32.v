@@ -18,10 +18,10 @@ module fifo8x32(
     output              fifoEmpty
 );
 
-    reg     [7:0]   fifo[31:0];
-    reg     [5:0]   depth;
+    reg     [7:0]   fifo[63:0];
+    reg     [6:0]   depth;
     assign          fifoEmpty = (depth == 0);
-    reg     [4:0]   rdAddr,wrAddr;
+    reg     [5:0]   rdAddr,wrAddr;
     always @(posedge clk) begin
         if (reset) begin
             rdAddr <= 0;
@@ -30,7 +30,7 @@ module fifo8x32(
         end
         else if (clkEn) begin
             // Fifo addresses
-            if (wrEn && (depth < 32)) begin
+            if (wrEn && (depth < 64)) begin
                 wrAddr <= wrAddr + 1;
             end
             if (rdEn && (depth > 0)) begin
@@ -40,7 +40,7 @@ module fifo8x32(
             if (wrEn && rdEn) begin
                 depth <= depth;
             end
-            else if (wrEn && (depth < 32)) begin
+            else if (wrEn && (depth < 64)) begin
                 depth <= depth + 1;
             end
             else if (rdEn && (depth > 0)) begin

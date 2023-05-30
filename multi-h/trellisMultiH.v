@@ -22,6 +22,7 @@ module trellisMultiH
     input                           symEnIn,
     input                           sym2xEnIn,
     input           signed  [17:0]  iIn,qIn,
+    input                           multihLOS,
     `ifdef USE_BUS_CLOCK
     input                           busClk,
     `endif
@@ -141,6 +142,7 @@ module trellisMultiH
         .sym2xEn(sym2xEn),
         .iIn(iInLatch),
         .qIn(qInLatch),
+        .multihLOS(multihLOS),
         .phaseError(phaseError),
         .phaseErrorEn(phaseErrorEn),
         .phaseErrorValid(phaseErrorValid),
