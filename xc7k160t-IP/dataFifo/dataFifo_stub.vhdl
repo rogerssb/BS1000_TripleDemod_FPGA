@@ -1,7 +1,7 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
--- Date        : Fri May 12 17:18:08 2023
+-- Date        : Fri May 26 15:05:16 2023
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub C:/Semco/Vivado/Demods2022/xc7k160t-IP/dataFifo/dataFifo_stub.vhdl
 -- Design      : dataFifo
