@@ -72,7 +72,7 @@ ARCHITECTURE rtl OF FireberdDrive IS
       );
    END COMPONENT;
 
-   CONSTANT FIFO_THRESH       : natural := 256;
+   CONSTANT FIFO_THRESH       : natural := 26;
    -- Signals
    SIGNAL   Accum             : signed(15 downto 0);
    SIGNAL   ClocksPerBitDly   : SLV16;

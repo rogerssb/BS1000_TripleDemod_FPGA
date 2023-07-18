@@ -52,6 +52,7 @@ trellisDetector
         4) At 40 Mbps, the system clock is at least 160 MHz so its not likely the clock can
             be increase much beyond twice that frequency.
 
+	6-26-23 FZ Added initialize to 0 to prevent unknowns in simulation
 */
 module trellisDetector (
     input                   clk, clkEn,
@@ -66,24 +67,25 @@ module trellisDetector (
     `else
     output                  finalMetricOutputEn,
     `endif
-    output  reg     [17:0]  finalMetric,
-    output  reg             outputEn,
-    output  reg     [3:0]   outputBits
+    output  reg     [17:0]  finalMetric = 18'h0,
+    output  reg             outputEn = 1'b0,
+    output  reg     [3:0]   outputBits = 3'b0
 );
 
 
     //-------------------------- Process State Machine ------------------------
 
-    reg             [1:0]   detectorState;
     parameter   TrellisIdle =           2'b00,
                 TrellisSetup =          2'b01,
                 TrellisDetectInit =     2'b11,
                 TrellisDetectBits =     2'b10;
-    reg                     positiveTau;
+    reg             [1:0]   detectorState = TrellisIdle;
+    reg                     positiveTau = 1'b0;
     wire                    setupComplete;
     always @(posedge clk) begin
         if (reset) begin
             positiveTau <= 1;
+            detectorState <= TrellisIdle;
         end
         else begin
             case (detectorState)
@@ -128,16 +130,16 @@ module trellisDetector (
 
     //-------------------------- Input Data Buffer ----------------------------
 
-    reg     signed  [17:0]  s0_0_real,s0_0_imag;
-    reg     signed  [17:0]  s0_1_real,s0_1_imag;
-    reg     signed  [17:0]  s0_2_real,s0_2_imag;
-    reg     signed  [17:0]  s0_3_real,s0_3_imag;
-    reg     signed  [17:0]  s0_4_real,s0_4_imag;
-    reg     signed  [17:0]  s1_0_real,s1_0_imag;
-    reg     signed  [17:0]  s1_1_real,s1_1_imag;
-    reg     signed  [17:0]  s1_2_real,s1_2_imag;
-    reg     signed  [17:0]  s1_3_real,s1_3_imag;
-    reg             [1:0]   sampleCount;
+    reg     signed  [17:0]  s0_0_real,s0_0_imag = 18'h0;
+    reg     signed  [17:0]  s0_1_real,s0_1_imag = 18'h0;
+    reg     signed  [17:0]  s0_2_real,s0_2_imag = 18'h0;
+    reg     signed  [17:0]  s0_3_real,s0_3_imag = 18'h0;
+    reg     signed  [17:0]  s0_4_real,s0_4_imag = 18'h0;
+    reg     signed  [17:0]  s1_0_real,s1_0_imag = 18'h0;
+    reg     signed  [17:0]  s1_1_real,s1_1_imag = 18'h0;
+    reg     signed  [17:0]  s1_2_real,s1_2_imag = 18'h0;
+    reg     signed  [17:0]  s1_3_real,s1_3_imag = 18'h0;
+    reg             [1:0]   sampleCount = 2'b0;
     reg                     startBlock,startBlockEarly;
     always @(posedge clk) begin
         if (startFrame) begin
@@ -194,10 +196,10 @@ module trellisDetector (
 
     //-------------------------------------------------------------------------
     // Samples used in the acs stages. This is only for debug
-    reg     signed  [17:0]  s00r,s00i,s10r,s10i;
-    reg     signed  [17:0]  s01r,s01i,s11r,s11i;
-    reg     signed  [17:0]  s02r,s02i,s12r,s12i;
-    reg     signed  [17:0]  s03r,s03i,s13r,s13i;
+    reg     signed  [17:0]  s00r,s00i,s10r,s10i = 18'h0;
+    reg     signed  [17:0]  s01r,s01i,s11r,s11i = 18'h0;
+    reg     signed  [17:0]  s02r,s02i,s12r,s12i = 18'h0;
+    reg     signed  [17:0]  s03r,s03i,s13r,s13i = 18'h0;
     always @(posedge clk) begin
         if (clkEn && sampleEn && startBlock) begin
             s00r <= s0_0_real;      s00i <= s0_0_imag;
@@ -385,7 +387,7 @@ module trellisDetector (
     wire            [18:0]  sumMetric_10 = {1'b0,accMetric3_10} + {1'b0,startMetric_00};
     wire            [18:0]  sumMetric_11 = {1'b0,accMetric3_11} + {1'b0,startMetric_00};
     wire            [6:0]   winner5;
-    reg                     flipTracebackPingPong;
+    reg                     flipTracebackPingPong = 1'b0;
     wire            [3:0]   detectedBits;
     `endif
     wire            [17:0]  accMetric4_000;
@@ -633,9 +635,9 @@ module trellisDetector (
     wire            [17:0]  accMetric7_101;
     wire            [17:0]  accMetric7_110;
     wire            [17:0]  accMetric7_111;
-    reg             [3:0]   minIndex;
-    reg             [7:0]   startBlock7Dly;
-    reg             [17:0]  acc7Real, acc7Imag;
+    reg             [3:0]   minIndex = 4'h0;
+    reg             [7:0]   startBlock7Dly = 8'h0;
+    reg             [17:0]  acc7Real, acc7Imag = 18'h0;
     wire                    acc7Start  = (positiveTau || !clksPerEq2) ? (startBlock & sampleEn) : startBlock7Dly[7];
     wire            [17:0]  acc7RealIn = (positiveTau || !clksPerEq2) ? s1_3_real : acc7Real;
     wire            [17:0]  acc7ImagIn = (positiveTau || !clksPerEq2) ? s1_3_imag : acc7Imag;
@@ -699,51 +701,51 @@ module trellisDetector (
     `endif
 
     // Find the minimum metric and serialize the output
-    reg             [2:0]   minState;
     `define                 MIN_IDLE        3'b000
     `define                 MIN_COMPARE8    3'b001
     `define                 MIN_COMPARE4    3'b011
     `define                 MIN_COMPARE2    3'b010
     `define                 MIN_COMPARE1    3'b110
     `define                 MIN_SERIALIZE   3'b100
-    reg             [3:0]   minIndex_000,minIndex_100;
-    reg             [3:0]   minIndex_001,minIndex_101;
-    reg             [3:0]   minIndex_010,minIndex_110;
-    reg             [3:0]   minIndex_011,minIndex_111;
-    reg             [3:0]   minIndex_00;
-    reg             [3:0]   minIndex_01;
-    reg             [3:0]   minIndex_10;
-    reg             [3:0]   minIndex_11;
-    reg             [3:0]   minIndex_0;
-    reg             [3:0]   minIndex_1;
-    reg             [17:0]  minMetric_000,minMetric_100;
-    reg             [17:0]  minMetric_001,minMetric_101;
-    reg             [17:0]  minMetric_010,minMetric_110;
-    reg             [17:0]  minMetric_011,minMetric_111;
-    reg             [17:0]  minMetric_00;
-    reg             [17:0]  minMetric_01;
-    reg             [17:0]  minMetric_10;
-    reg             [17:0]  minMetric_11;
-    reg             [17:0]  minMetric_0;
-    reg             [17:0]  minMetric_1;
-    reg             [17:0]  minMetric;
-    reg             [17:0]  accMetric_0000;
-    reg             [17:0]  accMetric_0001;
-    reg             [17:0]  accMetric_0010;
-    reg             [17:0]  accMetric_0011;
-    reg             [17:0]  accMetric_0100;
-    reg             [17:0]  accMetric_0101;
-    reg             [17:0]  accMetric_0110;
-    reg             [17:0]  accMetric_0111;
-    reg             [17:0]  accMetric_1000;
-    reg             [17:0]  accMetric_1001;
-    reg             [17:0]  accMetric_1010;
-    reg             [17:0]  accMetric_1011;
-    reg             [17:0]  accMetric_1100;
-    reg             [17:0]  accMetric_1101;
-    reg             [17:0]  accMetric_1110;
-    reg             [17:0]  accMetric_1111;
-    reg             [3:0]   finalMetricCount;
+    reg             [2:0]   minState = `MIN_IDLE;
+    reg             [3:0]   minIndex_000,minIndex_100 = 4'h0;
+    reg             [3:0]   minIndex_001,minIndex_101 = 4'h0;
+    reg             [3:0]   minIndex_010,minIndex_110 = 4'h0;
+    reg             [3:0]   minIndex_011,minIndex_111 = 4'h0;
+    reg             [3:0]   minIndex_00 = 4'h0;
+    reg             [3:0]   minIndex_01 = 4'h0;
+    reg             [3:0]   minIndex_10 = 4'h0;
+    reg             [3:0]   minIndex_11 = 4'h0;
+    reg             [3:0]   minIndex_0 = 4'h0;
+    reg             [3:0]   minIndex_1 = 4'h0;
+    reg             [17:0]  minMetric_000,minMetric_100 = 18'h0;
+    reg             [17:0]  minMetric_001,minMetric_101 = 18'h0;
+    reg             [17:0]  minMetric_010,minMetric_110 = 18'h0;
+    reg             [17:0]  minMetric_011,minMetric_111 = 18'h0;
+    reg             [17:0]  minMetric_00 = 18'h0;
+    reg             [17:0]  minMetric_01 = 18'h0;
+    reg             [17:0]  minMetric_10 = 18'h0;
+    reg             [17:0]  minMetric_11 = 18'h0;
+    reg             [17:0]  minMetric_0 = 18'h0;
+    reg             [17:0]  minMetric_1 = 18'h0;
+    reg             [17:0]  minMetric = 18'h0;
+    reg             [17:0]  accMetric_0000 = 18'h0;
+    reg             [17:0]  accMetric_0001 = 18'h0;
+    reg             [17:0]  accMetric_0010 = 18'h0;
+    reg             [17:0]  accMetric_0011 = 18'h0;
+    reg             [17:0]  accMetric_0100 = 18'h0;
+    reg             [17:0]  accMetric_0101 = 18'h0;
+    reg             [17:0]  accMetric_0110 = 18'h0;
+    reg             [17:0]  accMetric_0111 = 18'h0;
+    reg             [17:0]  accMetric_1000 = 18'h0;
+    reg             [17:0]  accMetric_1001 = 18'h0;
+    reg             [17:0]  accMetric_1010 = 18'h0;
+    reg             [17:0]  accMetric_1011 = 18'h0;
+    reg             [17:0]  accMetric_1100 = 18'h0;
+    reg             [17:0]  accMetric_1101 = 18'h0;
+    reg             [17:0]  accMetric_1110 = 18'h0;
+    reg             [17:0]  accMetric_1111 = 18'h0;
+    reg             [3:0]   finalMetricCount = 4'h0;
     always @(posedge clk) begin
         if (startFrame) begin
             minState                <= `MIN_IDLE;
@@ -960,7 +962,7 @@ module trellisDetector (
 
     // Delay the stage 7 startNextStage to create the outputEn
 //    reg                     outputEn;
-    reg             [31:0]  outputEnSR;
+    reg             [31:0]  outputEnSR = 32'h0;
 //    reg             [3:0]   outputBits;
     always @(posedge clk) begin
         outputEnSR <= {outputEnSR[30:0],startMinSearch};
@@ -1000,9 +1002,9 @@ module trellisDetector (
     assign                  finalMetricOutputEn = metric7OutputEn;
     assign                  finalMetric = accMetric7;
     reg             [17:0]  minMetric;
-    reg             [3:0]   minIndex;
-    reg             [3:0]   index;
-    reg                     delay;
+    reg             [3:0]   minIndex = 4'h0;
+    reg             [3:0]   index = 4'h0;
+    reg                     delay  = 1'b0;
     wire                    finalStartBlock = (!delay && finalMetricOutputEn);
     always @(posedge clk) begin
         if (reset) begin

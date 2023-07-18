@@ -46,6 +46,7 @@ Dependencies:
  Determine Offset input value and set to constant
 ----------------------------------------------------------------------------
 12-16-16 Initial release FZ
+6-27-23  Corrected Verbage in line 171 comment
 -------------------------------------------------------------
 */
 
@@ -167,19 +168,19 @@ BEGIN
             ValidOut          <= '0';
          elsif (ce) then
             /*
-               wait for PilotPulseIn and capture CorrPntr. set active flag.
+               wait_for_PilotPulseIn and capture CorrPntr. set active flag.
                wait for WrAddr > CorrPntr + 512 for first packet
                Set StartOut, Set RdAddr to CorrPntrCapture
-               Wait two clock for StartOut to drop
+               Wait_two_clocks for StartOut to drop
                Set ValidOut,
                Inc RdAddr
                Do 512 samples,
                Clr ValidOut, Inc PacketCntr
                Wait for WrAddr > RdAddr + 512 for next packet
-               if (PacketCntr < 26) goto Wait Two Clocks
+               if (PacketCntr < 26) goto Wait_Two_Clocks
                else
                Clr PacketCntr
-               Goto Wait for PilotPulseIn.
+               Goto Wait_for_PilotPulseIn.
             */
             RamDepth <= resize(WrAddr - RdAddr, RamDepth);
             case (PacketMode) is

@@ -92,7 +92,7 @@ reg one_error_enable;
 output e3_errors_enable;
 reg e3_errors_enable;
 
-output  [3:0] sourceSelct;
+output  [3:0] sourceSelect;
 reg     [3:0] sourceSelect;
 
 always @(posedge busClk) begin

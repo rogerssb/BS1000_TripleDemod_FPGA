@@ -47,6 +47,7 @@
 `endif
 
 `ifdef BITSYNC_BERT
+`define USE_VIVADO_CORES
 `define USE_BUS_CLOCK
 `define DF_CIC_COMP_USE_MPY
 `define BS_CIC_COMP_USE_MPY
@@ -54,6 +55,7 @@
 `define USE_DEMOD_CandD
 //`define ADD_TURBO
 `define ADD_MSE
+`define ADD_RSENCODER
 `endif
 
 `ifdef TRIPLE_DEMOD
@@ -158,6 +160,7 @@
 `endif
 
 `ifdef LDPC_DEMOD
+`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
@@ -194,6 +197,10 @@
 `define ADD_IDCODE
 `endif
 
+`ifdef STC_TRIPLE_MOD
+`define STC_MOD
+`define R6100
+`endif
 `ifdef STC_MOD
 `define FPGA_TYPE           `STC_MOD_IMAGE
 `define USE_BUS_CLOCK
@@ -272,9 +279,9 @@
     `define DEC_CLK_PHASE_180       2'b01
     `define DEC_CLK_PHASE_90        2'b10
     `define DEC_CLK_PHASE_270       2'b11
-    `define DEC_INPUT_BS            2'b00
-    `define DEC_INPUT_TURBO         2'b01
-    `define DEC_INPUT_VITERBI       2'b10
+    `define DEC_INPUT_BS            3'b000
+    `define DEC_INPUT_TURBO         3'b001
+    `define DEC_INPUT_VITERBI       3'b010
 
 `ifdef USE_DEMOD_CandD
 
@@ -379,10 +386,15 @@
     `define BS_TOP_DC_GAINS         13'bx_xxxx_xxx1_00xx
 
 `define VITERBISPACE        13'b0_01xx_0010_xxxx
-    `define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
-    `define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
-    `define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+`define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
+`define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
+`define VIT_STATUS             13'bx_xxxx_xxxx_10xx
 `define VIT_CONTROL            13'bx_xxxx_xxxx_11xx
+    `define VIT_MODE_SINGLE_CH      3'b000
+    `define VIT_MODE_IND_CH         3'b001
+    `define VIT_MODE_DUAL_CH        3'b010
+    `define VIT_MODE_OFFSET_CH      3'b011
+    `define VIT_MODE_OFFSET_INTLV   3'b100
 
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
 `define BITSYNCSPACE        `CH0_BITSYNCSPACE
@@ -446,6 +458,7 @@
         `define PNGEN_FEC_OFF           2'b00
         `define PNGEN_FEC_CONV          2'b01
         `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_FEC_RS            2'b11
         `define PNGEN_LDPC_R1_2         2'b00
         `define PNGEN_LDPC_R2_3         2'b01
         //`define PNGEN_LDPC_R3_4         2'b10
@@ -455,13 +468,14 @@
         `define PNGEN_LDPC_RND_OFF      2'b00
         `define PNGEN_LDPC_RND_CCSDS    2'b01
         `define PNGEN_LDPC_RND_IRIG     2'b10
+    `define PNGEN_RS_ASM            13'bx_xxxx_xxxx_11xx
 
 // Framesync subsystem registers
-`define FRAMER_SPACE            13'b1_00xx_0000_xxxx
-    `define FRAMER_CONTROL          13'bx_xxxx_xxxx_00xx
-    `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
-    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
-    `define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
+`define FRAMER_SPACE            13'b1_00xx_000x_xxxx
+    `define FRAMER_CONTROL          13'bx_xxxx_xxx0_00xx
+    `define FRAMER_SYNCWORD         13'bx_xxxx_xxx0_01xx
+    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxx0_10xx
+    `define FRAMER_STATUS           13'bx_xxxx_xxx0_11xx
     `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
 
 // Dual MSE subsystem registers
@@ -639,6 +653,7 @@
         `define PNGEN_FEC_OFF           2'b00
         `define PNGEN_FEC_CONV          2'b01
         `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_FEC_RS            2'b11
         `define PNGEN_LDPC_R1_2         2'b00
         `define PNGEN_LDPC_R2_3         2'b01
         //`define PNGEN_LDPC_R3_4         2'b10
@@ -648,6 +663,7 @@
         `define PNGEN_LDPC_RND_OFF      2'b00
         `define PNGEN_LDPC_RND_CCSDS    2'b01
         `define PNGEN_LDPC_RND_IRIG     2'b10
+    `define PNGEN_RS_ASM            13'bx_xxxx_xxxx_11xx
 
 // Demod subsystem registers
 `define PRIDEMODSPACE       13'b0_0100_xxxx_xxxx
@@ -658,20 +674,20 @@
 
     `ifdef SIMULATE
 
-    `define DEMODSPACE          13'b0_0100_000x_xxxx
-    `define DDCSPACE            13'b0_0100_0010_xxxx
-    `define DDCFIRSPACE         13'b0_0100_0011_xxxx
-    `define CICDECSPACE         13'b0_0100_0100_0xxx
-    `define RESAMPSPACE         13'b0_0100_0101_xxxx
-    `define BITSYNCSPACE        13'b0_0100_011x_xxxx
-    `define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
-        `define BS_MODE_SINGLE_CH       2'b00
-        `define BS_MODE_IND_CH          2'b01
-        `define BS_MODE_DUAL_CH         2'b10
-        `define BS_MODE_OFFSET_CH       2'b11
-    `define CHAGCSPACE          13'b0_0100_101x_xxxx
-    `define CARRIERSPACE        13'b0_0100_110x_xxxx
-    `define EQUALIZERSPACE      13'b0_0100_1110_xxxx
+`define DEMODSPACE          13'b0_0100_000x_xxxx
+`define DDCSPACE            13'b0_0100_0010_xxxx
+`define DDCFIRSPACE         13'b0_0100_0011_xxxx
+`define CICDECSPACE         13'b0_0100_0100_0xxx
+`define RESAMPSPACE         13'b0_0100_0101_xxxx
+`define BITSYNCSPACE        13'b0_0100_011x_xxxx
+`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
+    `define BS_MODE_SINGLE_CH       2'b00
+    `define BS_MODE_IND_CH          2'b01
+    `define BS_MODE_DUAL_CH         2'b10
+    `define BS_MODE_OFFSET_CH       2'b11
+`define CHAGCSPACE          13'b0_0100_101x_xxxx
+`define CARRIERSPACE        13'b0_0100_110x_xxxx
+`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
 
     `else //SIMULATE
 
@@ -703,7 +719,7 @@
     `define DQM_SYNC_WORD       16'hfac4
     `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
     `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
-    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
 
 
     `ifdef DQM_USE_DPLL
@@ -796,6 +812,24 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_RS_DEC      4'b1111
 
+// Combiner subsystem registers start at x0C40 to 0xC7F
+        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
+        `define COMB_LAG_COEF      6'b00_00xx
+        `define COMB_LEAD_COEF     6'b00_01xx
+        `define COMB_SWEEP_RATE    6'b00_10xx
+        `define COMB_SWEEP_LIMIT   6'b00_110x
+        `define COMB_OPTIONS       6'b00_111x
+        `define COMB_LOCKS         6'b01_00xx
+        `define COMB_DB_RANGE      6'b01_010x
+        `define COMB_DB_RATIO      6'b01_011x
+        // The Combiner AGC uses the same register set defined in the global map at bottom of file
+        // Define the Combiner AGC Loop Filter memory map
+        `define CALF_CONTROL       6'b10_00xx
+        `define CALF_ULIMIT        6'b10_01xx
+        `define CALF_LLIMIT        6'b10_10xx
+        `define CALF_RATIOS        6'b10_11xx
+        `define CALF_INTEGRATOR    6'b11_00xx
+
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_100x_xxxx
     `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
@@ -854,6 +888,7 @@
 `define VIDFIR1SPACE            13'b0_1000_0011_xxxx
 `define INTERP2SPACE            13'b0_1000_0100_xxxx
 `define VIDFIR2SPACE            13'b0_1000_0101_xxxx
+
 
 // Video Switch Control registers
 `define VIDSWITCHSPACE          13'b0_1000_1000_xxxx
@@ -1014,7 +1049,7 @@
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
         `define CandD_SRC_PCMTRELLIS    4'b0010
-        `define CandD_SRC_SOQTRELLIS    4'b0011
+        `define CandD_SRC_MULTIH        4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
@@ -1026,7 +1061,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-        `define CandD_SRC_RD_SOL        4'b1111
+        `define CandD_SRC_DEC3_CH1      4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
@@ -1034,6 +1069,56 @@
     `define CandD_DLL_CENTER_FREQ   13'bx_xxxx_xxxx_01xx
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
+
+// BERT subsystem registers
+`define BERT_SPACE          13'b0_0111_0xxx_xxxx
+    `define BERT_POLY               13'bx_xxxx_x000_00xx
+    `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
+    `define SLIP_LIMIT              13'bx_xxxx_x000_10xx
+    `define SLIP_THRESHOLD          13'bx_xxxx_x000_11xx
+    `define SLIP_RECOVERY           13'bx_xxxx_x001_00xx
+    `define SYNC_THRESHOLD          13'bx_xxxx_x001_01xx
+    `define SINGLE_TEST_LENGTH      13'bx_xxxx_x001_10xx
+    `define SINGLE_TEST_ERRORS      13'bx_xxxx_x001_11xx
+    `define SINGLE_TEST_COUNT       13'bx_xxxx_x010_00xx
+    `define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x010_01xx
+    `define CONTINUOUS_TEST_COUNT   13'bx_xxxx_x010_10xx
+    `define TEST_CONTROL            13'bx_xxxx_x010_11xx
+    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
+        `define BERT_SRC_LEGACY_I    4'b0000
+        `define BERT_SRC_LEGACY_Q    4'b0001
+        `define BERT_SRC_PCMTRELLIS  4'b0010
+        `define BERT_SRC_SOQTRELLIS  4'b0011
+        `define BERT_SRC_STC         4'b0100
+        `define BERT_SRC_RSVD0       4'b0101
+        `define BERT_SRC_LDPC        4'b0110
+        `define BERT_SRC_RSVD1       4'b0111
+        `define BERT_SRC_DEC0_CH0    4'b1000
+        `define BERT_SRC_DEC0_CH1    4'b1001
+        `define BERT_SRC_DEC1_CH0    4'b1010
+        `define BERT_SRC_DEC1_CH1    4'b1011
+        `define BERT_SRC_DEC2_CH0    4'b1100
+        `define BERT_SRC_DEC2_CH1    4'b1101
+        `define BERT_SRC_DEC3_CH0    4'b1110
+        `define BERT_SRC_RS_DEC      4'b1111
+
+// Combiner subsystem registers start at x0C40 to 0xC7F
+        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
+        `define COMB_LAG_COEF      6'b00_00xx
+        `define COMB_LEAD_COEF     6'b00_01xx
+        `define COMB_SWEEP_RATE    6'b00_10xx
+        `define COMB_SWEEP_LIMIT   6'b00_110x
+        `define COMB_OPTIONS       6'b00_111x
+        `define COMB_LOCKS         6'b01_00xx
+        `define COMB_DB_RANGE      6'b01_010x
+        `define COMB_DB_RATIO      6'b01_011x
+        // The Combiner AGC uses the same register set defined in the global map at bottom of file
+        // Define the Combiner AGC Loop Filter memory map
+        `define CALF_CONTROL       6'b10_00xx
+        `define CALF_ULIMIT        6'b10_01xx
+        `define CALF_LLIMIT        6'b10_10xx
+        `define CALF_RATIOS        6'b10_11xx
+        `define CALF_INTEGRATOR    6'b11_00xx
 
 // Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_0100_000x_xxxx
@@ -1285,7 +1370,6 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
-        `define DAC_SRC_RS_DEC          7      // uses the same decode as LDPC since they're mutually exclusive
         `define DAC_SRC_STC             8
         `define DAC_SRC_SBS             9
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x

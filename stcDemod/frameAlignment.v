@@ -35,7 +35,7 @@ module frameAlignment
     //------------------------------ Sample Counter ---------------------------
 
 (* MARK_DEBUG="true" *)    reg             [14:0]  wrAddr, rdAddr;
-(* MARK_DEBUG="true" *)    reg  signed     [14:0]  depth;
+(* MARK_DEBUG="true" *)    reg  signed     [14:0]  depth, rdWrCount;
     wire   signed   [15:0]  rdAddr0, rdAddr1, rdAddr0Tmp, rdAddr1Tmp;
     reg                     sofDetected, lastSamplesAvailable;
     reg                     outputState, lastSample;
@@ -79,6 +79,7 @@ module frameAlignment
         if (reset) begin
             rdAddr <= 0;
             wrAddr <= 0;
+            rdWrCount <= 0;
         end
         else if (clkEn) begin
             if (startOfFrame) begin     // start each frame at 0, read starts at sofAddress.
@@ -94,6 +95,12 @@ module frameAlignment
             else if (fifoRdEn) begin
                 rdAddr <= (rdAddr < 13311) ? rdAddr + 1 : 0;   // wrap read address back around to find final data at start of next packet.
             end
+
+            if (fifoWrEn && !fifoRdEn)
+                rdWrCount <= rdWrCount + 1;
+            else if (fifoRdEn && !fifoWrEn)
+                rdWrCount <= rdWrCount - 1;
+
         end
     end
 

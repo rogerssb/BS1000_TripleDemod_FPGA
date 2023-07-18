@@ -29,11 +29,11 @@
 -------------------------------------------------------------------------------
 
 library ieee;
-use ieee.std_logic_1164.all;
 use ieee.std_logic_textio.all;
-use ieee.numeric_std.all;
-use work.Semco_pkg.all;
-use work.fixed_generic_pkg_mod.all;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
+use work.fixed_pkg.all;
+use work.Semco_pkg.ALL;
 
 entity PilotDet_tb is
    generic (
@@ -48,26 +48,39 @@ architecture rtl of PilotDet_tb is
 
   -- Define Components
 
-COMPONENT PilotDetector is
-   generic (
-      IN_WIDTH    : natural   := 18;
-      IN_BINPT    : natural   := 17;
-      OUT_WIDTH   : natural   := 18;
-      OUT_BINPT   : natural   := 17
+COMPONENT PilotDetectSliding is
+   GENERIC
+      (SIM_MODE : boolean := false
    );
-   port (
-      clk,
-      ce,
-      reset,
-      ValidIn,
-      LastIn      : in  std_logic;
-      ReIn,
-      ImIn        : in  std_logic_vector(IN_WIDTH - 1 downto 0);
-      ReOut,
-      ImOut       : out std_logic_vector(OUT_WIDTH - 1 downto 0);
-      PilotFound  : out std_logic
-   );
-   end COMPONENT PilotDetector;
+   PORT(
+         clk,
+         clk2x,
+         reset,
+         reset2x,
+         ce,
+         SpectrumInv,
+         Mag0GtMag1,
+         ValidIn        : IN  std_logic;
+         ReIn,
+         ImIn           : IN  FLOAT_1_18;
+         SearchRange    : IN  SLV4;
+         CorrPntr,                                 -- Packet buffer pointer
+         RawAddr        : OUT ufixed(15 downto 0);
+         ReOut,
+         ImOut          : OUT FLOAT_1_18;          -- Packetized output
+         Magnitude0,
+         Magnitude1,
+         PhaseOut0,
+         PhaseOut1,                                -- Streaming Mag/Phs of iFFT
+         MagPeak0,
+         PhsPeak0,
+         MagPeak1,
+         PhsPeak1       : OUT SLV18;               -- Peak Mag/Phs of iFFT
+         PilotFound,
+         ValidOut,                                 -- ReOut/ImOut valid
+         StartOut       : OUT std_logic
+      );
+   end COMPONENT PilotDetectSliding;
 
 COMPONENT ReadGoldRef IS
    GENERIC (
@@ -113,13 +126,12 @@ END COMPONENT CompareGoldRef;
    constant DELAY                : positive  := 4;
 
    signal   reset                : std_logic := '1';
-   signal   clk                  : std_logic := '1';
-   signal   ce                   : std_logic := '1';
+   signal   clk, clk2x           : std_logic := '1';
 
-   SIGNAL   DataCount         : unsigned(12 downto 0) := 13x"000";
-   SIGNAL   DataValid,
-            DataValid_o       : std_logic := '0';
-   SIGNAL   Done              : UINT8 := (others=>'0');
+   SIGNAL   DataValid         : std_logic := '0';
+   SIGNAL   Done,
+            BitRate,
+            BitMax            : UINT8 := (others=>'0');
    SIGNAL   Errors            : vector_of_slvs(0 to 1)(31 downto 0);
    SIGNAL   ErrorCount        : UINT16 := (others=>'0');
    SIGNAL   VarsComp0,
@@ -130,6 +142,8 @@ END COMPONENT CompareGoldRef;
             ImagComp,
             ReIn,
             ImIn              : std_logic_vector(17 downto 0);
+   signal   Count             : UINT8 := x"11";
+
 
 begin
 
@@ -143,31 +157,39 @@ begin
          end if;
          wait;
       else
-         clk <= not clk;
+         clk2x <= not clk2x;
+         if (clk2x) then
+            clk <= not clk;
+         end if;
       end if;
    end process;
 
    process begin
       wait for 3 ns;
          reset <= '0';
+         BitMax <= x"04";
    end process;
 
    reg_process : process (clk)
    begin
       if (rising_edge(clk)) then
-         DataValid <= '1' when (DataCount < 1054) else '0';
-         DataCount <= DataCount + 1;
+         if (BitRate < BitMax) then
+            BitRate <= BitRate + 1;
+            DataValid <= '0';
+         else
+            BitRate <= x"00";
+            DataValid <= '1';
+            Count <= Count + 1;
+         end if;
          if ( unsigned(Errors(0)) > 0 or unsigned(Errors(1)) > 0 ) then
             ErrorCount <= ErrorCount + 1;
          end if;
       end if;
    end process reg_process;
 
-   ce <= '1' when (DataValid = '1') and (DataCount < 512) else '0';
-
    ReadReal : ReadGoldRef
    GENERIC MAP(
-      FILE_NAME         => "test_data/resampled_r.txt",
+      FILE_NAME         => "../simData/InRBrik2.txt",
       NUM_VALUES        => 1,
       DATA_TYPE         => SFix,
       OUT_WIDTH         => 18,
@@ -176,14 +198,14 @@ begin
    PORT MAP(
       clk               => clk,
       reset             => reset,
-      ce                => ce,
+      ce                => DataValid,
       OutputData        => VarsReal,
       Done              => Done(7)
    );
 
    ReadImag : ReadGoldRef
    GENERIC MAP(
-      FILE_NAME         => "test_data/resampled_i.txt",
+      FILE_NAME         => "../simData/InIBrik2.txt",
       NUM_VALUES        => 1,
       DATA_TYPE         => SFix,
       OUT_WIDTH         => 18,
@@ -192,34 +214,47 @@ begin
    PORT MAP(
       clk               => clk,
       reset             => reset,
-      ce                => ce,
+      ce                => DataValid,
       OutputData        => VarsImag,
       Done              => Done(6)
    );
 
-   ReIn <= VarsReal(0) when (DataCount < 512) else (others=>'0');
-   ImIn <= VarsImag(0) when (DataCount < 512) else (others=>'0');
+   ReIn <= VarsReal(0);
+   ImIn <= VarsImag(0);
 
-   Pd_u : PilotDetector
-      generic map(
-         IN_WIDTH       => IN_WIDTH,
-         IN_BINPT       => IN_BINPT,
-         OUT_WIDTH      => OUT_WIDTH,
-         OUT_BINPT      => OUT_BINPT
+   PD_u : PilotDetectSliding
+      GENERIC MAP
+         (SIM_MODE => TRUE
       )
-      port map(
+      PORT MAP(
          clk            => clk,
-         ce             => '1',
+         clk2x          => clk2x,
          reset          => reset,
+         reset2x        => reset,
+         ce             => '1',
+         SpectrumInv    => '0',
+         Mag0GtMag1     => '0',
          ValidIn        => DataValid,
-         LastIn         => '0',
-         ReIn           => ReIn,
-         ImIn           => ImIn,
+         ReIn           => to_sfixed(10x"00" & std_logic_vector(Count), 0, -17),
+         ImIn           => to_sfixed(10x"11" & std_logic_vector(Count), 0, -17),
+         SearchRange    => x"2",
+         CorrPntr       => open,
+         RawAddr        => open,
          ReOut          => open,
          ImOut          => open,
-         PilotFound     => open
+         Magnitude0     => open,
+         Magnitude1     => open,
+         PhaseOut0      => open,
+         PhaseOut1      => open,
+         MagPeak0       => open,
+         PhsPeak0       => open,
+         MagPeak1       => open,
+         PhsPeak1       => open,
+         PilotFound     => open,
+         ValidOut       => open,
+         StartOut       => open
       );
-
+/*
    VarsComp0(0) <= RealComp;
    VarsComp1(0) <= ImagComp;
 
@@ -260,7 +295,7 @@ begin
       ErrorOut          => Errors(1),
       Done              => Done(1)
    );
-
+*/
 end rtl;
 -------------
 -- CVS Info:

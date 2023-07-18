@@ -1,3 +1,5 @@
+// 6-32-23 FZ Added register initialization for simulation to remove unknowns
+
 `timescale 1ns/1ps
 
 module acsOp(
@@ -7,7 +9,7 @@ module acsOp(
     input                   accMetricInEn,
     input           [17:0]  accMetricIn,
     output                  accMetricOutEn,
-    output  reg     [17:0]  accMetricOut
+    output  reg     [17:0]  accMetricOut = 18'h0
 );
 
     // Calculate y8 - s.                // caution, assumes no overflow
@@ -43,6 +45,13 @@ module acsOp(
     // the magnitude circuit
     reg             [17:0]  accMetric[2:0];
     integer                 i;
+
+    initial begin
+        for (i = 0; i < 2; i = i + 1) begin
+            accMetric[i+1] <= 0;
+        end
+    end
+
     always @(posedge clk) begin
         accMetric[0] <= accMetricIn;
         for (i = 0; i < 2; i = i + 1) begin
@@ -54,7 +63,7 @@ module acsOp(
 
     // Final output is a saturated sum.
     //wire            [18:0]  accSum = {1'b0,accMetric[0]} + branchMetric;
-    reg            [18:0]  accSum;
+    reg            [18:0]  accSum = 18'h0;
     always @(posedge clk) begin
 
         accSum <= {1'b0,accMetricIn} + branchMetric;
@@ -76,7 +85,7 @@ module acsOp(
     end
 
     // Create the output clk enable
-    reg             [7:0] clkEnSR;
+    reg             [7:0] clkEnSR = 8'h0;
     always @(posedge clk) begin
         clkEnSR <= {clkEnSR[6:0],accMetricInEn};
     end

@@ -63,6 +63,7 @@ module stcModTopRegs(
             end
         end
     end
+
     always @(posedge busClk) begin
         if (cs && wr0) begin
             casex (addr)
