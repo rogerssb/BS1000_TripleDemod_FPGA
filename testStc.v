@@ -269,6 +269,8 @@ module test;
         .modData0(stcBit0),
         .modData1(stcBit1),
         .modDataValid(modDataValid),
+        .h0Tau(5'h00),
+        .h1Tau(5'h1f),
         .txEnable(txEnable),
         .posEdgeModClkEn(posEdgeModClkEn),
         .modWaveform0(),

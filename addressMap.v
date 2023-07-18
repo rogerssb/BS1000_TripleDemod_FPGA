@@ -4,20 +4,29 @@
 // FPGA Image Types
 // NOTE: Multi H is listed as 3 because we don't want to rebuild the image to
 // add the readback circuitry and it defaults to 3
-`define LEGACY_DEMOD_IMAGE          16'h0
-`define TRELLIS_DEMOD_IMAGE         16'h1
-`define TWOCHANNEL_SCDEMOD_IMAGE    16'h2
-`define MULTIH_DEMOD_IMAGE          16'h3
-`define BITSYNC_BERT_IMAGE          16'h4
-`define LEGACY_CMA_IMAGE            16'h5
-`define SEMCO_DEMOD_IMAGE           16'h6
-`define LDPC_DEMOD_IMAGE            16'h7
-`define STC_DEMOD_IMAGE             16'h8
+`define LEGACY_DEMOD_IMAGE          16'd0
+`define TRELLIS_DEMOD_IMAGE         16'd1
+`define TWOCHANNEL_SCDEMOD_IMAGE    16'd2
+`define MULTIH_DEMOD_IMAGE          16'd3
+`define BITSYNC_BERT_IMAGE          16'd4
+`define LEGACY_CMA_IMAGE            16'd5
+`define SEMCO_DEMOD_IMAGE           16'd6
+`define LDPC_DEMOD_IMAGE            16'd7
+`define STC_DEMOD_IMAGE             16'd8
+// FPGA2: Two channel viterbi with PCM decoder
+`define VITERBI_DEMOD_IMAGE         16'd9
+// STC Modulator on a BS1000
+`define STC_MOD_IMAGE               16'd10
+`define LDPC_12_DEMOD_IMAGE         16'd11
+`define LDPC_23_DEMOD_IMAGE         16'd12
+`define LDPC_45_DEMOD_IMAGE         16'd13
 
 //`define INTERNAL_ADAPT
 `define SYM_DEVIATION
 `define ADD_SOQPSK_TRELLIS
 //`define FM_FILTER
+`define DQM_USE_DPLL
+//`define NEW_FM_TIMING
 
 `ifdef LEGACY_DEMOD
 `define CIC_COMP_USE_MPY
@@ -49,13 +58,61 @@
 
 `ifdef TRIPLE_DEMOD
 `define SEMCO_DEMOD
+`define ADD_SUBCARRIER
+`define ADD_FRAMER
+`define ADD_BITSYNC
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
+`ifdef TRIPLE_MULTIH
+`define MULTIH_DEMOD
+`define ADD_FRAMER
+`define ADD_BITSYNC
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
 
 `ifdef TRIPLE_LDPC
+`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
 `define R6100
 `endif
+
+`ifdef TRIPLE_LDPC_12
+`define FPGA_TYPE           `LDPC_12_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
+`ifdef TRIPLE_LDPC_23
+`define FPGA_TYPE           `LDPC_23_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
+`ifdef TRIPLE_LDPC_45
+`define FPGA_TYPE           `LDPC_45_DEMOD_IMAGE
+`define LDPC_DEMOD
+`define ADD_MULTIBOOT
+`define ADD_IDCODE
+`define ADD_SPECTRAL_SWEEP
+`define R6100
+`endif
+
 
 `ifdef SEMCO_DEMOD
 `define FPGA_TYPE           `SEMCO_DEMOD_IMAGE
@@ -63,37 +120,31 @@
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
-//`define ADD_DESPREADER
-//`define ADD_SCPATH
+`define ADD_HB0_BYPASS
 `define ADD_CMA
 `define ADD_TRELLIS
-`define ADD_MULTIH
-//`define ADD_LDPC
+`define ADD_SOQPSK
 `define ADD_DQM
-`define ADD_SUPERBAUD_TED
-`ifndef SIMULATE
-`define EMBED_MULTIH_CARRIER_LOOP
-`endif
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
-`define ADD_MULTIBOOT
-`define ADD_SPECTRAL_SWEEP
 `define ADD_VITERBI
-`define ADD_BITSYNC
+`define ADD_RS_DEC
+`define ADD_PN_GEN
+`define NO_LDPC_ENC
 `endif
 
-`ifdef LDPC_DEMOD
-`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
+`ifdef ADD_SOQPSK
+//`define CLF_SOQPSK_USE_RESAMP_PHASE
+`endif
+
+`ifdef MULTIH_DEMOD
+`define FPGA_TYPE           `MULTIH_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
-//`define ADD_DESPREADER
-//`define ADD_SCPATH
 `define ADD_CMA
-//`define ADD_TRELLIS
-//`define ADD_MULTIH
-`define ADD_LDPC
+`define ADD_MULTIH
 `define ADD_DQM
 `define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
@@ -101,8 +152,21 @@
 `endif
 `define ADD_SPI_GATEWAY
 `define ADD_BERT
-`define ADD_MULTIBOOT
-`define ADD_SPECTRAL_SWEEP
+`define ADD_VITERBI
+`define ADD_PN_GEN
+`define NO_LDPC_ENC
+`endif
+
+`ifdef LDPC_DEMOD
+`define SEMCO_DEMOD_MAP
+`define USE_BUS_CLOCK
+`define USE_VIVADO_CORES
+`define USE_DDC_FIR
+`define ADD_CMA
+`define ADD_LDPC
+`define ADD_DQM
+`define ADD_SPI_GATEWAY
+`define ADD_BERT
 `endif
 
 `ifdef ADD_LDPC
@@ -127,14 +191,33 @@
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
 `define ADD_MULTIBOOT
+`define ADD_IDCODE
 `endif
 
 `ifdef STC_MOD
+`define FPGA_TYPE           `STC_MOD_IMAGE
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
 `define ADD_SPI_GATEWAY
+`define ADD_TAU
 `endif
+
+
+`ifdef R6100
+
+`define DEMOD_SLOT_0    2'b00
+`define DEMOD_SLOT_1    2'b01
+`define DEMOD_SLOT_2    2'b10
+`define DEMOD_CMB_SLOT  `DEMOD_SLOT_2
+
+`ifdef  ADD_DQM
+    `define DQM_USE_CHIP_TO_CHIP
+    `define DQM_LOG_BITS    11
+`endif
+
+`endif //R6100
+
 
 `ifdef BITSYNC_BERT
 
@@ -295,10 +378,11 @@
     `define BS_TOP_STATUS           13'bx_xxxx_xxx0_11xx
     `define BS_TOP_DC_GAINS         13'bx_xxxx_xxx1_00xx
 
-`define VITERBISPACE        13'b0_01xx_0010_0xxx
-`define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
-`define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
-`define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+`define VITERBISPACE        13'b0_01xx_0010_xxxx
+    `define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
+    `define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
+    `define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+`define VIT_CONTROL            13'bx_xxxx_xxxx_11xx
 
 `define CH0_BITSYNCSPACE    13'b0_01x0_010x_xxxx
 `define BITSYNCSPACE        `CH0_BITSYNCSPACE
@@ -359,6 +443,18 @@
         `define PNGEN_PCM_DMS           4'b1001
         `define PNGEN_PCM_MDMM          4'b1010
         `define PNGEN_PCM_MDMS          4'b1011
+        `define PNGEN_FEC_OFF           2'b00
+        `define PNGEN_FEC_CONV          2'b01
+        `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_LDPC_R1_2         2'b00
+        `define PNGEN_LDPC_R2_3         2'b01
+        //`define PNGEN_LDPC_R3_4         2'b10
+        `define PNGEN_LDPC_R4_5         2'b10
+        `define PNGEN_LDPC_L1024        1'b0
+        `define PNGEN_LDPC_L4096        1'b1
+        `define PNGEN_LDPC_RND_OFF      2'b00
+        `define PNGEN_LDPC_RND_CCSDS    2'b01
+        `define PNGEN_LDPC_RND_IRIG     2'b10
 
 // Framesync subsystem registers
 `define FRAMER_SPACE            13'b1_00xx_0000_xxxx
@@ -366,6 +462,7 @@
     `define FRAMER_SYNCWORD         13'bx_xxxx_xxxx_01xx
     `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxxx_10xx
     `define FRAMER_STATUS           13'bx_xxxx_xxxx_11xx
+    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
 
 // Dual MSE subsystem registers
 `define DMSE_SPACE              13'b1_00xx_0001_xxxx
@@ -391,7 +488,7 @@
 //-------------------------------- Semco Demod --------------------------------
 
 // Top level registers
-`define SEMCO_TOP_SPACE     13'b0_00xx_000x_xxxx
+`define SEMCO_TOP_SPACE     13'b0_0000_000x_xxxx
     // Define the system top level memory map
     `define SYS_RESET           13'bx_xxxx_xxx0_000x
     `define SYS_VERSION         13'bx_xxxx_xxx0_001x
@@ -400,7 +497,7 @@
         `define SYS_DAC_INPUT_SEL_DEMOD 3'b000
     `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
     `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
+    `define SYS_IDCODE          13'bx_xxxx_xxx1_001x
     `define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
     `define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
         `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
@@ -408,7 +505,7 @@
         `define SYS_OUTPUT_SEL_CH1_BS   4'b0010
         `define SYS_OUTPUT_SEL_CH1_PCM  4'b0011
 
-`define SPIGW_SPACE         13'b0_00xx_0010_xxxx
+`define SPIGW_SPACE         13'b0_0000_0010_xxxx
     `define SPIGW_CYCLE32       13'bx_xxxx_xxxx_00xx
     `define SPIGW_CYCLE16       13'bx_xxxx_xxxx_010x
     `define SPIGW_RSVD0         13'bx_xxxx_xxxx_011x
@@ -416,7 +513,7 @@
     `define SPIGW_RSVD1         13'bx_xxxx_xxxx_101x
     `define SPIGW_CONTROL       13'bx_xxxx_xxxx_11xx
 
-`define LDPCSPACE               13'b0_00xx_010x_xxxx
+`define LDPCSPACE               13'b0_0000_010x_xxxx
     `define LDPC_CONTROL            13'bx_xxxx_xxx0_00xx
         `define LDPC_RATE_1_2           2'b01
         `define LDPC_RATE_2_3           2'b10
@@ -431,13 +528,20 @@
     `define LDPC_DLL_GAINS          13'bx_xxxx_xxx1_010x
     `define LDPC_DLL_FDBK_DIV       13'bx_xxxx_xxx1_011x
 
-`define VITERBISPACE            13'b0_00xx_0110_xxxx
+`define VITERBISPACE            13'b0_0000_0110_xxxx
     `define VIT_INVERSE_MEAN        13'bx_xxxx_xxxx_00xx
     `define VIT_BER_TEST_LENGTH     13'bx_xxxx_xxxx_01xx
     `define VIT_STATUS              13'bx_xxxx_xxxx_10xx
+    `define VIT_CONTROL             13'bx_xxxx_xxxx_11xx
+        `define VIT_MODE_SINGLE_CH      3'b000
+        `define VIT_MODE_IND_CH         3'b001
+        `define VIT_MODE_DUAL_CH        3'b010
+        `define VIT_MODE_OFFSET_CH      3'b011
+        `define VIT_MODE_OFFSET_INTLV   3'b100
 
-`define DUAL_DECODERSPACE   13'b0_00xx_1000_xxxx
-`define CH1_DECODERSPACE    13'b0_00xx_1001_xxxx
+
+`define DUAL_DECODERSPACE   13'b0_0000_1000_xxxx
+`define CH1_DECODERSPACE    13'b0_0000_1001_xxxx
     `define DEC_CONTROL         13'bx_xxxx_xxxx_00xx
         `define DEC_DERAND_MODE_OFF     3'b000
         `define DEC_DERAND_MODE_RNRZ15  3'b001
@@ -469,9 +573,9 @@
         `define PNGEN_PCM_MDMS          4'b1011
 
 // PLL subsystem registers
-`define PLL0SPACE           13'b0_00xx_1010_xxxx
-`define PLL1SPACE           13'b0_00xx_1100_xxxx
-`define PLL2SPACE           13'b0_00xx_1110_xxxx
+`define PLL0SPACE           13'b0_0000_1010_xxxx
+`define PLL1SPACE           13'b0_0000_1100_xxxx
+`define PLL2SPACE           13'b0_0000_1110_xxxx
     `define PLL0_BITS_0to31     13'bx_xxxx_xxxx_00xx
     `define PLL0_BITS_68to99    13'bx_xxxx_xxxx_01xx
     `define PLL0_BITS_100to131  13'bx_xxxx_xxxx_10xx
@@ -489,14 +593,14 @@
     `define PLL2_XFER           13'bx_xxxx_xxxx_111x
 
 // Clock and Data subsystem registers
-`define CandD0SPACE         13'b0_00xx_1011_xxxx
-`define CandD1SPACE         13'b0_00xx_1101_xxxx
-`define CandD2SPACE         13'b0_00xx_1111_xxxx
+`define CandD0SPACE         13'b0_0000_1011_xxxx
+`define CandD1SPACE         13'b0_0000_1101_xxxx
+`define CandD2SPACE         13'b0_0000_1111_xxxx
     `define CandD_CONTROL           13'bx_xxxx_xxxx_00xx
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
         `define CandD_SRC_PCMTRELLIS    4'b0010
-        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_SOQTRELLIS    4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
@@ -508,7 +612,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_SRC_RS_DEC        4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
@@ -517,24 +621,81 @@
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
 
-// Legacy Demod subsystem registers
-`define DEMODSPACE          13'b0_0100_000x_xxxx
-`define DDCSPACE            13'b0_0100_0010_xxxx
-`define DDCFIRSPACE         13'b0_0100_0011_xxxx
-`define CICDECSPACE         13'b0_0100_0100_0xxx
-`define RESAMPSPACE         13'b0_0100_0101_xxxx
-`define BITSYNCSPACE        13'b0_0100_011x_xxxx
-`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
-    `define BS_MODE_SINGLE_CH       2'b00
-    `define BS_MODE_IND_CH          2'b01
-    `define BS_MODE_DUAL_CH         2'b10
-    `define BS_MODE_OFFSET_CH       2'b11
-`define CHAGCSPACE          13'b0_0100_101x_xxxx
-`define CARRIERSPACE        13'b0_0100_110x_xxxx
-`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
-`define TRELLIS_SPACE       13'b0_0100_1111_xxxx
-`define TRELLISLFSPACE      13'b0_0101_000x_xxxx
-`define MULTIH_SPACE        13'b0_0101_0010_xxxx
+// PN Generator subsystem registers
+`define PNGEN_SPACE             13'b0_0001_0000_xxxx
+    `define PNGEN_POLY              13'bx_xxxx_xxxx_00xx
+    `define PNGEN_RATE              13'bx_xxxx_xxxx_01xx
+    `define PNGEN_PCM_MODE          13'bx_xxxx_xxxx_10xx
+        `define PNGEN_PCM_NRZL          4'b0000
+        `define PNGEN_PCM_NRZM          4'b0001
+        `define PNGEN_PCM_NRZS          4'b0010
+        `define PNGEN_PCM_BIPL          4'b0100
+        `define PNGEN_PCM_BIPM          4'b0101
+        `define PNGEN_PCM_BIPS          4'b0110
+        `define PNGEN_PCM_DMM           4'b1000
+        `define PNGEN_PCM_DMS           4'b1001
+        `define PNGEN_PCM_MDMM          4'b1010
+        `define PNGEN_PCM_MDMS          4'b1011
+        `define PNGEN_FEC_OFF           2'b00
+        `define PNGEN_FEC_CONV          2'b01
+        `define PNGEN_FEC_LDPC          2'b10
+        `define PNGEN_LDPC_R1_2         2'b00
+        `define PNGEN_LDPC_R2_3         2'b01
+        //`define PNGEN_LDPC_R3_4         2'b10
+        `define PNGEN_LDPC_R4_5         2'b10
+        `define PNGEN_LDPC_L1024        1'b0
+        `define PNGEN_LDPC_L4096        1'b1
+        `define PNGEN_LDPC_RND_OFF      2'b00
+        `define PNGEN_LDPC_RND_CCSDS    2'b01
+        `define PNGEN_LDPC_RND_IRIG     2'b10
+
+// Demod subsystem registers
+`define PRIDEMODSPACE       13'b0_0100_xxxx_xxxx
+`define SCIFPATHSPACE       13'b0_1010_xxxx_xxxx
+    // interpolator used after the Subcarrier IF Path
+    `define SCINTERPSPACE       13'bx_xxxx_1111_xxxx
+`define SCDEMODSPACE        13'b0_1011_xxxx_xxxx
+
+    `ifdef SIMULATE
+
+    `define DEMODSPACE          13'b0_0100_000x_xxxx
+    `define DDCSPACE            13'b0_0100_0010_xxxx
+    `define DDCFIRSPACE         13'b0_0100_0011_xxxx
+    `define CICDECSPACE         13'b0_0100_0100_0xxx
+    `define RESAMPSPACE         13'b0_0100_0101_xxxx
+    `define BITSYNCSPACE        13'b0_0100_011x_xxxx
+    `define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
+        `define BS_MODE_SINGLE_CH       2'b00
+        `define BS_MODE_IND_CH          2'b01
+        `define BS_MODE_DUAL_CH         2'b10
+        `define BS_MODE_OFFSET_CH       2'b11
+    `define CHAGCSPACE          13'b0_0100_101x_xxxx
+    `define CARRIERSPACE        13'b0_0100_110x_xxxx
+    `define EQUALIZERSPACE      13'b0_0100_1110_xxxx
+
+    `else //SIMULATE
+
+    `define DEMODSPACE          13'bx_xxxx_000x_xxxx
+    `define DDCSPACE            13'bx_xxxx_0010_xxxx
+    `define DDCFIRSPACE         13'bx_xxxx_0011_xxxx
+    `define CICDECSPACE         13'bx_xxxx_0100_0xxx
+    `define RESAMPSPACE         13'bx_xxxx_0101_xxxx
+    `define BITSYNCSPACE        13'bx_xxxx_011x_xxxx
+    `define BITSYNCAUSPACE      13'bx_xxxx_100x_xxxx
+        `define BS_MODE_SINGLE_CH       2'b00
+        `define BS_MODE_IND_CH          2'b01
+        `define BS_MODE_DUAL_CH         2'b10
+        `define BS_MODE_OFFSET_CH       2'b11
+    `define CHAGCSPACE          13'bx_xxxx_101x_xxxx
+    `define CARRIERSPACE        13'bx_xxxx_110x_xxxx
+    `define EQUALIZERSPACE      13'bx_xxxx_1110_xxxx
+
+    `endif //SIMULATE
+
+
+`define TRELLIS_SPACE       13'b0_0101_0000_xxxx
+`define MULTIH_SPACE        13'b0_0101_0001_xxxx
+`define TRELLISLFSPACE      13'b0_0101_001x_xxxx
 `define MULTIHLFSPACE       13'b0_0101_010x_xxxx
 `define SDISPACE            13'b0_0101_0110_xxxx
 `define UARTSPACE           13'b0_0101_0111_xxxx
@@ -542,14 +703,17 @@
     `define DQM_SYNC_WORD       16'hfac4
     `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
     `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
-        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
-    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
-    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
-    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+
+
+    `ifdef DQM_USE_DPLL
+
+    `define DQM_DLL_FREQUENCY   13'bx_xxxx_xxxx_10xx
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_110x
         `define DQM_SRC_LEGACY_I    4'b0000
         `define DQM_SRC_LEGACY_Q    4'b0001
         `define DQM_SRC_PCMTRELLIS  4'b0010
-        `define DQM_SRC_MULTIH      4'b0011
+        `define DQM_SRC_SOQTRELLIS  4'b0011
         `define DQM_SRC_STC         4'b0100
         `define DQM_SRC_PNGEN       4'b0101
         `define DQM_SRC_LDPC        4'b0110
@@ -561,11 +725,47 @@
         `define DQM_SRC_DEC2_CH0    4'b1100
         `define DQM_SRC_DEC2_CH1    4'b1101
         `define DQM_SRC_DEC3_CH0    4'b1110
-        `define DQM_SRC_DEC3_CH1    4'b1111
+        `define DQM_SRC_RS_DEC      4'b1111
+
+        `define DQM_CMB_MODE_DISABLED   3'b000
+        `define DQM_CMB_MODE_CH0SELECT  3'b001
+        `define DQM_CMB_MODE_CH1SELECT  3'b010
+        `define DQM_CMB_MODE_OPTSELECT  3'b011
+        `define DQM_CMD_MODE_OPTRATIO   3'b100
+
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_111x
+
+    `else //DQM_USE_DPLL
+
+    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+        `define DQM_SRC_LEGACY_I    4'b0000
+        `define DQM_SRC_LEGACY_Q    4'b0001
+        `define DQM_SRC_PCMTRELLIS  4'b0010
+        `define DQM_SRC_SOQTRELLIS  4'b0011
+        `define DQM_SRC_STC         4'b0100
+        `define DQM_SRC_PNGEN       4'b0101
+        `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RSVD0       4'b0111
+        `define DQM_SRC_DEC0_CH0    4'b1000
+        `define DQM_SRC_DEC0_CH1    4'b1001
+        `define DQM_SRC_DEC1_CH0    4'b1010
+        `define DQM_SRC_DEC1_CH1    4'b1011
+        `define DQM_SRC_DEC2_CH0    4'b1100
+        `define DQM_SRC_DEC2_CH1    4'b1101
+        `define DQM_SRC_DEC3_CH0    4'b1110
+        `define DQM_SRC_RS_DEC      4'b1111
+
+    `endif //DQM_USE_DPLL
+
+
+`define SOQTRELLIS_SPACE    13'b0_0101_1001_xxxx
+`define SOQTRELLISLFSPACE   13'b0_0101_101x_xxxx
 `define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // BERT subsystem registers
-`define BERT_SPACE          13'b0_0111_xxxx_xxxx
+`define BERT_SPACE          13'b0_0111_0xxx_xxxx
     `define BERT_POLY               13'bx_xxxx_x000_00xx
     `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
     `define SLIP_LIMIT              13'bx_xxxx_x000_10xx
@@ -582,11 +782,11 @@
         `define BERT_SRC_LEGACY_I    4'b0000
         `define BERT_SRC_LEGACY_Q    4'b0001
         `define BERT_SRC_PCMTRELLIS  4'b0010
-        `define BERT_SRC_VIT0        4'b0011
+        `define BERT_SRC_SOQTRELLIS  4'b0011
         `define BERT_SRC_STC         4'b0100
-        `define BERT_SRC_VIT1        4'b0101
+        `define BERT_SRC_RSVD0       4'b0101
         `define BERT_SRC_LDPC        4'b0110
-        `define BERT_SRC_RSVD0       4'b0111
+        `define BERT_SRC_RSVD1       4'b0111
         `define BERT_SRC_DEC0_CH0    4'b1000
         `define BERT_SRC_DEC0_CH1    4'b1001
         `define BERT_SRC_DEC1_CH0    4'b1010
@@ -594,7 +794,57 @@
         `define BERT_SRC_DEC2_CH0    4'b1100
         `define BERT_SRC_DEC2_CH1    4'b1101
         `define BERT_SRC_DEC3_CH0    4'b1110
-        `define BERT_SRC_DEC3_CH1    4'b1111
+        `define BERT_SRC_RS_DEC      4'b1111
+
+// Reed Solomon Decoder subsystem registers start at x0C80
+`define RS_DEC_SPACE          13'b0_1100_100x_xxxx
+    `define RS_DEC_CONTROL            13'bx_xxxx_xxx0_00xx
+    `define RS_DEC_STATUS             13'bx_xxxx_xxx0_01xx
+    `define RS_DEC_ASM_CONTROL        13'bx_xxxx_xxx0_10xx
+    `define RS_DEC_SOURCE_SELECT      13'bx_xxxx_xxx0_11xx
+    `define RS_DEC_PHASE_INC          13'bx_xxxx_xxx1_00xx
+    `define RS_DEC_SYNCWORD           13'bx_xxxx_xxx1_01xx
+        `define RS_DEC_SRC_LEGACY_I    4'b0000
+        `define RS_DEC_SRC_LEGACY_Q    4'b0001
+        `define RS_DEC_SRC_PCMTRELLIS  4'b0010
+        `define RS_DEC_SRC_SOQTRELLIS  4'b0011
+        `define RS_DEC_SRC_STC         4'b0100
+        `define RS_DEC_SRC_RSVD0       4'b0101
+        `define RS_DEC_SRC_LDPC        4'b0110
+        `define RS_DEC_SRC_RSVD1       4'b0111
+        `define RS_DEC_SRC_DEC0_CH0    4'b1000
+        `define RS_DEC_SRC_DEC0_CH1    4'b1001
+        `define RS_DEC_SRC_DEC1_CH0    4'b1010
+        `define RS_DEC_SRC_DEC1_CH1    4'b1011
+        `define RS_DEC_SRC_DEC2_CH0    4'b1100
+        `define RS_DEC_SRC_DEC2_CH1    4'b1101
+        `define RS_DEC_SRC_DEC3_CH0    4'b1110
+        `define RS_DEC_SRC_DEC3_CH1    4'b1111
+
+
+// Framesync subsystem registers
+`define FRAMER_SPACE            13'b0_0111_100x_xxxx
+    `define FRAMER_CONTROL          13'bx_xxxx_xxx0_00xx
+    `define FRAMER_SYNCWORD         13'bx_xxxx_xxx0_01xx
+    `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxx0_10xx
+    `define FRAMER_STATUS           13'bx_xxxx_xxx0_11xx
+    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
+        `define FRAMER_SRC_LEGACY_I    4'b0000
+        `define FRAMER_SRC_LEGACY_Q    4'b0001
+        `define FRAMER_SRC_PCMTRELLIS  4'b0010
+        `define FRAMER_SRC_SOQTRELLIS  4'b0011
+        `define FRAMER_SRC_STC         4'b0100
+        `define FRAMER_SRC_RSVD0       4'b0101
+        `define FRAMER_SRC_LDPC        4'b0110
+        `define FRAMER_SRC_RSVD1       4'b0111
+        `define FRAMER_SRC_DEC0_CH0    4'b1000
+        `define FRAMER_SRC_DEC0_CH1    4'b1001
+        `define FRAMER_SRC_DEC1_CH0    4'b1010
+        `define FRAMER_SRC_DEC1_CH1    4'b1011
+        `define FRAMER_SRC_DEC2_CH0    4'b1100
+        `define FRAMER_SRC_DEC2_CH1    4'b1101
+        `define FRAMER_SRC_DEC3_CH0    4'b1110
+        `define FRAMER_SRC_RS_DEC      4'b1111
 
 
 // Video Interpolators and FIRs
@@ -615,10 +865,12 @@
 // Standalone, Single Channel Bitsync
 `define SBS_TOP_SPACE       13'b0_1001_000x_xxxx
     `define BS_TOP_CONTROL          13'bx_xxxx_xxx0_00xx
+        `ifndef BS_MODE_SINGLE_CH
         `define BS_MODE_SINGLE_CH       2'b00
         `define BS_MODE_IND_CH          2'b01
         `define BS_MODE_DUAL_CH         2'b10
         `define BS_MODE_OFFSET_CH       2'b11
+        `endif
     `define BS_TOP_CH0_CONTROL      13'bx_xxxx_xxx0_01xx
     `define BS_TOP_CH1_CONTROL      13'bx_xxxx_xxx0_10xx
     `define BS_DAC_ADC                  4'b0000
@@ -673,7 +925,7 @@
         `define SYS_DAC_INPUT_SEL_DEMOD 3'b000
     `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
     `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_RSVD1           13'bx_xxxx_xxx1_001x
+    `define SYS_IDCODE          13'bx_xxxx_xxx1_001x
     `define SYS_SUBSYSTEM_CTRL  13'bx_xxxx_xxx1_01xx
     `define SYS_OUTPUT_SEL      13'bx_xxxx_xxx1_10xx
         `define SYS_OUTPUT_SEL_CH0_BS   4'b0000
@@ -762,7 +1014,7 @@
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
         `define CandD_SRC_PCMTRELLIS    4'b0010
-        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_SOQTRELLIS    4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
@@ -774,7 +1026,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_SRC_RD_SOL        4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
@@ -811,18 +1063,20 @@
 //-------------------------------- STC Mod ------------------------------------
 
 // Top level registers
-`define STC_MOD_SPACE       13'b0_00xx_000x_xxxx
+`define STC_MOD_SPACE       13'b0_00xx_00xx_xxxx
     // Define the system top level memory map
-    `define SYS_RESET           13'bx_xxxx_xxx0_000x
-    `define SYS_VERSION         13'bx_xxxx_xxx0_001x
-    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xxx0_01xx
-    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xxx0_10xx
-    `define SYS_REBOOT_ADDR     13'bx_xxxx_xxx0_11xx
-    `define SYS_TYPE            13'bx_xxxx_xxx1_000x
-    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xxx1_001x
-    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xxx1_01xx
-    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xxx1_10xx
-    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xxx1_11xx
+    `define SYS_RESET           13'bx_xxxx_xx00_000x
+    `define SYS_VERSION         13'bx_xxxx_xx00_001x
+    `define SYS_STCMOD_H0REAL   13'bx_xxxx_xx00_01xx
+    `define SYS_STCMOD_H0IMAG   13'bx_xxxx_xx00_10xx
+    `define SYS_REBOOT_ADDR     13'bx_xxxx_xx00_11xx
+    `define SYS_TYPE            13'bx_xxxx_xx01_000x
+    `define SYS_STCMOD_CONTROL  13'bx_xxxx_xx01_001x
+    `define SYS_STCMOD_PNPOLY   13'bx_xxxx_xx01_01xx
+    `define SYS_STCMOD_H1REAL   13'bx_xxxx_xx01_10xx
+    `define SYS_STCMOD_H1IMAG   13'bx_xxxx_xx01_11xx
+    `define SYS_STCMOD_H0TAU    13'bx_xxxx_xx10_00xx
+    `define SYS_STCMOD_H1TAU    13'bx_xxxx_xx10_01xx
 
 `define FMMODSPACE              13'b0_00xx_011x_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxx0_00xx
@@ -1031,6 +1285,7 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
+        `define DAC_SRC_RS_DEC          7      // uses the same decode as LDPC since they're mutually exclusive
         `define DAC_SRC_STC             8
         `define DAC_SRC_SBS             9
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x

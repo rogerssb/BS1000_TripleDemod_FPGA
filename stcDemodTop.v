@@ -121,7 +121,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd10682;
+    parameter VER_NUMBER = 16'd764;
 
 
 //******************************************************************************
@@ -299,6 +299,7 @@ module stcDemodTop (
     end
 
     wire    [31:0]  boot_addr;
+    wire    [8:0]   idCode;
     wire    [3:0]   ch0MuxSelect;
     wire    [3:0]   ch1MuxSelect;
     wire    [31:0]  semcoTopDout;
@@ -312,6 +313,7 @@ module stcDemodTop (
         .clk(clk),
         .versionNumber(VER_NUMBER),
         .fpgaType(`FPGA_TYPE),
+        .idCode(idCode),
         .reset(reset),
         .reboot(reboot),
         .rebootAddress(boot_addr),
@@ -328,12 +330,26 @@ module stcDemodTop (
 //                           Multiboot Controller
 //******************************************************************************
 
+    `ifdef ADD_IDCODE
+
+    multibootK7_FZ multiboot(
+        .clk(clk),
+        .reset(reset),
+        .pulse(reboot),
+        .addr(boot_addr),
+        .idCode(idCode)
+    );
+
+    `else //ADD_IDCODE
+
     multibootK7 multiboot(
         .clk(clk),
         .pulse(reboot),
         .addr(boot_addr),
         .reset(reset)
     );
+
+    `endif //ADD_IDCODE
 
 `endif //ADD_MULTIBOOT
 
@@ -637,11 +653,14 @@ module stcDemodTop (
         .pllOutputClk(pll0_OUT1),
         .sourceSelect(cAndD0SourceSelect),
         .pllReferenceClk(pll0_REF),
-        .outputClk(ch0ClkOut),
+        .outputClk(cAndD0ClkOut),
         .outputData(cAndD0DataOut)
     );
+    assign ch0ClkOut = cAndD0ClkOut;
     assign ch0DataOut = cAndD0DataOut[2];
-    assign ch2ClkOut = ch0ClkOut;
+    //assign ch0ClkOut = stcBitEnOut;
+    //assign ch0DataOut = decBitOut;
+    assign ch2ClkOut = cAndD0ClkOut;
     assign ch2DataOut = cAndD0DataOut[2];
 
     //----------------------- Channel 1 Jitter Attenuation --------------------

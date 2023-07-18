@@ -205,7 +205,6 @@ ARCHITECTURE rtl OF STC IS
          reset,
          ce,
          MsbFirst,
-         EstimatesDone,
          ValidIn        : IN  std_logic;
          RecoveredData  : IN  SLV4;
          ClocksPerBit   : IN  sfixed(0 downto -15);
@@ -686,7 +685,6 @@ BEGIN
          reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
-         EstimatesDone  => EstimatesDone,
          MsbFirst       => '1',
          RecoveredData  => TrellisBits,
          ClocksPerBit   => to_sfixed(ClocksPerBit, 0, -15),
