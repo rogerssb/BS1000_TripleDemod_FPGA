@@ -10,8 +10,7 @@
 `timescale 1ns/100ps
 
 module trellisProcess (
-    input                   oldNew,
-                            clk,
+    input                   clk,
                             clkEnable,
                             reset,
                             frameStart,
@@ -75,7 +74,7 @@ module trellisProcess (
 
         Estimate time = 5300  clocks
         Incoming data = 13312 clocks
-        Trellis time  = 800*4*4 = 12800 clocks
+        Trellis time  = 800*4*4*Decimation = 12800 clocks
 
         Since the trellis plus estimating time is greater than 1 frame, the end of the
         trellis process may aoverlap the estimating time
@@ -86,8 +85,6 @@ module trellisProcess (
         19.7e6
     */
     wire    signed  [17:0]  faReal0,faImag0,faReal1,faImag1;
-    wire    signed  [17:0]  faReal0New,faImag0New,faReal1New,faImag1New;
-    wire    signed  [17:0]  faReal0Old,faImag0Old,faReal1Old,faImag1Old;
     reg                     estimatesDoneDly;
 
     always @(posedge clk) begin
@@ -104,7 +101,6 @@ module trellisProcess (
     end
 
     integer SPARE_CODE_WORDS = 1; // first output is bogus
-    assign  lastSampleReset = (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
 
     frameAlignment
     fa(
@@ -119,47 +115,16 @@ module trellisProcess (
         .TwoClksPerTrellis(TwoClksPerTrellis),
         .m_ndx0(m_ndx0),
         .m_ndx1(m_ndx1),
-        .clkEnOut(faClkEnOld),
-        .myStartOfTrellis(myStartOfTrellisOld),
-        .interpolate(interpolateOld),
-        .doutReal0(faReal0Old),
-        .doutImag0(faImag0Old),
-        .doutReal1(faReal1Old),
-        .doutImag1(faImag1Old)
+        .clkEnOut(faClkEn),
+        .myStartOfTrellis(myStartOfTrellis),
+        .interpolate(interpolate),
+        .doutReal0(faReal0),
+        .doutImag0(faImag0),
+        .doutReal1(faReal1),
+        .doutImag1(faImag1)
     );
-
-    frameAlignmentFifo
-    faFifo(
-        .clk(clk),
-        .clkEn(clkEnable),
-        .reset(reset),
-        .startOfFrame(frameStart),
-        .estimatesDone(estimatesDoneDly),
-        .valid(dfValid),
-        .dinReal(dfRealOutput),
-        .dinImag(dfImagOutput),
-        .TwoClksPerTrellis(TwoClksPerTrellis),
-        .m_ndx0(m_ndx0),
-        .m_ndx1(m_ndx1),
-        .clkEnOut(faClkEnNew),
-        .myStartOfTrellis(myStartOfTrellisNew),
-        .interpolate(interpolateNew),
-        .doutReal0(faReal0New),
-        .doutImag0(faImag0New),
-        .doutReal1(faReal1New),
-        .doutImag1(faImag1New)
-    );
-
-    wire faClkEn            = (oldNew) ? faClkEnOld          : faClkEnNew;
-    wire myStartOfTrellis   = (oldNew) ? myStartOfTrellisOld : myStartOfTrellisNew;
-    wire interpolate        = (oldNew) ? interpolateOld      : interpolateNew;
-    assign faReal0          = (oldNew) ? faReal0Old          : faReal0New;
-    assign faImag0          = (oldNew) ? faImag0Old          : faImag0New;
-    assign faReal1          = (oldNew) ? faReal1Old          : faReal1New;
-    assign faImag1          = (oldNew) ? faImag1Old          : faImag1New;
 
 //------------------------- Interpolators ---------------------------------
-
     wire    signed      [17:0]  sample0r, sample0i, sample1r, sample1i;
     interpolator ch0r(
         .clk(clk),
@@ -210,7 +175,8 @@ module trellisProcess (
     );
 
     //------------------------- Trellis Detector ------------------------------
-    wire [3:0]   tdOutputBits;
+    wire [3:0]  tdOutputBits;
+    reg         lastSampleReset;
 
     trellisDetector td(
         .clk(clk),
@@ -229,6 +195,7 @@ module trellisProcess (
         .outputEn(tdOutputEn),
         .outputBits(tdOutputBits)
     );
+
 
     always @(posedge clk) begin
         if (reset || myStartOfTrellis || lastSampleReset) begin
@@ -251,56 +218,9 @@ module trellisProcess (
         else if (tdOutputEn) begin
             outputBits <= tdOutputBits;
         end
-    end
 
-    reg [17:0]  inCount, dfCount, faCount, tdCount, outCount, inLatch, dfLatch, faLatch, tdLatch, outLatch = 0;
-    always @(posedge clk) begin
-        if (frameStart) begin
-            inCount     <= inputValid;
-            dfCount     <= dfValid;
-            faCount     <= faClkEn & interpolate;
-            tdCount     <= interpOutEn;
-            outCount    <= tdOutputEn;
-            inLatch     <= inCount;
-            dfLatch     <= dfCount;
-            faLatch     <= faCount;
-            tdLatch     <= tdCount;
-            outLatch    <= outCount;
-        end
-        else begin
-            if (inputValid) begin
-                inCount <= inCount + 1;
-            end
-            if (dfValid) begin
-                dfCount <= dfCount + 1;
-            end
-            if (faClkEn & interpolate) begin
-                faCount <= faCount + 1;
-            end
-            if (interpOutEn) begin
-                tdCount <= tdCount + 1;
-        end
-            if (tdOutputEn) begin
-                outCount <= outCount + 1;
+        lastSampleReset <= (sampleOut == `CODEWORDS_PER_FRAME + SPARE_CODE_WORDS);
     end
-        end
-    end
-
-Vio2x18 CountVios (
-  .clk(clk),
-  .probe_in0(inLatch),
-  .probe_in1(dfLatch),
-  .probe_in2(faLatch),
-  .probe_in3(tdLatch),
-  .probe_in4(outLatch),
-  .probe_in5(18'b0),
-  .probe_out0(),
-  .probe_out1(),
-  .probe_out2(),
-  .probe_out3(),
-  .probe_out4(),
-  .probe_out5()
-);
 
 endmodule
 

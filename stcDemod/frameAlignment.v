@@ -7,9 +7,9 @@
 //          Add depth register so read never reaches within 5 of write to avoid possible overflow if m_ndx is large positive. When SOF is detected, write goes
 //          back to zero, but read continues till all samples read. Added sample counter.
 // 9/3/20   Modulo 13312 math wasn't checking underflow. fifoOutputValid wasn't waiting for data, just SOF
+// 7/19/23  Removed sampleCount > 2000 from setting last samples. Above 17M, it would fail
 
 module frameAlignment
-//    #(parameter CLKS_PER_OUTPUT = 2)
     (
     input                   clk,
                             clkEn,
@@ -35,32 +35,38 @@ module frameAlignment
     //------------------------------ Sample Counter ---------------------------
 
 (* MARK_DEBUG="true" *)    reg             [14:0]  wrAddr, rdAddr;
-(* MARK_DEBUG="true" *)    reg  signed     [14:0]  depth, rdWrCount;
+(* MARK_DEBUG="true" *)    reg  signed     [14:0]  depth;
     wire   signed   [15:0]  rdAddr0, rdAddr1, rdAddr0Tmp, rdAddr1Tmp;
-    reg                     sofDetected, lastSamplesAvailable;
-    reg                     outputState, lastSample;
-    reg             [14:0]   sampleCount;
-    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // since new frame starts writing at 0, frame data starts at known offset
+    reg                     sofDetected, sofActive, fifoWrEnDly;
+    reg                     outputState, lastSample, myReset;
+    reg             [13:0]  sampleCount;
+    wire                    fifoWrEn = (clkEn && valid);
+
+    parameter   DELAY = 25;
+    reg [DELAY-1:0]  sofDelay;
+    wire    mySof = sofDelay[DELAY-1];
+
+    `define   SOF_ADDRESS `PILOT_SAMPLES_PER_FRAME - 10  // since new frame starts writing at DEPTH, frame data starts at known offset
     always @(posedge clk) begin
-        if (reset) begin
+        fifoWrEnDly <= fifoWrEn;
+        if (myReset) begin
             myStartOfTrellis <= 0;
             sofDetected      <= 0;
-            lastSamplesAvailable <= 0;
+            sofActive        <= 0;
         end
         else if (clkEn) begin
+            sofDelay <= {sofDelay[DELAY-2:0], fifoWrEn & !fifoWrEnDly & sofActive};
             if (startOfFrame) begin
                 sofDetected <= 1;
+                sofActive   <= 1;
+            end
+            else if (mySof) begin
+                sofActive <= 0;
             end
             else if (myStartOfTrellis) begin
                 sofDetected <= 0;
             end
 
-            if (lastSample) begin
-                lastSamplesAvailable <= 0;
-            end
-            else if ((wrAddr == 20) && (sampleCount > 2000)) begin
-                lastSamplesAvailable <= 1;
-            end
 
             myStartOfTrellis <= (estimatesDone & sofDetected);
         end
@@ -71,36 +77,40 @@ module frameAlignment
     // This forces the packet to always start at 0 up to 13312ish then the next packet will start at the bottom
     // The read address then starts at SOF_ADDRESS samples later
 
-    wire                    fifoWrEn = (clkEn && valid);
-    reg                     fifoRdEn;
+    reg                     fifoRdEn, lastSampleAvailable;
     wire    [35:0]          fifoRdData0, fifoRdData1;
 
     always @(posedge clk) begin
-        if (reset) begin
-            rdAddr <= 0;
-            wrAddr <= 0;
-            rdWrCount <= 0;
+        if (myReset) begin
+            rdAddr      <= 0;
+            wrAddr      <= 0;
+            myReset     <= 0;
+            lastSampleAvailable <= 0;
         end
         else if (clkEn) begin
-            if (startOfFrame) begin     // start each frame at 0, read starts at sofAddress.
+            myReset <= reset | (wrAddr > 13340);    // should never get this high
+
+            if (mySof) begin     // start each frame at 0, read starts at sofAddress.
                 wrAddr <= 0;
+//              lastSampleAvailable <= 1;   defined below for verilog syntax
             end
             else if (fifoWrEn) begin
                 wrAddr <= wrAddr + 1;
             end
 
+            if (mySof) begin     // start each frame at 0, read starts at sofAddress.
+                lastSampleAvailable <= 1;
+            end
+            else if (lastSample | myStartOfTrellis) begin
+                lastSampleAvailable <= 0;
+            end
+
             if (myStartOfTrellis) begin
-                rdAddr <= `SOF_ADDRESS;  // skip the pilot data at first sync
+                rdAddr <= `SOF_ADDRESS - (DELAY + 1);  // skip the pilot data
             end
             else if (fifoRdEn) begin
-                rdAddr <= (rdAddr < 13311) ? rdAddr + 1 : 0;   // wrap read address back around to find final data at start of next packet.
+                rdAddr <= rdAddr + 1;
             end
-
-            if (fifoWrEn && !fifoRdEn)
-                rdWrCount <= rdWrCount + 1;
-            else if (fifoRdEn && !fifoWrEn)
-                rdWrCount <= rdWrCount - 1;
-
         end
     end
 
@@ -112,36 +122,36 @@ module frameAlignment
 
     RAM_2Reads_1WriteVerWrap #(
       .DATA_WIDTH  (36),
-      .ADDR_WIDTH  (15),
+      .ADDR_WIDTH  (14),
       .LATENCY     (1) )
     fifoRealImag(
         .clk(clk),
         .ce(clkEn),
-        .reset(reset),
+        .reset(myReset),
         .WrEn(fifoWrEn),
-        .WrAddr(wrAddr),
-        .RdAddrA(rdAddr0[14:0]),        // only use the unsigned part of rdAddr
-        .RdAddrB(rdAddr1[14:0]),
+        .WrAddr(wrAddr[13:0]),
+        .RdAddrA(rdAddr0[13:0]),        // only use the unsigned part of rdAddr
+        .RdAddrB(rdAddr1[13:0]),
         .WrData({dinReal, dinImag}),
         .RdOutA(fifoRdData0),
         .RdOutB(fifoRdData1)
     );
-    wire    fifoOutputValid = ((interpolate == 1) || (depth > 5) || (lastSamplesAvailable == 1));  // allow enough room for worst case, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of current data section
+    wire    fifoOutputValid = (interpolate | lastSampleAvailable | (depth > 5));  // allow enough room for worst case m_ndx, don't leave interpolate hanging. When next startOfFrame wrAddr goes to 0, so keep reading to end of current data section
     assign  doutReal0       = fifoRdData0[35:18];
     assign  doutImag0       = fifoRdData0[17:0];
     assign  doutReal1       = fifoRdData1[35:18];
     assign  doutImag1       = fifoRdData1[17:0];
-    wire            [3:0]   clksPerOutput = (TwoClksPerTrellis) ? 2 : 4;
+    wire    [3:0]   clksPerOutput = (TwoClksPerTrellis) ? 2 : 4;
 
     //-------------------------- Output State Machine -------------------------
 
-        `define WAIT_VALID          1'b0
-        `define WAIT_DECIMATION     1'b1
-    reg             [2:0]   decimationCount;
-    reg             [1:0]   outputCount;
-    reg             [8:0]   trellisInitCnt;
+    `define WAIT_VALID          1'b0
+    `define WAIT_DECIMATION     1'b1
+    reg [2:0]   decimationCount;
+    reg [1:0]   outputCount;
+    reg [8:0]   trellisInitCnt;
     always @(posedge clk) begin
-        if (reset || lastSample) begin
+        if (myReset || lastSample) begin
             outputState <= `WAIT_VALID;
             decimationCount <= clksPerOutput - 1; //CLKS_PER_OUTPUT-1;
             fifoRdEn        <= 0;

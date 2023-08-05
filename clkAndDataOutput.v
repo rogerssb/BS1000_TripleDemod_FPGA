@@ -1,8 +1,9 @@
-`include "./addressMap.v"
+`include "/addressMap.v"
 `timescale 1ns / 10 ps
 
 
-module clkAndDataOutput(
+module clkAndDataOutput 
+    (
     input               clk, reset,
     input               busClk,
     input       [12:0]  addr,
@@ -75,18 +76,36 @@ module clkAndDataOutput(
     // First stage jitter attenuation FIFO
     reg             dll_ReadEnable;
     wire    [2:0]   dll_Symbol;
-    jitterFifo dllFifo(
-        .rst(clkReset),
-        .wr_clk(clk),
-        .rd_clk(dllReadClk),
-        .din(dataIn),
-        .wr_en(clkEnIn),
-        .rd_en(dll_ReadEnable),
-        .dout(dll_Symbol),
-        .full(dll_Full),
-        .empty(dll_Empty),
-        .prog_full(dll_HalfFull)
-    );
+    wire            dll_HalfFull;
+
+    `ifndef USE_FIFO_64    
+            jitterFifo dllFifo(
+                .rst(clkReset),
+                .wr_clk(clk),
+                .rd_clk(dllReadClk),
+                .din(dataIn),
+                .wr_en(clkEnIn),
+                .rd_en(dll_ReadEnable),
+                .dout(dll_Symbol),
+                .full(dll_Full),
+                .empty(dll_Empty),
+                .prog_full(dll_HalfFull)
+            );
+    `else
+            jitterFifo64 dllFifo(
+                .rst(clkReset),
+                .wr_clk(clk),
+                .rd_clk(dllReadClk),
+                .din(dataIn),
+                .wr_en(clkEnIn),
+                .rd_en(dll_ReadEnable),
+                .dout(dll_Symbol),
+                .full(dll_Full),
+                .empty(dll_Empty),
+                .prog_full(dll_HalfFull)
+            );
+    `endif
+
     always @(posedge dllReadClk) begin
         if (clkReset) begin
             dll_ReadEnable <= 0;
@@ -129,19 +148,36 @@ module clkAndDataOutput(
     // Second stage jitter attenuation FIFO
     reg             pll_ReadEnable;
     wire    [2:0]   pll_Symbol;
-    jitterFifo pllFifo(
-        .rst(clkReset),
-        .wr_clk(clk),
-        .rd_clk(pllReadClk),
-        .din(dataIn),
-        .wr_en(clkEnIn),
-        .rd_en(pll_ReadEnable),
-        .dout(pll_Symbol),
-        .full(pll_Full),
-        .empty(pll_Empty),
-        .prog_full(pll_HalfFull)
-    );
-    always @(posedge pllReadClk) begin
+    wire            pll_HalfFull;
+    `ifndef USE_FIFO_64
+            jitterFifo pllFifo(
+                .rst(clkReset),
+                .wr_clk(clk),
+                .rd_clk(pllReadClk),
+                .din(dataIn),
+                .wr_en(clkEnIn),
+                .rd_en(pll_ReadEnable),
+                .dout(pll_Symbol),
+                .full(pll_Full),
+                .empty(pll_Empty),
+                .prog_full(pll_HalfFull)
+            );
+   `else
+            jitterFifo64 pllFifo(
+                .rst(clkReset),
+                .wr_clk(clk),
+                .rd_clk(pllReadClk),
+                .din(dataIn),
+                .wr_en(clkEnIn),
+                .rd_en(pll_ReadEnable),
+                .dout(pll_Symbol),
+                .full(pll_Full),
+                .empty(pll_Empty),
+                .prog_full(pll_HalfFull)
+            );
+   `endif
+
+   always @(posedge pllReadClk) begin
         if (clkReset) begin
             pll_ReadEnable <= 0;
         end

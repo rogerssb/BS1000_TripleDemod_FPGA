@@ -46,10 +46,9 @@ ENTITY FireberdDrive IS
       reset,
       ce,
       EstimatesDone,
-      MsbFirst,
       ValidIn        : IN  std_logic;
       RecoveredData  : IN  SLV4;
-      ClocksPerBit   : IN  SLV16;
+      PhaseIncr      : IN  SLV16;
       DataOut,
       ClkOut         : OUT std_logic
    );
@@ -75,13 +74,11 @@ ARCHITECTURE rtl OF FireberdDrive IS
    CONSTANT FIFO_THRESH       : natural := 26;
    -- Signals
    SIGNAL   Accum             : signed(15 downto 0);
-   SIGNAL   ClocksPerBitDly   : SLV16;
+   SIGNAL   PhaseIncrDly      : SLV16;
    SIGNAL   EffectiveRate     : signed(12 downto 0);
-   SIGNAL   FifoDataIn,
-            ClkDelay          : SLV4;
+   SIGNAL   ClkDelay          : SLV4;
    SIGNAL   FifoDataOut       : std_logic_vector(0 to 0);
-   SIGNAL   FifoDepth,
-            WrCount           : STD_LOGIC_VECTOR(13 DOWNTO 0);
+   SIGNAL   FifoDepth         : STD_LOGIC_VECTOR(13 DOWNTO 0);
    SIGNAL   FifoOffset        : signed(12 DOWNTO 0);
    SIGNAL   RdEn,
             Active,
@@ -97,35 +94,30 @@ ARCHITECTURE rtl OF FireberdDrive IS
 
 BEGIN
 
-   FifoDataIn <= RecoveredData when (MsbFirst) else reverse_slv_bits(RecoveredData);
-   DataOut    <= FifoDataOut(0);
+   DataOut  <= FifoDataOut(0);
 
    ClkProcess : process(Clk)
    begin
       if (rising_edge(Clk)) then
-         ClocksPerBitDly <= ClocksPerBit;
+         PhaseIncrDly    <= PhaseIncr;
          FifoOffset      <= (FIFO_THRESH - signed(FifoDepth(12 downto 0)));
          AccumMsb        <= Accum(15);
-         if ((reset = '1') or (ClocksPerBit /= ClocksPerBitDly)) then
+         if ((reset = '1') or (PhaseIncr /= PhaseIncrDly)) then
             Accum          <= (others=>'0');
             EffectiveRate  <= (others=>'0');
             Active         <= '0';
             RdEn           <= '0';
             ClkOut         <= '0';
             ClkDelay       <= x"0";
-            WrCount        <= (others=>'0');
          elsif (ce) then
             if (unsigned(FifoDepth) > FIFO_THRESH) then
                Active <= '1';
             end if;
             if (Active) then
-               Accum    <= Accum + signed(ClocksPerBit) + EffectiveRate - (FifoOffset sra 2);
+               Accum    <= Accum + signed(PhaseIncr) + EffectiveRate - (FifoOffset sra 2);
                RdEn     <= AccumMsb and not Accum(15) and not Empty;
                if (EstimatesDone) then
                   EffectiveRate <= EffectiveRate - FifoOffset;
-               end if;
-               if (unsigned(FifoDepth) > unsigned(WrCount)) then     -- test for maximum FifoDepth
-                  WrCount <= FifoDepth;
                end if;
             end if;
             ClkDelay <= ClkDelay(2 downto 0) & RdEn;
@@ -138,7 +130,7 @@ BEGIN
    PORT MAP (
       clk            => clk,
       srst           => reset or Full,
-      din            => FifoDataIn,
+      din            => RecoveredData,
       wr_en          => ValidIn and not reset,
       rd_en          => RdEn and not Empty,
       dout           => FifoDataOut,

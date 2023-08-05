@@ -27,7 +27,6 @@ Dependencies: None
                                HISTORY
 ----------------------------------------------------------------------------
 2-6-17 Initial release FZ
-6-26-23 FZ Changed delay lines from shifters to RAM based to save parts and routing
 -------------------------------------------------------------
 */
 
@@ -63,20 +62,6 @@ END OverlapAddAbs;
 
 ARCHITECTURE rtl OF OverlapAddAbs IS
 
-   COMPONENT VariableDelayX18
-      PORT (
-         clk,
-         srst,
-         wr_en,
-         rd_en       : IN  STD_LOGIC;
-         din         : IN  STD_LOGIC_VECTOR(17 DOWNTO 0);
-         full,
-         empty       : OUT STD_LOGIC;
-         dout        : OUT STD_LOGIC_VECTOR(17 DOWNTO 0);
-         data_count  : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
-      );
-   END COMPONENT;
-
    CONSTANT IN_LEFT     : integer := ReIn'left;
    CONSTANT IN_RIGHT    : integer := ReIn'right;
    CONSTANT DELAY       : integer := 511;
@@ -84,8 +69,8 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
    type DelayLine is array (natural range <>) of sfixed(IN_LEFT downto IN_RIGHT);
 
   -- Signals
-   SIGNAL   A0, A0FZ,
-            B0, B0FZ,
+   SIGNAL   A0,
+            B0,
             A1,
             B1,
             A2,
@@ -99,12 +84,11 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
    SIGNAL   ValidDly,
             StartDly    : std_logic_vector(4 downto 1);
    SIGNAL   Count       : integer range 0 to 1023;
-   SIGNAL   RdDelayFifo,
-            OverFlow    : std_logic;
+   SIGNAL   OverFlow    : std_logic;
    SIGNAL   FullSize    : ufixed(2*A0'left+2 downto OUT_BINPT);
-   SIGNAL   data_count  : STD_LOGIC_VECTOR(9 DOWNTO 0);
-   SIGNAL   dOutR,
-            dOutI       : STD_LOGIC_VECTOR(IN_WIDTH-1 DOWNTO 0);
+   SIGNAL   ReDlyLine,
+            ImDlyLine   : DelayLine(DELAY downto 0); -- := (others=>(others=>'0'));     -- TODO FZ, remove initialization to pack into SRL16s
+
 BEGIN
 
    ClkProcess : process(clk)
@@ -127,9 +111,11 @@ BEGIN
             ValidDly <= ValidDly(3 downto 1) & ValidIn;
             StartDly <= StartDly(3 downto 1) & StartIn;
             if (ValidIn) then
+               ReDlyLine <= ReDlyLine(DELAY-1 downto 0) & ReIn;
+               ImDlyLine <= ImDlyLine(DELAY-1 downto 0) & ImIn;
                -- pipeline level 1, latch inputs
-               A0 <= ReIn + to_sfixed(dOutR, ReIn);
-               B0 <= ImIn + to_sfixed(dOutI, ReIn);
+               A0 <= ReIn + ReDlyLine(DELAY);
+               B0 <= ImIn + ImDlyLine(DELAY);
                if (Count < 1023) then
                   Count <= Count + 1;
                end if;
@@ -166,34 +152,6 @@ BEGIN
    ValidOut <= ValidDly(4);
    ReOut    <= resize(A3, ReOut);
    ImOut    <= resize(B3, ImOut);
-
-   RdDelayFifo <= (unsigned(data_count) ?>= 511) and ValidIn;
-
-   ReDly512 : VariableDelayX18
-      PORT MAP (
-         clk         => clk,
-         srst        => reset,
-         din         => to_slv(ReIn),
-         wr_en       => ValidIn,
-         rd_en       => RdDelayFifo,
-         dout        => dOutR,
-         full        => open,
-         empty       => open,
-         data_count  => data_count
-   );
-
-   ImDly512 : VariableDelayX18
-      PORT MAP (
-         clk         => clk,
-         srst        => reset,
-         din         => to_slv(ImIn),
-         wr_en       => ValidIn,
-         rd_en       => RdDelayFifo,
-         dout        => dOutI,
-         full        => open,
-         empty       => open,
-         data_count  => open
-   );
 
 END rtl;
 

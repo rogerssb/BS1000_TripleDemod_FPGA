@@ -148,7 +148,7 @@ module stcDemodTop (
                                 NextClk_n,
                                 PrevClk_p,
                                 PrevClk_n,
-        `elsif COMBINER_DEMOD // combiner
+        `elsif COMBINER_DEMOD
 
         // interFpga data
             output [4:0]        PrevData_p,
@@ -161,8 +161,6 @@ module stcDemodTop (
                                 PrevClk_n,
         `endif
 
-
-
     // SDI Output
         output              sdiOut,
         output              DQMOut
@@ -170,13 +168,14 @@ module stcDemodTop (
     `else   //R6100
 
         // SDI Output
+    output              DQMOut,
     output              sdiOut
 
     `endif //R6100
 
 );
 
-    parameter VER_NUMBER = 16'd682;
+    parameter VER_NUMBER = 16'd780;
 
 
 //******************************************************************************
@@ -419,7 +418,6 @@ module stcDemodTop (
     wire                DdsCS_n;
     wire                DdsSClk;
     wire                DdsMosi;
-    wire                IF_BS_n;
     wire      [13:0]    bsAdc;
     wire                bsAdc_overflow, bsAdc_powerDown;
     // Input Impedance and Topology controls
@@ -450,7 +448,11 @@ module stcDemodTop (
         .bsAdc           (bsAdc),
         .bsAdc_overflow  (bsAdc_overflow)
     );
+
+    `ifndef COMBINER
+        assign IF_BS_n = 1'b0;
     `endif
+ `endif
 
 //******************************************************************************
 //                             Top Level Registers
@@ -532,12 +534,12 @@ module stcDemodTop (
 
     wire    signed  [15:0]  ch0Mag,ch1Mag;
     wire    signed  [5:0]   stcDeltaTau;
-    wire            [15:0]  clocksPerBit;
+    wire            [15:0]  PhaseIncr;
     wire            [11:0]  hxThreshSlv;
     wire            [3:0]   stcDac0Select;
     wire            [3:0]   stcDac1Select;
     wire            [3:0]   stcDac2Select;
-    wire            [31:0]  stcDout;
+    wire            [31:0]  stcRegsDout;
 
     stcRegs stcTopReg(
         .busClk(busClk),
@@ -545,15 +547,15 @@ module stcDemodTop (
         .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
         .addr(addr),
         .dataIn(dataIn),
-        .dataOut(stcDout),
+        .dataOut(stcRegsDout),
         .ch0Mag(ch0Mag),
         .ch1Mag(ch1Mag),
         .stcDeltaTau(stcDeltaTau),
         .lockStatus0(pilotFound),
         .lockStatus1(pilotLocked),
         .spectrumInvert(SpectrumInv),
-        .clocksPerBit(clocksPerBit),
-        .hxThreshSlv(hxThreshSlv),      // AGC dependent, usually x"180"
+        .clocksPerBit(PhaseIncr),
+        .hxThreshSlv(hxThreshSlv),      // No longer used, AGC dependent, usually x"180"
         .dac0Select(stcDac0Select),
         .dac1Select(stcDac1Select),
         .dac2Select(stcDac2Select)
@@ -673,7 +675,6 @@ module stcDemodTop (
 
 
 
-
 //******************************************************************************
 //                                 STC Demod
 //******************************************************************************
@@ -683,11 +684,19 @@ module stcDemodTop (
     wire                    stcDac1ClkEn;
     wire    signed  [17:0]  stcDac2Data;
     wire                    stcDac2ClkEn;
-    wire                    stcBitEnOut;
-    wire                    stcBit;
+    wire                    stcClkOutEn;
+    wire                    stcDataOut;
     wire            [31:0]  stcPeaks;
     assign  ch0Mag = $signed(stcPeaks[15:0]);
     assign  ch1Mag = $signed(stcPeaks[31:16]);
+
+    reg cAndD0Space;
+    always @* begin
+        casex(addr)
+            `CandD0SPACE: cAndD0Space = cs;
+            default:      cAndD0Space = 0;
+        endcase
+    end
 
     STC stcDemod(
         .ResampleR(iStc),
@@ -696,7 +705,7 @@ module stcDemodTop (
         .Clk93Dly(clkDly),
         .Clk186(clk186),
         .ValidIn(stcDdcClkEn),
-        .ClocksPerBit(clocksPerBit),
+        .PhaseIncr(PhaseIncr),
         .DacSelect0(stcDac0Select),
         .DacSelect1(stcDac1Select),
         .DacSelect2(stcDac2Select),
@@ -706,14 +715,14 @@ module stcDemodTop (
         .PhaseDiffEn(phaseDiffEn),
         .PilotOffset(sampleRateError),
         .StartOfFrame(sampleRateErrorEn),
-        .ClkOutEn(stcBitEnOut),
+        .ClkOutEn(stcClkOutEn),
+        .DataOut(stcDataOut),
         .PilotFound(pilotFound),
         .PilotLocked(pilotLocked),
         .HxEstR(HxEstR),
         .HxEstI(HxEstI),
         .Peaks(stcPeaks),
         .DeltaTau(stcDeltaTau),
-        .DataOut(stcBitOut),
         .Dac0Data(stcDac0Data),
         .Dac0ClkEn(stcDac0ClkEn),
         .Dac1Data(stcDac1Data),
@@ -721,6 +730,13 @@ module stcDemodTop (
         .Dac2Data(stcDac2Data),
         .Dac2ClkEn(stcDac2ClkEn)
     );
+
+    // retime the 186MHz clock and data output back to the 93.3MHz clock domain
+    reg stcBitEnOut, stcBitOut;
+    always @(posedge(clk)) begin
+        stcBitEnOut <= stcClkOutEn;
+        stcBitOut   <= stcDataOut;
+    end
 
 //******************************************************************************
 `ifdef COMBINER
@@ -879,49 +895,6 @@ module stcDemodTop (
 
 `endif
 
-
-`ifdef ADD_BERT
-//******************************************************************************
-//                            Bit Error Rate Tester
-//******************************************************************************
-
-    reg bertSpace;
-    always @* begin
-        casex(addr)
-            `BERT_SPACE:            bertSpace = cs;
-            default:                bertSpace = 0;
-            endcase
-        end
-
-    wire    [3:0]   bertSourceSelect;
-    reg             bertClkEn;
-    reg             bertDataIn;
-    always @* begin
-        casex (bertSourceSelect)
-            default:   begin
-                bertClkEn = stcBitEnOut;
-                bertDataIn = stcBit;
-            end
-        endcase
-    end
-
-    wire    [31:0]  bertDout;
-    bert_top bert(
-        .reset(reset),
-        .busClk(busClk),
-        .cs(bertSpace),
-        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
-        .addr(addr),
-        .dataIn(dataIn),
-        .dataOut(bertDout),
-        .clk(clk),
-        .enable(bertClkEn),
-        .data(bertDataIn),
-        .inputSourceSelect(bertSourceSelect)
-    );
-`endif //ADD_BERT
-
-
 //******************************************************************************
 //                            Derandomizer
 //******************************************************************************
@@ -948,6 +921,48 @@ module stcDemodTop (
         .bitInput(stcBitOut),
         .bitOutput(decBitOut)
     );
+
+`ifdef ADD_BERT
+//******************************************************************************
+//                            Bit Error Rate Tester
+//******************************************************************************
+
+    reg bertSpace;
+    always @* begin
+        casex(addr)
+            `BERT_SPACE:            bertSpace = cs;
+            default:                bertSpace = 0;
+            endcase
+        end
+
+    wire    [3:0]   bertSourceSelect;
+    reg             bertClkEn;
+    reg             bertDataIn;
+    always @* begin
+        casex (bertSourceSelect)
+            default:   begin
+                bertClkEn = stcBitEnOut;
+                bertDataIn = decBitOut;
+            end
+        endcase
+    end
+
+    wire    [31:0]  bertDout;
+    bert_top bert(
+        .reset(reset),
+        .busClk(busClk),
+        .cs(bertSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(bertDout),
+        .clk(clk),
+        .enable(bertClkEn),
+        .data(bertDataIn),
+        .sourceSelect(bertSourceSelect)
+    );
+`endif //ADD_BERT
+
 
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
@@ -1016,11 +1031,14 @@ module stcDemodTop (
         .pllOutputClk(pll0_OUT1),
         .sourceSelect(cAndD0SourceSelect),
         .pllReferenceClk(pll0_REF),
-        .outputClk(ch0ClkOut),
+        .outputClk(cAndD0ClkOut),
         .outputData(cAndD0DataOut)
     );
+    assign ch0ClkOut  = cAndD0ClkOut;
     assign ch0DataOut = cAndD0DataOut[2];
-    assign ch2ClkOut = ch0ClkOut;
+    //assign ch2ClkOut = stcBitEnOut;
+    //assign ch2DataOut = stcBitOut;
+    assign ch2ClkOut  = cAndD0ClkOut;
     assign ch2DataOut = cAndD0DataOut[2];
 
     //----------------------- Channel 1 Jitter Attenuation --------------------
@@ -1060,16 +1078,13 @@ module stcDemodTop (
         .outputData(cAndD1DataOut)
     );
     assign ch1DataOut = cAndD1DataOut[2];
-    assign ch1ClkOut = cAndD1ClkOut;
+    assign ch1ClkOut  = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
         `ifdef COMBINER
         assign ch3ClkOut = !bestSrcSel;
         `else
         assign ch3ClkOut = cAndD1ClkOut;
         `endif
-//    assign ch1ClkOut = stcBitEnOut;
-//    assign ch3DataOut = decBitOut;
-//    assign ch3ClkOut = stcBitEnOut;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -1464,6 +1479,28 @@ module stcDemodTop (
     `endif //R6100
 
 
+    `ifdef ADD_SPECTRAL_SWEEP
+    //******************************************************************************
+    //                          Spectral Sweep Card
+    //******************************************************************************
+    wire [31:0] sscDout;
+    ssc ssc(
+        .atod(adc0In[17:4]),
+        .clk(clk),
+        .reset(reset),
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),
+        .wr1(wr1),
+        .wr2(wr2),
+        .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(sscDout),
+        .uartOut(DQMOut)
+        );
+    `endif  //ADD_SPECTRAL_SWEEP
+
     `ifdef R6100
 
     //******************************************************************************
@@ -1477,7 +1514,7 @@ module stcDemodTop (
             `SPIGW_SPACE:       rd_mux = spiGatewayDout;
             `endif
 
-            `STC_DEMOD_SPACE:   rd_mux = stcDout;
+            `STC_DEMOD_SPACE:   rd_mux = stcRegsDout;
 
             `DEMODSPACE,
             `DDCSPACE,
@@ -1503,6 +1540,10 @@ module stcDemodTop (
 
             `VIDSWITCHSPACE:    rd_mux = vsDout;
 
+
+            `ifdef ADD_SPECTRAL_SWEEP
+            `SSCSPACE:          rd_mux = sscDout;
+            `endif
 
             `ifdef ADD_BERT
             `BERT_SPACE:        rd_mux = bertDout;
@@ -1548,10 +1589,10 @@ module stcDemodTop (
 
             `STC_DEMOD_SPACE:   begin
                 if (addr[1]) begin
-                    rd_mux = stcDout[31:16];
+                    rd_mux = stcRegsDout[31:16];
                 end
                 else begin
-                    rd_mux = stcDout[15:0];
+                    rd_mux = stcRegsDout[15:0];
                 end
             end
 
@@ -1663,6 +1704,16 @@ module stcDemodTop (
                     rd_mux = bertDout[15:0];
                 end
             end
+            `endif
+
+            `ifdef ADD_SPECTRAL_SWEEP
+            `SSCSPACE:       begin
+                if (addr[1]) begin
+                    rd_mux = sscDout[31:16];
+                end
+                else begin
+                    rd_mux = sscDout[15:0];
+                end
             `endif
 
             `ifdef COMBINER_DISTORT

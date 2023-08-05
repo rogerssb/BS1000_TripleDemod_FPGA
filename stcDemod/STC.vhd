@@ -36,7 +36,7 @@ Dependencies:
 12_??-19 Removed Detection Filter from Brik2 module. Changed STC routing to match
 12-19-19 Change PilotSync Offset to 9. Changed TrellisOffset in VIO to 0
 01-14-20 Add Peaks and DeltaTau outputs for meter
-06-15-23 Removed MiscBits and force MagRSlv to 25000. Removed LUT of expected data for simulation
+06-15-23 Removed MiscBits, Vio1 and forced MagRSlv to 25000. Removed LUT of expected data for simulation
 
 -------------------------------------------------------------
 */
@@ -56,7 +56,7 @@ ENTITY STC IS
    PORT(
       ResampleR,
       ResampleI         : IN  SLV18;
-      ClocksPerBit      : IN  SLV16;
+      PhaseIncr         : IN  SLV16;
       DacSelect0,
       DacSelect1,
       DacSelect2        : IN  SLV4;
@@ -176,7 +176,6 @@ ARCHITECTURE rtl OF STC IS
 
    COMPONENT trellisProcess
       PORT (
-         oldNew,
          clk,
          clkEnable,
          reset,
@@ -200,35 +199,32 @@ ARCHITECTURE rtl OF STC IS
    );
    END COMPONENT TrellisProcess;
 
+   COMPONENT FireberdDriveLF
+      PORT(
+         clk,
+         reset,
+         ce,
+         ValidIn           : IN  std_logic;
+         RecoveredData     : IN  SLV4;
+         PhaseIncr         : IN  SLV16;
+         DataOut,
+         ClkOut            : OUT std_logic
+      );
+   END COMPONENT FireberdDriveLF;
+
    COMPONENT FireberdDrive
       PORT(
          clk,
          reset,
          ce,
-         MsbFirst,
          EstimatesDone,
          ValidIn        : IN  std_logic;
          RecoveredData  : IN  SLV4;
-         ClocksPerBit   : IN  SLV16;
+         PhaseIncr      : IN  SLV16;
          DataOut,
          ClkOut         : OUT std_logic
       );
    END COMPONENT FireberdDrive;
-
-      COMPONENT FireberdDriveNew
-         PORT(
-            clk,
-            reset,
-            ce,
-            MsbFirst,
-            EstimatesDone,
-            ValidIn        : IN  std_logic;
-            RecoveredData  : IN  SLV4;
-            ClocksPerBit   : IN  SLV16;
-            DataOut,
-            ClkOut         : OUT std_logic
-         );
-      END COMPONENT FireberdDriveNew;
 
    COMPONENT RAM_2Reads_1Write IS
       GENERIC(
@@ -304,6 +300,11 @@ ARCHITECTURE rtl OF STC IS
         );
    end component;
 
+  constant CandD_CLK_PHASE_0   : std_logic_vector(1 downto 0) := "00";
+  constant CandD_CLK_PHASE_90  : std_logic_vector(1 downto 0) := "01";
+  constant CandD_CLK_PHASE_180 : std_logic_vector(1 downto 0) := "10";
+  constant CandD_CLK_PHASE_270 : std_logic_vector(1 downto 0) := "11";
+
   -- Signals
    SIGNAL   ResetSrc          : SLV8 := x"FF";
    SIGNAL   CE,
@@ -322,8 +323,11 @@ ARCHITECTURE rtl OF STC IS
             StartInBrik2Dly,
             ValidInBrik2Dly,
             PilotValidOutDly,
-            DataOutOld, DataOutNew,
-            ClkOutEnOld, ClkOutEnNew,
+
+            FireBerdSel,
+            DataOutPll, DataOutLF,
+            ClkOutEnPll, ClkOutEnLF,
+
             TrellisOutEn,
             EstimatesDone,
             EstimatesDoneDly  : std_logic;
@@ -392,15 +396,15 @@ ARCHITECTURE rtl OF STC IS
             H1Mag_u,
             HxThresh          : ufixed(0 downto -12);
    SIGNAL   CorrPntr8to0      : std_logic_vector(8 downto 0);
+   SIGNAL   ClocksPerBitCnt,
+            ClocksPerBit      : unsigned(8 downto 0) := 9x"0";
 
 -- todo, remove
    SIGNAL   m_ndx0Slv,
             m_ndx1Slv,
-            PrnError          : SLV4;
-   signal   MiscBits,
-            Vio1,
             CountTo,
-            HxPhase,
+            PrnError          : SLV4;
+   signal   HxPhase,
             InRBrik2Ila,
             InIBrik2Ila,
             PrnShift          : SLV18;
@@ -410,7 +414,7 @@ ARCHITECTURE rtl OF STC IS
    signal   DeltaTauEn,
             ResetTrellis,
             PrnErrors         : std_logic;
-   signal   Counter, fdCount  : unsigned(15 downto 0) := x"0000";
+   signal   Counter           : unsigned(3 downto 0) := x"0";
 
    attribute mark_debug : string;
    attribute mark_debug of EstimatesDone,
@@ -418,7 +422,7 @@ ARCHITECTURE rtl OF STC IS
                   PhaseDiffWB, PhaseDiffNB, CorrPntr8to0, m_ndx0Slv, m_ndx1Slv, Mag0GtMag1, HxThresh,
                   H0Phase, H1Phase, H0Mag, H1Mag, deltaTauEstSlv, MagRSlv, MagISlv,
                   PrnErrors, PhaseDiffs, PilotOffset, PilotOffset_s,
-                  DataOut, ClkOutEn, ValidPN15, fdCount : signal is "true";
+                  DataOut, ClkOutEn, ValidPN15 : signal is "true";
 
 BEGIN
 
@@ -453,15 +457,20 @@ BEGIN
                Reload <= '1';
             end if;
          end if;
-         if (StartInBrik2Dly) then
-            fdCount <= 16x"0";
-         elsif (ValidIn) then
-            fdCount <= fdCount + 1;
+
+         if (TrellisOutEn) then
+            PrnShift <= PrnShift(13 downto 0) & TrellisBits;
+            PrnError(0) <= PrnShift(14) xor PrnShift(13) xor TrellisBits(3);
+            PrnError(1) <= PrnShift(13) xor PrnShift(12) xor TrellisBits(2);
+            PrnError(2) <= PrnShift(12) xor PrnShift(11) xor TrellisBits(1);
+            PrnError(3) <= PrnShift(11) xor PrnShift(10) xor TrellisBits(0);
          end if;
+         PrnErrors <= or(PrnError);
+
       end if;
    end process;
 
-   CE        <= '1';     -- no need to strobe CE at this point.
+   CE        <= '1';     -- no need to strobe CE at this point. Don't know if strobing works
 
    Reset93Process : process(Clk93)
    begin
@@ -640,13 +649,13 @@ BEGIN
       end if;
    end process;
 
-   TwoClksPerTrellis   <= '1' when (ClocksPerBit > 16x"D00") else '0';  -- ~9.5Mb
+   TwoClksPerTrellis <= '1' when (PhaseIncr > 16x"D00") else '0';  -- ~9.5Mb
+   FireBerdSel       <= '1' when (PhaseIncr > 16x"D00") else '0';  -- ~9.5Mb
 
    Trellis_u : trellisProcess
       PORT MAP (
          clk                  => Clk186,
          clkEnable            => CE,
-         oldNew               => Vio1(4),
          reset                => ResetTrellis,
          estimatesDone        => EstimatesDone and not EstimatesDoneDly,   -- rising edge of 93M clock pulse
          frameStart           => StartInBrik2Dly,
@@ -667,37 +676,33 @@ BEGIN
          outputBits           => TrellisBits
       );
 
-   FD : FireberdDrive
+   FD_LF : FireberdDriveLF
       PORT MAP(
          clk            => Clk186,
          reset          => Reset2x,
          ce             => CE,
          ValidIn        => TrellisOutEn,
-         EstimatesDone  => EstimatesDone,
-         MsbFirst       => '1',
          RecoveredData  => TrellisBits,
-         ClocksPerBit   => ClocksPerBit,
-         DataOut        => DataOutOld,
-         ClkOut         => ClkOutEnOld
+         PhaseIncr      => PhaseIncr,
+         DataOut        => DataOutLF,
+         ClkOut         => ClkOutEnLF
       );
 
-
-   FDnew : FireberdDriveNew
+   FD_pll : FireberdDrive
       PORT MAP(
          clk            => Clk186,
          reset          => Reset2x,
          ce             => CE,
-         ValidIn        => TrellisOutEn,
          EstimatesDone  => EstimatesDone,
-         MsbFirst       => '1',
+         ValidIn        => TrellisOutEn,
          RecoveredData  => TrellisBits,
-         ClocksPerBit   => ClocksPerBit,
-         DataOut        => DataOutNew,
-         ClkOut         => ClkOutEnNew
+         PhaseIncr      => PhaseIncr,
+         DataOut        => DataOutPll,
+         ClkOut         => ClkOutEnPll
       );
 
-   DataOut  <= DataOutNew  when (Vio1(0)) else DataOutOld;
-   ClkOutEn <= ClkOutEnNew when (Vio1(0)) else ClkOutEnOld;
+   DataOut  <= DataOutLF  when (FireBerdSel) else DataOutPll;
+   ClkOutEn <= ClkOutEnLF when (FireBerdSel) else ClkOutEnPll;
 
    pn_derand : bert_correlator
       port map (
@@ -742,7 +747,7 @@ BEGIN
 
          CorrPntr8to0 <= to_slv(CorrPntr(8 downto 0));
 
-         if (Reset) then
+         if (Reset) then      -- switch masters when twice power of other channel
             Mag0GtMag1 <= '1';
          elsif (H0Mag_u > H1Mag_u sla 1) then
             Mag0GtMag1   <= '1';
@@ -823,6 +828,8 @@ BEGIN
          enOut => open
       );
 
+-- handy for debugging. Allows for sampling every CountTo clocks
+-- trigger on Counter = 0 and set CountTo to DivBy N
    Vio : Vio2x18
       PORT MAP(
          clk         => Clk93,
@@ -832,11 +839,11 @@ BEGIN
          probe_in3   => 18x"0",
          probe_in4   => 18x"0",
          probe_in5   => 18x"0",
-         probe_out0  => MiscBits,
-         probe_out1  => Vio1,
-         probe_out2  => CountTo,
+         probe_out0  => open,
+         probe_out1  => open,
+         probe_out2  => open,
          probe_out3  => open,
-         probe_out4  => open,
+         probe_out4  => CountTo,
          probe_out5  => open
       );
 
@@ -846,7 +853,7 @@ BEGIN
          if (Counter < unsigned(CountTo)) then
             Counter <= Counter + 1;
          else
-            Counter <= 16x"0";
+            Counter <= x"0";
          end if;
       end if;
    end process;

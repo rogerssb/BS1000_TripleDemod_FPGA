@@ -48,7 +48,7 @@ module stcDerandomizer (
         .biphaseEnable(),
         .millerEnable(),
         .mode(),
-        .inputSelect(),
+        .sourceSelect(),
         .pcmEncoderMode()
     );
 

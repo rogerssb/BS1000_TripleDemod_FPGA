@@ -61,15 +61,19 @@ set_property PACKAGE_PIN B15 [get_ports {dac1_d[0]}]
 set_property PACKAGE_PIN AF25 [get_ports DQMOut]
 set_property PACKAGE_PIN AD26 [get_ports sdiOut]
 
+# BS Data/Clk TTL
 set_property PACKAGE_PIN AE21 [get_ports ch0ClkOut]
 set_property PACKAGE_PIN AD21 [get_ports ch0DataOut]
 
+# TTL0/1
 set_property PACKAGE_PIN Y21 [get_ports ch1ClkOut]
 set_property PACKAGE_PIN AD23 [get_ports ch1DataOut]
 
+#TTL 2/3
 set_property PACKAGE_PIN AD24 [get_ports ch2ClkOut]
 set_property PACKAGE_PIN AB22 [get_ports ch2DataOut]
 
+# Enc Clk/Data
 set_property PACKAGE_PIN AC24 [get_ports ch3ClkOut]
 set_property PACKAGE_PIN AA22 [get_ports ch3DataOut]
 
@@ -247,8 +251,8 @@ set_property SLEW SLOW [get_ports dac_sdio]
 
 set_property IOSTANDARD LVCMOS33 [get_ports ch*ClkOut]
 set_property IOSTANDARD LVCMOS33 [get_ports ch*DataOut]
-set_property DRIVE 16 [get_ports ch*DataOut]
-set_property SLEW FAST [get_ports ch*DataOut]
+set_property DRIVE 12 [get_ports ch*DataOut]
+set_property SLEW SLOW [get_ports ch*DataOut]
 
 set_property IOSTANDARD LVCMOS33 [get_ports sdiOut]
 set_property DRIVE 12 [get_ports sdiOut]
@@ -308,6 +312,17 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property BITSTREAM.CONFIG.CONFIGRATE 66 [current_design]
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
+
+
+
+
+
+
+
+
+
+
+
 
 
 

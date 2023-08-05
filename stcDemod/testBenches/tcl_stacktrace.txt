@@ -12,3 +12,13 @@ Trace back: invalid command name "SrcCommon::LoadDBSDialog"
     ("after" script)
   <2:C:/modeltech_pe_10.5c/win32pe/tk8.5/bgerror.tcl:92: ::tkerror {invalid command name "SrcCommon::LoadDBSDialog"}
   <1:eval:1: ::tk::dialog::error::bgerror {invalid command name "SrcCommon::LoadDBSDialog"}
+Tue Jul 18 19:08:18 EDT 2023
+Trace back: invalid command name ".main_pane.wave.saveformat.bb.ok"
+    while executing
+"$w cget -state"
+    (procedure "::tk::ButtonInvoke" line 2)
+    invoked from within
+"::tk::ButtonInvoke .main_pane.wave.saveformat.bb.ok"
+    (command bound to event)
+  <2:C:/modeltech_pe_10.5c/win32pe/tk8.5/bgerror.tcl:92: ::tkerror {invalid command name ".main_pane.wave.saveformat.bb.ok"}
+  <1:eval:1: ::tk::dialog::error::bgerror {invalid command name ".main_pane.wave.saveformat.bb.ok"}

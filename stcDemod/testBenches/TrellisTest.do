@@ -1,11 +1,18 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+add wave -noupdate -divider {New Divider}
+add wave -noupdate /fa_tb/DataRate
+add wave -noupdate /fa_tb/FrameCnt
+add wave -noupdate /fa_tb/Increment
+add wave -noupdate /fa_tb/PilotFound
+add wave -noupdate /fa_tb/StartOfFrame
+add wave -noupdate /fa_tb/Valid
+add wave -noupdate /fa_tb/clksPerBit
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/clk
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/clkEn
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/clkEnOut
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/clksPerOutput
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/decimationCount
-add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/depth
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/dinImag
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/dinReal
 add wave -noupdate /fa_tb/STC_u/Trellis_u/fa/doutImag1
@@ -50,13 +57,16 @@ add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/lastSample
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/myStartOfTrellis
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/rdAddr
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/sofDetected
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/sofFound
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/startFound
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/startOfFrame
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/startOfTrellis
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/syncTime
-add wave -noupdate -format Analog-Step -height 80 -max 130.0 /fa_tb/STC_u/Trellis_u/fa/trellisInitCnt
-add wave -noupdate -format Analog-Step -height 80 -max 130.0 /fa_tb/STC_u/Trellis_u/faFifo/trellisInitCnt
-add wave -noupdate -format Analog-Step -height 80 -max 16386.0 -radix unsigned /fa_tb/STC_u/Trellis_u/faFifo/depth
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 30 -max 130.0 /fa_tb/STC_u/Trellis_u/fa/trellisInitCnt
+add wave -noupdate -clampanalog 1 -format Analog-Step -height 30 -max 130.0 /fa_tb/STC_u/Trellis_u/faFifo/trellisInitCnt
+add wave -noupdate -format Analog-Step -height 80 -max 12862.0 -radix unsigned /fa_tb/STC_u/Trellis_u/faFifo/depth
+add wave -noupdate -format Analog-Step -height 80 -max 32767.0 -radix unsigned /fa_tb/STC_u/Trellis_u/fa/rdWrCount
+add wave -noupdate -format Analog-Step -height 80 -max 23019.0 -radix decimal /fa_tb/STC_u/Trellis_u/fa/depth
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/wrAddr
 add wave -noupdate /fa_tb/DataRate
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faFifo/almostEmpty
@@ -90,14 +100,30 @@ add wave -noupdate -format Analog-Step -height 80 -max 2537.0 /fa_tb/STC_u/PD_u/
 add wave -noupdate /fa_tb/STC_u/Trellis_u/inCount
 add wave -noupdate /fa_tb/STC_u/Trellis_u/dfCount
 add wave -noupdate /fa_tb/STC_u/Trellis_u/faCount
-add wave -noupdate /fa_tb/STC_u/Trellis_u/outCount
 add wave -noupdate /fa_tb/STC_u/Trellis_u/tdCount
-add wave -noupdate /fa_tb/STC_u/ResampleI
-add wave -noupdate -format Analog-Step -max 1.0 /fa_tb/Accum
-add wave -noupdate /fa_tb/clk93
-add wave -noupdate /fa_tb/Valid
+add wave -noupdate /fa_tb/STC_u/Trellis_u/outCount
+add wave -noupdate -radix hexadecimal /fa_tb/STC_u/TrellisBits
+add wave -noupdate /fa_tb/STC_u/TrellisOutEn
+add wave -noupdate /fa_tb/STC_u/ValidPN15
+add wave -noupdate /fa_tb/STC_u/Vio/probe_out1
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faClkEnOld
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faClkEnNew
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faClkEn
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faImag0
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faImag1
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faReal0
+add wave -noupdate /fa_tb/STC_u/Trellis_u/faReal1
+add wave -noupdate /fa_tb/STC_u/Trellis_u/interpolate
+add wave -noupdate /fa_tb/STC_u/Trellis_u/interpolateOld
+add wave -noupdate /fa_tb/STC_u/Trellis_u/interpolateNew
+add wave -noupdate /fa_tb/STC_u/Trellis_u/myStartOfTrellis
+add wave -noupdate /fa_tb/STC_u/Trellis_u/myStartOfTrellisNew
+add wave -noupdate /fa_tb/STC_u/Trellis_u/myStartOfTrellisOld
+add wave -noupdate /fa_tb/STC_u/Trellis_u/oldNew
+add wave -noupdate /fa_tb/STC_u/Trellis_u/outputBits
+add wave -noupdate /fa_tb/STC_u/Trellis_u/outputEn
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {596167906 ps} 0} {{Cursor 3} {4352719380 ps} 0}
+WaveRestoreCursors {{Cursor 1} {1462626356 ps} 0} {{Cursor 3} {2330143868 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 410
 configure wave -valuecolwidth 100
@@ -113,7 +139,7 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {3950493644 ps} {5173511272 ps}
+WaveRestoreZoom {0 ps} {3574369180 ps}
 bookmark add wave bookmark0 {{2508730 ps} {2540670 ps}} 0
 bookmark add wave bookmark1 {{3023030 ps} {3054970 ps}} 0
 bookmark add wave bookmark2 {{2187685 ps} {2199857 ps}} 33

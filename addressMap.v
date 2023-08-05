@@ -1070,6 +1070,11 @@
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
 
+// Spectral Sweep Card
+`define SSCSPACE            13'b0_1000_1001_xxxx
+
+`define UARTSPACE           13'b0_0101_0111_xxxx
+
 // BERT subsystem registers
 `define BERT_SPACE          13'b0_0111_0xxx_xxxx
     `define BERT_POLY               13'bx_xxxx_x000_00xx
@@ -1103,7 +1108,7 @@
         `define BERT_SRC_RS_DEC      4'b1111
 
 // Combiner subsystem registers start at x0C40 to 0xC7F
-        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
+`define COMBINER_SPACE          13'b0_1100_01xx_xxxx
         `define COMB_LAG_COEF      6'b00_00xx
         `define COMB_LEAD_COEF     6'b00_01xx
         `define COMB_SWEEP_RATE    6'b00_10xx
@@ -1119,6 +1124,9 @@
         `define CALF_LLIMIT        6'b10_10xx
         `define CALF_RATIOS        6'b10_11xx
         `define CALF_INTEGRATOR    6'b11_00xx
+
+// STC Output Data Loop Filter
+`define STC_SPACE           13'b0_1101_00xx_xxxx
 
 // Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_0100_000x_xxxx
