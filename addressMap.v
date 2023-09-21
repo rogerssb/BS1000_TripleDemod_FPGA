@@ -56,6 +56,7 @@
 //`define ADD_TURBO
 `define ADD_MSE
 `define ADD_RSENCODER
+`define ADD_LDPC
 `endif
 
 `ifdef TRIPLE_DEMOD

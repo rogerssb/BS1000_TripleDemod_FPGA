@@ -1,8 +1,8 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
--- Date        : Fri Oct 11 06:09:45 2019
--- Host        : Lenny running 64-bit major release  (build 9200)
+-- Date        : Mon Aug 21 17:39:29 2023
+-- Host        : DESKTOP-6PPS5M0 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode synth_stub C:/modem/vivado/xc7k160t-IP/fifo_1x16/fifo_1x16_stub.vhdl
 -- Design      : fifo_1x16
 -- Purpose     : Stub declaration of top-level module interface

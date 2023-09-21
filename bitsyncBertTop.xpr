@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="17" Path="Y:/vivado/bitsyncBertTop.xpr">
+<Project Version="7" Minor="17" Path="C:/modem/vivado/bitsyncBertTop.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="1c6c31b35abf42169fcf94b82a9d9e1d"/>
