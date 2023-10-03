@@ -69,6 +69,7 @@ BEGIN
    begin
       if (rising_edge(clk)) then
          if (reset = '1') then
+            file_close(FilePntr); --close the file after reading.
             --Open the file in read mode.
             file_open(FilePntr, FILE_NAME, read_mode);
             OutputData <= (others=>(others=>'0'));

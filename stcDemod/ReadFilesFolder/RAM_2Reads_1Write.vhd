@@ -112,15 +112,18 @@ ARCHITECTURE rtl OF RAM_2Reads_1Write IS
             exit;
          end if;
       end loop;
+      report "Done Reading file" severity warning;
       return FuncRam;
    end function;
 
    impure function init_from_file_or_zeroes(RamFileName : string) return MyRam is
    begin
-       if (RamFileName = "") then
-           return (others => (others => '0'));
-       else
-           return InitRamFromFile(RamFileName) ;
+      if (RamFileName = "") then
+         report "File name is null" severity warning;
+         return (others => (others => '0'));
+      else
+         report "InitRamFromFile" severity warning;
+         return InitRamFromFile(RamFileName) ;
        end if;
    end;
 

@@ -148,11 +148,11 @@ begin
 
    RepeatR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\simData\TimeEstGoldXr.txt",
+         FILENAME    => "..\simData\TimeEstGoldXr.slv",
          DATA_WIDTH  => FLOAT_1_LP'length,
          BINPT       => -FLOAT_1_LP'right,
          ADDR_WIDTH  => 8,
-         FILE_IS_SLV => false,
+         FILE_IS_SLV => true,
          LATENCY     => 1
      )
       PORT MAP(
@@ -170,11 +170,11 @@ begin
 
    RepeatI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\simData\TimeEstGoldXi.txt",
+         FILENAME    => "..\simData\TimeEstGoldXi.slv",
          DATA_WIDTH  => FLOAT_1_LP'length,
          BINPT       => -FLOAT_1_LP'right,
          ADDR_WIDTH  => 8,
-         FILE_IS_SLV => false,
+         FILE_IS_SLV => true,
          LATENCY     => 1
       )
       PORT MAP(

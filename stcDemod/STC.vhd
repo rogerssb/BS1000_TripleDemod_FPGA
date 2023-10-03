@@ -83,7 +83,9 @@ ENTITY STC IS
       HxEstR,
       HxEstI,
       PhaseDiffNB,
-      PhaseDiffWB       : OUT SLV18
+      PhaseDiffWB       : OUT SLV18;
+      NoiseTotal,
+      PeakTotal         : OUT ufixed(8 downto -25)
    );
 END STC;
 
@@ -119,7 +121,11 @@ ARCHITECTURE rtl OF STC IS
          PhsPeak1       : OUT SLV18;
          PilotFound,
          ValidOut,
-         StartOut       : OUT std_logic
+         StartOut       : OUT std_logic;
+         NoiseTotal0,
+         NoiseTotal1,
+         PeakTotal0,
+         PeakTotal1     : OUT ufixed(8 downto -25)
       );
    end COMPONENT PilotDetectSliding;
 
@@ -399,6 +405,11 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   ClocksPerBitCnt,
             ClocksPerBit      : unsigned(8 downto 0) := 9x"0";
 
+   SIGNAL   NoiseTotal0,
+            NoiseTotal1,
+            PeakTotal0,
+            PeakTotal1        : ufixed(8 downto -25);
+
 -- todo, remove
    SIGNAL   m_ndx0Slv,
             m_ndx1Slv,
@@ -535,12 +546,20 @@ BEGIN
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
-         StartOut       => PilotPulse
+         StartOut       => PilotPulse,
+         NoiseTotal0    => NoiseTotal0,
+         NoiseTotal1    => NoiseTotal1,
+         PeakTotal0     => PeakTotal0,
+         PeakTotal1     => PeakTotal1
    );
+
 
    AFC_process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
+         PeakTotal   <= NoiseTotal0 when (NoiseTotal0 > NoiseTotal1) else NoiseTotal1;
+         NoiseTotal  <= PeakTotal0  when (PeakTotal0  > PeakTotal1)  else PeakTotal1;
+
          PilotValidOutDly  <= PilotValidOut;
          StartOffset       <= x"0020";
          StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);

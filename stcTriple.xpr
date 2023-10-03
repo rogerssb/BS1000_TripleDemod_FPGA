@@ -38,13 +38,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="349"/>
-    <Option Name="WTModelSimExportSim" Val="350"/>
-    <Option Name="WTQuestaExportSim" Val="349"/>
-    <Option Name="WTIesExportSim" Val="348"/>
-    <Option Name="WTVcsExportSim" Val="348"/>
-    <Option Name="WTRivieraExportSim" Val="348"/>
-    <Option Name="WTActivehdlExportSim" Val="348"/>
+    <Option Name="WTXSimExportSim" Val="352"/>
+    <Option Name="WTModelSimExportSim" Val="353"/>
+    <Option Name="WTQuestaExportSim" Val="352"/>
+    <Option Name="WTIesExportSim" Val="351"/>
+    <Option Name="WTVcsExportSim" Val="351"/>
+    <Option Name="WTRivieraExportSim" Val="351"/>
+    <Option Name="WTActivehdlExportSim" Val="351"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -1026,15 +1026,22 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/cordicSqRt/cordicSqRt.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="stcDemodTop"/>
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
         <Define Name="STC_TRIPLE"/>
+        <Define Name="COMBINER"/>
         <Define Name="ADD_BERT"/>
-        <Define Name="ADD_SPRECTRAL_SWEEP#"/>
-        <Define Name="USE_FIFO_64"/>
+        <Define Name="ADD_SPECTRAL_SWEEP"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">
@@ -1848,6 +1855,25 @@
         <Define Name="ADD_SPRECTRAL_SWEEP"/>
       </Config>
     </FileSet>
+    <FileSet Name="divideUnsigned" Type="BlockSrcs" RelSrcDir="$PSRCDIR/divideUnsigned">
+      <File Path="$PSRCDIR/sources_1/ip/divideUnsigned/divideUnsigned.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="divideUnsigned"/>
+        <Option Name="VerilogDir" Val="$PPRDIR/."/>
+        <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+        <Define Name="STC_TRIPLE"/>
+        <Define Name="COMBINER"/>
+        <Define Name="ADD_BERT"/>
+        <Define Name="ADD_SPECTRAL_SWEEP"/>
+      </Config>
+    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -1868,15 +1894,16 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="10">
-    <Run Id="synth325CombDemod" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
+    <Run Id="synth325CombDriver" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth325CombDriver" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design" PreStepTclHook="$PPRDIR/MaxThread1.tcl"/>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="synth160NoComb" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth160NoComb" IncludeInArchive="true">
+    <Run Id="synth160NoComb" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth160NoComb" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
@@ -2229,16 +2256,41 @@
     </Run>
     <Run Id="jitterFifo64_synth_1" Type="Ft3:Synth" SrcSet="jitterFifo64" Part="xc7k160tfbg676-1" ConstrsSet="jitterFifo64" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/jitterFifo64_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl_325" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Default settings for Implementation." SynthRun="synth325CombDemod" IncludeInArchive="true">
+    <Run Id="synth160CombDriver" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth160CombDriver" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="synth325Combiner" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/synth325Combiner" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="divideUnsigned_synth_1" Type="Ft3:Synth" SrcSet="divideUnsigned" Part="xc7k160tfbg676-1" ConstrsSet="divideUnsigned" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/divideUnsigned_synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2017"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl325CombDriver" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Default settings for Implementation." Dir="$PRUNDIR/impl325CombDriver" SynthRun="synth325CombDriver" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -2249,14 +2301,15 @@
         <Step Id="phys_opt_design"/>
         <Step Id="route_design"/>
         <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream" PostStepTclHook="$PRUNDIR/impl_325/BuildStcTriple325.tcl">
+        <Step Id="write_bitstream">
           <Option Id="BinFile">1</Option>
         </Step>
       </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="impl160NoComb" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl160NoComb" SynthRun="synth160NoComb" IncludeInArchive="true">
+    <Run Id="impl160NoComb" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." Dir="$PRUNDIR/impl160NoComb" SynthRun="synth160NoComb" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
@@ -2884,9 +2937,57 @@
     </Run>
     <Run Id="jitterFifo64_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="jitterFifo64" Description="Default settings for Implementation." SynthRun="jitterFifo64_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl160CombDriver" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-2" ConstrsSet="7K160" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl160CombDriver" SynthRun="synth160CombDriver" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="impl325Combiner" Type="Ft2:EntireDesign" Part="xc7k325tfbg676-2" ConstrsSet="7k325ILA" Description="Default settings for Implementation." Dir="$PRUNDIR/impl325Combiner" SynthRun="synth325Combiner" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="divideUnsigned_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="divideUnsigned" Description="Default settings for Implementation." SynthRun="divideUnsigned_synth_1" IncludeInArchive="false">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2017"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
