@@ -557,8 +557,8 @@ BEGIN
    AFC_process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         PeakTotal   <= NoiseTotal0 when (NoiseTotal0 > NoiseTotal1) else NoiseTotal1;
-         NoiseTotal  <= PeakTotal0  when (PeakTotal0  > PeakTotal1)  else PeakTotal1;
+         PeakTotal   <= NoiseTotal0 when (PeakTotal0 > PeakTotal1) else NoiseTotal1;
+         NoiseTotal  <= PeakTotal0  when (PeakTotal0 > PeakTotal1)  else PeakTotal1;
 
          PilotValidOutDly  <= PilotValidOut;
          StartOffset       <= x"0020";

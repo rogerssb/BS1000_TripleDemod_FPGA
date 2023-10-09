@@ -258,7 +258,7 @@ COMPONENT PilotDetectSliding is
  --  signal   NoiseTotalArray,
  --           SumTotalArray     : vector_of_real(9 downto 0) := (others=>0.0);
    signal   Noise1Gained,
-            Noise2Gained      : sfixed(1 downto -16) := (others=>'0');
+            Noise2Gained      : sfixed(2 downto -15) := (others=>'0');
    SIGNAL   PilotRealOut,
             PilotImagOut      : Float_1_18;
    SIGNAL   MagRSlv,
