@@ -80,11 +80,13 @@ module bitsyncBertTop (
     output          pll2_CS,
     output          pll2_REF,
     input           pll2_OUT1,
-    output          pll2_PWDn
+    output          pll2_PWDn,
 
+    // DQM Capture UART
+    output          spare
 );
 
-    parameter VER_NUMBER = 16'd781;
+    parameter VER_NUMBER = 16'd788;
 
 
 //******************************************************************************
@@ -584,7 +586,6 @@ clockAndDataInputSync diffSync(
         .data(bertData),
         .inputSourceSelect()
     );
-
 
 //******************************************************************************
 //                               PN Generator
@@ -1092,13 +1093,61 @@ clockAndDataInputSync diffSync(
         .inputSourceSelect(),
         .framesyncPulse(framer_Sync),
         .framedBitOut(framer_Data),
-        .framesync(framesync)
+        .framesync(framesync),
+        .framedClkEn(framedClkEn),
+        .frameEndOfPayload(frameEndOfPayload),
+        .payloadStart(payloadStart)
     );
 
     assign rotation = framerEnable ? framerRotation : 2'b0;
 
+//******************************************************************************
+//                               DQM Capture - UART
+//******************************************************************************
+/// 2nd BERT module used for the DQM Capture 
+/// Configure this BERT module the same as the 'bert' 
+wire [31:0] dBertDOut;              //dummy
+reg framer_Data_0, 
+framedClkEn_0, 
+payloadStart_0,
+frameEndOfPayload_0;
 
+always@(posedge framer_Clk) begin
+    framer_Data_0       <= framer_Data;
+    framedClkEn_0       <= framedClkEn;
+    payloadStart_0      <= payloadStart; 
+    frameEndOfPayload_0 <= frameEndOfPayload; 
+end
 
+bert_top dqmCaptureBert(
+        .reset(reset),
+        .busClk(fb_clk),
+        .cs(bertSpace),
+        .wr0(wr0), .wr1(wr1), .wr2(wr2), .wr3(wr3),
+        .addr(addr),
+        .dataIn(dataIn),
+        .dataOut(dBertDOut),
+        .clk(framer_Clk),
+        .enable(framedClkEn_0),
+        .data(framer_Data_0),
+        .inputSourceSelect(),
+        .syncDetectData(syncDetectData),
+        .inSync(inSync)
+    );
+
+ dqmCapture dqmCapture(
+        .clkFramer(framer_Clk),      
+        .enable(1'b1),      
+        .reset(reset),      
+        .frameData(framer_Data_0),
+        .frameSyncPulse(payloadStart_0),
+        .frameEndOfPayload(frameEndOfPayload_0),          
+        .clkSys(clk),
+        .uartOut(spare),
+        .syncDetectData(syncDetectData),
+        .inSync(inSync),
+        .framePayloadClkEn(framedClkEn_0)
+    );   
 
 
 //******************************************************************************

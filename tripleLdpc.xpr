@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="17" Path="Y:/vivado/tripleLdpc.xpr">
+<Project Version="7" Minor="17" Path="C:/Engineering/Triple_Demod/BS1000-FPGA/branches/vivado/tripleLdpc.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="44e7233ad56b455bb07920429618d9e5"/>
@@ -643,13 +643,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/multibootK7.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/bert/bert_top.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -682,6 +675,14 @@
       </File>
       <File Path="$PPRDIR/semcoDemodTop.v">
         <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/multibootK7.v">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1183,6 +1184,7 @@
       <Filter Type="Srcs"/>
       <File Path="$PPRDIR/vm_cordic.v">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -1283,14 +1285,14 @@
     </FileSet>
     <FileSet Name="simResampler" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/simResampler">
       <Filter Type="Srcs"/>
-      <File Path="$PPRDIR/dualResampler.v">
+      <File Path="$PPRDIR/resampler/resampler.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/resampler/resampler.v">
+      <File Path="$PPRDIR/dualResampler.v">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -1979,32 +1981,25 @@
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="dqmILA_synth_1" Type="Ft3:Synth" SrcSet="dqmILA" Part="xc7k160tfbg676-1" ConstrsSet="dqmILA" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/dqmILA_synth_1" IncludeInArchive="true">
+    <Run Id="dqmILA_synth_1" Type="Ft3:Synth" SrcSet="dqmILA" Part="xc7k160tfbg676-1" ConstrsSet="dqmILA" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="bramSP_512x8_synth_1" Type="Ft3:Synth" SrcSet="bramSP_512x8" Part="xc7k160tfbg676-1" ConstrsSet="bramSP_512x8" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/bramSP_512x8_synth_1" IncludeInArchive="true">
+    <Run Id="bramSP_512x8_synth_1" Type="Ft3:Synth" SrcSet="bramSP_512x8" Part="xc7k160tfbg676-1" ConstrsSet="bramSP_512x8" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
-    <Run Id="bramSDP_16Kx8_synth_1" Type="Ft3:Synth" SrcSet="bramSDP_16Kx8" Part="xc7k160tfbg676-1" ConstrsSet="bramSDP_16Kx8" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/bramSDP_16Kx8_synth_1" IncludeInArchive="true">
+    <Run Id="bramSDP_16Kx8_synth_1" Type="Ft3:Synth" SrcSet="bramSDP_16Kx8" Part="xc7k160tfbg676-1" ConstrsSet="bramSDP_16Kx8" Description="Vivado Synthesis Defaults" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2016"/>
         <Step Id="synth_design"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="constrs_2" Description="Default settings for Implementation." State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true">
@@ -2325,9 +2320,7 @@
     </Run>
     <Run Id="bramSP_512x8_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="bramSP_512x8" Description="Default settings for Implementation." SynthRun="bramSP_512x8_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -2342,9 +2335,7 @@
     </Run>
     <Run Id="bramSDP_16Kx8_impl_1" Type="Ft2:EntireDesign" Part="xc7k160tfbg676-1" ConstrsSet="bramSDP_16Kx8" Description="Default settings for Implementation." SynthRun="bramSDP_16Kx8_synth_1" IncludeInArchive="false">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2016"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

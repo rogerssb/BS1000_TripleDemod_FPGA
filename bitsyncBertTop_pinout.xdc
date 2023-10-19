@@ -159,7 +159,7 @@ set_property PACKAGE_PIN C13 [get_ports differentialData]
 set_property PACKAGE_PIN G25 [get_ports framer_Sync]
 set_property PACKAGE_PIN J26 [get_ports spareClock]
 set_property PACKAGE_PIN J23 [get_ports spareData]
-
+set_property PACKAGE_PIN F24 [get_ports spare]
 
 
 set_property IOSTANDARD LVCMOS18 [get_ports {adc0[0]}]
@@ -521,7 +521,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports framer_Sync]
 set_property IOSTANDARD LVCMOS33 [get_ports spareClock]
 set_property IOSTANDARD LVCMOS33 [get_ports spareData]
 
-
+set_property SLEW SLOW [get_ports spare]
+set_property IOSTANDARD LVCMOS33 [get_ports spare]
 
 
 

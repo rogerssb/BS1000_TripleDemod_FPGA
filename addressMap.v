@@ -418,6 +418,7 @@
 `define CH1_DFFIRSPACE      13'b0_01x1_1000_xxxx
 `define CH1_AGCSPACE        13'b0_01x1_101x_xxxx
 
+`define UARTSPACE           13'b0_01x1_1100_xxxx
 
 // BERT subsystem registers
 `define BERT_SPACE              13'b0_10xx_xxxx_xxxx
@@ -472,7 +473,13 @@
     `define FRAMER_SYNCWORD         13'bx_xxxx_xxx0_01xx
     `define FRAMER_SYNCWORD_MASK    13'bx_xxxx_xxx0_10xx
     `define FRAMER_STATUS           13'bx_xxxx_xxx0_11xx
-    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx
+    `define FRAMER_SOURCE_SELECT    13'bx_xxxx_xxx1_00xx    
+    /// Will confilct with DMSE_SPACE and since not using at this time we'll just comment out
+    ///  may use in the future will have to adjust address spaces below
+    //`define FRAMER_LOCK_COUNTS      13'bx_xxxx_xx01_01xx
+    //`define FRAMER_UNLOCK_COUNTS    13'bx_xxxx_xx01_10xx
+    //`define FRAMER_DQM              13'bx_xxxx_xx01_11xx
+    //`define FRAMER_MAX_MIN_DQM      13'bx_xxxx_xx10_00xx
 
 // Dual MSE subsystem registers
 `define DMSE_SPACE              13'b1_00xx_0001_xxxx
@@ -491,6 +498,7 @@
     `define TURBO_OUTPUT_CLK_DIV    13'bx_xxxx_xxx0_10xx
     `define TURBO_DAC_SELECT        13'bx_xxxx_xxx0_11xx
     `define TURBO_ASM_PARMS         13'bx_xxxx_xxx1_00xx
+
 
 
 `elsif SEMCO_DEMOD_MAP

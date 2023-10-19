@@ -17,6 +17,11 @@ module framerTop(
     output              framedBitOut,
     output reg          framesync,
     output              framesyncPulse
+`ifdef BITSYNC_BERT
+    ,output              framedClkEn,
+    output              frameEndOfPayload,
+    output reg          payloadStart
+`endif
 );
 
     reg         [1:0]   syncState;
@@ -29,6 +34,13 @@ module framerTop(
     wire        [31:0]  syncwordMask;
     wire        [31:0]  syncword;
     wire signed [6:0]   syncThreshold;
+`ifdef BITSYNC_BERT
+    // wire                framerCountsReset; 
+    reg         [31:0]  syncDelay;
+    // reg         [31:0]  lockCount, unLockCount;
+    // reg         [15:0]  DqmShift, DqmCapture, DqmSmooth, DqmMax, DqmMin;
+`endif
+
     framerRegs framerRegs(
         .busClk(busClk),
         .cs(cs),
@@ -45,6 +57,16 @@ module framerTop(
         .syncword(syncword),
         .syncThreshold(syncThreshold),
         .inputSourceSelect(inputSourceSelect)
+`ifdef BITSYNC_BERT        
+        //,
+        // .lockCount(lockCount),
+        // .unLockCount(unLockCount),
+        // .DqmRaw(DqmCapture),
+        // .DqmMax(DqmMax),
+        // .DqmMin(DqmMin),
+        // .DqmSmooth(DqmSmooth),
+        // .framerCountsReset(framerCountsReset)
+`endif 
     );
 
     // Calculate syncwordBits from syncwordMask
@@ -221,13 +243,84 @@ module framerTop(
     wire            endOfPayload = ((bitCount == 0) && (wordCount == 0));
     integer         syncCount;
         `define FRAMER_MAX_SYNC_COUNT 5
+        
+`ifdef BITSYNC_BERT        
+    reg  outClkEn;
+    // reg framerCountsResetLatch, framerCountsResetDly;
+    
+    always @(posedge clk) begin
+        if (clkEn) begin
+            if (endOfPayload) begin
+                outClkEn <= 0;
+            end
+            else if ((syncDelay == 47)) begin
+                outClkEn <= 1;
+            end
+        end
+    end
+
+    // always @(posedge clk) begin							// need to cross clock boundaries. Force ResetCounts till count go to 0
+    //    framerCountsResetDly <= framerCountsReset;
+    //    if (framerCountsReset && ~framerCountsResetDly) begin
+    //        framerCountsResetLatch <= 1;
+    //    end
+    //    else if ((lockCount == 0) && (unLockCount == 0)) begin
+    //        framerCountsResetLatch <= 0;
+    //    end
+    // end
+    
+    //wire [15:0] DqmSmoothChk = DqmSmooth - (DqmSmooth >> 4) + (DqmCapture >> 4);
+`endif 
+
     always @(posedge clk) begin
         if (reset) begin
             syncState <= `OUT_OF_SYNC;
             invertData <= 0;
             rotation <= 0;
+`ifdef BITSYNC_BERT
+            // lockCount   <= 0;
+            // unLockCount <= 0;
+            syncDelay   <= 55;
+            // DqmCapture  <= 0;
+            // DqmShift    <= 0;
+            //DqmSmooth   <= 0;
+            payloadStart <= 0;
+`endif
         end
         else if (clkEn) begin
+`ifdef BITSYNC_BERT
+            if (syncDelay < 55) begin
+               syncDelay <= syncDelay + 1;
+            //    DqmShift <= {DqmShift[14:0], framedBitOut};
+            //    if (syncDelay == 48) begin
+            //       DqmCapture <= DqmShift;
+            //       if ((DqmSmooth > 16'hE000) && (DqmSmoothChk < 16'h8000))    // check for overflow
+            //           DqmSmooth <= 16'hffff;
+            //       else if ((DqmSmooth < 16'h3000) && (DqmSmoothChk > 16'h8000))    // check for underflow
+            //           DqmSmooth <= 16'h0000;
+            //       else
+            //           DqmSmooth <= DqmSmoothChk;
+            //       if (DqmCapture > DqmMax)
+            //           DqmMax <= DqmCapture;
+            //       else if (DqmCapture < DqmMin)
+            //           DqmMin <= DqmCapture;
+            //    end
+            //    if ((syncState == `TEST_SYNC) && (bitCount == 0)) begin
+            //        if (syncDetected) begin
+            //             lockCount <= lockCount + 1;
+            //         end
+            //         else begin
+            //             unLockCount <= unLockCount + 1;
+            //         end
+            //    end
+            end
+            // else if (framerCountsResetLatch) begin
+            //     lockCount   <= 0;
+            //     unLockCount <= 0;
+            //     DqmMax      <= 0;
+            //     DqmMin      <= 16'hFFFF;
+            // end
+`endif
             case (syncState)
                 `OUT_OF_SYNC: begin
                     framesync <= 0;
@@ -238,6 +331,9 @@ module framerTop(
                         syncCount <= 0;
                         syncState <= `SKIP_PAYLOAD;
                         invertData <= negPolarity;
+`ifdef BITSYNC_BERT
+                        payloadStart <= 1;
+`endif
                     end
                     // Do we need to try another rotation?
                     else if (endOfPayload) begin
@@ -260,9 +356,15 @@ module framerTop(
                     end
                 end
                 `SKIP_PAYLOAD: begin
+`ifdef BITSYNC_BERT                    
+                    payloadStart <= 0;
+`endif
                     if (endOfPayload) begin
                         bitCount <= syncwordBits;
                         syncState <= `TEST_SYNC;
+`ifdef BITSYNC_BERT
+                        syncDelay <= 0;
+`endif
                     end
                     else if (bitCount == 0) begin
                         bitCount <= bitsPerWord;
@@ -289,6 +391,9 @@ module framerTop(
                             bitCount <= bitsPerWord;
                             wordCount <= wordsPerFrame;
                             syncState <= `SKIP_PAYLOAD;
+`ifdef BITSYNC_BERT                            
+                            payloadStart <= 1;
+`endif
                         end
                         else if (syncCount == 0) begin
                             rotation <= rotation + 1;
@@ -300,6 +405,9 @@ module framerTop(
                             bitCount <= bitsPerWord;
                             wordCount <= wordsPerFrame;
                             syncState <= `SKIP_PAYLOAD;
+`ifdef BITSYNC_BERT
+                            payloadStart <= 1;
+`endif
                         end
                     end
                     else begin
@@ -320,7 +428,11 @@ module framerTop(
 
     assign framesyncPulse = (syncDetected & framesync);
     assign framedBitOut = corrSR[1];
-
+`ifdef BITSYNC_BERT
+    //always @(*) payloadStart <= framesyncPulse && (syncState != `SKIP_PAYLOAD);
+    assign framedClkEn      = outClkEn;     // FZ TODO, run output thru Bit Sync 2 to spread data
+    assign frameEndOfPayload = endOfPayload;
+`endif
 endmodule
 
 module fourBitCorrelator(

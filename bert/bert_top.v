@@ -11,7 +11,9 @@ module bert_top (
   clk,
   enable,
   data,
-  inputSourceSelect
+  inputSourceSelect, 
+  syncDetectData,
+  inSync
 );
 
 input busClk;
@@ -25,7 +27,8 @@ input clk;
 input enable;
 input data;
 output  [3:0]   inputSourceSelect;
-
+output syncDetectData;
+output inSync;
 
 // i/o register wiring
 
@@ -228,4 +231,6 @@ bert_counters bert_counters (
   .data_enable(sync_detect_data_enable)                         //input
 );
 
+assign syncDetectData = sync_detect_data;
+assign inSync = bert_insync; 
 endmodule

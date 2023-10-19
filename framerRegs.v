@@ -17,6 +17,16 @@ module framerRegs(
     output reg          [31:0]  syncword,
     output      signed  [6:0]   syncThreshold,
     output reg          [3:0]   inputSourceSelect
+`ifdef BITSYNC_BERT
+    /// Will confilct with DMSE_SPACE and since not using at this time we'll just comment out
+    ///  may use in the future 
+    // ,
+    // input               [31:0]  lockCount, unLockCount,
+    // input               [15:0]  DqmSmooth, DqmRaw, DqmMax, DqmMin,
+    // output reg          [3:0]   inputSourceSelect = 3'b111,
+    // output reg                  framerCountsReset
+`endif
+
 );
 
     parameter RegSpace = `FRAMER_SPACE;
@@ -38,7 +48,11 @@ module framerRegs(
                 `FRAMER_CONTROL:        bitsPerWord <= din[4:0];
                 `FRAMER_SYNCWORD:       syncword[7:0] <= din[7:0];
                 `FRAMER_SYNCWORD_MASK:  syncwordMask[7:0] <= din[7:0];
-                `FRAMER_SOURCE_SELECT:  inputSourceSelect <= din[3:0];
+                `FRAMER_SOURCE_SELECT:  inputSourceSelect <= din[3:0];/// at this time we'll just comment out    
+`ifdef BITSYNC_BERT                
+                
+                //`FRAMER_LOCK_COUNTS:    framerCountsReset <= din[0];/// at this time we'll just comment out    
+`endif
                 default: ;
             endcase
         end
@@ -76,6 +90,12 @@ module framerRegs(
                 `FRAMER_SYNCWORD_MASK:  dout = syncwordMask;
                 `FRAMER_STATUS:         dout = {23'b0,invertData,2'b0,syncState,3'b0,framesync};
                 `FRAMER_SOURCE_SELECT:  dout = {28'b0,inputSourceSelect};
+`ifdef BITSYNC_BERT
+                //`FRAMER_LOCK_COUNTS:    dout = lockCount;
+                //`FRAMER_UNLOCK_COUNTS:  dout = unLockCount;
+                //`FRAMER_DQM:            dout = {DqmSmooth, DqmRaw};
+                //`FRAMER_MAX_MIN_DQM:    dout = {DqmMax, DqmMin};               
+`endif
                 default:                dout = 32'hx;
             endcase
         end
