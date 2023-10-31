@@ -787,17 +787,17 @@ begin
                end if;
                MaxCntr0 <= AbsCntr0;   -- just delayed to keep timing happy
                MaxCntr1 <= AbsCntr1;
-               AbsSq0   <= resize(AbsCntr0 * AbsCntr0, AbsSq0);
-               AbsSq1   <= resize(AbsCntr1 * AbsCntr1, AbsSq0);
+               AbsSq0   <= resize(AbsCntr0 * AbsCntr0, AbsSq0, fixed_truncate, fixed_wrap);
+               AbsSq1   <= resize(AbsCntr1 * AbsCntr1, AbsSq0, fixed_truncate, fixed_wrap);
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
                   -- Sum noise
                   if (Index1 < 245) or (Index1 > 266) then
-                     NoiseSum0 <= resize(NoiseSum0 + AbsSq0, NoiseSum0);
-                     NoiseSum1 <= resize(NoiseSum1 + AbsSq1, NoiseSum1);
+                     NoiseSum0 <= resize(NoiseSum0 + AbsSq0, NoiseSum0, fixed_truncate, fixed_wrap);
+                     NoiseSum1 <= resize(NoiseSum1 + AbsSq1, NoiseSum1, fixed_truncate, fixed_wrap);
                   else
-                     PeakSum0 <= resize(PeakSum0 + AbsSq0, PeakSum0);
-                     PeakSum1 <= resize(PeakSum1 + AbsSq1, PeakSum1);
+                     PeakSum0 <= resize(PeakSum0 + AbsSq0, PeakSum0, fixed_truncate, fixed_wrap);
+                     PeakSum1 <= resize(PeakSum1 + AbsSq1, PeakSum1, fixed_truncate, fixed_wrap);
                   end if;
 
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
@@ -829,7 +829,7 @@ begin
                   end if;
 
                elsif (Index1 = 525) then     -- setup for next frame
-                  PackCntr <= resize(PackCntr + 1, PackCntr);
+                  PackCntr <= resize(PackCntr + 1, PackCntr, fixed_truncate, fixed_wrap);
                   if (PeakPend) then
                      StartOut  <= '1';
                      PrevIndex <= PendIndex;
@@ -1033,7 +1033,7 @@ begin
                   PhsPeak1  <= to_slv(PhsPeak1_u);
                   PeakPointer <= PeakPointer + 1;
                else
-                  Threshold <= resize((Peak1 + Peak3) / 2, Threshold);
+                  Threshold <= resize((Peak1 + Peak3) / 2, Threshold, fixed_truncate, fixed_wrap);
                   CalcThreshold <= '0';
                   CurrentPeak <= (others=>'0');
                end if;
