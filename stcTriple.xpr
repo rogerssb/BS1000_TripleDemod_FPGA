@@ -1039,9 +1039,9 @@
         <Option Name="VerilogDir" Val="$PPRDIR/."/>
         <Option Name="VerilogDir" Val="$PPRDIR/stcDemod"/>
         <Define Name="STC_TRIPLE"/>
-        <Define Name="COMBINER"/>
+        <Define Name="COMBINER#"/>
         <Define Name="ADD_BERT"/>
-        <Define Name="ADD_SPECTRAL_SWEEP"/>
+        <Define Name="ADD_SPECTRAL_SWEEP#"/>
       </Config>
     </FileSet>
     <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">

@@ -220,8 +220,9 @@
 
 `ifdef  ADD_DQM
     `define DQM_USE_CHIP_TO_CHIP
-    `define DQM_LOG_BITS    11
 `endif
+// log bits is referenced but not necessarily ADD_DQM
+`define DQM_LOG_BITS    11
 
 `endif //R6100
 
@@ -386,9 +387,9 @@
     `define BS_TOP_DC_GAINS         13'bx_xxxx_xxx1_00xx
 
 `define VITERBISPACE        13'b0_01xx_0010_xxxx
-`define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
-`define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
-`define VIT_STATUS             13'bx_xxxx_xxxx_10xx
+    `define VIT_INVERSE_MEAN       13'bx_xxxx_xxxx_00xx
+    `define VIT_BER_TEST_LENGTH    13'bx_xxxx_xxxx_01xx
+    `define VIT_STATUS             13'bx_xxxx_xxxx_10xx
 `define VIT_CONTROL            13'bx_xxxx_xxxx_11xx
     `define VIT_MODE_SINGLE_CH      3'b000
     `define VIT_MODE_IND_CH         3'b001
@@ -674,20 +675,20 @@
 
     `ifdef SIMULATE
 
-`define DEMODSPACE          13'b0_0100_000x_xxxx
-`define DDCSPACE            13'b0_0100_0010_xxxx
-`define DDCFIRSPACE         13'b0_0100_0011_xxxx
-`define CICDECSPACE         13'b0_0100_0100_0xxx
-`define RESAMPSPACE         13'b0_0100_0101_xxxx
-`define BITSYNCSPACE        13'b0_0100_011x_xxxx
-`define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
-    `define BS_MODE_SINGLE_CH       2'b00
-    `define BS_MODE_IND_CH          2'b01
-    `define BS_MODE_DUAL_CH         2'b10
-    `define BS_MODE_OFFSET_CH       2'b11
-`define CHAGCSPACE          13'b0_0100_101x_xxxx
-`define CARRIERSPACE        13'b0_0100_110x_xxxx
-`define EQUALIZERSPACE      13'b0_0100_1110_xxxx
+    `define DEMODSPACE          13'b0_0100_000x_xxxx
+    `define DDCSPACE            13'b0_0100_0010_xxxx
+    `define DDCFIRSPACE         13'b0_0100_0011_xxxx
+    `define CICDECSPACE         13'b0_0100_0100_0xxx
+    `define RESAMPSPACE         13'b0_0100_0101_xxxx
+    `define BITSYNCSPACE        13'b0_0100_011x_xxxx
+    `define BITSYNCAUSPACE      13'b0_0100_100x_xxxx
+        `define BS_MODE_SINGLE_CH       2'b00
+        `define BS_MODE_IND_CH          2'b01
+        `define BS_MODE_DUAL_CH         2'b10
+        `define BS_MODE_OFFSET_CH       2'b11
+    `define CHAGCSPACE          13'b0_0100_101x_xxxx
+    `define CARRIERSPACE        13'b0_0100_110x_xxxx
+    `define EQUALIZERSPACE      13'b0_0100_1110_xxxx
 
     `else //SIMULATE
 
@@ -719,7 +720,7 @@
     `define DQM_SYNC_WORD       16'hfac4
     `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
     `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
-        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
 
 
     `ifdef DQM_USE_DPLL
@@ -822,6 +823,8 @@
         `define COMB_LOCKS         6'b01_00xx
         `define COMB_DB_RANGE      6'b01_010x
         `define COMB_DB_RATIO      6'b01_011x
+        `define COMB_AGC_DIFF      6'b01_100x
+        `define COMB_AGC_ZERO      6'b01_101x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
@@ -882,17 +885,17 @@
 
 
 // Video Interpolators and FIRs
-`define INTERP0SPACE            13'b0_1000_0000_xxxx
-`define VIDFIR0SPACE            13'b0_1000_0001_xxxx
-`define INTERP1SPACE            13'b0_1000_0010_xxxx
-`define VIDFIR1SPACE            13'b0_1000_0011_xxxx
-`define INTERP2SPACE            13'b0_1000_0100_xxxx
-`define VIDFIR2SPACE            13'b0_1000_0101_xxxx
+`define INTERP0SPACE        13'b0_1000_0000_xxxx
+`define VIDFIR0SPACE        13'b0_1000_0001_xxxx
+`define INTERP1SPACE        13'b0_1000_0010_xxxx
+`define VIDFIR1SPACE        13'b0_1000_0011_xxxx
+`define INTERP2SPACE        13'b0_1000_0100_xxxx
+`define VIDFIR2SPACE        13'b0_1000_0101_xxxx
 
 
 // Video Switch Control registers
-`define VIDSWITCHSPACE          13'b0_1000_1000_xxxx
-    `define VIDSWITCH_CONTROL       13'bx_xxxx_xxxx_00xx
+`define VIDSWITCHSPACE      13'b0_1000_1000_xxxx
+    `define VIDSWITCH_CONTROL   13'bx_xxxx_xxxx_00xx
 
 // Spectral Sweep Card
 `define SSCSPACE            13'b0_1000_1001_xxxx
@@ -938,7 +941,7 @@
 `define SBS_AGCSPACE        13'b0_1001_101x_xxxx
 
 
-`define FMMODSPACE              13'b1_11xx_0000_xxxx
+`define FMMODSPACE          13'b1_11xx_0000_xxxx
     `define FM_MOD_FREQ         12'bxxxx_xxxx_00xx
     `define FM_MOD_DEV          12'bxxxx_xxxx_01xx
     `define FM_MOD_BITRATE      12'bxxxx_xxxx_10xx
@@ -1049,7 +1052,7 @@
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
         `define CandD_SRC_PCMTRELLIS    4'b0010
-        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_SOQTRELLIS    4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
@@ -1061,7 +1064,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_SRC_RD_SOL        4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
@@ -1069,11 +1072,6 @@
     `define CandD_DLL_CENTER_FREQ   13'bx_xxxx_xxxx_01xx
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
-
-// Spectral Sweep Card
-`define SSCSPACE            13'b0_1000_1001_xxxx
-
-`define UARTSPACE           13'b0_0101_0111_xxxx
 
 // BERT subsystem registers
 `define BERT_SPACE          13'b0_0111_0xxx_xxxx
@@ -1108,7 +1106,7 @@
         `define BERT_SRC_RS_DEC      4'b1111
 
 // Combiner subsystem registers start at x0C40 to 0xC7F
-`define COMBINER_SPACE          13'b0_1100_01xx_xxxx
+        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
         `define COMB_LAG_COEF      6'b00_00xx
         `define COMB_LEAD_COEF     6'b00_01xx
         `define COMB_SWEEP_RATE    6'b00_10xx
@@ -1117,6 +1115,8 @@
         `define COMB_LOCKS         6'b01_00xx
         `define COMB_DB_RANGE      6'b01_010x
         `define COMB_DB_RATIO      6'b01_011x
+        `define COMB_AGC_DIFF      6'b01_100x
+        `define COMB_AGC_ZERO      6'b01_101x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
@@ -1125,8 +1125,15 @@
         `define CALF_RATIOS        6'b10_11xx
         `define CALF_INTEGRATOR    6'b11_00xx
 
-// STC Output Data Loop Filter
-`define STC_SPACE           13'b0_1101_00xx_xxxx
+// Spectral Sweep Card
+`define SSCSPACE            13'b0_1000_1001_xxxx
+
+`define UARTSPACE           13'b0_0101_0111_xxxx
+`define DQMSPACE            13'b0_0101_1000_xxxx
+    `define DQM_SYNC_WORD       16'hfac4
+    `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
+    `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
+    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
 
 // Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_0100_000x_xxxx
@@ -1378,6 +1385,7 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
+        `define DAC_SRC_RS_DEC          7      // uses the same decode as LDPC since they're mutually exclusive
         `define DAC_SRC_STC             8
         `define DAC_SRC_SBS             9
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x
