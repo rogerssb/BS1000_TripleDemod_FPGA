@@ -41,9 +41,9 @@ USE work.Semco_pkg.ALL;
 
 ENTITY DemodPreDist IS
    PORT (
-         clk93r3,
-         clk46r6,
-         clk186,
+         clk,
+         clkOver2,
+         clk2x,
          Reset,
          cs,
          wr0,
@@ -302,7 +302,7 @@ BEGIN
          INIT_Z3 => 64x"FFDA_3500_00FE_95FF"      -- 18,436,106,298,727,503,359
       )
       PORT MAP (
-          clk        => clk93r3,
+          clk        => clk,
           rstn       => not Reset,
           ce         => '1',
           valid_out  => open,
@@ -316,7 +316,7 @@ BEGIN
          INIT_Z3 => 64x"FFB5_6A00_00FF_2BFF"    -- 18,425,749,998,705,519,615
       )
       PORT MAP (
-         clk        => clk93r3,
+         clk        => clk,
          rstn       => not Reset,
          ce         => '1',
          valid_out  => open,
@@ -330,7 +330,7 @@ BEGIN
          INIT_Z3 => 64x"FF6C_180D_913E_C1FF"    -- 18,415,112,223,706,825,215
       )
       PORT MAP (
-         clk        => clk93r3,
+         clk        => clk,
          rstn       => not Reset,
          ce         => '1',
          valid_out  => open,
@@ -344,7 +344,7 @@ BEGIN
          INIT_Z3 => 64x"FF6AD40001FE57FE"      -- 18,404,755,923,701,487,614
       )
       PORT MAP (
-         clk        => clk93r3,
+         clk        => clk,
          rstn       => not Reset,
          ce         => '1',
          valid_out  => open,
@@ -364,7 +364,7 @@ BEGIN
          ADDR_WIDTH  => 7
       )
       PORT MAP (
-         clk         => clk93r3,
+         clk         => clk,
          ce          => '1',
          reset       => Reset,
          Input       => adc0In,
@@ -374,7 +374,7 @@ BEGIN
 
    ddc : dualQuadDdc    -- Down convert incoming IF to baseband, output is decimated
       port map (
-         clk      => clk93r3,
+         clk      => clk,
          reset    => reset,
          ifIn1    => DlyData,
          ifIn2    => 18x"0",
@@ -384,12 +384,12 @@ BEGIN
          iOut2    => open,
          qOut2    => open
       );
-   ------------------------ DDC outputs are at clk46r6 rate ------------------------
+   ------------------------ DDC outputs are at clkOver2 rate ------------------------
 
    -- generate the AM modulation frequencies
    AM_NCO : OffsetNCO
       PORT MAP (
-         aclk                 => clk46r6,
+         aclk                 => clkOver2,
          aresetn              => not Reset46r6,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => AM_Freq,
@@ -401,7 +401,7 @@ BEGIN
 
    NCO : OffsetNCO
       PORT MAP (
-         aclk                 => clk93r3,
+         aclk                 => clk,
          aresetn              => not Reset,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => PhaseInc,
@@ -422,7 +422,7 @@ BEGIN
          OUT_BINPT => 17
       )
       PORT MAP(
-         clk         => clk46r6,
+         clk         => clkOver2,
          reset       => Reset46r6,
          ce          => '1',
          ValidIn     => '1',
@@ -438,9 +438,9 @@ BEGIN
          StartOut    => open
    );
 
-   Delay_process: process (clk46r6)
+   Delay_process: process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          Reset46r6 <= Reset;
          if (Reset46r6) then
             NoisePipeI     <= (others=>'0');
@@ -475,7 +475,7 @@ BEGIN
 
    LowpassNoise : Lowpass66
       PORT MAP (
-         aclk                 => clk186,      -- run at 4x clock rate to reduce DSPs
+         aclk                 => clk2x,      -- run at 4x clock rate to reduce DSPs
          aresetn              => not Reset186,
          s_axis_data_tvalid   => '1',
          s_axis_data_tdata    => LpfIn,
@@ -484,9 +484,9 @@ BEGIN
          m_axis_data_tdata    => LpfOut
    );
 
-   Reset186Process : process(clk186)
+   Reset186Process : process(clk2x)
    begin
-      if (rising_edge(clk186)) then
+      if (rising_edge(clk2x)) then
          Reset186 <= Reset;
 
          FiltI <= to_sfixed(LpfOut(41 downto 24), FiltI);
@@ -496,7 +496,7 @@ BEGIN
 
    AGCs : DualAgc
       PORT MAP (
-         Clk         => clk46r6,
+         Clk         => clkOver2,
          Reset       => Reset46r6,
          Attack      => 3x"7",
          Decay       => 3x"6",
@@ -508,22 +508,22 @@ BEGIN
          AgcVoltage  => open
    );
 
-   Realign : process (clk46r6) begin
-      if (rising_edge(clk46r6)) then
+   Realign : process (clkOver2) begin
+      if (rising_edge(clkOver2)) then
          RealOut <= to_slv(RealOut_f);
          ImagOut <= to_slv(ImagOut_f);
       end if;
    end process;
 
-   PickPhase : process (clk93r3) begin
-      if (rising_edge(clk93r3)) then
+   PickPhase : process (clk) begin
+      if (rising_edge(clk)) then
           DucEn <= DucEn(2 downto 0) & '1';
       end if;
    end process;
 
    GenIF : DUC
       port map (
-         clk      => clk93r3,
+         clk      => clk,
          ce       => DucEn(3),
          realIn   => RealOut,
          imagIn   => ImagOut,

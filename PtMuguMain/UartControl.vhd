@@ -43,8 +43,8 @@ USE work.Semco_pkg.ALL;
 
 ENTITY UartControl IS
    GENERIC (
-      REVISION_NUM   : string;
-      FIRMWARE_VER   : string;
+      REVISION_NUM   : string := "0000";
+      FIRMWARE_VER   : string := "0000";
       OUTPUT_PAIRS   : positive := 16;
       IN_WIDTH       : positive := 5
    );
@@ -55,7 +55,7 @@ ENTITY UartControl IS
       Txd,
       TxEn,
       NotBusy        : OUT std_logic;
-      Selects        : VECTOR_OF_SLVS(OUTPUT_PAIRS-1 downto 0)(IN_WIDTH-1 downto 0)
+      Selects        : OUT VECTOR_OF_SLVS(OUTPUT_PAIRS-1 downto 0)(IN_WIDTH-1 downto 0)
    );
 END UartControl;
 
@@ -120,6 +120,7 @@ ARCHITECTURE rtl OF UartControl IS
    signal   Clk62Div    : unsigned(4 downto 0) := "00000";  -- div by 32 for 500nS period
    signal   CrossPointer : integer range 0 to 15;
    signal   MyInt       : integer;
+   signal   TxEnCount   : integer range 0 to 31;
    signal   RxBuffer    : string(1 to 31);
    signal   RxCommand   : string(1 to COMM_LEN);
    signal   BytesReceived : integer;-- range 0 to 8;
@@ -174,7 +175,7 @@ BEGIN
       if (rising_edge(clk)) then
          if (reset = '1') then
             RxPointer      <= 1;
-            RxBuffer(1 to 21) <= STX & MY_ADDR & "CXPT0521" & EOT & TERM;  -- set crosspoint output 5 to input 21. All decimals
+            RxBuffer(1 to 15) <= STX & MY_ADDR & "CXPT0521" & EOT & TERM;  -- set crosspoint output 5 to input 21. All decimals
             RxBuffer(22 to 31) <= (others=>TERM);
             TxBuffer(1)    <= TERM;       -- set first char of Tx to NULL TERM to disable TX
             TxEnCount      <= 31;
@@ -246,8 +247,8 @@ BEGIN
                   RxPointer <= 1;
                   case (SubMode) is
                   when XPNT =>
-                     if (CrossPointer < 16 and MyInt <= 24) then
-                        Selects(CrossPointer) <= MyInt;
+                     if (CrossPointer < OUTPUT_PAIRS and MyInt <= 24) then
+                        Selects(CrossPointer) <= std_logic_vector(to_unsigned(MyInt, IN_WIDTH));
                         TxBuffer(1 to 2) <= ACK & TERM;
                      else
                         TxBuffer(1 to 2) <= NAK & TERM;
@@ -331,12 +332,6 @@ BEGIN
             if (bvalid and bready) then
                bready <= '0';
             end if;
-
-/*
-         if (CS and Wr) then
-            Selects(to_integer(unsigned(Addr))) <= DataBusIn(IN_WIDTH-1 downto 0);
-         end if;
-*/
 
          end if;
       end if;

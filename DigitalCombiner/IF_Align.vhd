@@ -48,8 +48,8 @@ entity IF_Align is
       (SIM_MODE : boolean := false
    );
    PORT(
-         clk46r6,
-         clk186,
+         clkOver2,
+         clk2x,
          reset,
          CarrierDetect,
          ce             : IN  std_logic;
@@ -274,7 +274,7 @@ begin
          DATA_WIDTH  => 18
       )
       PORT MAP (
-         clk         => clk46r6,
+         clk         => clkOver2,
          reset       => Reset,
          AbeforeB    => IndexAcc(IndexAcc'left),
          RealIn1     => Re1In,
@@ -289,9 +289,9 @@ begin
       );
 
 
-   LatchInputs : process(clk46r6)
+   LatchInputs : process(clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          IF_Diff <= to_slv(resize(to_sfixed(Re1Out, 17, 0) - to_sfixed(Re2Out, 17, 0), 17, 0));
          if (Reset) then
             ReInDly1       <= (others=>'0');
@@ -307,9 +307,9 @@ begin
       end if;
    end process;
 
-   SetForInvFFT : process(clk186)
+   SetForInvFFT : process(clk2x)
    begin
-      if (rising_edge(clk186)) then
+      if (rising_edge(clk2x)) then
          if (Reset or Restart) then
             ConfigTValid   <= '0';
             ConfigDone     <= '0';
@@ -333,8 +333,8 @@ begin
             IN_SIM         => in_simulation
          )
       PORT MAP(
-         clk               => clk46r6,
-         clk4X             => clk186,
+         clk               => clkOver2,
+         clk4X             => clk2x,
          reset             => Reset or Restart,
          ce                => ce,
          ReadyIn           => FftReady,
@@ -360,7 +360,7 @@ begin
 
    Fft_u : fft_512_Float
     port map (
-      aclk                          => clk186,
+      aclk                          => clk2x,
       aresetn                       => not (Reset or Restart),
       aclken                        => ce,
       s_axis_config_tvalid          => '0', -- not needed and prone to error, was ConfigTValid,
@@ -383,10 +383,10 @@ begin
       );
 
 
-   FftProcess : process(clk186)
+   FftProcess : process(clk2x)
       variable CountEq255  : std_logic;
    begin
-      if (rising_edge(clk186)) then
+      if (rising_edge(clk2x)) then
          if (Reset or Restart) then
             Count          <= 0;
             OverflowFft    <= '0';
@@ -424,7 +424,7 @@ begin
          OUT_BINPT   => -XC_Size'right
          )
       PORT MAP(
-         clk         => clk186,
+         clk         => clk2x,
          ce          => ce,
          reset       => Reset or Restart,
          ReadyIn     => iFftReady,
@@ -442,7 +442,7 @@ begin
 
    iFft_u : fft_512_Float     -- fft_512 is dual channel, but only one iFft channel is needed
     port map (          -- this FFT is also floating point output in 0.-17 format
-      aclk                          => clk186,
+      aclk                          => clk2x,
       aresetn                       => not (Reset or Restart),
       aclken                        => ce,
       s_axis_config_tvalid          => ConfigTValid,
@@ -472,16 +472,16 @@ begin
       GENERIC MAP(IN_WIDTH  => iFftSize'length, IN_BINPT  => iFftSize'right,
                   OUT_WIDTH => AbsSize'length,  OUT_BINPT => AbsSize'right )
       PORT MAP(
-         clk    => clk186,     reset    => Reset or Restart,    ce       => ce,
+         clk    => clk2x,     reset    => Reset or Restart,    ce       => ce,
          ReIn   => iFftR,     ImIn     => iFftI,      ValidIn  => ValidIFftOut,
          ReOut  => open,      ImOut    => open,
          AbsOut => AbsFft,    ValidOut => ValidAbs,   StartIn  => '0', StartOut => open);
 
 
    -- Now find peak of iFFT
-   MaxProcess : process(clk186)
+   MaxProcess : process(clk2x)
    begin
-      if (rising_edge(clk186)) then
+      if (rising_edge(clk2x)) then
          if (Reset or not CarrierDetect) then            -- ignore Restart to let previous IndexOut carry over
             Index0      <= 0;
             IndexOut    <= x"00";

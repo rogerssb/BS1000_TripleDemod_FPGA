@@ -42,11 +42,11 @@ use UNISIM.vcomponents.all;
 
 ENTITY DC_DemodTop IS
    PORT(
-      clk93r3,
+      clk,
+      clk4x,
       Reset,
       FPGA_ID0,
       FPGA_ID1,
-      testMode,
       dataI, dataEn,
       dqmDATA,
       dqmCLK,
@@ -73,7 +73,8 @@ ARCHITECTURE rtl OF DC_DemodTop IS
          PORTS    : natural := 5
       );
       Port (
-         Clk93r3,
+         clk,
+         clk4x,
          Reset,
          Active            : in std_logic;
          TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
@@ -83,6 +84,25 @@ ARCHITECTURE rtl OF DC_DemodTop IS
          RefClkOut_n       : out std_logic
       );
    end component DemodSerDesOut;
+
+   COMPONENT dds6p0
+      PORT (
+         aclk,
+         aclken,
+         aresetn,
+         s_axis_phase_tvalid  : IN  STD_LOGIC;
+         s_axis_phase_tdata   : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
+         m_axis_data_tvalid   : OUT STD_LOGIC;
+         m_axis_data_tdata    : OUT STD_LOGIC_VECTOR(47 DOWNTO 0)
+      );
+   END COMPONENT;
+
+   COMPONENT VioTwoBit
+      PORT (
+         clk : IN STD_LOGIC;
+         probe_out0 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+      );
+   END COMPONENT;
 
    constant CHANNEL_1            : std_logic_vector(1 downto 0) := "00";
    constant CHANNEL_2            : std_logic_vector(1 downto 0) := "01";
@@ -94,20 +114,42 @@ ARCHITECTURE rtl OF DC_DemodTop IS
    signal   TxData4              : UINT8 := x"55";
    signal   TxData               : SLV8_ARRAY(PORTS - 1 downto 0);
    signal   Active1,
-            Active2             : std_logic;
+            Active2              : std_logic;
+   signal   testMode             : std_logic_vector(1 downto 0) := "01";
    signal   probe_out0,
             probe_out1           : STD_LOGIC_VECTOR(4 DOWNTO 0);
    signal   unstableBitOnDMDRev2 : std_logic := '0';
+   signal   Sin, Cos             : slv18;
+   signal   DDS                  : STD_LOGIC_VECTOR(47 DOWNTO 0);
 
 BEGIN
 
-   ID <= FPGA_ID1 & FPGA_ID0;
+   OneBit : VioTwoBit
+      PORT MAP (
+         clk        => clk,
+         probe_out0 => testMode
+   );
 
-   IF_Clk_process : process(clk93r3)
+   DDS6 : dds6p0
+      PORT MAP (
+         aclk                 => clk,
+         aclken               => '1',
+         aresetn              => not testMode(0),
+         s_axis_phase_tvalid  => '1',
+         s_axis_phase_tdata   => 32x"0800_0000",
+         m_axis_data_tvalid   => open,
+         m_axis_data_tdata    => DDS
+   );
+
+   ID  <= FPGA_ID1 & FPGA_ID0;
+   Sin <= DDS(41 downto 24);
+   Cos <= DDS(17 downto 0);
+
+   IF_Clk_process : process(clk)
    begin
-      if (rising_edge(clk93r3)) then
+      if (rising_edge(clk)) then
          if (Reset) then
-            TxData4 <= x"55";
+            TxData4   <= x"55";
             TxData(0) <= x"00";
             TxData(1) <= x"00";
             TxData(2) <= x"00";
@@ -120,11 +162,23 @@ BEGIN
                TxData4 <= x"55";
             end if;
 
-            TxData(0) <= TxData(1) when (testMode) else adc0(7 downto 0);
-            TxData(1) <= TxData(2) when (testMode) else  dataI & dataEn & adc0(13 downto 8);
-            TxData(2) <= TxData(3) when (testMode) else amDataIn(7 downto 0);
-            -- I've seen sporadic errors on the combiner DataOut23(3) signal. DataOut13 is ok
-            TxData(3) <= TxData(4) when (testMode) else amDataIn(11 downto 8) & unstableBitOnDMDRev2 & dqmDATA & dqmCLK & dqmFS;
+            if (testMode(0)) then
+               TxData(0) <= TxData(1);
+               TxData(1) <= TxData(2);
+               TxData(2) <= TxData(3);
+               TxData(3) <= TxData(4);
+            elsif (testMode(1)) then
+               TxData(0) <= Sin(11 downto 4);
+               TxData(1) <= "00" & Sin(17 downto 12);
+               TxData(2) <= Cos(13 downto 6);
+               TxData(3) <= Cos(17 downto 14) & x"0";
+            else
+               TxData(0) <= adc0(7 downto 0);
+               TxData(1) <= dataI & dataEn & adc0(13 downto 8);
+               TxData(2) <= amDataIn(7 downto 0);
+               TxData(3) <= amDataIn(11 downto 8) & unstableBitOnDMDRev2 & dqmDATA & dqmCLK & dqmFS;
+               -- I've seen sporadic errors on the combiner DataOut23(3) signal. DataOut13 is ok
+            end if;
             TxData(4) <= std_logic_vector(TxData4);   -- used as test channel
          end if;
       end if;
@@ -137,7 +191,8 @@ BEGIN
          PORTS    => PORTS
       )
       Port MAP(
-         Clk93r3      => clk93r3,
+         clk         => clk,
+         clk4x       => clk4x,
          Reset       => Reset,
          Active      => Active1,
          TxData      => TxData,
@@ -154,7 +209,8 @@ BEGIN
          PORTS    => PORTS
       )
       Port MAP(
-         Clk93r3      => clk93r3,
+         clk         => clk,
+         clk4x       => clk4x,
          Reset       => Reset,
          Active      => Active2,
          TxData      => TxData,

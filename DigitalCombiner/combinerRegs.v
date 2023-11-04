@@ -18,6 +18,7 @@ module combinerRegs(
     input               wr0, wr1, wr2, wr3,
     input               realLock, imagLock, locked, ddsMiso, combinerFlag, agc0_gt_agc1,
     input       [7:0]   Index,
+    input       [15:0]  agcDifferential,
     output  reg [31:0]  MDB_CombLag     = 32'h0000,
     output  reg [31:0]  MDB_CombLead    = 32'h0000,
     output  reg [15:0]  MDB_CombSwLmt   = 16'h0000,
@@ -25,7 +26,8 @@ module combinerRegs(
     output  reg [31:0]  MDB_CombLocks   = 32'h0000,
     output  reg [15:0]  MDB_CombOptions = 16'h0000,
     output  reg [15:0]  MDB_dB_Range    = 16'h1800,
-    output  reg [15:0]  MDB_dB_Ratio    = 16'h03AA
+    output  reg [15:0]  MDB_dB_Ratio    = 16'h03AA,
+    output  reg [15:0]  MDB_AgcZero     = 16'h0000
 );
 
     always @(posedge busClk) begin
@@ -37,6 +39,7 @@ module combinerRegs(
                 `COMB_LOCKS:            MDB_CombLocks[7:0]      <= dataIn[7:0];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[7:0]      <= dataIn[7:0];
                 `COMB_DB_RANGE:         MDB_dB_Range[7:0]       <= dataIn[7:0];
+                `COMB_AGC_ZERO:         MDB_AgcZero[7:0]        <= dataIn[7:0];
                 default: ;
             endcase
         end
@@ -48,6 +51,7 @@ module combinerRegs(
                 `COMB_LOCKS:            MDB_CombLocks[15:8]     <= dataIn[15:8];
                 `COMB_SWEEP_LIMIT:      MDB_CombSwLmt[15:8]     <= dataIn[15:8];
                 `COMB_DB_RANGE:         MDB_dB_Range[15:8]      <= dataIn[15:8];
+                `COMB_AGC_ZERO:         MDB_AgcZero[15:8]       <= dataIn[15:8];
                 default: ;
             endcase
         end
@@ -86,6 +90,8 @@ module combinerRegs(
                 `COMB_LOCKS:        dataOut = MDB_CombLocks;
                 `COMB_DB_RANGE,
                 `COMB_DB_RATIO:     dataOut = {MDB_dB_Ratio, MDB_dB_Range};
+                `COMB_AGC_DIFF,
+                `COMB_AGC_ZERO:     dataOut = {MDB_AgcZero, agcDifferential};
                 default:            dataOut = 32'b0;
             endcase
         end

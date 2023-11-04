@@ -207,7 +207,7 @@ module ldpc #(parameter LDPCBITS = 3) (
     `elsif TRIPLE_LDPC_12
     ldpc12Decoder ldpcd(
     `else
-    ldpcDecoder ldpcd (
+    ldpc12Decoder ldpcd (   // the triple LDPC decoder doesn't exist as yet
     `endif
         `ifdef LDPC_2X
         .clock_2x(clk2x),

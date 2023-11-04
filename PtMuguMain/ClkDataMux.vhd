@@ -48,8 +48,7 @@ ENTITY ClkAndDataMux IS
       GENERIC(
          INPUT_PAIRS    : positive := 24;
          IN_WIDTH       : positive := 5;
-         OUTPUT_PAIRS   : positive := 16;
-         OUT_WIDTH      : positive := 4
+         OUTPUT_PAIRS   : positive := 16
       );
    PORT(
       ClkIn_p,
@@ -122,8 +121,8 @@ BEGIN
 
    Uart : UartControl
       GENERIC MAP(
-         REVISION_NUM   => 16x"0100",
-         FIRMWARE_VER   => 16x"0100",
+         REVISION_NUM   => "0100",
+         FIRMWARE_VER   => "0100",
          OUTPUT_PAIRS   => OUTPUT_PAIRS,
          IN_WIDTH       => IN_WIDTH
       )
@@ -187,7 +186,7 @@ GenOutputs:
       -- Select output clock
       ClkOut(n) <= ClkIn(to_integer(unsigned(Selects(n))));
       -- Latch outgoing data.
-      -- Data being latched on input and output releives timing skew between clk/data pairs
+      -- Data being latched on input and output relative timing skew between clk/data pairs
       DelayOut_process: process (ClkOut(n))
       begin
          if (rising_edge(ClkOut(n))) then

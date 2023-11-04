@@ -46,9 +46,10 @@ USE work.Semco_pkg.ALL;
 
 ENTITY DigitalCombiner IS
    PORT (
-      clk46r6,
-      clk93r3,
-      clk186,
+      clkOver2,
+      clk,
+      clk2x,
+      clk4x,
       SideCarClk,
       cs,
       wr0, wr1, wr2, wr3,
@@ -109,14 +110,17 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          dataIn            : IN  SLV32;
          dataOut           : OUT SLV32;
          Index             : IN  SLV8;
+         agcDifferential   : IN SLV16;
          MDB_CombLag,
          MDB_CombLead,
          MDB_CombRate,
-         MDB_CombLocks    : OUT SLV32;
+         MDB_CombLocks     : OUT SLV32;
          MDB_dB_Range,
          MDB_dB_Ratio,
          MDB_CombSwLmt,
-         MDB_CombOptions   : OUT SLV16
+         MDB_CombOptions,
+         MDB_AgcZero       : OUT SLV16
+
       );
    END COMPONENT combinerRegs;
 
@@ -141,8 +145,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
 
    COMPONENT IF_Align
       PORT (
-         clk46r6,
-         clk186,
+         clkOver2,
+         clk2x,
          ce,
          CarrierDetect,
          Reset          : IN  std_logic;
@@ -218,7 +222,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
       Port (
          ClkIn1,
          ClkIn2,
-         Clk93r3,
+         clk,
+         clk4x,
          Reset             : in  std_logic;
          DataIn1,
          DataIn2           : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
@@ -302,12 +307,15 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             agcDataOut        : SLV32;
    signal   MDB_CombSwLmt,
             MDB_CombOptions,
+            agcDifferential,
+            agcZero,
             MDB_dB_Ratio,
             MDB_dB_Range      : SLV16;
    signal   DucCount          : unsigned(1 downto 0) := "00";
    SIGNAL   PrevData,
             NextData          : STD_LOGIC_VECTOR(4 DOWNTO 0);
-   signal   ch0Agc,
+   signal   ch0AgcNorm,
+            ch0Agc,
             ch1Agc            : std_logic_vector(11 downto 0);
    signal   ch0FastAgc,
             ch1FastAgc,
@@ -392,6 +400,8 @@ ARCHITECTURE rtl OF DigitalCombiner IS
             ch1Imag,
             ch0Adc17,
             ch1Adc17,
+            DataOut14,
+            DataOut24,
             Real1Out,
             Imag1Out,
             Real2Out,
@@ -432,7 +442,9 @@ BEGIN
          MDB_CombLocks     => MDB_CombLocks,
          MDB_CombOptions   => MDB_CombOptions,
          MDB_dB_Range      => MDB_dB_Range,
-         MDB_dB_Ratio      => MDB_dB_Ratio
+         MDB_dB_Ratio      => MDB_dB_Ratio,
+         agcDifferential   => agcDifferential,
+         MDB_agcZero       => agcZero
       );
 
 /*
@@ -446,6 +458,8 @@ BEGIN
 #define MDB_combOptions             207
 #define MDB_combLocksLS16           208
 #define MDB_combLocksMS16           209
+#define MDB_agcDifferential         210
+#define MDB_agcZero                 211
 */
 
    DdsCS_n        <= MDB_CombOptions(0);
@@ -523,7 +537,8 @@ BEGIN
    generic map
       ( PORTS => 6)
    port map (
-      Clk93r3     => clk93r3,
+      clk         => clk,
+      clk4x       => clk4x,
       Reset       => reset,
       ClkIn1      => NextClk,  -- Next is Ch1
       DataIn1     => NextData,
@@ -541,28 +556,34 @@ BEGIN
       DataOut24   => DataOut24
    );
 
-   ch0Adc17       <= DataOut11(5 downto 0) & DataOut10 & "0000";
-   ch1Adc17       <= DataOut21(5 downto 0) & DataOut20 & "0000";
-   ch0Agc         <= DataOut13(7 downto 4) & DataOut12;
-   ch1Agc         <= DataOut23(7 downto 4) & DataOut22;
-   ch0SCLK        <= DataOut13(1);
-   ch0SFS         <= DataOut13(0);
-   ch0SDATA       <= DataOut13(2);
-   ch1SCLK        <= DataOut23(1);
-   ch1SFS         <= DataOut23(0);
-   ch1SDATA       <= DataOut23(2);
-   dataI0         <= DataOut11(7);
-   dataI1         <= DataOut21(7);
-   dataEn0        <= DataOut11(6);
-   dataEn1        <= DataOut21(6);
--- I've seen sporadic errors on the DataOut23(3) signal. DataOut13 is ok
-   unstableBitOnDMDRev2_1 <= DataOut13(3);
-   unstableBitOnDMDRev2_2 <= DataOut23(3);
+   serDesProc : process(Clk)
+   begin
+      if (rising_edge(Clk)) then
+         ch0Adc17       <= DataOut11(5 downto 0) & DataOut10 & "0000";
+         ch0Agc         <= DataOut13(7 downto 4) & DataOut12;
+         ch0SCLK        <= DataOut13(1);
+         ch0SFS         <= DataOut13(0);
+         ch0SDATA       <= DataOut13(2);
+         dataI0         <= DataOut11(7);
+         dataEn0        <= DataOut11(6);
+
+         ch1Adc17       <= DataOut21(5 downto 0) & DataOut20 & "0000";
+         ch1Agc         <= DataOut23(7 downto 4) & DataOut22;
+         ch1SCLK        <= DataOut23(1);
+         ch1SFS         <= DataOut23(0);
+         ch1SDATA       <= DataOut23(2);
+         dataI1         <= DataOut21(7);
+         dataEn1        <= DataOut21(6);
+      -- I've seen sporadic errors on the DataOut23(3) signal. DataOut13 is ok
+         unstableBitOnDMDRev2_1 <= DataOut13(3);
+         unstableBitOnDMDRev2_2 <= DataOut23(3);
+      end if;
+   end process;
 
 
    c2c : dqmChip2Chip   -- only use the combiner section
       port map (
-        clk                   => clk93r3,
+        clk                   => clk,
         reset                 => reset,
         combinerStartOfFrame  => '0',
         dqmStartOfFrame       => '0',
@@ -597,7 +618,7 @@ BEGIN
 
    preDdc : dualQuadDdc    -- Down convert incoming IFs to baseband, do both channels with same phase LO
    port map (
-      clk      => clk93r3,
+      clk      => clk,
       reset    => reset,
       invert   => InvertDDC,
       ifIn1    => ch0Adc17,
@@ -609,9 +630,12 @@ BEGIN
       qOut2    => ch1Imag
    );
 
+   agcDifferential <= to_slv(resize(to_sfixed('0' & ch0Agc, 1, -11) - to_sfixed('0' & ch1Agc, 1, -11), 3, -12));
+   ch0AgcNorm      <= to_slv(resize(to_sfixed('0' & ch0Agc, 1, -11) - to_sfixed(agcZero, 4, -11), 0, -11, fixed_truncate, fixed_saturate));
+
    fastAgc0 : combinerfastagc
       PORT MAP (
-         clk            => clk46r6,
+         clk            => clkOver2,
          ce             => '1',
          reset          => CombinerReset,
          cs             => cs,
@@ -625,7 +649,7 @@ BEGIN
          dout           => agcDataOut,
          i_in0          => ch0Real,
          q_in0          => ch0Imag,
-         agcIn0         => ch0Agc,
+         agcIn0         => ch0AgcNorm,
          agcIn1         => ch1Agc,
          i_in1          => ch1Real,
          q_in1          => ch1Imag,
@@ -643,8 +667,8 @@ BEGIN
 
    IF_Align_u : IF_Align
       PORT MAP (
-         clk46r6        => clk46r6,
-         clk186         => clk186,
+         clkOver2       => clkOver2,
+         clk2x          => clk2x,
          reset          => CombinerReset,
          CarrierDetect  => '1',
          ce             => orMinGain,     -- if one channel is turned off, hold current alignment in case a channel is dead.
@@ -664,7 +688,7 @@ BEGIN
 
    CmplxPhsDet : complexphasedetectorswap_0
       PORT MAP (
-         clk            => clk46r6,                            -- MDB_combDbRange             199
+         clk            => clkOver2,                            -- MDB_combDbRange             199
          reset          => CombinerReset,                      -- MDB_combLagLS16             200
          ch0gtch1       => MDB_CombRate(19),                   -- MDB_combLagMS16             201
          overridech     => MDB_CombRate(20),                   -- MDB_combLeadLS16            202
@@ -675,16 +699,16 @@ BEGIN
          ch1agc         => ch1Gain,                            -- MDB_combOptions             207
          ch0real        => Real1Out,                           -- MDB_combLocksLS16           208
          ch0imag        => Imag1Out,                           -- MDB_combLocksMS16           209
-         ch1real        => Real2Out,                           -- MDB_CalfControlsLS16        210
-         ch1imag        => Imag2Out,                           -- MDB_CalfControlsMS16        211
-         lag_coef       => MDB_CombLag(17 downto 0),           -- MDB_CalfULimitLS16          212
-         lead_coef      => MDB_CombLead(17 downto 0),          -- MDB_CalfULimitMS16          213
-         sweeplmt       => MDB_CombSwLmt(14 downto 0),         -- MDB_CalfLLimitLS16          214
-         swprate        => MDB_CombRate(17 downto 0),          -- MDB_CalfLLimitMS16          215
-         db_range       => MDB_dB_Range,                       -- MDB_CalfRatiosLS16          216
-         db_ratio       => MDB_dB_Ratio,                       -- MDB_CalfRatiosMS16          217
-         realout        => realout,                            -- MDB_CalfIntegrator0         218
-         imagout        => imagout,                            -- MDB_CalfIntegrator1         219
+         ch1real        => Real2Out,
+         ch1imag        => Imag2Out,
+         lag_coef       => MDB_CombLag(17 downto 0),
+         lead_coef      => MDB_CombLead(17 downto 0),
+         sweeplmt       => MDB_CombSwLmt(14 downto 0),
+         swprate        => MDB_CombRate(17 downto 0),
+         db_range       => MDB_dB_Range,
+         db_ratio       => MDB_dB_Ratio,
+         realout        => realout,
+         imagout        => imagout,
          reallock       => reallock,
          imaglock       => imaglock,
          locked         => locked,
@@ -703,9 +727,9 @@ BEGIN
       );
 
   -- create a series of rising edges for the ILA to subsample the data for lower frequnecy acquistion
-   subClkProc : process(clk93r3)
+   subClkProc : process(clk)
    begin
-      if (rising_edge(clk93r3)) then
+      if (rising_edge(clk)) then
          SubSample <= SubSample + 1;
       end if;
    end process;
@@ -714,7 +738,7 @@ BEGIN
 -- drive combiner outputs to demod as 70MHz IF
    GenIF : DUC
       port map (
-         clk      => clk93r3,
+         clk      => clk,
          ce       => '1',
          invert   => InvertDUC,
          realIn   => realOut,
@@ -729,7 +753,7 @@ BEGIN
 
    NCO : OffsetNCO
       PORT MAP (
-         aclk                 => clk46r6,
+         aclk                 => clkOver2,
          aresetn              => not ResetPdClk,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => PhaseInc,
@@ -743,9 +767,9 @@ BEGIN
    NcoSin <= NcoData(24+17 downto 24);
 
    DdsGain <= unsigned(MDB_CombLag(22 downto 20));
-   IF_BuffProc : process (clk46r6)
+   IF_BuffProc : process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          orMinGain   <= or(gainoutmin);
          ResetPdClk  <= Reset;
          CombReal    <= realOut;
@@ -781,9 +805,9 @@ BEGIN
       end if;
    end process;
 
-   IF_OutProc : process (clk93r3)
+   IF_OutProc : process (clk)
    begin
-      if (rising_edge(clk93r3)) then
+      if (rising_edge(clk)) then
          if (SideCarClk) then
             DdsData <= ImagCmbFFDly;
          else

@@ -160,6 +160,7 @@
 `endif
 
 `ifdef LDPC_DEMOD
+`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
@@ -215,8 +216,9 @@
 
 `ifdef  ADD_DQM
     `define DQM_USE_CHIP_TO_CHIP
-    `define DQM_LOG_BITS    11
 `endif
+// log bits is referenced but not necessarily ADD_DQM
+`define DQM_LOG_BITS    11
 
 `endif //R6100
 
@@ -817,6 +819,8 @@
         `define COMB_LOCKS         6'b01_00xx
         `define COMB_DB_RANGE      6'b01_010x
         `define COMB_DB_RATIO      6'b01_011x
+        `define COMB_AGC_DIFF      6'b01_100x
+        `define COMB_AGC_ZERO      6'b01_101x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
@@ -1064,6 +1068,68 @@
     `define CandD_DLL_CENTER_FREQ   13'bx_xxxx_xxxx_01xx
     `define CandD_DLL_GAINS         13'bx_xxxx_xxxx_100x
     `define CandD_DLL_FDBK_DIV      13'bx_xxxx_xxxx_101x
+
+// BERT subsystem registers
+`define BERT_SPACE          13'b0_0111_0xxx_xxxx
+    `define BERT_POLY               13'bx_xxxx_x000_00xx
+    `define POLARITY_THRESHOLD      13'bx_xxxx_x000_01xx
+    `define SLIP_LIMIT              13'bx_xxxx_x000_10xx
+    `define SLIP_THRESHOLD          13'bx_xxxx_x000_11xx
+    `define SLIP_RECOVERY           13'bx_xxxx_x001_00xx
+    `define SYNC_THRESHOLD          13'bx_xxxx_x001_01xx
+    `define SINGLE_TEST_LENGTH      13'bx_xxxx_x001_10xx
+    `define SINGLE_TEST_ERRORS      13'bx_xxxx_x001_11xx
+    `define SINGLE_TEST_COUNT       13'bx_xxxx_x010_00xx
+    `define CONTINUOUS_TEST_ERRORS  13'bx_xxxx_x010_01xx
+    `define CONTINUOUS_TEST_COUNT   13'bx_xxxx_x010_10xx
+    `define TEST_CONTROL            13'bx_xxxx_x010_11xx
+    `define SOURCE_SELECT           13'bx_xxxx_x011_000x
+        `define BERT_SRC_LEGACY_I    4'b0000
+        `define BERT_SRC_LEGACY_Q    4'b0001
+        `define BERT_SRC_PCMTRELLIS  4'b0010
+        `define BERT_SRC_SOQTRELLIS  4'b0011
+        `define BERT_SRC_STC         4'b0100
+        `define BERT_SRC_RSVD0       4'b0101
+        `define BERT_SRC_LDPC        4'b0110
+        `define BERT_SRC_RSVD1       4'b0111
+        `define BERT_SRC_DEC0_CH0    4'b1000
+        `define BERT_SRC_DEC0_CH1    4'b1001
+        `define BERT_SRC_DEC1_CH0    4'b1010
+        `define BERT_SRC_DEC1_CH1    4'b1011
+        `define BERT_SRC_DEC2_CH0    4'b1100
+        `define BERT_SRC_DEC2_CH1    4'b1101
+        `define BERT_SRC_DEC3_CH0    4'b1110
+        `define BERT_SRC_RS_DEC      4'b1111
+
+// Combiner subsystem registers start at x0C40 to 0xC7F
+        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
+        `define COMB_LAG_COEF      6'b00_00xx
+        `define COMB_LEAD_COEF     6'b00_01xx
+        `define COMB_SWEEP_RATE    6'b00_10xx
+        `define COMB_SWEEP_LIMIT   6'b00_110x
+        `define COMB_OPTIONS       6'b00_111x
+        `define COMB_LOCKS         6'b01_00xx
+        `define COMB_DB_RANGE      6'b01_010x
+        `define COMB_DB_RATIO      6'b01_011x
+        `define COMB_AGC_DIFF      6'b01_100x
+        `define COMB_AGC_ZERO      6'b01_101x
+        // The Combiner AGC uses the same register set defined in the global map at bottom of file
+        // Define the Combiner AGC Loop Filter memory map
+        `define CALF_CONTROL       6'b10_00xx
+        `define CALF_ULIMIT        6'b10_01xx
+        `define CALF_LLIMIT        6'b10_10xx
+        `define CALF_RATIOS        6'b10_11xx
+        `define CALF_INTEGRATOR    6'b11_00xx
+
+// Spectral Sweep Card
+`define SSCSPACE            13'b0_1000_1001_xxxx
+
+`define UARTSPACE           13'b0_0101_0111_xxxx
+`define DQMSPACE            13'b0_0101_1000_xxxx
+    `define DQM_SYNC_WORD       16'hfac4
+    `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
+    `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
+    `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
 
 // Legacy Demod subsystem registers
 `define DEMODSPACE          13'b0_0100_000x_xxxx

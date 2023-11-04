@@ -179,6 +179,8 @@ module semcoDemodTop (
         parameter VER_NUMBER = VERSION_NUMBER + 20000;
     `elsif ADD_LDPC
         parameter VER_NUMBER = VERSION_NUMBER + 10000;
+    `elsif ADD_STC
+        parameter VER_NUMBER = VERSION_NUMBER + 30000;
     `else
         parameter VER_NUMBER = VERSION_NUMBER;
     `endif
@@ -190,8 +192,9 @@ module semcoDemodTop (
     systemClock systemClock (
         .clkIn(adc0Clk),
         .clk1x(clk),
-        .clk2x(clk186),
-        .clkOver2(clk46r6),
+        .clk2x(clk2x),
+        .clk4x(clk4x),
+        .clkOver2(clkOver2),
         .locked(clkLocked)
     );
 
@@ -340,7 +343,6 @@ module semcoDemodTop (
 
     `ifdef COMBINER
         wire            [17:0]  combinerIF;
-        wire    clk93r3 = clk;
         wire            combinerEn;
         always @(posedge clk) begin
             adc0Reg <= adc0;
@@ -354,7 +356,6 @@ module semcoDemodTop (
     `elsif COMBINER_DISTORT
         reg     signed  [17:0]  adc0InPre;
         wire    signed  [17:0]  adc0InPost;
-        wire    clk93r3 = clk;
         wire            [11:0]  amDataIn_u;
 
         always @(posedge clk) begin
@@ -376,9 +377,9 @@ module semcoDemodTop (
     wire    [31:0]  combDataOut;
          DemodPreDist Distort
          (
-            .clk46r6        (clk46r6),
-            .clk93r3        (clk93r3),
-            .clk186         (clk186),
+            .clkOver2       (clkOver2),
+            .clk            (clk),
+            .clk2x          (clk2x),
             .reset          (reset),
             .cs             (combSpace),
             .addr           (addr[5:0]),
@@ -486,7 +487,6 @@ module semcoDemodTop (
         .dac2InputSelect(),
         .ch0MuxSelect(),
         .ch1MuxSelect(),
-        .combinerTestMode(combinerTestMode),
         .pngenEnable(pngenEnable),
         .framerEnable(framerEnable)
     );
@@ -1819,9 +1819,10 @@ module semcoDemodTop (
     wire    [31:0]  combDataOut;
     DigitalCombiner Combiner
     (
-        .clk46r6        (clk46r6),
-        .clk93r3        (clk93r3),
-        .clk186         (clk186),
+        .clkOver2       (clkOver2),
+        .clk            (clk),
+        .clk2x          (clk2x),
+        .clk4x          (clk4x),
         .SideCarClk     (SideCarClk),
         .reset          (!FPGA_ID1 || reset),
         .cs             (combSpace),
@@ -1930,11 +1931,11 @@ module semcoDemodTop (
 //                               Combiner Outputs from Demod
 //******************************************************************************
      DC_DemodTop combinerOut(
-        .clk93r3        (clk),
+        .clk            (clk),
+        .clk4x          (clk4x),
         .Reset          (reset),
         .FPGA_ID0       (FPGA_ID0),
         .FPGA_ID1       (FPGA_ID1),
-        .testMode       (combinerTestMode),
         .adc0           (adc0In[17:4]), // grab just the raw a/d data. I'll convert to 18 bit signed in combiner
         .amDataIn       (amDataIn_u),
         // DQM serial inputs
@@ -2643,9 +2644,9 @@ sdi sdi(
 
         always @* begin
             if (ngrMode) begin // NGR_DEMOD
-                video0OutSelect = vid0Select[1:0];    // Sw_Filt_0_A0  Pin D26:D28
+                video0OutSelect = vid0Select[1:0];    // Sw_Filt_0_A[1:0]  Pin D26, D28
                 video1OutSelect = vid1Select[1:0];    // Sw_Filt_1_A[1:0]  Pin D22, D24
-                Sw50Ohm = vid2Select[2];    // Sw_50_Ohm, Sw_Vid_1_A[1:0] Pins D11, D14:D16
+                Sw50Ohm = vid2Select[2];              // Sw_50_Ohm         Pin D11
             end
             else begin  //Original R6080
 

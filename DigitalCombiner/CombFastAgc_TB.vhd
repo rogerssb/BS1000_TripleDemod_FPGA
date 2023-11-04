@@ -180,9 +180,9 @@ ARCHITECTURE rtl OF CombFastAgc_TB IS
    signal   mcuMode           : mcuFsm := IDLE;
    signal   Mode              : Modulation := QPSK;
 
-   signal   clk186,
-            clk93r3,
-            clk46r6,
+   signal   clk2x,
+            clk,
+            clkOver2,
             cs,
             wrLsb,
             wrMsb,
@@ -253,18 +253,18 @@ BEGIN
 
    process begin
       wait for 5.35 ns;
-      clk186 <= not clk186;
-      if (clk186) then
-         clk93r3 <= not clk93r3;
-         if (clk93r3) then
-            clk46r6 <= not clk46r6;
+      clk2x <= not clk2x;
+      if (clk2x) then
+         clk <= not clk;
+         if (clk) then
+            clkOver2 <= not clkOver2;
          end if;
       end if;
    end process;
 
-   mcuProcess : process (clk46r6)
+   mcuProcess : process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          if (Reset) then
             case (mcuMode) is
                when IDLE =>
@@ -320,7 +320,7 @@ BEGIN
 
    LFSR11 : BERT_LFSR
       PORT MAP(
-         clock       => clk46r6,
+         clock       => clkOver2,
          reset       => Reset,
          reload      => '0',
          enable      => PrnEn,
@@ -333,7 +333,7 @@ BEGIN
 
    LFSR15 : BERT_LFSR
       PORT MAP(
-         clock       => clk46r6,
+         clock       => clkOver2,
          reset       => Reset,
          reload      => '0',
          enable      => PrnEn,
@@ -344,9 +344,9 @@ BEGIN
          serial      => PrnDataQ
    );
 
-   Delay_process: process (clk46r6)
+   Delay_process: process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          PrnEn <= '0';
          if (Timer = 2000) then
             OneCycle <= '1';
@@ -410,7 +410,7 @@ BEGIN
          INIT_Z3 => 64x"FFDA_3500_00FE_95FF"      -- 18,436,106,298,727,503,359
       )
       PORT MAP (
-          clk        => clk93r3,
+          clk        => clk,
           rstn       => not Reset,
           ce         => '1',
           valid_out  => open,
@@ -424,7 +424,7 @@ BEGIN
          INIT_Z3 => 64x"FFB5_6A00_00FF_2BFF"    -- 18,425,749,998,705,519,615
       )
       PORT MAP (
-         clk        => clk93r3,
+         clk        => clk,
          rstn       => not Reset,
          ce         => '1',
          valid_out  => open,
@@ -434,7 +434,7 @@ BEGIN
    -- generate the AM modulation frequencies
    AM_NCO : OffsetNCO
       PORT MAP (
-         aclk                 => clk46r6,
+         aclk                 => clkOver2,
          aresetn              => not reset,
          s_axis_config_tvalid => '1',
          s_axis_config_tdata  => to_slv(to_sfixed(AM_FreqReal, 31, 0)),
@@ -444,9 +444,9 @@ BEGIN
          m_axis_data_tdata    => AM_Sines
       );
 
-   DataGen_process: process (clk46r6)
+   DataGen_process: process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          if (Reset) then
             NoisePipe0     <= (others=>'0');
             NoisePipe1     <= (others=>'0');
@@ -482,7 +482,7 @@ BEGIN
 
    LowpassNoise : Lowpass66
       PORT MAP (
-         aclk                 => clk186,      -- run at 4x clock rate to reduce DSPs
+         aclk                 => clk2x,      -- run at 4x clock rate to reduce DSPs
          aresetn              => not Reset,
          s_axis_data_tvalid   => '1',
          s_axis_data_tdata    => LpfIn,
@@ -510,11 +510,11 @@ end generate;
    agcIn1 <= std_logic_vector(to_unsigned(integer(((Agc1/20.0 + 5.5) / 4.4) * 4096.0),12));
    combinerFastAgc_u : combinerfastagc
       PORT MAP (
-         clk         => clk46r6,
+         clk         => clkOver2,
          ce          => '1',
          reset       => Reset,
          cs          => cs,
-         busClk      => clk46r6,
+         busClk      => clkOver2,
          wr0         => wrLsb,
          wr1         => wrLsb,
          wr2         => wrMsb,
@@ -544,7 +544,7 @@ end generate;
 
    CmplxPhsDet : complexphasedetector_0
       PORT MAP (
-         clk            => clk46r6,
+         clk            => clkOver2,
          reset          => reset,
          ch0gtch1       => '0',
          overridech     => '0',
@@ -581,9 +581,9 @@ end generate;
          gainoutmin     => open
       );
 
-   lock_process : process (clk46r6)
+   lock_process : process (clkOver2)
    begin
-      if (rising_edge(clk46r6)) then
+      if (rising_edge(clkOver2)) then
          locked <= force '1';
       end if;
    end process;

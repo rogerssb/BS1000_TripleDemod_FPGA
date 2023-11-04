@@ -41,7 +41,8 @@ entity CombinerSerDesIn is
    Port (
       ClkIn1,
       ClkIn2,
-      Clk93r3,
+      clk,
+      clk4x,
       Reset             : in  std_logic;
       DataIn1,
       DataIn2           : in  STD_LOGIC_VECTOR(PORTS-2 downto 0);
@@ -82,19 +83,9 @@ architecture rtl of CombinerSerDesIn is
    component Clk200
       port (
          reset             : in     std_logic;
-         Clk93r3           : in     std_logic;
+         clk93r3           : in     std_logic;
          locked            : out    std_logic;
          Clk200M           : out    std_logic
-      );
-   end component;
-
-   component SerDesPll
-      port (
-         Clk93r3,
-         reset             : in     std_logic;
-         clk_Nx,
-         clk_1x,
-         locked            : out    std_logic
       );
    end component;
 
@@ -104,49 +95,30 @@ architecture rtl of CombinerSerDesIn is
    signal   SyncRst           : SLV16 := (others=>'1');
    signal   ChBitSlip1,
             ChBitSlip2        : std_logic_vector(PORTS-1 downto 0);
-   signal   ClkX1,
-            ClkNx,
-            Clk200M,
+   signal   Clk200M,
             DelayLocked1,
             DelayLocked2,
-            LockedXn,
             Lock200           : std_logic;
    signal   Demux1,
-            Demux2,
-            PrevOut1,
-            Prevout2,
-            Error1,
-            Error2:            SLV8_ARRAY(PORTS-1 downto 0);
+            Demux2            : SLV8_ARRAY(PORTS-1 downto 0);
    signal   ChOut1,
             ChOut2            : std_logic_vector ((PORTS*8)-1 downto 0);
-   signal   Count             : UINT8 := x"00";
-
-   attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of Error1, Error2 : signal is "TRUE";
+   signal   Count             : UINT4 := x"0";
 
 begin
 
    Pll200 : Clk200
       port map(
-         Clk93r3           => Clk93r3,
+         clk93r3           => clk,
          reset             => Reset,
          locked            => Lock200,
          Clk200M           => Clk200M
       );
 
-   PllXn_u : SerDesPll
-      port map (
-         Clk93r3           => Clk93r3,
-         reset             => Reset,
-         locked            => LockedXn,
-         clk_1x            => ClkX1,
-         clk_Nx            => ClkNx
-    );
-
-   SyncRstProcess : process(ClkX1)
+   SyncRstProcess : process(clk)
    begin
-      if (rising_edge(ClkX1)) then
-         if (Lock200 and LockedXn and not Reset) then
+      if (rising_edge(clk)) then
+         if (Lock200 and not Reset) then
             SyncRst <= SyncRst(14 downto 0) & '0' ;
          else
             SyncRst <= (others=>'1');
@@ -157,8 +129,8 @@ begin
    SerDesIn1 : SerDes6x8to1In
        port map
       (
-         clk_in               => ClkNx,
-         clk_div_in           => ClkX1,
+         clk_in               => clk4x,
+         clk_div_in           => clk,
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
 
@@ -171,8 +143,8 @@ begin
    SerDesIn2 : SerDes6x8to1In
        port map
       (
-         clk_in               => ClkNx,
-         clk_div_in           => ClkX1,
+         clk_in               => clk4x,
+         clk_div_in           => clk,
          io_reset             => SyncRst(SyncRst'left),
          ref_clock            => Clk200M,
 
@@ -182,9 +154,9 @@ begin
          delay_locked         => DelayLocked2
       );
 
-   DeInterlace1 : process(ClkX1)
+   DeInterlace1 : process(clk)
    begin
-      if (rising_edge(ClkX1)) then
+      if (rising_edge(clk)) then
          for ch in 0 to PORTS-1 loop
             if ((ch = 3) or (ch = 4) or (ch = 5)) then
                for bits in 0 to 7 loop
@@ -197,11 +169,7 @@ begin
             end if;
          end loop;
 
-         if (Count < 15) then
-            Count <= Count + 1;
-         else
-            Count <= x"00";
-         end if;
+         Count <= Count + 1;
 
          if ((Demux1(CLOCK) = x"0F") or (Count < 15)) then  -- Clock 1 is inverted
             ChBitSlip1 <= (others=>'0');
@@ -213,9 +181,9 @@ begin
    end process;
 
 
-   DeInterlace2 : process(ClkX1)
+   DeInterlace2 : process(clk)
    begin
-      if (rising_edge(ClkX1)) then
+      if (rising_edge(clk)) then
          for ch in 0 to PORTS-1 loop
             if ((ch = 3) or (ch = 4) or (ch = 5)) then
                for bits in 0 to 7 loop
@@ -237,9 +205,9 @@ begin
       end if;
    end process;
 
-   OutProcess : process(Clk93r3)
+   OutProcess : process(clk)
    begin
-      if (rising_edge(Clk93r3)) then
+      if (rising_edge(clk)) then
          DataOut10 <= Demux1(0);
          DataOut11 <= Demux1(1);
          DataOut12 <= Demux1(2);
@@ -251,28 +219,6 @@ begin
          DataOut22 <= Demux2(2);
          DataOut23 <= Demux2(3);
          DataOut24 <= Demux2(4);
-
-         PrevOut1(0) <=  DataOut10;
-         PrevOut1(1) <=  DataOut11;
-         PrevOut1(2) <=  DataOut12;
-         PrevOut1(3) <=  DataOut13;
-         PrevOut1(4) <=  DataOut14;
-         PrevOut2(0) <=  DataOut20;
-         PrevOut2(1) <=  DataOut21;
-         PrevOut2(2) <=  DataOut22;
-         PrevOut2(3) <=  DataOut23;
-         PrevOut2(4) <=  DataOut24;
-
-         Error1(0)   <= DataOut10 xor std_logic_vector(unsigned(PrevOut1(0)) + x"11");
-         Error1(1)   <= DataOut11 xor std_logic_vector(unsigned(PrevOut1(1)) + x"11");
-         Error1(2)   <= DataOut12 xor std_logic_vector(unsigned(PrevOut1(2)) + x"11");
-         Error1(3)   <= DataOut13 xor std_logic_vector(unsigned(PrevOut1(3)) + x"11");
-         Error1(4)   <= DataOut14 xor std_logic_vector(unsigned(PrevOut1(4)) + x"11");
-         Error2(0)   <= DataOut20 xor std_logic_vector(unsigned(PrevOut2(0)) + x"11");
-         Error2(1)   <= DataOut21 xor std_logic_vector(unsigned(PrevOut2(1)) + x"11");
-         Error2(2)   <= DataOut22 xor std_logic_vector(unsigned(PrevOut2(2)) + x"11");
-         Error2(3)   <= DataOut23 xor std_logic_vector(unsigned(PrevOut2(3)) + x"11");
-         Error2(4)   <= DataOut24 xor std_logic_vector(unsigned(PrevOut2(4)) + x"11");
       end if;
    end process;
 
