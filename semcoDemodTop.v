@@ -119,23 +119,21 @@ module semcoDemodTop (
         output  reg         Sw50Ohm,
         input               FPGA_ID0, FPGA_ID1,
 
-//        `ifdef COMBINER // assumes the sidecar is attached, the SBS signals are defined later
-            inout    [40:1]     SideCar,
- /*       `elsif ADD_BITSYNC
-            // Bitsync ADC
-            input       [13:0]  bsAdc,
-            input               bsAdc_overflow,
-            output              bsAdc_powerDown,
 
-            // Input Impedance and Topology controls
-            output              bsHighImpedance,
-            output              bsSingleEnded,
+        output    [17:0]    DdsData,   // TODO, was inout for bitsync.
+        output              DdsIO_Reset,
+                            DdsIO_Update,
+                            DdsReset,
+                            DdsCS_n,
+                            DdsSClk,
+                            DdsMosi,
+                            TxEnable,
+                            IF_BS_n,
+        input               DdsMiso,
+                            PdClk,
+                            DdsSyncClk,
 
-            // Gain and Offset DAC interfaces
-            output              bsDacSELn,
-            output              bsDacSCLK, bsDacMOSI,
-        `endif  //ADD_BITSYNC
-*/
+
        `ifdef COMBINER  // both sides need these signals
             input  [4:0]        PrevData_p,
                                 PrevData_n,
@@ -173,17 +171,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VERSION_NUMBER = 16'd765;
-    // Adding a Demod Mode feedback to the version number to make sure of what FPGA image is loaded
-    `ifdef TRIPLE_MULTIH
-        parameter VER_NUMBER = VERSION_NUMBER + 20000;
-    `elsif ADD_LDPC
-        parameter VER_NUMBER = VERSION_NUMBER + 10000;
-    `elsif ADD_STC
-        parameter VER_NUMBER = VERSION_NUMBER + 30000;
-    `else
-        parameter VER_NUMBER = VERSION_NUMBER;
-    `endif
+    parameter VER_NUMBER = 16'd766;
 
 //******************************************************************************
 //                          Clock Distribution
@@ -192,9 +180,8 @@ module semcoDemodTop (
     systemClock systemClock (
         .clkIn(adc0Clk),
         .clk1x(clk),
-        .clk2x(clk2x),
-        .clk4x(clk4x),
-        .clkOver2(clkOver2),
+        .clk2x(clk186),
+        .clkOver2(clk46r6),
         .locked(clkLocked)
     );
 
@@ -343,6 +330,7 @@ module semcoDemodTop (
 
     `ifdef COMBINER
         wire            [17:0]  combinerIF;
+        wire    clk93r3 = clk;
         wire            combinerEn;
         always @(posedge clk) begin
             adc0Reg <= adc0;
@@ -356,6 +344,7 @@ module semcoDemodTop (
     `elsif COMBINER_DISTORT
         reg     signed  [17:0]  adc0InPre;
         wire    signed  [17:0]  adc0InPost;
+        wire    clk93r3 = clk;
         wire            [11:0]  amDataIn_u;
 
         always @(posedge clk) begin
@@ -377,9 +366,9 @@ module semcoDemodTop (
     wire    [31:0]  combDataOut;
          DemodPreDist Distort
          (
-            .clkOver2       (clkOver2),
-            .clk            (clk),
-            .clk2x          (clk2x),
+            .clk46r6        (clk46r6),
+            .clk93r3        (clk93r3),
+            .clk186         (clk186),
             .reset          (reset),
             .cs             (combSpace),
             .addr           (addr[5:0]),
@@ -409,6 +398,7 @@ module semcoDemodTop (
     end
     `endif
 
+/*    IF reconstruction no longer supports a bitsync
     `ifdef R6100
     //Assume IF/BS Sidecar is used. This is just muxing
     wire        [17:0]  DdsData;
@@ -428,7 +418,7 @@ module semcoDemodTop (
     wire                bsDacSELn, bsDacSCLK, bsDacMOSI;
 
    ifBsMux ifBsMux (
-        .IF_BS_n         (IF_BS_n),
+        .IF_BS_n         (1'b1), // IF_BS_n),
         .SideCar         (SideCar),
         .DdsData         (DdsData),
         .DdsIO_Reset     (DdsIO_Reset),
@@ -450,7 +440,7 @@ module semcoDemodTop (
         .bsAdc_overflow  (bsAdc_overflow)
     );
     `endif
-
+*/
 //******************************************************************************
 //                             Top Level Registers
 //******************************************************************************
@@ -1819,11 +1809,10 @@ module semcoDemodTop (
     wire    [31:0]  combDataOut;
     DigitalCombiner Combiner
     (
-        .clkOver2       (clkOver2),
-        .clk            (clk),
-        .clk2x          (clk2x),
-        .clk4x          (clk4x),
-        .SideCarClk     (SideCarClk),
+        .clk46r6        (clk46r6),
+        .clk93r3        (clk93r3),
+        .clk186         (clk186),
+        .PdClk          (PdClk),
         .reset          (!FPGA_ID1 || reset),
         .cs             (combSpace),
         .addr           (addr[5:0]),
@@ -1844,10 +1833,10 @@ module semcoDemodTop (
         .PrevClk_p      (PrevClk_p),
         .PrevClk_n      (PrevClk_n),
 
-        .ch0MseSum(ch0MseSum),
-        .ch0Log10MseSum(ch0Log10MSE),
-        .ch1MseSum(ch1MseSum),
-        .ch1Log10MseSum(ch1Log10MSE),
+        .ch1MseSum      (ch0MseSum),
+        .ch1Log10MseSum (ch0Log10MSE),
+        .ch2MseSum      (ch1MseSum),
+        .ch2Log10MseSum (ch1Log10MSE),
 
         .ifOut          (combinerIF),
         .realout        (iCombData),     // combiner runs at 46.6MHz
@@ -1856,7 +1845,7 @@ module semcoDemodTop (
         .locked         (combLocked),
         .imaglock       (ImagLock),
         .reallock       (RealLock),
-        .agc0_gt_agc1   (bestSrcSel),
+        .Ch1isMaster    (bestSrcSel),
         .realxord       (),
         .imagxord       (),
         .ifBS_n         (IF_BS_n),
@@ -1873,7 +1862,7 @@ module semcoDemodTop (
         .dataI          (bertDataIn)
     );
 
-
+      assign TxEnable = 1'b1;
 //    assign lockLed0n = RealLock[12];
 //    assign lockLed1n = ImagLock[12];
 
@@ -1931,8 +1920,7 @@ module semcoDemodTop (
 //                               Combiner Outputs from Demod
 //******************************************************************************
      DC_DemodTop combinerOut(
-        .clk            (clk),
-        .clk4x          (clk4x),
+        .clk93r3        (clk),
         .Reset          (reset),
         .FPGA_ID0       (FPGA_ID0),
         .FPGA_ID1       (FPGA_ID1),
@@ -2126,9 +2114,9 @@ module semcoDemodTop (
     assign ch2ClkOut = cAndD0ClkEn;
     assign ch2DataOut = cAndD0DataIn[2];
     `else
-    assign ch0ClkOut = cAndD0ClkOut;
+    assign ch0ClkOut  = cAndD0ClkOut;
     assign ch0DataOut = cAndD0DataOut[2];
-    assign ch2ClkOut = cAndD0ClkOut;
+    assign ch2ClkOut  = cAndD0ClkOut;
     assign ch2DataOut = cAndD0DataOut[2];
     `endif
 

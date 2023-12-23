@@ -42,8 +42,7 @@ use UNISIM.vcomponents.all;
 
 ENTITY DC_DemodTop IS
    PORT(
-      clk,
-      clk4x,
+      clk93r3,
       Reset,
       FPGA_ID0,
       FPGA_ID1,
@@ -73,8 +72,7 @@ ARCHITECTURE rtl OF DC_DemodTop IS
          PORTS    : natural := 5
       );
       Port (
-         clk,
-         clk4x,
+         Clk93r3,
          Reset,
          Active            : in std_logic;
          TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
@@ -118,64 +116,53 @@ ARCHITECTURE rtl OF DC_DemodTop IS
    signal   testMode             : std_logic_vector(1 downto 0) := "01";
    signal   probe_out0,
             probe_out1           : STD_LOGIC_VECTOR(4 DOWNTO 0);
-   signal   unstableBitOnDMDRev2 : std_logic := '0';
-   signal   Sin, Cos             : slv18;
-   signal   DDS                  : STD_LOGIC_VECTOR(47 DOWNTO 0);
+   signal   unstableBitOnDMDRev2,
+            unstableBitOnDMDRev3 : std_logic := '0';
+   signal   Noise                : SLV8 := x"FF";
 
 BEGIN
 
    OneBit : VioTwoBit
       PORT MAP (
-         clk        => clk,
+         clk        => clk93r3,
          probe_out0 => testMode
    );
 
-   DDS6 : dds6p0
-      PORT MAP (
-         aclk                 => clk,
-         aclken               => '1',
-         aresetn              => not testMode(0),
-         s_axis_phase_tvalid  => '1',
-         s_axis_phase_tdata   => 32x"0800_0000",
-         m_axis_data_tvalid   => open,
-         m_axis_data_tdata    => DDS
-   );
-
    ID  <= FPGA_ID1 & FPGA_ID0;
-   Sin <= DDS(41 downto 24);
-   Cos <= DDS(17 downto 0);
 
-   IF_Clk_process : process(clk)
+   IF_Clk_process : process(clk93r3)
    begin
-      if (rising_edge(clk)) then
+      if (rising_edge(clk93r3)) then
          if (Reset) then
-            TxData4   <= x"55";
+            TxData4   <= x"00";
             TxData(0) <= x"00";
             TxData(1) <= x"00";
             TxData(2) <= x"00";
             TxData(3) <= x"00";
             TxData(4) <= x"00";
          else
-            if (TxData4 < 255) then
-               TxData4 <= TxData4 + x"11";
-            else
-               TxData4 <= x"55";
-            end if;
+            TxData4 <= TxData4 + x"01";
+            Noise   <= Noise(6 downto 0) & (Noise(5) xor Noise(6));
 
-            if (testMode(0)) then
+            if (testMode = "01") then
                TxData(0) <= TxData(1);
                TxData(1) <= TxData(2);
                TxData(2) <= TxData(3);
                TxData(3) <= TxData(4);
-            elsif (testMode(1)) then
-               TxData(0) <= Sin(11 downto 4);
-               TxData(1) <= "00" & Sin(17 downto 12);
-               TxData(2) <= Cos(13 downto 6);
-               TxData(3) <= Cos(17 downto 14) & x"0";
+            elsif (testMode = "10") then
+               TxData(0) <= Noise;
+               TxData(1) <= x"AA";
+               TxData(2) <= Noise;
+               TxData(3) <= x"55";
+            elsif (testMode = "11") then
+               TxData(0) <= x"AA";
+               TxData(1) <= Noise;
+               TxData(2) <= x"55";
+               TxData(3) <= Noise;
             else
                TxData(0) <= adc0(7 downto 0);
-               TxData(1) <= dataI & dataEn & adc0(13 downto 8);
-               TxData(2) <= amDataIn(7 downto 0);
+               TxData(1) <= amDataIn(7) & dataEn & adc0(13 downto 8);
+               TxData(2) <= unstableBitOnDMDRev2 & amDataIn(6 downto 0);
                TxData(3) <= amDataIn(11 downto 8) & unstableBitOnDMDRev2 & dqmDATA & dqmCLK & dqmFS;
                -- I've seen sporadic errors on the combiner DataOut23(3) signal. DataOut13 is ok
             end if;
@@ -191,8 +178,7 @@ BEGIN
          PORTS    => PORTS
       )
       Port MAP(
-         clk         => clk,
-         clk4x       => clk4x,
+         Clk93r3      => clk93r3,
          Reset       => Reset,
          Active      => Active1,
          TxData      => TxData,
@@ -209,8 +195,7 @@ BEGIN
          PORTS    => PORTS
       )
       Port MAP(
-         clk         => clk,
-         clk4x       => clk4x,
+         Clk93r3      => clk93r3,
          Reset       => Reset,
          Active      => Active2,
          TxData      => TxData,

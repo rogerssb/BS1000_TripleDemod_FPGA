@@ -24,3 +24,8 @@ set_multicycle_path -hold -from [get_pins -hierarchical -regexp {.*pcmTrellis/vi
 
 
 
+
+
+
+
+

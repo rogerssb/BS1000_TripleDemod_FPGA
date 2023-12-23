@@ -80,9 +80,17 @@ ARCHITECTURE rtl OF ClkAndDataMux IS
          Rxd            : IN  std_logic;
          Txd,
          TxEn,
-         NotBusy        : OUT std_logic
+         NotBusy        : OUT std_logic;
+         Selects        : OUT VECTOR_OF_SLVS(OUTPUT_PAIRS-1 downto 0)(IN_WIDTH-1 downto 0)
       );
    END Component UartControl;
+
+   COMPONENT VioByte
+      PORT (
+         clk         : IN STD_LOGIC;
+         probe_out0  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+      );
+   END COMPONENT VioByte;
 
    signal   ClkIn,
             DataIn,
@@ -90,11 +98,18 @@ ARCHITECTURE rtl OF ClkAndDataMux IS
             DataInDly      : std_logic_vector(INPUT_PAIRS-1 downto 0);
    signal   Selects        : VECTOR_OF_SLVS(OUTPUT_PAIRS-1 downto 0)(IN_WIDTH-1 downto 0);
    signal   reset,
+            TxdUart,
             clk            : std_logic;
+   signal   LtxCount       : UInt16 := x"0000";
    signal   Resets         : SLV16 := 16x"FFFF";
+   signal   VioX8          : SLV8;
 
    attribute IOB : string;
    attribute IOB of DataOut, DataInFF : signal is "TRUE";
+
+   attribute KEEP : string;
+   attribute KEEP of LtxCount : signal is "TRUE";
+
 
 BEGIN
 
@@ -116,6 +131,7 @@ BEGIN
       if (rising_edge(clk)) then
          Resets <= Resets(14 downto 0) & '0';
          reset  <= Resets(15);
+         LtxCount <= LtxCount + 1;
       end if;
    end process;
 
@@ -130,10 +146,19 @@ BEGIN
          clk      => clk,
          reset    => reset,
          Rxd      => Rxd,
-         Txd      => Txd,
+         Txd      => TxdUart,
          TxEn     => open,
-         NotBusy  => open
+         NotBusy  => open,
+         Selects  => Selects
       );
+
+   Vio : VioByte
+      PORT MAP (
+         clk         => clk,
+         probe_out0  => VioX8
+   );
+
+      Txd <= Rxd when (VioX8(0)) else TxdUart;
 
 GenInputs :
    for n in 0 to INPUT_PAIRS-1 generate
@@ -175,7 +200,11 @@ GenInputs :
       DelayPipe_process: process (ClkIn(n))
       begin
          if (rising_edge(ClkIn(n))) then
-            DataInDly(n) <= DataInFF(n);
+            if (VioX8(1)) then
+               DataInDly(n) <= VioX8(2);
+            else
+               DataInDly(n) <= DataInFF(n);
+            end if;
          end if;
       end process DelayPipe_process;
 

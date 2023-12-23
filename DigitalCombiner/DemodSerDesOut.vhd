@@ -40,8 +40,7 @@ entity DemodSerDesOut is
       PORTS    : natural := 5
    );
    Port (
-      clk,
-      clk4x,
+      Clk93r3,
       Reset,
       Active            : in std_logic;
       TxData            : in SLV8_ARRAY(PORTS-1 downto 0);
@@ -53,6 +52,16 @@ entity DemodSerDesOut is
 end DemodSerDesOut;
 
 architecture rtl of DemodSerDesOut is
+
+   component SerDesPll
+      port (
+         Clk93r3,
+         reset             : in     std_logic;
+         clk_Nx,
+         clk_1x,
+         locked            : out    std_logic
+      );
+   end component;
 
    component SerDes5x8to1Out
       port (
@@ -73,7 +82,11 @@ architecture rtl of DemodSerDesOut is
    signal   SyncRst           : std_logic_vector(5 downto 0) := (others=>'1');
    signal   TxDataDly         : SLV8_ARRAY(PORTS-1 downto 0);
    signal   SerDesIn          : std_logic_vector(PORTS*8-1 downto 0);
-   signal   SRst              : std_logic;
+   signal   ClkNx,
+            Clk1x,
+            LockPll,
+            LocalReset,
+            SRst              : std_logic;
 
             -- debug signals
    signal   RefClkOutP,
@@ -84,28 +97,38 @@ architecture rtl of DemodSerDesOut is
 
 begin
 
-   RstClk : process(clk)
+   Pll466_u : SerDesPll
+      port map (
+         Clk93r3  => Clk93r3,
+         reset    => Reset,
+         locked   => LockPll,
+         clk_1x   => Clk1x,
+         clk_Nx   => ClkNx
+    );
+
+   LocalReset <= not LockPll;
+
+   RstClk : process(Clk1x, LocalReset)
    begin
-      if (rising_edge(clk)) then
-         if (Reset) then
-            SyncRst  <= (others=>'1');
-            SRst     <= '1';
-         else
+      if (LocalReset) then
+         SyncRst  <= (others=>'1');
+         SRst     <= '1';
+      elsif (rising_edge(Clk1x)) then
+         TxDataDly   <= TxData;
+         if (LockPll) then
             SyncRst  <= SyncRst(SyncRst'left-1 downto 0) & not Active;
             SRst     <= SyncRst(SyncRst'left);
+ --           if (Count = 63) then
+ --              Count <= 0;
+ ----              Offset <= Offset - 1 when (Offset > 0) else 63;
+ --           else
+ --              Count <= Count + 1;
+ --           end if;
          end if;
---            if (Count = 63) then
---               Count <= 0;
---               Offset <= Offset - 1 when (Offset > 0) else 63;
---            else
---               Count <= Count + 1;
---            end if;
-
-         TxDataDly   <= TxData;
 
          for x in 0 to PORTS-1 loop
             for bits in 0 to 7 loop
-               SerDesIn(bits*5 + x) <= TxData(x)(bits);
+               SerDesIn(bits*5 + x) <= TxDataDly(x)(bits);
             end loop;
          end loop;
 
@@ -114,8 +137,8 @@ begin
 
    SerDes5x10Out : SerDes5x8to1Out
       port map (
-         clk_in                => clk4x,
-         clk_div_in            => clk,
+         clk_in                => ClkNx,
+         clk_div_in            => Clk1x,
          clk_reset             => Srst,
          io_reset              => Srst,
          data_out_from_device  => SerDesIn,
@@ -126,9 +149,9 @@ begin
       );
 
 
-      RefClkOut_p <= /*transport*/ RefClkOutP;--  after offset * 300 ps;
-      RefClkOut_n <= /*transport*/ RefClkOutN;--  after offset * 300 ps;
-      DataOut_p   <= /*transport*/ DataOutP  ;--  after offset * 300 ps;
-      DataOut_n   <= /*transport*/ DataOutN  ;--  after offset * 300 ps;
+      RefClkOut_p <= transport RefClkOutP  after offset * 300 ps;
+      RefClkOut_n <= transport RefClkOutN  after offset * 300 ps;
+      DataOut_p   <= transport DataOutP    after offset * 300 ps;
+      DataOut_n   <= transport DataOutN    after offset * 300 ps;
 
 end rtl;

@@ -1,14 +1,14 @@
 -- Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2016.4 (win64) Build 1756540 Mon Jan 23 19:11:23 MST 2017
--- Date        : Wed May 17 17:29:45 2023
+-- Date        : Thu Oct 26 16:37:24 2023
 -- Host        : SEMCO_1039B running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode funcsim
---               C:/Semco/Vivado/Demods2022/xc7k160t-IP/fifo_EightToOne/fifo_EightToOne_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim -rename_top fifo_EightToOne -prefix
+--               fifo_EightToOne_ fifo_EightToOne_sim_netlist.vhdl
 -- Design      : fifo_EightToOne
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
--- Device      : xc7k325tffg676-1
+-- Device      : xc7k325tfbg676-2
 -- --------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -25,8 +25,6 @@ entity fifo_EightToOne_blk_mem_gen_prim_wrapper is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_prim_wrapper : entity is "blk_mem_gen_prim_wrapper";
 end fifo_EightToOne_blk_mem_gen_prim_wrapper;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_prim_wrapper is
@@ -197,8 +195,6 @@ entity fifo_EightToOne_compare is
     v1_reg : in STD_LOGIC_VECTOR ( 1 downto 0 );
     \gcc0.gc0.count_d1_reg[9]\ : in STD_LOGIC_VECTOR ( 4 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_compare : entity is "compare";
 end fifo_EightToOne_compare;
 
 architecture STRUCTURE of fifo_EightToOne_compare is
@@ -475,8 +471,6 @@ entity fifo_EightToOne_dc_ss is
     ram_full_fb_i_reg_0 : in STD_LOGIC_VECTOR ( 3 downto 0 );
     ram_full_fb_i_reg_1 : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_dc_ss : entity is "dc_ss";
 end fifo_EightToOne_dc_ss;
 
 architecture STRUCTURE of fifo_EightToOne_dc_ss is
@@ -745,8 +739,6 @@ entity fifo_EightToOne_rd_bin_cntr is
     clk : in STD_LOGIC;
     Q : in STD_LOGIC_VECTOR ( 1 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_rd_bin_cntr : entity is "rd_bin_cntr";
 end fifo_EightToOne_rd_bin_cntr;
 
 architecture STRUCTURE of fifo_EightToOne_rd_bin_cntr is
@@ -1329,8 +1321,6 @@ entity fifo_EightToOne_rd_fwft is
     wr_en : in STD_LOGIC;
     DI : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_rd_fwft : entity is "rd_fwft";
 end fifo_EightToOne_rd_fwft;
 
 architecture STRUCTURE of fifo_EightToOne_rd_fwft is
@@ -1616,8 +1606,6 @@ entity fifo_EightToOne_wr_bin_cntr is
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     clk : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_wr_bin_cntr : entity is "wr_bin_cntr";
 end fifo_EightToOne_wr_bin_cntr;
 
 architecture STRUCTURE of fifo_EightToOne_wr_bin_cntr is
@@ -2197,8 +2185,6 @@ entity fifo_EightToOne_blk_mem_gen_prim_width is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_prim_width : entity is "blk_mem_gen_prim_width";
 end fifo_EightToOne_blk_mem_gen_prim_width;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_prim_width is
@@ -2233,8 +2219,6 @@ entity fifo_EightToOne_rd_status_flags_ss is
     ram_full_fb_i_reg : in STD_LOGIC;
     wr_en : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_rd_status_flags_ss : entity is "rd_status_flags_ss";
 end fifo_EightToOne_rd_status_flags_ss;
 
 architecture STRUCTURE of fifo_EightToOne_rd_status_flags_ss is
@@ -2321,8 +2305,6 @@ entity fifo_EightToOne_wr_status_flags_ss is
     wr_data_count : in STD_LOGIC_VECTOR ( 9 downto 0 );
     DI : in STD_LOGIC_VECTOR ( 0 to 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_wr_status_flags_ss : entity is "wr_status_flags_ss";
 end fifo_EightToOne_wr_status_flags_ss;
 
 architecture STRUCTURE of fifo_EightToOne_wr_status_flags_ss is
@@ -2558,8 +2540,6 @@ entity fifo_EightToOne_blk_mem_gen_generic_cstr is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_generic_cstr : entity is "blk_mem_gen_generic_cstr";
 end fifo_EightToOne_blk_mem_gen_generic_cstr;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_generic_cstr is
@@ -2601,8 +2581,6 @@ entity fifo_EightToOne_rd_logic is
     wr_en : in STD_LOGIC;
     DI : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_rd_logic : entity is "rd_logic";
 end fifo_EightToOne_rd_logic;
 
 architecture STRUCTURE of fifo_EightToOne_rd_logic is
@@ -2683,8 +2661,6 @@ entity fifo_EightToOne_wr_logic is
     D : in STD_LOGIC_VECTOR ( 7 downto 0 );
     S : in STD_LOGIC_VECTOR ( 2 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_wr_logic : entity is "wr_logic";
 end fifo_EightToOne_wr_logic;
 
 architecture STRUCTURE of fifo_EightToOne_wr_logic is
@@ -2785,8 +2761,6 @@ entity fifo_EightToOne_blk_mem_gen_top is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_top : entity is "blk_mem_gen_top";
 end fifo_EightToOne_blk_mem_gen_top;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_top is
@@ -2818,8 +2792,6 @@ entity fifo_EightToOne_blk_mem_gen_v8_3_5_synth is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_v8_3_5_synth : entity is "blk_mem_gen_v8_3_5_synth";
 end fifo_EightToOne_blk_mem_gen_v8_3_5_synth;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_v8_3_5_synth is
@@ -2851,8 +2823,6 @@ entity fifo_EightToOne_blk_mem_gen_v8_3_5 is
     \gc0.count_d1_reg[12]\ : in STD_LOGIC_VECTOR ( 12 downto 0 );
     din : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_blk_mem_gen_v8_3_5 : entity is "blk_mem_gen_v8_3_5";
 end fifo_EightToOne_blk_mem_gen_v8_3_5;
 
 architecture STRUCTURE of fifo_EightToOne_blk_mem_gen_v8_3_5 is
@@ -2885,8 +2855,6 @@ entity fifo_EightToOne_memory is
     din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     p_5_out : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_memory : entity is "memory";
 end fifo_EightToOne_memory;
 
 architecture STRUCTURE of fifo_EightToOne_memory is
@@ -2931,8 +2899,6 @@ entity fifo_EightToOne_fifo_generator_ramfifo is
     din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rd_en : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_fifo_generator_ramfifo : entity is "fifo_generator_ramfifo";
 end fifo_EightToOne_fifo_generator_ramfifo;
 
 architecture STRUCTURE of fifo_EightToOne_fifo_generator_ramfifo is
@@ -3039,8 +3005,6 @@ entity fifo_EightToOne_fifo_generator_top is
     din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rd_en : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_fifo_generator_top : entity is "fifo_generator_top";
 end fifo_EightToOne_fifo_generator_top;
 
 architecture STRUCTURE of fifo_EightToOne_fifo_generator_top is
@@ -3074,8 +3038,6 @@ entity fifo_EightToOne_fifo_generator_v13_1_3_synth is
     din : in STD_LOGIC_VECTOR ( 7 downto 0 );
     rd_en : in STD_LOGIC
   );
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_fifo_generator_v13_1_3_synth : entity is "fifo_generator_v13_1_3_synth";
 end fifo_EightToOne_fifo_generator_v13_1_3_synth;
 
 architecture STRUCTURE of fifo_EightToOne_fifo_generator_v13_1_3_synth is
@@ -3735,8 +3697,6 @@ entity fifo_EightToOne_fifo_generator_v13_1_3 is
   attribute C_WR_PNTR_WIDTH_WRCH of fifo_EightToOne_fifo_generator_v13_1_3 : entity is 4;
   attribute C_WR_RESPONSE_LATENCY : integer;
   attribute C_WR_RESPONSE_LATENCY of fifo_EightToOne_fifo_generator_v13_1_3 : entity is 1;
-  attribute ORIG_REF_NAME : string;
-  attribute ORIG_REF_NAME of fifo_EightToOne_fifo_generator_v13_1_3 : entity is "fifo_generator_v13_1_3";
 end fifo_EightToOne_fifo_generator_v13_1_3;
 
 architecture STRUCTURE of fifo_EightToOne_fifo_generator_v13_1_3 is

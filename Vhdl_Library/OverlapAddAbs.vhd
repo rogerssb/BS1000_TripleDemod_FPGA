@@ -87,7 +87,7 @@ ARCHITECTURE rtl OF OverlapAddAbs IS
    SIGNAL   OverFlow    : std_logic;
    SIGNAL   FullSize    : ufixed(2*A0'left+2 downto OUT_BINPT);
    SIGNAL   ReDlyLine,
-            ImDlyLine   : DelayLine(DELAY downto 0) := (others=>(others=>'0'));     -- TODO FZ, remove initialization to pack into SRL16s
+            ImDlyLine   : DelayLine(DELAY downto 0); -- := (others=>(others=>'0'));     -- TODO FZ, remove initialization to pack into SRL16s
 
 BEGIN
 

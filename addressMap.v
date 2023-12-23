@@ -62,7 +62,7 @@
 `define SEMCO_DEMOD
 `define ADD_SUBCARRIER
 `define ADD_FRAMER
-`define ADD_BITSYNC
+// `define ADD_BITSYNC  deleted for reconstructed IF card
 `define ADD_MULTIBOOT
 `define ADD_IDCODE
 `define ADD_SPECTRAL_SWEEP
@@ -72,7 +72,7 @@
 `ifdef TRIPLE_MULTIH
 `define MULTIH_DEMOD
 `define ADD_FRAMER
-`define ADD_BITSYNC
+// `define ADD_BITSYNC
 `define ADD_MULTIBOOT
 `define ADD_IDCODE
 `define ADD_SPECTRAL_SWEEP

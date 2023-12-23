@@ -69,7 +69,7 @@ module ldpcFramer(
     wire [63:0] syncword = 64'hFCB8_8938_D8D7_6A4F;
 
     wire signed [3:0]   corr0;
-    fourBitCorrelator corrNibble0(
+    fourBitCorrelatorLdpc corrNibble0(
         .clk(clk),
         .data(corrSR[3:0]),
         .pattern(syncword[3:0]),
@@ -77,7 +77,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr1;
-    fourBitCorrelator corrNibble1(
+    fourBitCorrelatorLdpc corrNibble1(
         .clk(clk),
         .data(corrSR[7:4]),
         .pattern(syncword[7:4]),
@@ -85,7 +85,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr2;
-    fourBitCorrelator corrNibble2(
+    fourBitCorrelatorLdpc corrNibble2(
         .clk(clk),
         .data(corrSR[11:8]),
         .pattern(syncword[11:8]),
@@ -93,7 +93,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr3;
-    fourBitCorrelator corrNibble3(
+    fourBitCorrelatorLdpc corrNibble3(
         .clk(clk),
         .data(corrSR[15:12]),
         .pattern(syncword[15:12]),
@@ -101,7 +101,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr4;
-    fourBitCorrelator corrNibble4(
+    fourBitCorrelatorLdpc corrNibble4(
         .clk(clk),
         .data(corrSR[19:16]),
         .pattern(syncword[19:16]),
@@ -109,7 +109,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr5;
-    fourBitCorrelator corrNibble5(
+    fourBitCorrelatorLdpc corrNibble5(
         .clk(clk),
         .data(corrSR[23:20]),
         .pattern(syncword[23:20]),
@@ -117,7 +117,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr6;
-    fourBitCorrelator corrNibble6(
+    fourBitCorrelatorLdpc corrNibble6(
         .clk(clk),
         .data(corrSR[27:24]),
         .pattern(syncword[27:24]),
@@ -125,7 +125,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr7;
-    fourBitCorrelator corrNibble7(
+    fourBitCorrelatorLdpc corrNibble7(
         .clk(clk),
         .data(corrSR[31:28]),
         .pattern(syncword[31:28]),
@@ -133,7 +133,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr8;
-    fourBitCorrelator corrNibble8(
+    fourBitCorrelatorLdpc corrNibble8(
         .clk(clk),
         .data(corrSR[35:32]),
         .pattern(syncword[35:32]),
@@ -141,7 +141,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr9;
-    fourBitCorrelator corrNibble9(
+    fourBitCorrelatorLdpc corrNibble9(
         .clk(clk),
         .data(corrSR[39:36]),
         .pattern(syncword[39:36]),
@@ -149,7 +149,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr10;
-    fourBitCorrelator corrNibble10(
+    fourBitCorrelatorLdpc corrNibble10(
         .clk(clk),
         .data(corrSR[43:40]),
         .pattern(syncword[43:40]),
@@ -157,7 +157,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr11;
-    fourBitCorrelator corrNibble11(
+    fourBitCorrelatorLdpc corrNibble11(
         .clk(clk),
         .data(corrSR[47:44]),
         .pattern(syncword[47:44]),
@@ -165,7 +165,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr12;
-    fourBitCorrelator corrNibble12(
+    fourBitCorrelatorLdpc corrNibble12(
         .clk(clk),
         .data(corrSR[51:48]),
         .pattern(syncword[51:48]),
@@ -173,7 +173,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr13;
-    fourBitCorrelator corrNibble13(
+    fourBitCorrelatorLdpc corrNibble13(
         .clk(clk),
         .data(corrSR[55:52]),
         .pattern(syncword[55:52]),
@@ -181,7 +181,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr14;
-    fourBitCorrelator corrNibble14(
+    fourBitCorrelatorLdpc corrNibble14(
         .clk(clk),
         .data(corrSR[59:56]),
         .pattern(syncword[59:56]),
@@ -189,7 +189,7 @@ module ldpcFramer(
         );
 
     wire signed [3:0]   corr15;
-    fourBitCorrelator corrNibble15(
+    fourBitCorrelatorLdpc corrNibble15(
         .clk(clk),
         .data(corrSR[63:60]),
         .pattern(syncword[63:60]),
@@ -385,7 +385,7 @@ module ldpcFramer(
 
 endmodule
 
-module fourBitCorrelator(
+module fourBitCorrelatorLdpc(       // renamed to avoid conflict with framerTop.v
     input                       clk,
     input               [3:0]   data,
     input               [3:0]   pattern,

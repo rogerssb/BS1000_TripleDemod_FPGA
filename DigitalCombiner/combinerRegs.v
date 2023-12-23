@@ -16,7 +16,7 @@ module combinerRegs(
     output  reg [31:0]  dataOut,
     input               cs,
     input               wr0, wr1, wr2, wr3,
-    input               realLock, imagLock, locked, ddsMiso, combinerFlag, agc0_gt_agc1,
+    input               realLock, imagLock, locked, ddsMiso, combinerFlag, Ch1isMaster,
     input       [7:0]   Index,
     input       [15:0]  agcDifferential,
     output  reg [31:0]  MDB_CombLag     = 32'h0000,
@@ -82,7 +82,7 @@ module combinerRegs(
     always @* begin
         if (cs) begin
             casex (addr)
-                `COMB_LAG_COEF:     dataOut = {ddsMiso, realLock, imagLock, locked, combinerFlag, agc0_gt_agc1, MDB_CombLag[25:0]};
+                `COMB_LAG_COEF:     dataOut = {ddsMiso, realLock, imagLock, locked, combinerFlag, Ch1isMaster, MDB_CombLag[25:0]};
                 `COMB_LEAD_COEF:    dataOut = {Index, MDB_CombLead[23:0]};
                 `COMB_SWEEP_LIMIT,
                 `COMB_OPTIONS:      dataOut = {MDB_CombOptions, MDB_CombSwLmt};

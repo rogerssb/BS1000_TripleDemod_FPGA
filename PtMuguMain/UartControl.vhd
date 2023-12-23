@@ -99,11 +99,11 @@ ARCHITECTURE rtl OF UartControl IS
    constant RXFIFO_FULL    : integer := 1;
    constant TXFIFO_EMPTY   : integer := 2;
    constant TXFIFO_FULL    : integer := 3;
-   constant TERM           : character := character'val(0);
-   constant ACK            : character := character'val(6);
-   constant NAK            : character := character'val(21);
-   constant STX            : character := character'val(2);
-   constant EOT            : character := character'val(4);
+   constant TERM           : character :='T'; --character'val(0);
+   constant ACK            : character :='A'; --character'val(6);
+   constant NAK            : character :='N'; --character'val(21);
+   constant STX            : character :='S'; --character'val(2);
+   constant EOT            : character :='E'; --character'val(4);
    constant ADDR_LEN       : integer := 4;
    constant COMM_LEN       : integer := 4;
    constant DATA_STRT      : integer := ADDR_LEN + COMM_LEN + 2;
@@ -156,7 +156,8 @@ ARCHITECTURE rtl OF UartControl IS
    signal   TxBuffEmpty : std_logic;
 
    attribute MARK_DEBUG : string;
-   attribute MARK_DEBUG of MyInt, MyHex, Mode, SubMode  : signal is "TRUE";
+   attribute MARK_DEBUG of MyInt, MyHex, Mode, SubMode,
+   RxBuffer, RxCommand: signal is "TRUE";
 
 BEGIN
 
@@ -372,3 +373,23 @@ BEGIN
    );
 
 END rtl;
+
+/*
+S0123CXPT0000ET
+S0123CXPT0101ET
+S0123CXPT0202ET
+S0123CXPT0303ET
+S0123CXPT0404ET
+S0123CXPT0505ET
+S0123CXPT0606ET
+S0123CXPT0707ET
+S0123CXPT0808ET
+S0123CXPT0909ET
+S0123CXPT1010ET
+S0123CXPT1111ET
+S0123CXPT1212ET
+S0123CXPT1313ET
+S0123CXPT1414ET
+S0123CXPT1515ET
+S0123CXPT1616ET
+*/
