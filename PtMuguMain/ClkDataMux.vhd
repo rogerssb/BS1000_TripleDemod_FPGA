@@ -213,16 +213,16 @@ end generate;
 GenOutputs:
    for n in 0 to OUTPUT_PAIRS-1 generate
       -- Select output clock
-      ClkOut(n) <= ClkIn(to_integer(unsigned(Selects(n))));
-      -- Latch outgoing data.
-      -- Data being latched on input and output relative timing skew between clk/data pairs
-      DelayOut_process: process (ClkOut(n))
-      begin
-         if (rising_edge(ClkOut(n))) then
-            DataOut(n) <= DataInFF(to_integer(unsigned(Selects(n))));
-         end if;
-      end process DelayOut_process;
+         ClkOut(n) <= clk when (VioX8(1)) else ClkIn(to_integer(unsigned(Selects(n))));
+         -- Latch outgoing data.
+         -- Data being latched on input and output relative timing skew between clk/data pairs
 
+         DelayOut_process: process (ClkOut(n))
+         begin
+            if (rising_edge(ClkOut(n))) then
+               DataOut(n) <= LtxCount(n) when (VioX8(1)) else DataInDly(to_integer(unsigned(Selects(n))));
+            end if;
+         end process DelayOut_process;
    end generate;
 
 END rtl;

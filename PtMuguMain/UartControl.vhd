@@ -192,6 +192,7 @@ BEGIN
             WrPending      <= '0';
             RdPending      <= '0';
             Mode           <= PROC;
+            Selects        <= (5x"00", 5x"01", 5x"02", 5x"03", 5x"04", 5x"05", 5x"06", 5x"07", 5x"08", 5x"09", 5x"0A", 5x"0B", 5x"0C", 5x"0D", 5x"0E", 5x"0F");
          else
             if (Mode = PROC) then
                MyHex       <= (others=>'0');
