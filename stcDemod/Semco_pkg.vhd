@@ -31,17 +31,22 @@ PACKAGE Semco_pkg IS
    subtype INT16slv        is std_logic_vector(15 downto 0);
    subtype INT32slv        is std_logic_vector(31 downto 0);
 
+   subtype SLV2            is std_logic_vector(1 downto 0);
    subtype SLV4            is std_logic_vector(3 downto 0);
    subtype SLV8            is std_logic_vector(7 downto 0);
    subtype SLV12           is std_logic_vector(11 downto 0);
    subtype SLV16           is std_logic_vector(15 downto 0);
    subtype SLV18           is std_logic_vector(17 downto 0);
+   subtype SLV24           is std_logic_vector(23 downto 0);
    subtype SLV32           is std_logic_vector(31 downto 0);
    subtype SLV64           is std_logic_vector(63 downto 0);
 
    subtype UINT2           is unsigned(1 downto 0);
+   subtype UINT3           is unsigned(2 downto 0);
+   subtype UINT4           is unsigned(3 downto 0);
+   subtype UINT5           is unsigned(4 downto 0);
    subtype UINT8           is unsigned(7 downto 0);
-   subtype UINT16          is unsigned(15 DOWNTO 0);
+   subtype UINT16          is unsigned(15 downto 0);
    subtype UINT32          is unsigned(31 downto 0);
 
    subtype INT8            is signed(7 downto 0);
