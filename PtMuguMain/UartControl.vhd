@@ -177,7 +177,7 @@ BEGIN
          if (reset = '1') then
             RxPointer      <= 1;
             RxBuffer(1 to 15) <= STX & MY_ADDR & "CXPT0521" & EOT & TERM;  -- set crosspoint output 5 to input 21. All decimals
-            RxBuffer(22 to 31) <= (others=>TERM);
+            RxBuffer(16 to 31) <= (others=>TERM);
             TxBuffer(1)    <= TERM;       -- set first char of Tx to NULL TERM to disable TX
             TxEnCount      <= 31;
             TxPointer      <= 1;

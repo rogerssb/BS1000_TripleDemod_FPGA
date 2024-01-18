@@ -100,12 +100,12 @@ ARCHITECTURE rtl OF ClkAndDataMux IS
    signal   reset,
             TxdUart,
             clk            : std_logic;
-   signal   LtxCount       : UInt16 := x"0000";
+   signal   LtxCount       : unsigned(INPUT_PAIRS-1 downto 0) := x"000000";
    signal   Resets         : SLV16 := 16x"FFFF";
    signal   VioX8          : SLV8;
 
    attribute IOB : string;
-   attribute IOB of DataOut, DataInFF : signal is "TRUE";
+--   attribute IOB of DataOut, DataInFF : signal is "TRUE";
 
    attribute KEEP : string;
    attribute KEEP of LtxCount : signal is "TRUE";
@@ -118,7 +118,7 @@ BEGIN
       generic map (
          DIFF_TERM => TRUE,
          IBUF_LOW_PWR => TRUE,
-         IOSTANDARD => "LVDS_25"
+         IOSTANDARD => "LVDS_18"
       )
       port map (
          I  => Clk93_p,
@@ -144,7 +144,7 @@ BEGIN
       )
       PORT MAP (
          clk      => clk,
-         reset    => reset,
+         reset    => VioX8(4),
          Rxd      => Rxd,
          Txd      => TxdUart,
          TxEn     => open,
@@ -158,7 +158,7 @@ BEGIN
          probe_out0  => VioX8
    );
 
-      Txd <= Rxd when (VioX8(0)) else TxdUart;
+      Txd <= Rxd xor VioX8(1) when (VioX8(0)) else TxdUart;
 
 GenInputs :
    for n in 0 to INPUT_PAIRS-1 generate
@@ -168,7 +168,7 @@ GenInputs :
          generic map (
             DIFF_TERM => TRUE,      -- Differential Termination
             IBUF_LOW_PWR => TRUE,   -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-            IOSTANDARD => "LVDS_25"
+            IOSTANDARD => "LVDS_18"
          )
          port map (
             I  => DataIn_p(n),      -- Diff_p buffer input (connect directly to top-level port)
@@ -180,7 +180,7 @@ GenInputs :
          generic map (
             DIFF_TERM => TRUE,      -- Differential Termination
             IBUF_LOW_PWR => TRUE,   -- Low power (TRUE) vs. performance (FALSE) setting for referenced I/O standards
-            IOSTANDARD => "LVDS_25"
+            IOSTANDARD => "LVDS_18"
          )
          port map (
             I  => ClkIn_p(n),      -- Diff_p buffer input (connect directly to top-level port)
@@ -200,11 +200,7 @@ GenInputs :
       DelayPipe_process: process (ClkIn(n))
       begin
          if (rising_edge(ClkIn(n))) then
-            if (VioX8(1)) then
-               DataInDly(n) <= VioX8(2);
-            else
-               DataInDly(n) <= DataInFF(n);
-            end if;
+            DataInDly(n) <= DataInFF(n);
          end if;
       end process DelayPipe_process;
 
@@ -213,14 +209,14 @@ end generate;
 GenOutputs:
    for n in 0 to OUTPUT_PAIRS-1 generate
       -- Select output clock
-         ClkOut(n) <= clk when (VioX8(1)) else ClkIn(to_integer(unsigned(Selects(n))));
+         ClkOut(n) <= LtxCount(OUTPUT_PAIRS - n - 1) when (VioX8(2)) else ClkIn(to_integer(unsigned(Selects(n))));
          -- Latch outgoing data.
          -- Data being latched on input and output relative timing skew between clk/data pairs
 
          DelayOut_process: process (ClkOut(n))
          begin
             if (rising_edge(ClkOut(n))) then
-               DataOut(n) <= LtxCount(n) when (VioX8(1)) else DataInDly(to_integer(unsigned(Selects(n))));
+               DataOut(n) <= LtxCount(n) when (VioX8(3)) else DataInDly(to_integer(unsigned(Selects(n))));
             end if;
          end process DelayOut_process;
    end generate;

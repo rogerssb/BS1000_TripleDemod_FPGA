@@ -165,10 +165,13 @@ set_property IOSTANDARD LVDS_25 [get_ports {DataIn_p[0]}]
 set_property IOSTANDARD LVDS [get_ports Clk93_p]
 set_property IOSTANDARD LVDS [get_ports Clk93_n]
 
-set_property PACKAGE_PIN C19 [get_ports Txd]
 set_property PACKAGE_PIN B19 [get_ports Rxd]
 set_property IOSTANDARD LVCMOS25 [get_ports Rxd]
+set_property PACKAGE_PIN C19 [get_ports Txd]
 set_property IOSTANDARD LVCMOS25 [get_ports Txd]
+set_property OFFCHIP_TERM NONE [get_ports Txd]
+set_property DRIVE 16 [get_ports Txd]
+set_property SLEW FAST [get_ports Txd]
 
 set_property IOSTANDARD LVCMOS18 [get_ports {ClkOut[15]}]
 set_property IOSTANDARD LVCMOS18 [get_ports {ClkOut[14]}]
@@ -266,5 +269,8 @@ set_property DRIVE 16 [get_ports {DataOut[3]}]
 set_property DRIVE 16 [get_ports {DataOut[2]}]
 set_property DRIVE 16 [get_ports {DataOut[1]}]
 set_property DRIVE 16 [get_ports {DataOut[0]}]
+
+
+
 
 
