@@ -57,8 +57,8 @@ ENTITY ClkAndDataMux IS
       DataIn_n       : IN  std_logic_vector(INPUT_PAIRS-1 downto 0);
       Clk93_p,
       Clk93_n,
-      Rxd            : IN  std_logic;
-      Txd            : OUT std_logic;
+      BB_Txd            : IN  std_logic;
+      BB_Rxd            : OUT std_logic;
       ClkOut,
       DataOut        : OUT std_logic_vector(OUTPUT_PAIRS-1 downto 0)
    );
@@ -99,6 +99,7 @@ ARCHITECTURE rtl OF ClkAndDataMux IS
    signal   Selects        : VECTOR_OF_SLVS(OUTPUT_PAIRS-1 downto 0)(IN_WIDTH-1 downto 0);
    signal   reset,
             TxdUart,
+            UartReset,
             clk            : std_logic;
    signal   LtxCount       : unsigned(INPUT_PAIRS-1 downto 0) := x"000000";
    signal   Resets         : SLV16 := 16x"FFFF";
@@ -135,6 +136,8 @@ BEGIN
       end if;
    end process;
 
+   UartReset <= VioX8(4) when (not VioX8(5)) else ( (LtxCount(19)) or reset);
+
    Uart : UartControl
       GENERIC MAP(
          REVISION_NUM   => "0100",
@@ -144,8 +147,8 @@ BEGIN
       )
       PORT MAP (
          clk      => clk,
-         reset    => VioX8(4),
-         Rxd      => Rxd,
+         reset    => UartReset,
+         Rxd      => BB_Txd,
          Txd      => TxdUart,
          TxEn     => open,
          NotBusy  => open,
@@ -158,7 +161,7 @@ BEGIN
          probe_out0  => VioX8
    );
 
-      Txd <= Rxd xor VioX8(1) when (VioX8(0)) else TxdUart;
+   BB_Rxd <= BB_Txd xor VioX8(1) when (VioX8(0)) else TxdUart;
 
 GenInputs :
    for n in 0 to INPUT_PAIRS-1 generate

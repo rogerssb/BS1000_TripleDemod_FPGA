@@ -820,7 +820,7 @@
         `define COMB_DB_RANGE      6'b01_010x
         `define COMB_DB_RATIO      6'b01_011x
         `define COMB_AGC_DIFF      6'b01_100x
-        `define COMB_AGC_ZERO      6'b01_101x
+        `define COMB_FAST_AGC      6'b01_101x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx
@@ -1112,7 +1112,7 @@
         `define COMB_DB_RANGE      6'b01_010x
         `define COMB_DB_RATIO      6'b01_011x
         `define COMB_AGC_DIFF      6'b01_100x
-        `define COMB_AGC_ZERO      6'b01_101x
+        `define COMB_FAST_AGC      6'b01_101x
         // The Combiner AGC uses the same register set defined in the global map at bottom of file
         // Define the Combiner AGC Loop Filter memory map
         `define CALF_CONTROL       6'b10_00xx

@@ -153,7 +153,6 @@ ARCHITECTURE rtl OF UartControl IS
    signal   rresp       : STD_LOGIC_VECTOR(1 DOWNTO 0);   -- OUT
    signal   rvalid      : STD_LOGIC;                      -- OUT
    signal   interrupt   : std_logic;
-   signal   TxBuffEmpty : std_logic;
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of MyInt, MyHex, Mode, SubMode,
@@ -174,7 +173,7 @@ BEGIN
       variable Addr9957_v : integer range 0 to 31;
    begin
       if (rising_edge(clk)) then
-         if (reset = '1') then
+         if (reset) then
             RxPointer      <= 1;
             RxBuffer(1 to 15) <= STX & MY_ADDR & "CXPT0521" & EOT & TERM;  -- set crosspoint output 5 to input 21. All decimals
             RxBuffer(16 to 31) <= (others=>TERM);

@@ -24,8 +24,8 @@ create_clock -period 21.459 -name {ClkIn[22]} -waveform {0.000 10.730} [get_port
 create_clock -period 21.459 -name {ClkIn[23]} -waveform {0.000 10.730} [get_ports {ClkIn_p[23]}]
 
 create_clock -period 10.714 -name Clk93 -waveform {0.000 5.357} [get_ports Clk93_p]
-set_false_path -from [get_ports *Rxd*] -to [get_clocks Clk93]
-set_false_path -from [get_clocks Clk93] -to [get_ports *Txd*]
+set_false_path -from [get_ports *BB_Txd*] -to [get_clocks Clk93]
+set_false_path -from [get_clocks Clk93] -to [get_ports *BB_Rxd*]
 
 create_clock -period 21.459 -name {ClkOut[0]} -waveform {0.000 10.730} [get_ports {ClkOut[0]}]
 create_clock -period 21.459 -name {ClkOut[1]} -waveform {0.000 10.730} [get_ports {ClkOut[1]}]
@@ -138,6 +138,7 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 1 [current_design]
 
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
+
 
 
 

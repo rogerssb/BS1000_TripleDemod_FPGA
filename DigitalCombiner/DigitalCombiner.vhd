@@ -118,7 +118,7 @@ ARCHITECTURE rtl OF DigitalCombiner IS
          MDB_dB_Ratio,
          MDB_CombSwLmt,
          MDB_CombOptions,
-         MDB_AgcZero       : OUT SLV16
+         MDB_FastAgcGain   : OUT SLV16
 
       );
    END COMPONENT combinerRegs;
@@ -432,6 +432,10 @@ END COMPONENT;
             overridech,    OverRide,
             enMasterSwitch, MasterSwitch : STD_LOGIC_VECTOR(0 DOWNTO 0);
    signal   GoVio          : boolean;
+   signal   FastAgcGainSlv : SLV16;
+   signal   FastAgcGain    : ufixed(2 downto -13);
+   signal   FastAgcGained1,
+            FastAgcGained2 : ufixed(12 downto 0);
 
    attribute MARK_DEBUG : string;
    attribute MARK_DEBUG of DataOut10,
@@ -484,7 +488,8 @@ BEGIN
          MDB_CombOptions   => MDB_CombOptions,
          MDB_dB_Range      => dBRangeLock,
          MDB_dB_Ratio      => dBRangeUnLock,
-         agcDifferential   => agcDifferential
+         agcDifferential   => agcDifferential,
+         MDB_FastAgcGain   => FastAgcGainSlv
       );
 
 /*
@@ -499,7 +504,7 @@ BEGIN
 #define MDB_combLocksLS16           208
 #define MDB_combLocksMS16           209
 #define MDB_agcDifferential         210
-#define MDB_agcZero                 211
+#define MDB_FastAgcGain                 211
 */
 
    DdsCS_n        <= MDB_CombOptions(0);
@@ -718,8 +723,11 @@ BEGIN
          Index          => Index
      );
 
-   Ch1Gain <= Ch1Log10MseInv & "00" when (dqm_AGCn) else Ch1FastAgc;
-   Ch2Gain <= Ch2Log10MseInv & "00" when (dqm_AGCn) else Ch2FastAgc;
+   FastAgcGain    <= to_ufixed(FastAgcGainSlv, FastAgcGain);
+   FastAgcGained1 <= resize(FastAgcGain * to_ufixed(Ch1FastAgc, 12, 0), FastAgcGained1);
+   FastAgcGained2 <= resize(FastAgcGain * to_ufixed(Ch2FastAgc, 12, 0), FastAgcGained2);
+   Ch1Gain <= Ch1Log10MseInv & "00" when (dqm_AGCn) else to_slv(FastAgcGained1);
+   Ch2Gain <= Ch2Log10MseInv & "00" when (dqm_AGCn) else to_slv(FastAgcGained2);
 
  Vios: vioCombDrive
   PORT MAP (
