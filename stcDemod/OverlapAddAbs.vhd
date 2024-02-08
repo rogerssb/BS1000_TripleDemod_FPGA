@@ -138,8 +138,8 @@ BEGIN
             end if;
                -- pipeline level 4, add squares
             if (ValidDly(3)) then
-               AbsOut   <= resize(MultRDly + MultIDly, AbsOut, fixed_truncate, fixed_wrap);
-               FullSize <= resize(MultRDly + MultIDly, FullSize, fixed_truncate, fixed_wrap);
+               AbsOut   <= resize(MultRDly + MultIDly, AbsOut);
+               FullSize <= resize(MultRDly + MultIDly, FullSize);
                A3       <=  A2;
                B3       <=  B2;
             end if;
@@ -150,8 +150,8 @@ BEGIN
 
    StartOut <= StartDly(4);
    ValidOut <= ValidDly(4);
-   ReOut    <= resize(A3, ReOut, fixed_truncate, fixed_wrap);
-   ImOut    <= resize(B3, ImOut, fixed_truncate, fixed_wrap);
+   ReOut    <= resize(A3, ReOut);
+   ImOut    <= resize(B3, ImOut);
 
 END rtl;
 
