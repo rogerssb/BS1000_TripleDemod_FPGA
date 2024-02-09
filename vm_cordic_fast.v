@@ -345,9 +345,9 @@ initial clk = 0;
 always  #5 clk = !clk;
 
 // LO Generator
-wire    [17:0]iDds;
-wire    [17:0]qDds;
-dds dds (
+wire    signed  [17:0]iDds;
+wire    signed  [17:0]qDds;
+dds6p0 dds (
     .sclr(reset),
     .clk(clk),
     .ce(1'b1),
@@ -357,14 +357,10 @@ dds dds (
     .cosine(iDds)
     );
 
-wire    [n-1:0]  x = iDds[17:(17-n+1)];
-wire    [n-1:0]  y = qDds[17:(17-n+1)];
-real xReal = (x[n-1] ? x - 16384.0 : x)/8192.0;
-real yReal = (y[n-1] ? y - 16384.0 : y)/8192.0;
-wire [n-2:0]mag;
-wire [n-3:0]phase;
-real magReal = mag/8192.0;
-real phaseReal = (phase[n-3] ? phase - 4096.0 : phase)/2048.0;
+wire    signed  [n-1:0]  x = iDds[17:(17-n+1)];
+wire    signed  [n-1:0]  y = qDds[17:(17-n+1)];
+wire            [n-2:0]  mag;
+wire    signed  [n-3:0]  phase;
 vm_cordic_fast #(n) uut(
     .clk(clk),
     .ena(1'b1),

@@ -1,18 +1,18 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Mon Feb 17 20:24:27 2020
-// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               C:/Semco/Vivado/Demods/Latest/stcDemod.srcs/sources_1/ip/jitterFifo/jitterFifo_sim_netlist.v
+// Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
+// Date        : Tue Dec 10 11:16:19 2019
+// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top jitterFifo -prefix
+//               jitterFifo_ jitterFifo_sim_netlist.v
 // Design      : jitterFifo
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k160tfbg676-2
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "jitterFifo,fifo_generator_v13_1_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_1_4,Vivado 2017.2.1" *) 
+(* CHECK_LICENSE_TYPE = "jitterFifo,fifo_generator_v13_1_4,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "fifo_generator_v13_1_4,Vivado 2017.2" *) 
 (* NotValidForBitStream *)
 module jitterFifo
    (rst,
@@ -605,7 +605,6 @@ module jitterFifo
         .wr_rst_busy(NLW_U0_wr_rst_busy_UNCONNECTED));
 endmodule
 
-(* ORIG_REF_NAME = "clk_x_pntrs" *) 
 module jitterFifo_clk_x_pntrs
    (out,
     ram_empty_fb_i_reg,
@@ -905,7 +904,6 @@ module jitterFifo_clk_x_pntrs
         .O(ram_empty_i_i_5_n_0));
 endmodule
 
-(* ORIG_REF_NAME = "dmem" *) 
 module jitterFifo_dmem
    (dout,
     wr_clk,
@@ -984,7 +982,6 @@ module jitterFifo_dmem
         .Q(dout[2]));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_ramfifo" *) 
 module jitterFifo_fifo_generator_ramfifo
    (wr_rst_busy,
     empty,
@@ -1102,7 +1099,6 @@ module jitterFifo_fifo_generator_ramfifo
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_top" *) 
 module jitterFifo_fifo_generator_top
    (wr_rst_busy,
     empty,
@@ -1220,7 +1216,7 @@ endmodule
 (* C_WR_DEPTH_WRCH = "16" *) (* C_WR_FREQ = "1" *) (* C_WR_PNTR_WIDTH = "4" *) 
 (* C_WR_PNTR_WIDTH_AXIS = "10" *) (* C_WR_PNTR_WIDTH_RACH = "4" *) (* C_WR_PNTR_WIDTH_RDCH = "10" *) 
 (* C_WR_PNTR_WIDTH_WACH = "4" *) (* C_WR_PNTR_WIDTH_WDCH = "10" *) (* C_WR_PNTR_WIDTH_WRCH = "4" *) 
-(* C_WR_RESPONSE_LATENCY = "1" *) (* ORIG_REF_NAME = "fifo_generator_v13_1_4" *) 
+(* C_WR_RESPONSE_LATENCY = "1" *) 
 module jitterFifo_fifo_generator_v13_1_4
    (backup,
     backup_marker,
@@ -2222,7 +2218,6 @@ module jitterFifo_fifo_generator_v13_1_4
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "fifo_generator_v13_1_4_synth" *) 
 module jitterFifo_fifo_generator_v13_1_4_synth
    (wr_rst_busy,
     empty,
@@ -2273,7 +2268,6 @@ module jitterFifo_fifo_generator_v13_1_4_synth
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "memory" *) 
 module jitterFifo_memory
    (dout,
     wr_clk,
@@ -2316,7 +2310,6 @@ module jitterFifo_memory
         .wr_clk(wr_clk));
 endmodule
 
-(* ORIG_REF_NAME = "rd_bin_cntr" *) 
 module jitterFifo_rd_bin_cntr
    (Q,
     \gnxpm_cdc.rd_pntr_gc_reg[2] ,
@@ -2453,7 +2446,6 @@ module jitterFifo_rd_bin_cntr
         .O(\gnxpm_cdc.rd_pntr_gc_reg[2] [2]));
 endmodule
 
-(* ORIG_REF_NAME = "rd_logic" *) 
 module jitterFifo_rd_logic
    (empty,
     out,
@@ -2504,7 +2496,6 @@ module jitterFifo_rd_logic
         .rd_clk(rd_clk));
 endmodule
 
-(* ORIG_REF_NAME = "rd_status_flags_as" *) 
 module jitterFifo_rd_status_flags_as
    (empty,
     out,
@@ -2561,7 +2552,6 @@ module jitterFifo_rd_status_flags_as
         .Q(ram_empty_i));
 endmodule
 
-(* ORIG_REF_NAME = "reset_blk_ramfifo" *) 
 module jitterFifo_reset_blk_ramfifo
    (out,
     \gc0.count_reg[1] ,
@@ -2784,7 +2774,6 @@ module jitterFifo_reset_blk_ramfifo
         .Q(wr_rst_reg[2]));
 endmodule
 
-(* ORIG_REF_NAME = "synchronizer_ff" *) 
 module jitterFifo_synchronizer_ff
    (out,
     \ngwrdrst.grst.g7serrst.rd_rst_asreg_reg ,
@@ -3198,7 +3187,6 @@ module jitterFifo_synchronizer_ff__parameterized0_5
         .O(D));
 endmodule
 
-(* ORIG_REF_NAME = "wr_bin_cntr" *) 
 module jitterFifo_wr_bin_cntr
    (Q,
     ram_full_i_reg,
@@ -3431,7 +3419,6 @@ module jitterFifo_wr_bin_cntr
         .O(ram_full_i_i_5_n_0));
 endmodule
 
-(* ORIG_REF_NAME = "wr_logic" *) 
 module jitterFifo_wr_logic
    (full,
     prog_full,
@@ -3497,7 +3484,6 @@ module jitterFifo_wr_logic
         .wr_rst_busy(wr_rst_busy));
 endmodule
 
-(* ORIG_REF_NAME = "wr_pf_as" *) 
 module jitterFifo_wr_pf_as
    (prog_full,
     plusOp,
@@ -3550,7 +3536,6 @@ module jitterFifo_wr_pf_as
         .Q(prog_full));
 endmodule
 
-(* ORIG_REF_NAME = "wr_status_flags_as" *) 
 module jitterFifo_wr_status_flags_as
    (full,
     out,

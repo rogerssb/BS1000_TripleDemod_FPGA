@@ -148,7 +148,7 @@
 `define ADD_CMA
 `define ADD_MULTIH
 `define ADD_DQM
-`define ADD_SUPERBAUD_TED
+//`define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif
@@ -160,7 +160,6 @@
 `endif
 
 `ifdef LDPC_DEMOD
-`define FPGA_TYPE           `LDPC_DEMOD_IMAGE
 `define SEMCO_DEMOD_MAP
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
@@ -192,9 +191,11 @@
 `define USE_BUS_CLOCK
 `define USE_VIVADO_CORES
 `define USE_DDC_FIR
+`define USE_FIFO_64
 `define ADD_SPI_GATEWAY
 `define ADD_MULTIBOOT
 `define ADD_IDCODE
+`define ADD_DQM
 `endif
 
 `ifdef STC_TRIPLE_MOD
@@ -812,23 +813,6 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_RS_DEC      4'b1111
 
-// Combiner subsystem registers start at x0C40 to 0xC7F
-        `define COMBINER_SPACE          13'b0_1100_01xx_xxxx
-        `define COMB_LAG_COEF      6'b00_00xx
-        `define COMB_LEAD_COEF     6'b00_01xx
-        `define COMB_SWEEP_RATE    6'b00_10xx
-        `define COMB_SWEEP_LIMIT   6'b00_110x
-        `define COMB_OPTIONS       6'b00_111x
-        `define COMB_LOCKS         6'b01_00xx
-        `define COMB_DB_RANGE      6'b01_010x
-        `define COMB_DB_RATIO      6'b01_011x
-        // The Combiner AGC uses the same register set defined in the global map at bottom of file
-        // Define the Combiner AGC Loop Filter memory map
-        `define CALF_CONTROL       6'b10_00xx
-        `define CALF_ULIMIT        6'b10_01xx
-        `define CALF_LLIMIT        6'b10_10xx
-        `define CALF_RATIOS        6'b10_11xx
-        `define CALF_INTEGRATOR    6'b11_00xx
 
 // Reed Solomon Decoder subsystem registers start at x0C80
 `define RS_DEC_SPACE          13'b0_1100_100x_xxxx
@@ -1049,7 +1033,7 @@
         `define CandD_SRC_LEGACY_I      4'b0000
         `define CandD_SRC_LEGACY_Q      4'b0001
         `define CandD_SRC_PCMTRELLIS    4'b0010
-        `define CandD_SRC_MULTIH        4'b0011
+        `define CandD_SRC_SOQTRELLIS    4'b0011
         `define CandD_SRC_STC           4'b0100
         `define CandD_SRC_PNGEN         4'b0101
         `define CandD_SRC_LDPC          4'b0110
@@ -1061,7 +1045,7 @@
         `define CandD_SRC_DEC2_CH0      4'b1100
         `define CandD_SRC_DEC2_CH1      4'b1101
         `define CandD_SRC_DEC3_CH0      4'b1110
-        `define CandD_SRC_DEC3_CH1      4'b1111
+        `define CandD_SRC_RD_SOL        4'b1111
         `define CandD_CLK_PHASE_0       2'b00
         `define CandD_CLK_PHASE_90      2'b01
         `define CandD_CLK_PHASE_180     2'b10
@@ -1074,6 +1058,67 @@
 `define SSCSPACE            13'b0_1000_1001_xxxx
 
 `define UARTSPACE           13'b0_0101_0111_xxxx
+`define DQMSPACE            13'b0_0101_1000_xxxx
+    `define DQM_SYNC_WORD       16'hfac4
+    `define DQM_MSE_CONTROL     13'bx_xxxx_xxxx_00xx
+    `define DQM_LOG10MSE        13'bx_xxxx_xxxx_01xx
+        `define DQM_LOG10MSE_OFFSET 13'bx_xxxx_xxxx_011x
+
+
+    `ifdef DQM_USE_DPLL
+
+    `define DQM_DLL_FREQUENCY   13'bx_xxxx_xxxx_10xx
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_110x
+        `define DQM_SRC_LEGACY_I    4'b0000
+        `define DQM_SRC_LEGACY_Q    4'b0001
+        `define DQM_SRC_PCMTRELLIS  4'b0010
+        `define DQM_SRC_SOQTRELLIS  4'b0011
+        `define DQM_SRC_STC         4'b0100
+        `define DQM_SRC_PNGEN       4'b0101
+        `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RSVD0       4'b0111
+        `define DQM_SRC_DEC0_CH0    4'b1000
+        `define DQM_SRC_DEC0_CH1    4'b1001
+        `define DQM_SRC_DEC1_CH0    4'b1010
+        `define DQM_SRC_DEC1_CH1    4'b1011
+        `define DQM_SRC_DEC2_CH0    4'b1100
+        `define DQM_SRC_DEC2_CH1    4'b1101
+        `define DQM_SRC_DEC3_CH0    4'b1110
+        `define DQM_SRC_RS_DEC      4'b1111
+
+        `define DQM_CMB_MODE_DISABLED   3'b000
+        `define DQM_CMB_MODE_CH0SELECT  3'b001
+        `define DQM_CMB_MODE_CH1SELECT  3'b010
+        `define DQM_CMB_MODE_OPTSELECT  3'b011
+        `define DQM_CMD_MODE_OPTRATIO   3'b100
+
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_111x
+
+    `else //DQM_USE_DPLL
+
+    `define DQM_CLKS_PER_BIT    13'bx_xxxx_xxxx_100x
+    `define DQM_PAYLOAD_SIZE    13'bx_xxxx_xxxx_101x
+    `define DQM_SRC_SELECT      13'bx_xxxx_xxxx_11xx
+        `define DQM_SRC_LEGACY_I    4'b0000
+        `define DQM_SRC_LEGACY_Q    4'b0001
+        `define DQM_SRC_PCMTRELLIS  4'b0010
+        `define DQM_SRC_SOQTRELLIS  4'b0011
+        `define DQM_SRC_STC         4'b0100
+        `define DQM_SRC_PNGEN       4'b0101
+        `define DQM_SRC_LDPC        4'b0110
+        `define DQM_SRC_RSVD0       4'b0111
+        `define DQM_SRC_DEC0_CH0    4'b1000
+        `define DQM_SRC_DEC0_CH1    4'b1001
+        `define DQM_SRC_DEC1_CH0    4'b1010
+        `define DQM_SRC_DEC1_CH1    4'b1011
+        `define DQM_SRC_DEC2_CH0    4'b1100
+        `define DQM_SRC_DEC2_CH1    4'b1101
+        `define DQM_SRC_DEC3_CH0    4'b1110
+        `define DQM_SRC_RS_DEC      4'b1111
+
+    `endif //DQM_USE_DPLL
+
+`define DQMLUTSPACE         13'b0_0110_xxxx_xxxx
 
 // BERT subsystem registers
 `define BERT_SPACE          13'b0_0111_0xxx_xxxx
@@ -1107,23 +1152,6 @@
         `define BERT_SRC_DEC3_CH0    4'b1110
         `define BERT_SRC_RS_DEC      4'b1111
 
-// Combiner subsystem registers start at x0C40 to 0xC7F
-`define COMBINER_SPACE          13'b0_1100_01xx_xxxx
-        `define COMB_LAG_COEF      6'b00_00xx
-        `define COMB_LEAD_COEF     6'b00_01xx
-        `define COMB_SWEEP_RATE    6'b00_10xx
-        `define COMB_SWEEP_LIMIT   6'b00_110x
-        `define COMB_OPTIONS       6'b00_111x
-        `define COMB_LOCKS         6'b01_00xx
-        `define COMB_DB_RANGE      6'b01_010x
-        `define COMB_DB_RATIO      6'b01_011x
-        // The Combiner AGC uses the same register set defined in the global map at bottom of file
-        // Define the Combiner AGC Loop Filter memory map
-        `define CALF_CONTROL       6'b10_00xx
-        `define CALF_ULIMIT        6'b10_01xx
-        `define CALF_LLIMIT        6'b10_10xx
-        `define CALF_RATIOS        6'b10_11xx
-        `define CALF_INTEGRATOR    6'b11_00xx
 
 // STC Output Data Loop Filter
 `define STC_SPACE           13'b0_1101_00xx_xxxx
@@ -1378,6 +1406,7 @@
         `define DAC_SRC_SOQTRELLIS      5
         `define DAC_SRC_MULTIHTRELLIS   6
         `define DAC_SRC_LDPC            7
+        `define DAC_SRC_RS_DEC          7      // uses the same decode as LDPC since they're mutually exclusive
         `define DAC_SRC_STC             8
         `define DAC_SRC_SBS             9
 `define INTERP_GAIN_MANTISSA    13'bx_xxxx_xxxx_001x

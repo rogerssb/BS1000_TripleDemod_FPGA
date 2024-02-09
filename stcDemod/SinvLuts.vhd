@@ -104,7 +104,7 @@ BEGIN
 
    RamSinvR0 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "..\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "..\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 0
       )
       PORT MAP(
@@ -119,7 +119,7 @@ BEGIN
 
    RamSinvR1 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "..\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "..\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 1
       )
       PORT MAP(
@@ -134,7 +134,7 @@ BEGIN
 
    RamSinvR3 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "..\sourceData\sinv_lut_r_pt31.slv",
+         FILENAME    => "..\stcDemod\sourceData\sinv_lut_r_pt31.slv",
          Index       => 3
       )
       PORT MAP(
@@ -149,7 +149,7 @@ BEGIN
 
    RamSinvI1 : ROM_2D
       GENERIC MAP(
-         FILENAME    => "..\sourceData\sinv_lut_i_pt31.slv",
+         FILENAME    => "..\stcDemod\sourceData\sinv_lut_i_pt31.slv",
          Index       => 1
       )
       PORT MAP(

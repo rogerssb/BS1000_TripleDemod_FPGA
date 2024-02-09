@@ -91,7 +91,9 @@ ENTITY Brik2 IS
       Mu0,
       Mu1            : OUT FLOAT_1_18;
       PhaseDiff      : OUT sfixed(0 downto -11);
-      DeltaTauEst    : OUT sfixed(0 downto -5)
+      DeltaTauEst    : OUT sfixed(0 downto -5);
+      log10MseEnable : OUT std_logic;
+      log10MSE       : OUT sfixed(3 downto -7)
    );
 END Brik2;
 
@@ -133,6 +135,28 @@ ARCHITECTURE rtl OF Brik2 IS
          Done           : OUT Std_logic
       );
    end COMPONENT ChannelEstimate;
+
+   COMPONENT NoiseEstimate IS
+        PORT(
+            clk,
+            clk186,
+            ce,
+            reset,
+            startIn,
+            validIn                 : IN std_logic;
+            iIn,
+            qIn                     : IN FLOAT_1_18;
+            channelEstimatesDone    : IN std_logic;
+            tau0Estimate            : IN ufixed(6 downto 0);
+            h0RealEstimate          : IN STC_Parm;
+            h0ImagEstimate          : IN STC_Parm;
+            tau1Estimate            : IN ufixed(6 downto 0);
+            h1RealEstimate          : IN STC_Parm;
+            h1ImagEstimate          : IN STC_Parm;
+            log10MseEnable          : OUT std_logic;
+            log10MSE                : OUT sfixed(3 downto -7)
+        );
+   END COMPONENT NoiseEstimate;
 
    COMPONENT HalfPilotPhase IS
    PORT(
@@ -398,6 +422,26 @@ BEGIN
          H1EstI         => H1EstI_CE,
          RdAddr         => ChanRdAddr,
          Done           => ChanEstDone
+   );
+
+   NE_u : NoiseEstimate PORT MAP (
+        clk                     =>  clk93, 
+        clk186                  =>  clk186,
+        ce                      =>  ce,
+        reset                   =>  reset,
+        startIn                 =>  StartIn,
+        validIn                 =>  ValidIn,
+        iIn                     =>  to_sfixed(InR, InR_sf),
+        qIn                     =>  to_sfixed(InI, InI_sf),
+        channelEstimatesDone    => ChanEstDoneDly,
+        tau0Estimate            => to_ufixed(Tau0EstNdxTE,6,0),
+        h0RealEstimate          => H0EstR_CE,
+        h0ImagEstimate          => H0EstI_CE,
+        tau1Estimate            => to_ufixed(Tau1EstNdxTE,6,0),
+        h1RealEstimate          => H1EstR_CE,
+        h1ImagEstimate          => H1EstI_CE,
+        log10MseEnable          => log10MseEnable,
+        log10MSE                => log10MSE
    );
 
    EstimatesProc : process(clk93)

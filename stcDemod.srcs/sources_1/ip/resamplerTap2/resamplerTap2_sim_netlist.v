@@ -1,18 +1,18 @@
 // Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
-// Tool Version: Vivado v.2017.2.1 (win64) Build 1957588 Wed Aug  9 16:32:24 MDT 2017
-// Date        : Mon Feb 17 20:25:14 2020
-// Host        : SEMCO_1039B running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               C:/Semco/Vivado/Demods/Latest/stcDemod.srcs/sources_1/ip/resamplerTap2/resamplerTap2_sim_netlist.v
+// Tool Version: Vivado v.2017.2 (win64) Build 1909853 Thu Jun 15 18:39:09 MDT 2017
+// Date        : Tue Dec 10 11:17:45 2019
+// Host        : DESKTOP-BUCL8EC running 64-bit major release  (build 9200)
+// Command     : write_verilog -force -mode funcsim -rename_top resamplerTap2 -prefix
+//               resamplerTap2_ resamplerTap2_sim_netlist.v
 // Design      : resamplerTap2
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
-// Device      : xc7k160tfbg676-1
+// Device      : xc7k160tfbg676-2
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "resamplerTap2,dist_mem_gen_v8_0_11,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_11,Vivado 2017.2.1" *) 
+(* CHECK_LICENSE_TYPE = "resamplerTap2,dist_mem_gen_v8_0_11,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "dist_mem_gen_v8_0_11,Vivado 2017.2" *) 
 (* NotValidForBitStream *)
 module resamplerTap2
    (a,
@@ -88,7 +88,7 @@ endmodule
 (* C_MEM_INIT_FILE = "resamplerTap2.mif" *) (* C_MEM_TYPE = "0" *) (* C_PARSER_TYPE = "1" *) 
 (* C_PIPELINE_STAGES = "0" *) (* C_QCE_JOINED = "0" *) (* C_QUALIFY_WE = "0" *) 
 (* C_READ_MIF = "1" *) (* C_REG_A_D_INPUTS = "0" *) (* C_REG_DPRA_INPUT = "0" *) 
-(* C_SYNC_ENABLE = "1" *) (* C_WIDTH = "18" *) (* ORIG_REF_NAME = "dist_mem_gen_v8_0_11" *) 
+(* C_SYNC_ENABLE = "1" *) (* C_WIDTH = "18" *) 
 module resamplerTap2_dist_mem_gen_v8_0_11
    (a,
     d,

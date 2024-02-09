@@ -119,63 +119,38 @@ module stcDemodTop (
 
     `ifdef R6100
 
-        output  reg         Sw50Ohm,
-        input               FPGA_ID0, FPGA_ID1,
+    output  reg         Sw50Ohm,
+    input               FPGA_ID0, FPGA_ID1,
 
-//        `ifdef COMBINER // assumes the sidecar is attached, the SBS signals are defined later
-            inout    [40:1]     SideCar,
- /*       `elsif ADD_BITSYNC
-            // Bitsync ADC
-            input       [13:0]  bsAdc,
-            input               bsAdc_overflow,
-            output              bsAdc_powerDown,
+    `ifdef ADD_BITSYNC
+    // Bitsync ADC
+    input       [13:0]  bsAdc,
+    input               bsAdc_overflow,
+    output              bsAdc_powerDown,
 
-            // Input Impedance and Topology controls
-            output              bsHighImpedance,
-            output              bsSingleEnded,
+    // Input Impedance and Topology controls
+    output              bsHighImpedance,
+    output              bsSingleEnded,
 
-            // Gain and Offset DAC interfaces
-            output              bsDacSELn,
-            output              bsDacSCLK, bsDacMOSI,
-        `endif  //ADD_BITSYNC
-*/
-       `ifdef COMBINER  // both sides need these signals
-            input  [4:0]        PrevData_p,
-                                PrevData_n,
-                                NextData_p,
-                                NextData_n,
-            input               NextClk_p,
-                                NextClk_n,
-                                PrevClk_p,
-                                PrevClk_n,
-        `elsif COMBINER_DEMOD
-
-        // interFpga data
-            output [4:0]        PrevData_p,
-                                PrevData_n,
-                                NextData_p,
-                                NextData_n,
-            output              NextClk_p,
-                                NextClk_n,
-                                PrevClk_p,
-                                PrevClk_n,
-        `endif
+    // Gain and Offset DAC interfaces
+    output              bsDacSELn,
+    output              bsDacSCLK, bsDacMOSI,
+    `endif  //ADD_BITSYNC
 
     // SDI Output
-        output              sdiOut,
-        output              DQMOut
+    output              sdiOut,
+    output              DQMOut
 
     `else   //R6100
 
         // SDI Output
-    output              DQMOut,
     output              sdiOut
 
     `endif //R6100
 
 );
 
-    parameter VER_NUMBER = 16'd780;
+    parameter VER_NUMBER = 16'd800;
 
 
 //******************************************************************************
@@ -336,123 +311,11 @@ module stcDemodTop (
     reg             [13:0]  adc0Reg;
     reg     signed  [17:0]  adc0In;
 
-    `ifdef COMBINER
-        wire            [17:0]  combinerIF;
-        wire    clk93r3 = clk;
-        wire            combinerEn;
-    always @(posedge clk) begin
-        adc0Reg <= adc0;
-            if (combinerEn) begin
-                adc0In <= combinerIF;
-            end
-            else begin
-                adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
-            end
-        end
-/*  STC in a 160 doesn't have enough DSPs for the PreDisortion module.
-    `elsif COMBINER_DISTORT
-        reg     signed  [17:0]  adc0InPre;
-        wire    signed  [17:0]  adc0InPost;
-        wire    clk93r3 = clk;
-        wire            [11:0]  amDataIn_u;
-
-        always @(posedge clk) begin
-            adc0Reg     <= adc0;
-            adc0InPre   <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
-            adc0In      <= adc0InPost;
-        end
-
-        reg combSpace;
-        always @* begin
-            casex(addr)
-                `COMBINER_SPACE:    combSpace = cs;
-                default:            combSpace = 0;
-            endcase
-        end
-
-    wire    [15:0]  Noise1, Noise2;
-    wire    [17:0]  ncoCos, ncoSin;
-    wire    [31:0]  combDataOut;
-         DemodPreDist Distort
-         (
-            .clk46r6        (clk46r6),
-            .clk93r3        (clk93r3),
-            .clk186         (clk186),
-            .reset          (reset),
-            .cs             (combSpace),
-            .addr           (addr[5:0]),
-            .dataIn         (dataIn),
-            .dataOut        (combDataOut),
-            .wr0            (wr0),
-            .wr1            (wr1),
-            .wr2            (wr2),
-            .wr3            (wr3),
-            .busClk         (busClk),
-            .FPGA_ID0       (FPGA_ID0),
-            .FPGA_ID1       (FPGA_ID1),
-            .adc0In         (adc0InPre),
-            .chAgc          (amDataIn_u),
-            .Noise1         (Noise1),
-            .Noise2         (Noise2),
-            .NcoCos         (ncoCos),
-            .NcoSin         (ncoSin),
-            .RealOut        (),
-            .ImagOut        (),
-            .ifOut          (adc0InPost)
-        );
-        */
-    `else
     always @(posedge clk) begin
         adc0Reg <= adc0;
         adc0In <= $signed({~adc0Reg[13],adc0Reg[12:0],4'b0});
     end
-    `endif
 
-    `ifdef R6100
-    //Assume IF/BS Sidecar is used. This is just muxing if IF_BS_n is low,
-    // but keeps pin names constant
-    wire        [17:0]  DdsData;
-    wire                DdsIO_Reset;
-    wire                DdsIO_Update;
-    wire                DdsReset;
-    wire                DdsCS_n;
-    wire                DdsSClk;
-    wire                DdsMosi;
-    wire      [13:0]    bsAdc;
-    wire                bsAdc_overflow, bsAdc_powerDown;
-    // Input Impedance and Topology controls
-    wire                bsHighImpedance, bsSingleEnded;
-
-    // Gain and Offset DAC interfaces
-    wire                bsDacSELn, bsDacSCLK, bsDacMOSI;
-
-   ifBsMux ifBsMux (
-        .IF_BS_n         (IF_BS_n),
-        .SideCar         (SideCar),
-        .DdsData         (DdsData),
-        .DdsIO_Reset     (DdsIO_Reset),
-        .DdsIO_Update    (DdsIO_Update),
-        .DdsReset        (DdsReset),
-        .DdsCS_n         (DdsCS_n),
-        .DdsSClk         (DdsSClk),
-        .DdsMosi         (DdsMosi),
-        .DdsMiso         (DdsMiso),
-        .SideCarClk      (SideCarClk),
-        .DdsSyncClk      (DdsSyncClk),
-        .bsAdc_powerDown (bsAdc_powerDown),
-        .bsHighImpedance (bsHighImpedance),
-        .bsSingleEnded   (bsSingleEnded),
-        .bsDacSELn       (bsDacSELn),
-        .bsDacSCLK       (bsDacSCLK),
-        .bsDacMOSI       (bsDacMOSI),
-        .bsAdc           (bsAdc),
-        .bsAdc_overflow  (bsAdc_overflow)
-    );
-
-    `ifndef COMBINER
-        assign IF_BS_n = 1'b0;
-    `endif
- `endif
 
 //******************************************************************************
 //                             Top Level Registers
@@ -698,6 +561,9 @@ module stcDemodTop (
         endcase
     end
 
+    `ifdef ADD_DQM
+    wire signed [10:0]  log10MSE;
+    `endif
     STC stcDemod(
         .ResampleR(iStc),
         .ResampleI(qStc),
@@ -723,6 +589,10 @@ module stcDemodTop (
         .HxEstI(HxEstI),
         .Peaks(stcPeaks),
         .DeltaTau(stcDeltaTau),
+        `ifdef ADD_DQM
+        .log10MseEnable(stcMseEnable),
+        .log10MSE(log10MSE),
+        `endif
         .Dac0Data(stcDac0Data),
         .Dac0ClkEn(stcDac0ClkEn),
         .Dac1Data(stcDac1Data),
@@ -738,162 +608,31 @@ module stcDemodTop (
         stcBitOut   <= stcDataOut;
     end
 
-//******************************************************************************
-`ifdef COMBINER
-    /* to do a combiner build
-        Define COMBINER in Project Settings-General-Verilog Options.
-        Set impl325 as active in Design Runs, the constrs_325 should go active
-        DC_DemodTop should be listed as unused in Design Sources
-        Generate Bitstream.
-    */
-    reg combSpace;
-    always @* begin
-        casex(addr)
-            `COMBINER_SPACE:    combSpace = cs;
-            default:            combSpace = 0;
-        endcase
-    end
+`ifdef ADD_DQM
+/******************************************************************************
+                                    DQM
+******************************************************************************/
 
-    wire    [12:0]  RealLock, ImagLock;
-    wire    [31:0]  combDataOut;
-    DigitalCombiner Combiner
+    wire            [31:0]  dqmDataOut;
+    dqm dqm
     (
-        .clk46r6        (clk46r6),
-        .clk93r3        (clk93r3),
-        .clk186         (clk186),
-        .SideCarClk     (SideCarClk),
-        .reset          (!FPGA_ID1 || reset),
-        .cs             (combSpace),
-        .addr           (addr[5:0]),
-        .dataIn         (dataIn),
-        .dataOut        (combDataOut),
-        .wr0            (wr0),
-        .wr1            (wr1),
-        .wr2            (wr2),
-        .wr3            (wr3),
-        .busClk         (busClk),
-
-        .PrevData_p     (PrevData_p),
-        .PrevData_n     (PrevData_n),
-        .NextData_p     (NextData_p),
-        .NextData_n     (NextData_n),
-        .NextClk_p      (NextClk_p),
-        .NextClk_n      (NextClk_n),
-        .PrevClk_p      (PrevClk_p),
-        .PrevClk_n      (PrevClk_n),
-
-        .ch0MseSum(ch0MseSum),
-        .ch0Log10MseSum(ch0Log10MSE),
-        .ch1MseSum(ch1MseSum),
-        .ch1Log10MseSum(ch1Log10MSE),
-
-        .ifOut          (combinerIF),
-        .realout        (iCombData),     // combiner runs at 46.6MHz
-        .imagout        (qCombData),     // I/Q outputs
-        .combinerEn     (combinerEn),
-        .locked         (combLocked),
-        .imaglock       (ImagLock),
-        .reallock       (RealLock),
-        .agc0_gt_agc1   (bestSrcSel),
-        .realxord       (),
-        .imagxord       (),
-        .ifBS_n         (IF_BS_n),
-        .DdsData        (DdsData),
-        .DdsIO_Reset    (DdsIO_Reset),
-        .DdsIO_Update   (DdsIO_Update),
-        .DdsReset       (DdsReset),
-        .DdsCS_n        (DdsCS_n),
-        .DdsSClk        (DdsSClk),
-        .DdsMosi        (DdsMosi),
-        .DdsMiso        (DdsMiso),
-        .DdsSyncClk     (DdsSyncClk),
-
-        .dataI          (bertDataIn)
-    );
-
-
-//    assign lockLed0n = RealLock[12];
-//    assign lockLed1n = ImagLock[12];
-
-`elsif COMBINER_DEMOD
-    /* to do a pre-combiner demod build
-        Set impl_160 as active in Design Runs, the constraint set should change to constrs_160
-        Redefine COMBINER to COMBINER_DEMOD in Project Settings-General-Verilog Options.
-        Define COMBINER_DISTORT if desired for testing
-        DigitalCombiner will now be listed as unused in Design Sources
-        Generate Bitstream.
-    */
-// See line 353
-//    `ifndef COMBINER_DISTORT
-
-        //******************************************************************************
-        //                           AM ADC Interface
-        //******************************************************************************
-        wire    signed  [11:0]  amDataIn;
-        // A/D input is inverted and signed, convert it to unsigned positive slope
-        wire    unsigned [11:0] amDataIn_u = {amDataIn[11], ~amDataIn[10:0]};
-        ad7476Interface amAdc(
-            .clk(clk),
-            .reset(reset),
-            .spiDin(amAdcDataIn),
-            .spiClk(amAdcClk),
-            .spiCSn(amAdcCSn),
-            .adcData(amDataIn),
-            .adcDataEn(amDataEn)
-        );
-//    `endif
-
-    dqmChip2Chip c2c (
         .clk(clk),
         .reset(reset),
-        .combinerStartOfFrame(),
-        .dqmStartOfFrame(),
-        .mseSum(mseSum),
-        .log10MseSum(log10MSE),
-        .mseMCLK(mseMCLK),
-        .mseMFS(mseMFS),
-        .mseMDATA(mseMDATA),
-        .ch0SCLK(1'b0),
-        .ch0SFS(1'b0),
-        .ch0SDATA(1'b0),
-        .ch0MseSum(),
-        .ch0Log10MseSum(),
-        .ch1SCLK(1'b0),
-        .ch1SFS(1'b0),
-        .ch1SDATA(1'b0),
-        .ch1MseSum(),
-        .ch1Log10MseSum()
+        .busClk(busClk),
+        .cs(cs),
+        .wr0(wr0),.wr1(wr1),.wr2(wr2),.wr3(wr3),
+        .addr(addr),
+        .din(dataIn),
+        .dout(dqmDataOut),
+        .bitClkEn(stcBitEnOut),
+        .payloadBit(stcBitOut),
+        .mseEn(stcMseEnable),
+        .log10MSE({{5{log10MSE[10]}},log10MSE}),
+        .dqmBitEn(dqmBitEn),
+        .dqmBit(dqmBit)
     );
 
-//******************************************************************************
-//                               Combiner Outputs from Demod
-//******************************************************************************
-     DC_DemodTop combinerOut(
-        .clk93r3        (clk),
-        .Reset          (reset),
-        .FPGA_ID0       (FPGA_ID0),
-        .FPGA_ID1       (FPGA_ID1),
-        .testMode       (combinerTestMode),
-        .adc0           (adc0In[17:4]), // grab just the raw a/d data. I'll convert to 18 bit signed in combiner
-        .amDataIn       (amDataIn_u),
-        // DQM serial inputs
-        .dqmCLK         (mseMCLK),   // demod DQM is out only
-        .dqmFS          (mseMFS),    // the same data is sent to toNext and toPrev
-        .dqmDATA        (mseMDATA),
-        .dataEn         (bertClkEn),
-        .dataI          (bertDataIn),
-        .PrevData_p     (PrevData_p),
-        .PrevData_n     (PrevData_n),
-        .NextData_p     (NextData_p),
-        .NextData_n     (NextData_n),
-        .NextClk_p      (NextClk_p),
-        .NextClk_n      (NextClk_n),
-        .PrevClk_p      (PrevClk_p),
-        .PrevClk_n      (PrevClk_n)
-
-    );
-
-`endif
+`endif //ADD_DQM
 
 //******************************************************************************
 //                            Derandomizer
@@ -964,6 +703,7 @@ module stcDemodTop (
 `endif //ADD_BERT
 
 
+//******************************************************************************
 //                       Clock/Data Jitter Reduction
 //******************************************************************************
 
@@ -1080,11 +820,7 @@ module stcDemodTop (
     assign ch1DataOut = cAndD1DataOut[2];
     assign ch1ClkOut  = cAndD1ClkOut;
     assign ch3DataOut = cAndD1DataOut[2];
-        `ifdef COMBINER
-        assign ch3ClkOut = !bestSrcSel;
-        `else
-        assign ch3ClkOut = cAndD1ClkOut;
-        `endif
+    assign ch3ClkOut = cAndD1ClkOut;
 
     assign          pll2_REF = 1'b0;
     assign          pll2_Data = 1'b0;
@@ -1410,11 +1146,12 @@ module stcDemodTop (
     //******************************************************************************
     //                          Video Switch Interface
     //******************************************************************************
-        // For the NGR demod, there are 3 filter selects and two 50/75 switch drivers that replace videoOutSels
-        wire    [2:0]   vid0Select;
-        wire    [2:0]   vid1Select;
-        wire    [2:0]   vid2Select;
-        wire    [2:0]   vid3Select;
+    // For the NGR demod, there are 3 filter selects and two 50/75 switch drivers that replace videoOutSels
+    wire    [2:0]   vid0Select;
+    wire    [2:0]   vid1Select;
+    wire    [2:0]   vid2Select;
+    wire    [2:0]   vid3Select;
+    wire            ngrMode = vid3Select[0];
     wire    [31:0]  vsDout;
     vidSwitchRegs vsregs(
         .busClk(busClk),
@@ -1428,54 +1165,51 @@ module stcDemodTop (
         .dout(vsDout),
         .vid0Select(vid0Select),
         .vid1Select(vid1Select),
-            .vid2Select(vid2Select),
-            .vid3Select(vid3Select)
+        .vid2Select(vid2Select),
+        .vid3Select(vid3Select)
     );
 
-        wire   ngrMode = vid3Select[0];
-
-        assign video0InSelect = ngrMode ? {vid1Select[2], vid0Select[2]} : vid0Select[1:0]; // Sw_Vid_0_A[1:0]  Pin D18:D20
-        assign video1InSelect = ngrMode ? vid2Select[1:0] : vid1Select[1:0];                // Sw_Vid_1_A[1:0]  Pin D14:D16
+    assign video0InSelect = ngrMode ? {vid1Select[2], vid0Select[2]} : vid0Select[1:0]; // Sw_Vid_0_A[1:0]  Pin D18:D20
+    assign video1InSelect = ngrMode ? vid2Select[1:0] : vid1Select[1:0];                // Sw_Vid_1_A[1:0]  Pin D14:D16
 
     always @* begin
-            if (ngrMode) begin // NGR_DEMOD
-                video0OutSelect = vid0Select[1:0];    // Sw_Filt_0_A0  Pin D26:D28
-                video1OutSelect = vid1Select[1:0];    // Sw_Filt_1_A[1:0]  Pin D22, D24
-                Sw50Ohm = vid2Select[2];    // Sw_50_Ohm, Sw_Vid_1_A[1:0] Pins D11, D14:D16
-            end
-            else begin  //Original R6080
-
+        if (ngrMode) begin // NGR_DEMOD
+            video0OutSelect = vid0Select[1:0];    // Sw_Filt_0_A0  Pin D26:D28
+            video1OutSelect = vid1Select[1:0];    // Sw_Filt_1_A[1:0]  Pin D22, D24
+            Sw50Ohm = vid2Select[2];    // Sw_50_Ohm, Sw_Vid_1_A[1:0] Pins D11, D14:D16
+        end
+        else begin  //Original R6080
             //This is to fix an error on the board layout
-                case (vid0Select[1:0])
-		            2'b00: begin
-		                video0OutSelect = 2'b00;
-		            end
-		            2'b01: begin
-		                video0OutSelect = 2'b10;
-		            end
-		            2'b10: begin
-		                video0OutSelect = 2'b01;
-		            end
-		            2'b11: begin
-		                video0OutSelect = 2'b11;
-		            end
-        		endcase
-                case (vid1Select[1:0])
-		            2'b00: begin
-		                video1OutSelect = 2'b00;
-		            end
-		            2'b01: begin
-		                video1OutSelect = 2'b10;
-		            end
-		            2'b10: begin
-		                video1OutSelect = 2'b01;
-		            end
-		            2'b11: begin
-		                video1OutSelect = 2'b11;
-		            end
-        		endcase
-    		end
-        end // NGR_DEMOD
+            case (vid0Select[1:0])
+                2'b00: begin
+                    video0OutSelect = 2'b00;
+                end
+                2'b01: begin
+                    video0OutSelect = 2'b10;
+                end
+                2'b10: begin
+                    video0OutSelect = 2'b01;
+                end
+                2'b11: begin
+                    video0OutSelect = 2'b11;
+                end
+            endcase
+            case (vid1Select[1:0])
+                2'b00: begin
+                    video1OutSelect = 2'b00;
+                end
+                2'b01: begin
+                    video1OutSelect = 2'b10;
+                end
+                2'b10: begin
+                    video1OutSelect = 2'b01;
+                end
+                2'b11: begin
+                    video1OutSelect = 2'b11;
+                end
+            endcase
+        end
+    end // NGR_DEMOD
     `endif //R6100
 
 
@@ -1549,14 +1283,12 @@ module stcDemodTop (
             `BERT_SPACE:        rd_mux = bertDout;
             `endif
 
-            `ifdef COMBINER_DISTORT
-             `COMBINER_SPACE:   rd_mux = combDataOut;
-             `endif
-            `ifdef COMBINER
-             `COMBINER_SPACE:   rd_mux = combDataOut;
-             `endif
+            `ifdef ADD_DQM
+            `DQMLUTSPACE,
+            `DQMSPACE:         rd_mux = dqmDataOut;
+            `endif
 
-             default :          rd_mux = 32'hxxxx;
+            default :          rd_mux = 32'hxxxx;
         endcase
     end
 
@@ -1684,17 +1416,6 @@ module stcDemodTop (
                     end
                 end
 
-            `ifdef COMBINER
-             `COMBINER_SPACE:   begin
-                if (addr[1]) begin
-                    rd_mux = combDataOut[31:16];
-                end
-                else begin
-                    rd_mux = combDataOut[15:0];
-                end
-             end
-             `endif
-
             `ifdef ADD_BERT
             `BERT_SPACE:        begin
                 if (addr[1]) begin
@@ -1725,6 +1446,17 @@ module stcDemodTop (
                     rd_mux = combDataOut[15:0];
                 end
              end
+             `endif
+
+             `ifdef ADD_DQM
+             `DQMLUTSPACE,
+             `DQMSPACE:         begin
+                if (addr[1]) begin
+                    rd_mux = dqmDataOut[31:16];
+                end
+                else begin
+                    rd_mux = dqmDataOut[15:0];
+                end
              `endif
 
              default : rd_mux = 16'hxxxx;

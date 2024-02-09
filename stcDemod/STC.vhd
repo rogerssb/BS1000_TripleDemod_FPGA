@@ -84,8 +84,8 @@ ENTITY STC IS
       HxEstI,
       PhaseDiffNB,
       PhaseDiffWB       : OUT SLV18;
-      NoiseTotal,
-      PeakTotal         : OUT ufixed(8 downto -25)
+      log10MseEnable    : OUT std_logic;
+      log10MSE          : OUT sfixed(3 downto -7)
    );
 END STC;
 
@@ -121,11 +121,7 @@ ARCHITECTURE rtl OF STC IS
          PhsPeak1       : OUT SLV18;
          PilotFound,
          ValidOut,
-         StartOut       : OUT std_logic;
-         NoiseTotal0,
-         NoiseTotal1,
-         PeakTotal0,
-         PeakTotal1     : OUT ufixed(8 downto -25)
+         StartOut       : OUT std_logic
       );
    end COMPONENT PilotDetectSliding;
 
@@ -176,7 +172,9 @@ ARCHITECTURE rtl OF STC IS
          Mu0,
          Mu1            : OUT FLOAT_1_18;
          PhaseDiff      : OUT sfixed(0 downto -11);
-         DeltaTauEst    : OUT sfixed(0 downto -5)
+         DeltaTauEst    : OUT sfixed(0 downto -5);
+         log10MseEnable : OUT std_logic;
+         log10MSE       : OUT sfixed(3 downto -7)
       );
    END COMPONENT Brik2;
 
@@ -405,11 +403,6 @@ ARCHITECTURE rtl OF STC IS
    SIGNAL   ClocksPerBitCnt,
             ClocksPerBit      : unsigned(8 downto 0) := 9x"0";
 
-   SIGNAL   NoiseTotal0,
-            NoiseTotal1,
-            PeakTotal0,
-            PeakTotal1        : ufixed(8 downto -25);
-
 -- todo, remove
    SIGNAL   m_ndx0Slv,
             m_ndx1Slv,
@@ -546,20 +539,13 @@ BEGIN
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
-         StartOut       => PilotPulse,
-         NoiseTotal0    => NoiseTotal0,
-         NoiseTotal1    => NoiseTotal1,
-         PeakTotal0     => PeakTotal0,
-         PeakTotal1     => PeakTotal1
+         StartOut       => PilotPulse
    );
 
 
    AFC_process : process(Clk186)
    begin
       if (rising_edge(Clk186)) then
-         PeakTotal   <= NoiseTotal0 when (PeakTotal0 > PeakTotal1) else NoiseTotal1;
-         NoiseTotal  <= PeakTotal0  when (PeakTotal0 > PeakTotal1)  else PeakTotal1;
-
          PilotValidOutDly  <= PilotValidOut;
          StartOffset       <= x"0020";
          StartFrameOffset  <= resize(StartNextFrame + ufixed(StartOffset), StartFrameOffset);
@@ -646,7 +632,9 @@ BEGIN
          Mu0            => Ch0Mu,
          Mu1            => Ch1Mu,
          EstimatesDone  => EstimatesDone,
-         PilotLocked    => PilotLocked
+         PilotLocked    => PilotLocked,
+         log10MseEnable => log10MseEnable,
+         log10MSE       => log10MSE
       );
 
    TP_Process : process(Clk186)

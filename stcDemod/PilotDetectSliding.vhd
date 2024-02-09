@@ -43,6 +43,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use IEEE.math_real.all;
 use work.Semco_pkg.all;
 use work.fixed_pkg.all;
 
@@ -76,11 +77,7 @@ entity PilotDetectSliding is
          PhsPeak1       : OUT SLV18;               -- Peak Mag/Phs of iFFT
          PilotFound,
          ValidOut,                                 -- ReOut/ImOut valid
-         StartOut       : OUT std_logic;
-         NoiseTotal0,
-         NoiseTotal1,
-         PeakTotal0,
-         PeakTotal1     : OUT ufixed(8 downto -25)
+         StartOut       : OUT std_logic
       );
 end PilotDetectSliding;
 
@@ -211,16 +208,6 @@ architecture rtl of PilotDetectSliding is
          enOut    : OUT std_logic
       );
    END COMPONENT vm_cordic_fast;
-
-   COMPONENT cordicSqRt
-      PORT (
-         aclk : IN STD_LOGIC;
-         s_axis_cartesian_tvalid : IN STD_LOGIC;
-         s_axis_cartesian_tdata : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
-         m_axis_dout_tvalid : OUT STD_LOGIC;
-         m_axis_dout_tdata : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
-      );
-   END COMPONENT;
 
 -------------------------------------------------------------------------------
 
@@ -390,12 +377,6 @@ architecture rtl of PilotDetectSliding is
             MaxCount          : natural range 0 to 28;
    SIGNAL   SampleCount       : natural range 0 to 16383;
    SIGNAL   DropCount         : natural range 0 to 7;
-   SIGNAL   AbsSq0,
-            AbsSq1,
-            NoiseSum0,
-            NoiseSum1,
-            PeakSum0,
-            PeakSum1          : ufixed(8 downto -25);
 -- ILAs
     SIGNAL  PilotMag_Ila,
             Peak1_Ila,
@@ -787,19 +768,8 @@ begin
                end if;
                MaxCntr0 <= AbsCntr0;   -- just delayed to keep timing happy
                MaxCntr1 <= AbsCntr1;
-               AbsSq0   <= resize(AbsCntr0 * AbsCntr0, AbsSq0);
-               AbsSq1   <= resize(AbsCntr1 * AbsCntr1, AbsSq0);
                -- Find the peak of this packet regardless of H0 or H1
                if (Index1 < 512) then     -- only search first half of the ifft
-                  -- Sum noise
-                  if (Index1 < 245) or (Index1 > 266) then
-                     NoiseSum0 <= resize(NoiseSum0 + AbsSq0, NoiseSum0);
-                     NoiseSum1 <= resize(NoiseSum1 + AbsSq1, NoiseSum1);
-                  else
-                     PeakSum0 <= resize(PeakSum0 + AbsSq0, PeakSum0);
-                     PeakSum1 <= resize(PeakSum1 + AbsSq1, PeakSum1);
-                  end if;
-
                   if (MaxCntr > AbsPeak) and (MaxCntr > Threshold) then
                      AbsPeak     <= MaxCntr;
                      AbsIndex    <= Index1;
@@ -905,17 +875,6 @@ begin
                end if;
             else
                Index0 <= 0;
-               NoiseSum0 <= (others=>'0');
-               NoiseSum1 <= (others=>'0');
-               PeakSum0 <=  (others=>'0');
-               PeakSum1 <=  (others=>'0');
-            end if;
-
-            if ((Index1 = 512) and (PeakSum0 > 0.1)) then
-               NoiseTotal0 <= NoiseSum0;
-               NoiseTotal1 <= NoiseSum1;
-               PeakTotal0  <= PeakSum0;
-               PeakTotal1  <= PeakSum1;
             end if;
 
             if (StartOut) then     -- StartOut is only one clock wide

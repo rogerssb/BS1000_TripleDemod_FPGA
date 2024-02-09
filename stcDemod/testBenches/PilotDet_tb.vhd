@@ -37,6 +37,20 @@ use std.env.stop;
 use work.fixed_pkg.all;
 use work.Semco_pkg.ALL;
 
+/*
+entity glbl is
+end glbl;
+*/
+
+library ieee;
+use ieee.std_logic_textio.all;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
+use IEEE.math_real.all;
+use std.env.stop;
+use work.fixed_pkg.all;
+use work.Semco_pkg.ALL;
+
 entity PilotDet_tb is
    generic (
       IN_WIDTH    : natural   := 18;
@@ -49,6 +63,11 @@ end PilotDet_tb;
 architecture rtl of PilotDet_tb is
 
   -- Define Components
+
+/*
+component glbl is
+end component glbl;
+*/
 
 COMPONENT PilotDetectSliding is
    GENERIC
@@ -80,11 +99,7 @@ COMPONENT PilotDetectSliding is
          PhsPeak1       : OUT SLV18;               -- Peak Mag/Phs of iFFT
          PilotFound,
          ValidOut,                                 -- ReOut/ImOut valid
-         StartOut       : OUT std_logic;
-         NoiseTotal0,
-         NoiseTotal1,
-         PeakTotal0,
-         PeakTotal1     : OUT ufixed(8 downto -25)
+         StartOut       : OUT std_logic
       );
    end COMPONENT PilotDetectSliding;
 
@@ -135,7 +150,9 @@ COMPONENT PilotDetectSliding is
          Mu0,
          Mu1            : OUT FLOAT_1_18;
          PhaseDiff      : OUT sfixed(0 downto -11);
-         DeltaTauEst    : OUT sfixed(0 downto -5)
+         DeltaTauEst    : OUT sfixed(0 downto -5);
+         log10MseEnable : OUT std_logic;
+         log10MSE       : OUT sfixed(3 downto -7)
       );
    END COMPONENT Brik2;
 
@@ -191,7 +208,7 @@ COMPONENT PilotDetectSliding is
 -------------------------------------------------------------------------------
 
    constant DELAY                : positive  := 4;
-   constant InitialSnr           : real := 15.0;
+   constant InitialSnr           : real := 100.0;
 
    TYPE vector_of_real IS ARRAY (NATURAL RANGE <>) OF real;
 
@@ -242,18 +259,23 @@ COMPONENT PilotDetectSliding is
    SIGNAL   VarsReal,
             VarsImag          : vector_of_slvs(0 to 0)(17 downto 0);
    signal   Count,
+            FrameCount,
             Frames            : integer := 0;
    signal   Noise1,
             Noise2            : SLV16;
    signal   SNR,
-            NoiseGain/*,
-            Ratio0,
-            Ratio1,
-            SumRatio,
-            SumTotal,
-            NoiseTotal,
-            SumTotalAvg,
-            NoiseTotalAvg*/     : real := InitialSnr;
+            NoiseGain         : real := InitialSnr;
+   signal   signalReal        : real;
+   signal   signalImag        : real;
+   signal   signalMagSquaredSum : real := 0.0;
+   signal   noise1Real        : real;
+   signal   noise2Real        : real;
+   signal   noiseMagSquaredSum : real := 0.0;
+   signal   noiseMagCount     : real := 0.0;
+   signal   snr0              : real;
+   signal   snr1              : real;
+   signal   snrAvg            : real := 0.0;
+   signal   snrAvgdB          : real;
    signal   Increment         : real := 1.0;
  --  signal   NoiseTotalArray,
  --           SumTotalArray     : vector_of_real(9 downto 0) := (others=>0.0);
@@ -266,12 +288,6 @@ COMPONENT PilotDetectSliding is
    SIGNAL   H0Phase,
             H1Phase           : SLV12;
    SIGNAL   PilotOffset       : STD_LOGIC_VECTOR(8 downto 0);
-   SIGNAL   NoiseTotal,
-            NoiseTotal0,
-            NoiseTotal1,
-            PeakTotal,
-            PeakTotal0,
-            PeakTotal1        : ufixed(8 downto -25);
 begin
 
    process begin
@@ -342,25 +358,33 @@ begin
             DataValid <= '1';
          end if;
 
+	 /*
          if ( unsigned(Errors(0)) > 0 or unsigned(Errors(1)) > 0 ) then
             ErrorCount <= ErrorCount + 1;
          end if;
+	 */
+
+        signalReal <= to_real(to_sfixed(VarsReal(0),0,-17));
+        signalImag <= to_real(to_sfixed(VarsImag(0),0,-17));
+        noise1Real <= to_real(to_sfixed(Noise1,2,-13)) * NoiseGain;
+        noise2Real <= to_real(to_sfixed(Noise2,2,-13)) * NoiseGain;
+        --noise1Real <= to_real(Noise1Gained);
+        --noise2Real <= to_real(Noise2Gained);
+        if (DataValid) then
+            signalMagSquaredSum <= signalMagSquaredSum
+                                 + (signalReal * signalReal)
+                                 + (signalImag * signalImag);
+            noiseMagSquaredSum <= noiseMagSquaredSum 
+                                + (noise1Real * noise1Real) 
+                                + (noise2Real * noise2Real);
+            noiseMagCount <= noiseMagCount + 1.0;
+        end if;
 
       AgcMode <= '1';
 
-         if (Count = 1527) then
- --           NoiseTotalArray <= NoiseTotalArray(8 downto 0) & NoiseTotal;
- --           SumTotalArray <= SumTotalArray(8 downto 0) & SumTotal;
- --           Average_u := NoiseTotal;
- --           for i in 0 to 9 loop
- --              Average_u := Average_u + NoiseTotalArray(i);
- --           end loop;
- --           NoiseTotalAvg <= Average_u;
- --           Average_u := SumTotal;
- --           for i in 0 to 9 loop
- --              Average_u := Average_u + SumTotalArray(i);
- --           end loop;
- --           SumTotalAvg <= Average_u;
+         --if (Count = 1527) then
+         if (Count = 4095) then
+         --if (Count = (4095 - 256)) then
             if (SNR < -0.0) then
                if (AgcMode) then
                   SNR <= InitialSnr;
@@ -368,44 +392,50 @@ begin
                   AgcMode <= '1';
                   SNR     <= InitialSnr;
                end if;
-            elsif (Frames < 10) then
+            elsif (Frames < 9) then
                Frames <= Frames + 1;
             else
                Frames <= 0;
                SNR    <= SNR - Increment;
             end if;
+            FrameCount <= FrameCount + 1;
             Count       <= 0;
             reset       <= '1';
- --           Ratio0      <= sqrt(to_real(PeakTotal0) / 20.0) / sqrt(to_real(NoiseTotal0) / (512.0 - 20.0));
- --           Ratio1      <= sqrt(to_real(PeakTotal1) / 20.0) / sqrt(to_real(NoiseTotal1) / (512.0 - 20.0));
- --           SumRatio    <= sqrt( (to_real(PeakTotal0) + to_real(PeakTotal1)) / 20.0) /
- --                          sqrt( (to_real(NoiseTotal0) + to_real(NoiseTotal1)) / (512.0 / 20.0));
- --
- --           NoiseTotal  <= sqrt(to_real(NoiseTotal0) / (512.0 - 20.0)) + sqrt(to_real(NoiseTotal1) / (512.0 - 20.0));
- --           SumTotal    <= sqrt( (to_real(PeakTotal0) + to_real(PeakTotal1)) / 20.0);
-            PeakTotal   <= NoiseTotal0 when (NoiseTotal0 > NoiseTotal1) else NoiseTotal1;
-            NoiseTotal  <= PeakTotal0  when (PeakTotal0  > PeakTotal1)  else PeakTotal1;
          elsif (DataValid) then
             Count <= Count + 1;
             reset <= '0';
          end if;
 
          NoiseGain <= (10.0 ** (-SNR/20.0));
-         Noise1Gained    <= resize(to_sfixed(Noise1, 3, -12) * NoiseGain, Noise1Gained);
-         Noise2Gained    <= resize(to_sfixed(Noise2, 3, -12) * NoiseGain, Noise2Gained);
+         Noise1Gained    <= resize(to_sfixed(Noise1, 2, -13) * NoiseGain, Noise1Gained);
+         Noise2Gained    <= resize(to_sfixed(Noise2, 2, -13) * NoiseGain, Noise2Gained);
          if (AgcMode) then
-            ReIn <= resize((to_sfixed(VarsReal(0), 0, -17) + Noise1Gained) / (1.0 + NoiseGain) / 2, ReIn);
-            ImIn <= resize((to_sfixed(VarsImag(0), 0, -17) + Noise2Gained) / (1.0 + NoiseGain) / 2, ReIn);
+            --ReIn <= resize((to_sfixed(VarsReal(0), 0, -17) + Noise1Gained) / (1.0 + NoiseGain) / 2, ReIn);
+            --ImIn <= resize((to_sfixed(VarsImag(0), 0, -17) + Noise2Gained) / (1.0 + NoiseGain) / 2, ReIn);
+            ReIn <= resize(to_sfixed(
+                                --((signalReal + noise1Real)/(1.0 + NoiseGain)/2.0),
+                                (signalReal + noise1Real),
+                                0,
+                                -17),
+                           ReIn);
+            ImIn <= resize(to_sfixed(
+                                --((signalImag + noise2Real)/(1.0 + NoiseGain)/2.0),
+                                (signalImag + noise2Real),
+                                0,
+                                -17), 
+                           ReIn);
          else
-            ReIn <= resize((to_sfixed(VarsReal(0), 0, -17) + Noise1Gained) / 2, ReIn);
-            ImIn <= resize((to_sfixed(VarsImag(0), 0, -17) + Noise2Gained) / 2, ReIn);
+            ReIn <= resize(to_sfixed(VarsReal(0), 0, -17) + to_sfixed(noise1Real,2,-15) / 2, ReIn);
+            ImIn <= resize(to_sfixed(VarsImag(0), 0, -17) + to_sfixed(noise2Real,2,-15) / 2, ReIn);
          end if;
       end if;
    end process reg_process;
 
    ReadReal : ReadGoldRef
    GENERIC MAP(
-      FILE_NAME         => "../simData/resampled_r.txt",
+      --FILE_NAME         => "../stcDemod/simData/resampled_r.txt",
+      FILE_NAME         => "c:/modem/vivado2017/stcDemod/simData/resampled_r.txt",
+      --FILE_NAME         => "c:/modem/stcDemod/cLanguageSim/resamplerR.txt",
       NUM_VALUES        => 1,
       DATA_TYPE         => SFix,
       OUT_WIDTH         => 18,
@@ -421,7 +451,9 @@ begin
 
    ReadImag : ReadGoldRef
    GENERIC MAP(
-      FILE_NAME         => "../simData/resampled_i.txt",
+      --FILE_NAME         => "../stcDemod/simData/resampled_i.txt",
+      FILE_NAME         => "c:/modem/vivado2017/stcDemod/simData/resampled_i.txt",
+      --FILE_NAME         => "c:/modem/stcDemod/cLanguageSim/resamplerI.txt",
       NUM_VALUES        => 1,
       DATA_TYPE         => SFix,
       OUT_WIDTH         => 18,
@@ -435,7 +467,6 @@ begin
       Done              => Done(6)
    );
 
-
    PD_u : PilotDetectSliding
       GENERIC MAP
          (SIM_MODE => TRUE
@@ -447,7 +478,7 @@ begin
          reset2x        => reset,
          ce             => '1',
          SpectrumInv    => '0',
-         Mag0GtMag1     => '0',
+         Mag0GtMag1     => '1',
          ValidIn        => DataValid,
          ReIn           => ReIn,
          ImIn           => ImIn,
@@ -466,13 +497,9 @@ begin
          ReOut          => PilotRealOut,
          ImOut          => PilotImagOut,
          ValidOut       => PilotValidOut,
-         StartOut       => PilotPulse ,
-         NoiseTotal0    => NoiseTotal0,
-         NoiseTotal1    => NoiseTotal1,
-         PeakTotal0     => PeakTotal0 ,
-         PeakTotal1     => PeakTotal1
+         StartOut       => PilotPulse
       );
-/*
+
    PilotFound     <= '1' when (PilotFoundPD = '1') and (PilotFoundCE = '1') and (unsigned(MagRSlv) < 25000) else '0';
 
    PS_u : pilotsync
@@ -541,7 +568,9 @@ begin
          Mu0            => open,
          Mu1            => open,
          EstimatesDone  => EstimatesDone,
-         PilotLocked    => open
+         PilotLocked    => open,
+         log10MseEnable => open,
+         log10MSE       => open
       );
 
    cordic0 : vm_cordic_fast
@@ -571,7 +600,7 @@ begin
          p     => H1Phase,
          enOut => open
       );
-*/
+
    AGCprocess : process(clk)   -- if AGC overdrives front end, the pilot gets lost and goes to zero, causing more AGC
    begin                         -- To compensate, check for PilotFound, else feedback raw sample RMS signal
       if (rising_edge(clk)) then
@@ -590,5 +619,7 @@ begin
 
       end if;
    end process;
+
+--   myGlbl : glbl ;
 
 end rtl;

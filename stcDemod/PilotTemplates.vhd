@@ -206,9 +206,13 @@ BEGIN
       );
 */
    -- 0KHz FFT of H0/1/R/I
+
+
+
    H0CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\sourceData\Center_h0_R_pt9.slv",
+         FILENAME    => "..\stcDemod\sourceData\Center_h0_R_pt9.slv",
+         --FILENAME    => "..\sourceData\Center_h0_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -228,9 +232,11 @@ BEGIN
          RdOutA      => H0CntrRslv,
          RdOutB      => open
       );
+
    H0CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\sourceData\Center_h0_I_pt9.slv",
+         FILENAME    => "..\stcDemod\sourceData\Center_h0_I_pt9.slv",
+         --FILENAME    => "..\sourceData\Center_h0_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -252,7 +258,8 @@ BEGIN
       );
    H1CntrR_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\sourceData\Center_h1_R_pt9.slv",
+         FILENAME    => "..\stcDemod\sourceData\Center_h1_R_pt9.slv",
+         --FILENAME    => "..\sourceData\Center_h1_R_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,
@@ -274,7 +281,8 @@ BEGIN
       );
    H1CntrI_u : RAM_2Reads_1Write
       GENERIC MAP(
-         FILENAME    => "..\sourceData\Center_h1_I_pt9.slv",
+         FILENAME    => "..\stcDemod\sourceData\Center_h1_I_pt9.slv",
+         --FILENAME    => "..\sourceData\Center_h1_I_pt9.slv",
          DATA_WIDTH  => FLOAT_256_LP'length,
          BINPT       => FLOAT_256_LP'right,
          ADDR_WIDTH  => 10,

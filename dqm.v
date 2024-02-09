@@ -3,7 +3,8 @@
 
 
 module dqm #(parameter regSpace = `DQMSPACE,
-                       lutSpace = `DQMLUTSPACE
+                       lutSpace = `DQMLUTSPACE,
+                       LOG_BITS = 11
 )
 (
     input                       clk,
@@ -16,11 +17,20 @@ module dqm #(parameter regSpace = `DQMSPACE,
     input               [12:0]  addr,
     input               [31:0]  din,
     output reg          [31:0]  dout,
+    input                       combinerStartOfFrame,
+    input   signed      [33:0]          ch0MseSum,
+    input   signed      [LOG_BITS-1:0]  ch0Log10MSE,
+    input   signed      [33:0]          ch1MseSum,
+    input   signed      [LOG_BITS-1:0]  ch1Log10MSE,
     input                       bitClkEn,
     input                       payloadBit,
     input                       magClkEn,
     input               [12:0]  mag,
     output              [3:0]   sourceSelect,
+    output              [2:0]   combinerMode,
+    output                      dqmStartOfFrame,
+    output  signed      [33:0]          mseSum,
+    output  signed      [LOG_BITS-1:0]  log10MseSum,
     output                      dqmBitEn,
     output                      dqmBit
 );
@@ -38,7 +48,11 @@ module dqm #(parameter regSpace = `DQMSPACE,
     wire            [15:0]  mseMean;
     wire            [15:0]  mseAvgLength;
     wire            [13:0]  payloadSize;
+    `ifdef DQM_USE_DPLL
+    wire            [31:0]  dllCenterFreq;
+    `else
     wire            [15:0]  clksPerBit;
+    `endif
     wire            [31:0]  regDout;
     dqmRegs dqmr(
         .cs(dqmSpace),
@@ -54,23 +68,36 @@ module dqm #(parameter regSpace = `DQMSPACE,
         .mseMean(mseMean),
         .mseAvgLength(mseAvgLength),
         .payloadSize(payloadSize),
+        `ifdef DQM_USE_DPLL
+        .dllCenterFreq(dllCenterFreq),
+        `else
         .clksPerBit(clksPerBit),
-        .sourceSelect(sourceSelect)
+        `endif
+        .sourceSelect(sourceSelect),
+        .combinerMode(combinerMode)
     );
 
 
 /******************************************************************************
                       Unit Circle MSE Estimate
 ******************************************************************************/
-    mseEstimate #(.LOG_BITS(11)) dqmm(
+    mseEstimate #(.LOG_BITS(LOG_BITS)) dqmm(
         .clk(clk),
         .reset(reset),
+        .combinerMode(combinerMode),
+        .combinerStartOfFrame(combinerStartOfFrame),
+        .ch0MseSum(ch0MseSum),
+        .ch0Log10MSE(ch0Log10MSE),
+        .ch1MseSum(ch1MseSum),
+        .ch1Log10MSE(ch1Log10MSE),
         .startEstimate(dqmStartOfFrame),
         .magClkEn(magClkEn),
         .mag(mag),
         .meanMag(mseMean),
         .avgLength(mseAvgLength),
         .log10MseOffset(log10MseOffset),
+        .mseSum(mseSum),
+        .log10MseSum(log10MseSum),
         .log10MSE(log10MSE)
     );
 
@@ -79,7 +106,7 @@ module dqm #(parameter regSpace = `DQMSPACE,
 ******************************************************************************/
     wire            [15:0]  dqmValue;
     wire            [31:0]  lutDout;
-    dqmLookupTable #(.LOGBITS(11), .regSpace(lutSpace)) dqml(
+    dqmLookupTable #(.LOGBITS(LOG_BITS), .regSpace(lutSpace)) dqml(
         .clk(clk),
         .reset(reset),
         .cs(cs),
@@ -104,7 +131,12 @@ module dqm #(parameter regSpace = `DQMSPACE,
         .payloadSize(payloadSize),
         .payloadBitEn(bitClkEn),
         .payloadBit(payloadBit),
+        `ifdef DQM_USE_DPLL
+        .dllCenterFreq(dllCenterFreq),
+        `else
         .clksPerBit(clksPerBit),
+        `endif
+        .combinerStartOfFrame(combinerStartOfFrame),
         .dqmStartOfFrame(dqmStartOfFrame),
         .dqmBitEn(dqmBitEn),
         .dqmBit(dqmBit)
@@ -118,6 +150,5 @@ module dqm #(parameter regSpace = `DQMSPACE,
             dout = lutDout;
         end
     end
-
 
 endmodule
