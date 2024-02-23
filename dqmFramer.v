@@ -33,6 +33,7 @@ module dqmFramer #(parameter VERSION=4'd0)
     reg                 pongWriteEnable;
     wire                pingFifoEmpty;
     wire                pongFifoEmpty;
+    wire                payloadRequest;
     always @(posedge clk) begin
         if (reset) begin
             payloadState <= `PAY_STATE_FLUSH;
@@ -63,17 +64,17 @@ module dqmFramer #(parameter VERSION=4'd0)
                         payloadBitCount <= payloadSize;
                         pingWriteSelect <= ~pingWriteSelect;
                         if (pingWriteSelect) begin
-                            if (!pingFifoEmpty) begin
-                                payloadState <= `PAY_STATE_FLUSH;
-                            end
+                            //if (!pingFifoEmpty) begin
+                            //    payloadState <= `PAY_STATE_FLUSH;
+                            //end
                             pingWriteEnable <= 1;
                             pongWriteEnable <= 0;
                             pingReadSelect <= 0;
                         end
                         else begin
-                            if (!pongFifoEmpty) begin
-                                payloadState <= `PAY_STATE_FLUSH;
-                            end
+                            //if (!pongFifoEmpty) begin
+                            //    payloadState <= `PAY_STATE_FLUSH;
+                            //end
                             pingWriteEnable <= 0;
                             pongWriteEnable <= 1;
                             pingReadSelect <= 1;
@@ -81,6 +82,18 @@ module dqmFramer #(parameter VERSION=4'd0)
                     end
                     else begin
                         payloadBitCount <= payloadBitCount - 1;
+                    end
+                    if (payloadRequest) begin
+                        if (pingWriteEnable) begin
+                            if (pongFifoEmpty) begin
+                                payloadState <= `PAY_STATE_FLUSH;
+                            end
+                        end
+                        if (pongWriteEnable) begin
+                            if (pingFifoEmpty) begin
+                                payloadState <= `PAY_STATE_FLUSH;
+                            end
+                        end
                     end
                 end
             endcase
@@ -155,6 +168,8 @@ module dqmFramer #(parameter VERSION=4'd0)
         `define DQM_STATE_WAIT      2'b01
         `define DQM_STATE_HEADER    2'b10
         `define DQM_STATE_PAYLOAD   2'b11
+    assign payloadRequest = (dqmState == `DQM_STATE_HEADER);
+
     reg         [15:0]  shiftCount;
     reg         [47:0]  headerSR;
     always @(posedge clk) begin

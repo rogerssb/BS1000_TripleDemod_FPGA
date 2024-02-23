@@ -33,8 +33,7 @@ module dqm #(parameter regSpace = `DQMSPACE,
         endcase
     end
 
-    // With STC, the number of bits is fixed to the frame size of the STC frame.
-    wire            [13:0]  payloadSize = 14'd3199;
+    wire            [13:0]  payloadSize;
     `ifdef DQM_USE_DPLL
     wire            [31:0]  dllCenterFreq;
     `else
@@ -54,7 +53,7 @@ module dqm #(parameter regSpace = `DQMSPACE,
         .log10MseOffset(),
         .mseMean(),
         .mseAvgLength(),
-        .payloadSize(),
+        .payloadSize(payloadSize),
         `ifdef DQM_USE_DPLL
         .dllCenterFreq(dllCenterFreq),
         `else

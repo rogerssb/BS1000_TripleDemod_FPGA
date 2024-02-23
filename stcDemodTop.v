@@ -150,7 +150,7 @@ module stcDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd800;
+    parameter VER_NUMBER = 16'd801;
 
 
 //******************************************************************************
@@ -749,6 +749,12 @@ module stcDemodTop (
                 cAndD0ClkEn = stcBitEnOut;
                 cAndD0DataIn = {decBitOut,2'b0};
             end
+            `ifdef ADD_DQM
+            `CandD_SRC_DQM: begin
+                cAndD0ClkEn = dqmBitEn;
+                cAndD0DataIn = {dqmBit,2'b0};
+            end
+            `endif
             default:   begin
                 cAndD0ClkEn = stcBitEnOut;
                 cAndD0DataIn = {decBitOut,2'b0};
@@ -792,6 +798,12 @@ module stcDemodTop (
                 cAndD1ClkEn = stcBitEnOut;
                 cAndD1DataIn = {decBitOut,2'b0};
             end
+            `ifdef ADD_DQM
+            `CandD_SRC_DQM: begin
+                cAndD1ClkEn = dqmBitEn;
+                cAndD1DataIn = {dqmBit,2'b0};
+            end
+            `endif
             default:   begin
                 cAndD1ClkEn = stcBitEnOut;
                 cAndD1DataIn = {decBitOut,2'b0};
@@ -1208,6 +1220,7 @@ module stcDemodTop (
                     video1OutSelect = 2'b11;
                 end
             endcase
+            Sw50Ohm = 0;
         end
     end // NGR_DEMOD
     `endif //R6100

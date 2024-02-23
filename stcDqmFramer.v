@@ -1,0 +1,191 @@
+`timescale 1ns/1ps
+`include "addressMap.v"
+
+
+module dqmFramer #(parameter VERSION=4'd0)
+(
+    input                       clk,
+    input                       reset,
+    input               [15:0]  dqm,
+    input               [13:0]  payloadSize,
+    input                       payloadBitEn,
+    input                       payloadBit,
+    `ifdef DQM_USE_DPLL
+    input               [31:0]  dllCenterFreq,
+    `else
+    input               [15:0]  clksPerBit,
+    `endif
+    output                      dqmStartOfFrame,
+    output  reg                 dqmBitEn,
+    output  reg                 dqmBit
+);
+
+    // Count payload bits
+    reg         [13:0]  payloadBitCount;
+    wire                startFrame = (payloadBitCount == 0);
+    always @(posedge clk) begin
+        if (reset) begin
+            payloadBitCount <= 1;
+        end
+        else if (payloadBitEn) begin
+            if (payloadBitCount > 0) begin
+                payloadBitCount <= payloadBitCount - 1;
+            end
+            else begin
+                payloadBitCount <= payloadSize;
+            end
+        end
+    end
+
+    // Create a clock enable that runs slightly faster than the required bitrate
+    // of the framed DQM output
+    `ifdef DQM_USE_DPLL
+
+    // Use a Digital PLL to generate the clock. We set the loop gain to zero to
+    // turn it into an NCO generating a clock enable at a fixed rate.
+    digitalPLL dll(
+        .clk(clk),
+        .reset(reset),
+        .centerFreq(dllCenterFreq),
+        //.loopGain(dllLoopGain),
+        .loopGain(5'h0),
+        .feedbackDivider(8'd1),
+        .referenceClkEn(1'b0),
+        .feedbackClkEn(divClkEn),
+        .dllOutputClk(divClk),
+        .filteredRefClk(),
+        .phaseError()
+    );
+
+    `else //DQM_USE_DPLL
+
+    reg         [15:0]  clkDivCount;
+    wire                divClkEn = (clkDivCount == 0);
+    always @(posedge clk) begin
+        if (reset) begin
+            clkDivCount <= 0;
+        end
+        else if (clkDivCount == 0) begin
+            clkDivCount <= clksPerBit;
+        end
+        else begin
+            clkDivCount <= clkDivCount - 1;
+        end
+    end
+
+    `endif //DQM_USE_DPLL
+
+    // Fifo to buffer the dqm payload bits
+    reg                 fifoReadEnable;
+    dqmFifo fifo(
+        .clk(clk),
+        .srst(reset),
+        .din(payloadBit),
+        .wr_en(payloadBitEn),
+        .rd_en(divClkEn && fifoReadEnable),
+        .dout(fifoPayloadBit),
+        .full(),
+        .empty(fifoEmpty)
+    );
+
+    // Use the startFrame signal to build an output frame
+    reg         [1:0]   dqmState;
+        `define DQM_STATE_IDLE      2'b00
+        `define DQM_STATE_WAIT      2'b01
+        `define DQM_STATE_HEADER    2'b11
+        `define DQM_STATE_PAYLOAD   2'b10
+
+    reg         [15:0]  shiftCount;
+    reg         [47:0]  headerSR;
+    always @(posedge clk) begin
+        if (reset) begin
+            dqmState <= `DQM_STATE_IDLE;
+            headerSR <= {`DQM_SYNC_WORD,12'b0,VERSION,dqm};
+            fifoReadEnable <= 0;
+        end
+        else if (divClkEn) begin
+            case (dqmState)
+                `DQM_STATE_IDLE: begin
+                    fifoReadEnable <= 0;
+                    // Assume the header output allows the input side of 
+                    // the fifo to always stay ahead of the output side.
+                    if (!fifoEmpty) begin
+                        shiftCount <= 47;
+                        dqmState <= `DQM_STATE_HEADER;
+                    end
+                end
+                `DQM_STATE_HEADER: begin
+                    if (shiftCount == 0) begin
+                        dqmState <= `DQM_STATE_PAYLOAD;
+                        shiftCount <= payloadSize;
+                        fifoReadEnable <= 1;
+                    end
+                    else begin
+                        shiftCount <= shiftCount - 1;
+                        headerSR <= {headerSR[46:0],1'b0};
+                    end
+                end
+                `DQM_STATE_PAYLOAD: begin
+                    if (shiftCount == 0) begin
+                        dqmState <= `DQM_STATE_IDLE;
+                        headerSR <= {`DQM_SYNC_WORD,12'b0,VERSION,dqm};
+                        fifoReadEnable <= 0;
+                    end
+                    else begin
+                        shiftCount <= shiftCount - 1;
+                    end
+                end
+                default: begin
+                end
+            endcase
+        end
+    end
+
+    always @* begin
+        case (dqmState)
+            `DQM_STATE_IDLE:    dqmBit = headerSR[47];
+            `DQM_STATE_WAIT:    dqmBit = headerSR[47];
+            `DQM_STATE_HEADER:  dqmBit = headerSR[47];
+            `DQM_STATE_PAYLOAD: dqmBit = fifoPayloadBit;
+        endcase
+        case (dqmState)
+            //`define DQM_USE_CLK_OUTPUT
+            `ifdef DQM_USE_CLK_OUTPUT
+            `DQM_STATE_IDLE:    begin
+                if (divClk) begin
+                    dqmBitEn <= 1'b1;
+                end
+            end
+            `DQM_STATE_WAIT:        dqmBitEn = divClk;
+            `DQM_STATE_HEADER:      dqmBitEn = divClk;
+            `DQM_STATE_PAYLOAD:     dqmBitEn = divClk;
+            `else
+            `DQM_STATE_WAIT:        dqmBitEn = divClkEn;
+            `DQM_STATE_HEADER:      dqmBitEn = divClkEn;
+            `DQM_STATE_PAYLOAD:     dqmBitEn = divClkEn;
+            default:                dqmBitEn = 0;
+            `endif
+        endcase
+    end
+
+    assign dqmStartOfFrame = startFrame;
+
+    //`define DQM_ADD_ILA
+    `ifdef DQM_ADD_ILA
+
+    dqmILA dqmILA(
+        .clk(clk),
+        .probe0(payloadBitCount),
+        .probe1(shiftCount[13:0]),
+        .probe2(startFrame),
+        .probe3(payloadBitEn),
+        .probe4(dqmBitEn),
+        .probe5(dqmBit),
+        .probe6(1'b0),
+        .probe7(1'b0)
+    );
+
+    `endif
+
+endmodule
+

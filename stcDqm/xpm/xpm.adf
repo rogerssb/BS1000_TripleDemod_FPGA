@@ -1,0 +1,53 @@
+[Project]
+Current Flow=Generic
+VCS=0
+version=4
+Current Config=compile
+[Configurations]
+compile=xpm
+[$LibMap$]
+xpm=.
+[Settings]
+FLOW_TYPE=HDL
+LANGUAGE=VHDL
+REFRESH_FLOW=1
+[Files]
+/..\..\..\stcdemod\xpm\xpm_fifo\hdl\xpm_fifo.sv=-1
+/..\..\..\stcdemod\xpm\xpm_cdc\hdl\xpm_cdc.sv=-1
+/..\..\..\stcdemod\xpm\xpm_memory\hdl\xpm_memory.sv=-1
+/..\..\..\stcdemod\xpm\xpm_vcomp.vhd=-1
+[Files.Data]
+.\..\..\stcdemod\xpm\xpm_fifo\hdl\xpm_fifo.sv=SystemVerilog Source Code
+.\..\..\stcdemod\xpm\xpm_cdc\hdl\xpm_cdc.sv=SystemVerilog Source Code
+.\..\..\stcdemod\xpm\xpm_memory\hdl\xpm_memory.sv=SystemVerilog Source Code
+.\..\..\stcdemod\xpm\xpm_vcomp.vhd=VHDL Source Code
+[Folders]
+Name0=Event Lists
+Directory0=C:\modem\vivado2017\stcDqm\xpm\
+Extension0=lst
+Name1=Logs
+Directory1=C:\modem\vivado2017\stcDqm\xpm\
+Extension1=log;htm;xml;txt
+Name2=Waveforms
+Directory2=C:\modem\vivado2017\stcDqm\xpm\
+Extension2=asdb;awc;asdbc;asdbe
+Name3=Makefiles
+Directory3=C:\modem\vivado2017\stcDqm\xpm\
+Extension3=mak
+Name4=Memory
+Directory4=C:\modem\vivado2017\stcDqm\xpm\
+Extension4=mem;mif;hex
+Name5=Dll Libraries
+Directory5=C:\modem\vivado2017\stcDqm\xpm\
+Extension5=dll
+Name6=PDF
+Directory6=C:\modem\vivado2017\stcDqm\xpm\
+Extension6=pdf
+Name7=HTML
+Directory7=C:\modem\vivado2017\stcDqm\xpm\
+Extension7=htm;html
+Name8=ALINT-PRO Workspaces
+Directory8=C:\modem\vivado2017\stcDqm\xpm\
+Extension8=alintws
+[SpecTracer]
+WindowVisible=0

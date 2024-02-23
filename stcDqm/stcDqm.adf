@@ -1,0 +1,199 @@
+[Project]
+Current Flow=Generic
+VCS=0
+version=4
+Current Config=compile
+
+[Configurations]
+compile=stcdqm
+
+[Library]
+stcDqm=.\stcDqm\stcDqm.lib
+
+[$LibMap$]
+stcDqm=.
+Active_lib=KINTEX7
+xilinxun=KINTEX7
+UnlinkedDesignLibrary=KINTEX7
+DESIGNS=KINTEX7
+xpm=.
+
+[Settings]
+FLOW_TYPE=HDL
+LANGUAGE=VHDL
+FLOWTOOLS=NONE
+REFRESH_FLOW=1
+FAMILY=Xilinx2017x KINTEX7
+fileopenfolder=C:\modem\vivado2017
+WireDelay=2
+
+[LocalVerilogSets]
+VerilogLanguage=4
+WarningPrnLevel=1
+OptimizationLevel=2
+ProtectLevel=0
+Strict=0
+VerilogNoSpecify=0
+EnableDebug=0
+AdditionalOptions=
+ErrorOutputLimit=0
+MonitoringOfEventsUDP=0
+DisablePulseError=0
+PulseErrorFilter=0
+ErrorLimit=100
+RejectionLimit=100
+SetErrorLimit=0
+SetRejectionLimit=0
+InitialRegsValue=X
+HasInitialRegsValue=0
+EnableSLP=1
+LibNames=
+PriorityLibNames=
+
+[DefineMacro]
+Global=+define+SIMULATE +define+STC_TRIPLE
+
+[LocalVerilogDirs]
+Count=0
+
+[SpecTracer]
+WindowVisible=0
+UseConceptualDesignTags=0
+HDLCounter=000
+HDLMotive=FPGA to DD
+HDLPostfix=
+HDLPrefix=HDL_
+HDLBlock=Detail Design
+CDCounter=000
+CDMotive=FPGA to CD
+CDPostfix=
+CDPrefix=CD_
+CDBlock=Conceptual Design
+SelectedREQ=
+SelectedTC=
+TBCounter=000
+TBMotive=Test to TB
+TBPostfix=
+TBPrefix=TB_
+TBBlock=Test Bench
+
+[LocalVhdlSets]
+NetlistCompilation=1
+EnableVHDL93Key=0
+EnableVHDL2002Key=0
+EnableVHDL2008Key=1
+EnableVHDL2019Key=0
+DisableVHDL87Key=0
+Syntax RelaxLRM=0
+MaxErrorsKey=100
+CompileWithDebug=1
+OptimizationLevel=3
+DisableRangeChecks=0
+ProtectLevel=0
+IncrementalCompilation=0
+AdditionalOptions=
+
+[HierarchyViewer]
+HierarchyInformation=pilotdet_tb|rtl|0     
+ShowHide=ShowTopLevel
+Selected=
+
+
+
+[Files.Data]
+.\..\stcDemod\fixed_pkg_2008.vhd=VHDL Source Code
+.\..\stcDemod\Semco_pkg.vhd=VHDL Source Code
+.\..\vm_cordic_fast.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_ctg.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_coef.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_lzd.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_smul_16_18.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_smul_16_18_sadd_37.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_interp.v=Verilog Source Code
+.\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng.v=Verilog Source Code
+.\..\stcDemod\testBenches\ReadGoldRef.vhd=VHDL Source Code
+.\..\stcDemod\ReadFilesFolder\RAM_2Reads_1Write.vhd=VHDL Source Code
+.\..\stcDemod\PilotTemplates.vhd=VHDL Source Code
+.\..\stcDemod\CmplxMult.vhd=VHDL Source Code
+.\..\stcDemod\OverlapAddAbs.vhd=VHDL Source Code
+.\src\fft_1k_sim_netlist.v=Verilog Source Code
+.\..\stcDemod\PD_Fft_FIfo.vhd=VHDL Source Code
+.\..\stcDemod\HalfPilotPhase.vhd=VHDL Source Code
+.\..\stcDemod\ReadFilesFolder\ROM_2D.vhd=VHDL Source Code
+.\..\stcDemod\SinvLuts.vhd=VHDL Source Code
+.\..\stcDemod\ReadFilesFolder\ComputeMetric.vhd=VHDL Source Code
+.\..\stcDemod\noiseEstimate.v=Verilog Source Code
+.\..\stcDemod\TimingEstimate.vhd=VHDL Source Code
+.\..\stcDemod\ReadFilesFolder\ChannelEstimate.vhd=VHDL Source Code
+.\..\stcDemod\Brik2.vhd=VHDL Source Code
+.\..\stcDemod\PilotSync.vhd=VHDL Source Code
+.\..\stcDemod\PilotDetectSliding.vhd=VHDL Source Code
+.\..\stcDemod\testBenches\PilotDet_tb.vhd=VHDL Test Bench
+.\src\testStcDqm.awc=Accelerated Waveform Configuration
+.\src\testStcDqm.do=Macro
+.\..\log10Estimate.v=Verilog Source Code
+
+[Files]
+/..\..\stcDemod\fixed_pkg_2008.vhd=-1
+/..\..\stcDemod\Semco_pkg.vhd=-1
+/..\..\vm_cordic_fast.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_ctg.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_coef.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_lzd.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_smul_16_18.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_smul_16_18_sadd_37.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng_interp.v=-1
+/..\..\Vhdl_Library\GaussianNoiseGenerator\rtl\gng.v=-1
+/..\..\stcDemod\testBenches\ReadGoldRef.vhd=-1
+/..\..\stcDemod\ReadFilesFolder\RAM_2Reads_1Write.vhd=-1
+/..\..\stcDemod\PilotTemplates.vhd=-1
+/..\..\stcDemod\CmplxMult.vhd=-1
+/..\..\stcDemod\OverlapAddAbs.vhd=-1
+/fft_1k_sim_netlist.v=-1
+/..\..\stcDemod\PD_Fft_FIfo.vhd=-1
+/..\..\stcDemod\HalfPilotPhase.vhd=-1
+/..\..\stcDemod\ReadFilesFolder\ROM_2D.vhd=-1
+/..\..\stcDemod\SinvLuts.vhd=-1
+/..\..\stcDemod\ReadFilesFolder\ComputeMetric.vhd=-1
+/..\..\log10Estimate.v=-1
+/..\..\stcDemod\noiseEstimate.v=-1
+/..\..\stcDemod\TimingEstimate.vhd=-1
+/..\..\stcDemod\ReadFilesFolder\ChannelEstimate.vhd=-1
+/..\..\stcDemod\Brik2.vhd=-1
+/..\..\stcDemod\PilotSync.vhd=-1
+/..\..\stcDemod\PilotDetectSliding.vhd=-1
+/..\..\stcDemod\testBenches\PilotDet_tb.vhd=-1
+/testStcDqm.awc=-1
+/testStcDqm.do=-1
+
+[Verilog Library]
+unisims_ver=
+xilinxcorelib_ver=
+[Folders]
+Name0=Event Lists
+Directory0=C:\modem\vivado2017\stcDqm\
+Extension0=lst
+Name1=Logs
+Directory1=C:\modem\vivado2017\stcDqm\
+Extension1=log;htm;xml;txt
+Name2=Waveforms
+Directory2=C:\modem\vivado2017\stcDqm\
+Extension2=asdb;awc;asdbc;asdbe
+Name3=Makefiles
+Directory3=C:\modem\vivado2017\stcDqm\
+Extension3=mak
+Name4=Memory
+Directory4=C:\modem\vivado2017\stcDqm\
+Extension4=mem;mif;hex
+Name5=Dll Libraries
+Directory5=C:\modem\vivado2017\stcDqm\
+Extension5=dll
+Name6=PDF
+Directory6=C:\modem\vivado2017\stcDqm\
+Extension6=pdf
+Name7=HTML
+Directory7=C:\modem\vivado2017\stcDqm\
+Extension7=htm;html
+Name8=ALINT-PRO Workspaces
+Directory8=C:\modem\vivado2017\stcDqm\
+Extension8=alintws

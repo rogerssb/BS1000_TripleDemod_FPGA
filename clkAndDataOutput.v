@@ -2,7 +2,7 @@
 `timescale 1ns / 10 ps
 
 
-module clkAndDataOutput 
+module clkAndDataOutput
     (
     input               clk, reset,
     input               busClk,
@@ -16,13 +16,14 @@ module clkAndDataOutput
     input               pllOutputClk,
     output      [3:0]   sourceSelect,
     output              pllReferenceClk,
-    output              outputClk,
+    output reg          outputClk,
     output      [2:0]   outputData
 );
 
     parameter RegSpace = `CandD0SPACE;
 
     // Configuration Regs
+    wire    [1:0]   finalOutputSelect;
     wire    [1:0]   clkPhase;
     wire    [31:0]  dllCenterFreq;
     wire    [4:0]   dllLoopGain;
@@ -38,7 +39,7 @@ module clkAndDataOutput
         .source(sourceSelect),
         .clkPhase(clkPhase),
         .clkReset(clkReset),
-        .finalOutputSelect(dllSelect),
+        .finalOutputSelect(finalOutputSelect),
         .dllCenterFreq(dllCenterFreq),
         .dllLoopGain(dllLoopGain),
         .dllFeedbackDivider(dllFeedbackDivider)
@@ -78,7 +79,7 @@ module clkAndDataOutput
     wire    [2:0]   dll_Symbol;
     wire            dll_HalfFull;
 
-    `ifndef USE_FIFO_64    
+    `ifndef USE_FIFO_64
             jitterFifo dllFifo(
                 .rst(clkReset),
                 .wr_clk(clk),
@@ -200,8 +201,15 @@ module clkAndDataOutput
     end
 
     // Final Output Mux
-    assign outputClk =  dllSelect ? dllClk :    pllClk;
-    assign outputData = dllSelect ? dllData :   pllData;
+    always @* begin
+        case (finalOutputSelect)
+            2'b00:      outputClk = pllClk;
+            2'b01:      outputClk = dllClk;
+            2'b10:      outputClk = clkEnIn; 
+            default:    outputClk = pllClk;
+        endcase
+    end
+    assign outputData = finalOutputSelect[0] ? dllData :   pllData;
 
 endmodule
 

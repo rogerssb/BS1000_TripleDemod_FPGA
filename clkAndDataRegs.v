@@ -19,7 +19,7 @@ module clkAndDataRegs(
     input               wr0, wr1, wr2, wr3,
     output  reg [3:0]   source,
     output  reg [1:0]   clkPhase,
-    output  reg         finalOutputSelect,
+    output  reg [1:0]   finalOutputSelect,
     output  reg         clkReset,
     output  reg [31:0]  dllCenterFreq,
     output  reg [4:0]   dllLoopGain,
@@ -79,7 +79,7 @@ module clkAndDataRegs(
         if (cAndDSpace && wr3) begin
             casex (addr)
                 `CandD_CONTROL:   begin
-                    finalOutputSelect <= din[24];
+                    finalOutputSelect <= din[25:24];
                     clkReset <= din[31];
                 end
                 `CandD_DLL_CENTER_FREQ: begin
@@ -94,7 +94,7 @@ module clkAndDataRegs(
         if (cAndDSpace) begin
             casex (addr)
                 `CandD_CONTROL: begin
-                    dout = {clkReset,6'b0,finalOutputSelect,
+                    dout = {clkReset,5'b0,finalOutputSelect,
                                8'b0,
                                6'b0,clkPhase,
                                4'b0,source};

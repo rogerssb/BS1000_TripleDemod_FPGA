@@ -10,6 +10,7 @@ module digitalPLL(
     input                   referenceClkEn,
     output  reg             feedbackClkEn,
     output  reg             dllOutputClk,
+    output  reg             dllOutputClkEn,
     output                  filteredRefClk,
     output  reg     [7:0]   phaseError
 );
@@ -31,6 +32,7 @@ module digitalPLL(
             clkSR <= {clkSR[0],phaseSum[31]};
         end
         dllOutputClk <= phase[31];
+        dllOutputClkEn <= phaseSum[31] & !phase[31];
     end
 
     `define ADD_DIVIDER
