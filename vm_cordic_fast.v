@@ -345,26 +345,23 @@ initial clk = 0;
 always  #5 clk = !clk;
 
 // LO Generator
-wire    [17:0]iDds;
-wire    [17:0]qDds;
-dds dds (
-    .sclr(reset),
-    .clk(clk),
-    .ce(1'b1),
-    .we(1'b1),
-    .data(32'h00200000),
-    .sine(qDds),
-    .cosine(iDds)
-    );
+wire    [47:0]  m_axis;
+wire    signed  [17:0]  qDds = $signed(m_axis[41:24]);
+wire    signed  [17:0]  iDds = $signed(m_axis[17:0]);
+dds6p0 dds(
+  .aclk(clk),
+  .aclken(1'b1),
+  .aresetn(!reset),
+  .m_axis_data_tdata(m_axis),
+  .m_axis_data_tvalid(),
+  .s_axis_phase_tdata(32'h00200000),
+  .s_axis_phase_tvalid(1'b1)
+);
 
-wire    [n-1:0]  x = iDds[17:(17-n+1)];
-wire    [n-1:0]  y = qDds[17:(17-n+1)];
-real xReal = (x[n-1] ? x - 16384.0 : x)/8192.0;
-real yReal = (y[n-1] ? y - 16384.0 : y)/8192.0;
-wire [n-2:0]mag;
-wire [n-3:0]phase;
-real magReal = mag/8192.0;
-real phaseReal = (phase[n-3] ? phase - 4096.0 : phase)/2048.0;
+wire    signed  [n-1:0] x = iDds[17:(17-n+1)];
+wire    signed  [n-1:0] y = qDds[17:(17-n+1)];
+wire            [n-2:0] mag;
+wire    signed  [n-3:0] phase;
 vm_cordic_fast #(n) uut(
     .clk(clk),
     .ena(1'b1),

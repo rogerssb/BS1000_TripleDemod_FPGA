@@ -149,7 +149,7 @@
 `define ADD_CMA
 `define ADD_MULTIH
 `define ADD_DQM
-`define ADD_SUPERBAUD_TED
+//`define ADD_SUPERBAUD_TED
 `ifndef SIMULATE
 `define EMBED_MULTIH_CARRIER_LOOP
 `endif

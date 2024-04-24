@@ -165,7 +165,7 @@ module semcoDemodTop (
 
 );
 
-    parameter VER_NUMBER = 16'd773;
+    parameter VER_NUMBER = 16'd802;
 
 
 //******************************************************************************
@@ -1819,7 +1819,8 @@ module semcoDemodTop (
     wire    [3:0]   cAndD0SourceSelect;
     reg             cAndD0ClkEn;
     reg     [2:0]   cAndD0DataIn;
-    always @(posedge clk) begin
+    //always @(posedge clk) begin
+    always @* begin
         casex (cAndD0SourceSelect)
             `CandD_SRC_LEGACY_I: begin
                 `ifdef ADD_FRAMER
@@ -1935,73 +1936,74 @@ module semcoDemodTop (
     wire    [3:0]   cAndD1SourceSelect;
     reg             cAndD1ClkEn;
     reg     [2:0]   cAndD1DataIn;
-    always @(posedge clk) begin
+    //always @(posedge clk) begin
+    always @* begin
         casex (cAndD1SourceSelect)
             `CandD_SRC_LEGACY_I: begin
                 `ifdef ADD_FRAMER
-                cAndD1ClkEn <= iDemodBitEn;
-                cAndD1DataIn <= {iRotBit,qRotBit,1'b0};
+                cAndD1ClkEn = iDemodBitEn;
+                cAndD1DataIn = {iRotBit,qRotBit,1'b0};
                 `else
-                cAndD1ClkEn <= iDemodBitEn;
-                cAndD1DataIn <= {iDemodBit,qDemodBit,1'b0};
+                cAndD1ClkEn = iDemodBitEn;
+                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
                 `endif
             end
             `CandD_SRC_LEGACY_Q: begin
                 `ifdef ADD_FRAMER
-                cAndD1ClkEn <= qDemodBitEn;
-                cAndD1DataIn <= {qRotBit,1'b0,1'b0};
+                cAndD1ClkEn = qDemodBitEn;
+                cAndD1DataIn = {qRotBit,1'b0,1'b0};
                 `else
-                cAndD1ClkEn <= qDemodBitEn;
-                cAndD1DataIn <= {qDemodBit,1'b0,1'b0};
+                cAndD1ClkEn = qDemodBitEn;
+                cAndD1DataIn = {qDemodBit,1'b0,1'b0};
                 `endif
             end
             `ifdef ADD_TRELLIS
             `CandD_SRC_PCMTRELLIS: begin
-                cAndD1ClkEn <= pcmTrellisSymEnOut;
-                cAndD1DataIn <= {pcmTrellisBit,pcmTrellisBit,1'b0};
+                cAndD1ClkEn = pcmTrellisSymEnOut;
+                cAndD1DataIn = {pcmTrellisBit,pcmTrellisBit,1'b0};
             end
             `endif
             `ifdef ADD_SOQPSK
             `CandD_SRC_SOQTRELLIS: begin
-                cAndD1ClkEn <= soqTrellisSymEn;
-                cAndD1DataIn <= {soqTrellisBit,soqTrellisBit,1'b0};
+                cAndD1ClkEn = soqTrellisSymEn;
+                cAndD1DataIn = {soqTrellisBit,soqTrellisBit,1'b0};
             end
             `endif
             //`CandD_SRC_STC:
            `ifdef ADD_PN_GEN
             `CandD_SRC_PNGEN: begin
-                cAndD1ClkEn <= pnClkEn;
-                cAndD1DataIn <= {pnBit,2'b0};
+                cAndD1ClkEn = pnClkEn;
+                cAndD1DataIn = {pnBit,2'b0};
             end
             `endif
             `ifdef ADD_LDPC
             `CandD_SRC_LDPC: begin
-                cAndD1ClkEn <= ldpcBitEnOut;
-                cAndD1DataIn <= {ldpcBitOut,2'b0};
+                cAndD1ClkEn = ldpcBitEnOut;
+                cAndD1DataIn = {ldpcBitOut,2'b0};
             end
             `endif
             `ifdef ADD_DQM
             `CandD_SRC_DQM: begin
-                cAndD1ClkEn <= dqmBitEn;
-                cAndD1DataIn <= {dqmBit,2'b0};
+                cAndD1ClkEn = dqmBitEn;
+                cAndD1DataIn = {dqmBit,2'b0};
             end
             `endif
             `CandD_SRC_DEC0_CH0: begin
-                cAndD1ClkEn <= dualPcmClkEn;
-                cAndD1DataIn <= {dualDataI,dualDataQ,1'b0};
+                cAndD1ClkEn = dualPcmClkEn;
+                cAndD1DataIn = {dualDataI,dualDataQ,1'b0};
             end
             `CandD_SRC_DEC0_CH1: begin
-                cAndD1ClkEn <= dualPcmClkEn;
-                cAndD1DataIn <= {dualDataQ,dualDataI,1'b0};
+                cAndD1ClkEn = dualPcmClkEn;
+                cAndD1DataIn = {dualDataQ,dualDataI,1'b0};
             end
             `CandD_SRC_DEC1_CH0: begin
-                cAndD1ClkEn <= ch1PcmClkEn;
-                cAndD1DataIn <= {ch1PcmData,1'b0,1'b0};
+                cAndD1ClkEn = ch1PcmClkEn;
+                cAndD1DataIn = {ch1PcmData,1'b0,1'b0};
             end
             `ifdef ADD_RS_DEC
             `CandD_SRC_RS_DEC: begin
-                cAndD1ClkEn <= rsDecBitEnOut;
-                cAndD1DataIn <= {rsDecBitOut,2'b0};
+                cAndD1ClkEn = rsDecBitEnOut;
+                cAndD1DataIn = {rsDecBitOut,2'b0};
             end
             `endif
             //`CandD_SRC_DEC1_CH1:
@@ -2009,8 +2011,8 @@ module semcoDemodTop (
             //`CandD_SRC_DEC2_CH1:
             //`CandD_SRC_DEC3_CH0:
             default:   begin
-                cAndD1ClkEn <= iDemodBitEn;
-                cAndD1DataIn <= {iDemodBit,qDemodBit,1'b0};
+                cAndD1ClkEn = iDemodBitEn;
+                cAndD1DataIn = {iDemodBit,qDemodBit,1'b0};
             end
         endcase
     end
